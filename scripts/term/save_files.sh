@@ -22,6 +22,8 @@ sudo cp -r /home/jonalm/.imwheelrc "$git_path"
 sudo cp -r /home/jonalm/.inputrc "$git_path"
 sudo cp -r /home/jonalm/.doom.d "$git_path"
 
+
+
 cd /home/jonalm/laptopgit/Laptop/
 git add --all
 git commit -m "commit ${new_number}"
