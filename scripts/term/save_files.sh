@@ -20,8 +20,6 @@ sudo cp -r /home/jonalm/.config/alacritty "$git_path"
 sudo cp -r /home/jonalm/.config/picom.conf "$git_path"
 sudo cp -r /home/jonalm/.imwheelrc "$git_path"
 sudo cp -r /home/jonalm/.inputrc "$git_path"
-sudo cp -r /home/jonalm/.Xauthority "$git_path"
-sudo cp -r /home/jonalm/.inputrc "$git_path"
 sudo cp -r /home/jonalm/.doom.d "$git_path"
 
 cd /home/jonalm/laptopgit/Laptop/
