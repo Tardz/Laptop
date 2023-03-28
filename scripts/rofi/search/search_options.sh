@@ -1,4 +1,8 @@
 declare -a options=(
+'TDDD80 - https://www.ida.liu.se/~TDDD80/index.sv.shtml'
+'TDDD78 - https://www.ida.liu.se/~TDDD78/index.sv.shtml'
+'TDDD85 - https://www.ida.liu.se/~TDDD14/index.en.shtml'
+'Ladok - https://www.student.ladok.se/student/app/studentwebb/start'
 "Youtube Search - https://www.youtube.com/results?search_query="
 "ChatGPT - https://chat.openai.com/chat"
 "Reddit - https://www.reddit.com/"

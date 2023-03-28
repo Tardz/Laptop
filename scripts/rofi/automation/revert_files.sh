@@ -11,7 +11,7 @@ if test -f "$json_file"; then
 else
   new_number=1
   echo "{ \"number\": $new_number, \"date\": \"$current_date_time\" }" | jq . > "$json_file"
-fi
+fiawdawd
 
 sudo cp -r /home/jonalm/laptopgit/Laptop/ /home/jonalm/laptopgit/LaptopBackup/
 sudo cp -r /home/jonalm/scripts "$git_path"

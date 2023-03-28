@@ -172,8 +172,8 @@ groups = [
             Match(wm_class = ["brave-browser"])
                 ]), 
         Group('3', label = "", matches=[ #Code
-            Match(wm_class = ["jetbrains-studio"]),
             Match(wm_class = ["code"]),
+            Match(wm_class = ["jetbrains-studio"]),
             Match(wm_class = ["jetbrains-idea"]),
             ]), 
         Group('4', label = "", matches=[ #Files
@@ -189,6 +189,7 @@ groups = [
             Match(wm_class = ["discord"]),
             ]), 
         Group('8', label = "", matches=[ #Settings
+            Match(wm_class = ["lxappearance"]),
             Match(wm_class = ["tlpui"]),
             ]), 
         Group('9', label = ""), #Scratchpad
@@ -377,9 +378,6 @@ mybar = Bar([
         padding = layouticon_padding,
         scale = layouticon_scale,
     ),
-    widget.WindowCount(
-        background = widgetbackground,
-    ),
     right_circle(),
 
     seperator(),
@@ -441,6 +439,10 @@ mybar = Bar([
         background = widgetbackground,
         fontsize = icon_size,
         font = fnt1,
+    ),
+    widget.WindowCount(
+        background = widgetbackground,
+        fontsize = 16,
     ),
     widget.WindowName(
         background = widgetbackground,
@@ -572,13 +574,6 @@ mybar = Bar([
 
 ### LAYOUT SETTINGS ###
 layouts = [
-    Stack(
-        border_normal       = layout_normal_color_stack,
-        border_focus        = layout_focus_color_stack,
-        margin              = layout_margin,
-        num_stacks          = layout_num_stacks,
-        border_width        = layout_border_width,
-    ),
     MonadTall(
         border_normal       = layout_normal_color_monadtall,
         border_focus        = layout_focus_color_monadtall,
@@ -586,7 +581,14 @@ layouts = [
         single_margin       = layout_margin,
         border_width        = layout_border_width,
         single_border_width = layout_border_width,
-    )
+    ),
+    Stack(
+        border_normal       = layout_normal_color_stack,
+        border_focus        = layout_focus_color_stack,
+        margin              = layout_margin,
+        num_stacks          = layout_num_stacks,
+        border_width        = layout_border_width,
+    ),
 ]
 
 ### FLOATING LAYOUT SETTINGS AND ASSIGNED APPS ###
