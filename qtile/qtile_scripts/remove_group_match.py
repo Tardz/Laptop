@@ -13,15 +13,14 @@ wm_class = str(out).split('"')[1]
 with open('/home/jonalm/.config/qtile/config.py', 'r') as f:
     config_lines = f.readlines()
 
-# Find the index of the floating_layout line
-i = config_lines.index('### FLOATING LAYOUT SETTINGS AND ASSIGNED APPS ###\n')
+# Find the index of the line to be removed
+for i, line in enumerate(config_lines):
+    if f'Match(wm_class = ["{wm_class}"])' in line:
+        line_index = i
+        break
 
-# Find the index of the next line after the float_rules list
-start_index = i + 8
-
-# Add the new match rule to the float_rules list
-new_line = f'        Match(wm_class = "{wm_class}"),\n'
-config_lines.insert(start_index, new_line)
+# Remove the line
+config_lines.pop(line_index)
 
 # Write the updated config file
 with open('/home/jonalm/.config/qtile/config.py', 'w') as f:

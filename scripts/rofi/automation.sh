@@ -1,17 +1,18 @@
 #!/bin/bash
   
 files_last_update=$(jq -r '.date' "/home/jonalm/scripts/term/save_files_data.json")
-# files_last_update_formated="${current_date_time//\"/}"
 
 declare -a options=(
 "Floating - Add | $HOME/.config/qtile/qtile_scripts/update_floating.py"
 "Floating - Remove | $HOME/.config/qtile/qtile_scripts/remove_floating.py"
+"Group Match - Add | $HOME/.config/qtile/qtile_scripts/update_group_match.py"
+"Group Match - Remove | $HOME/.config/qtile/qtile_scripts/remove_group_match.py"
 "Files - Save [$files_last_update] | $HOME/scripts/term/save_files.sh"
 )
 
 display_options=$(printf '%s\n' "${options[@]}" | cut -d'|' -f1-1)
 
-choice=$(printf '%s\n' "${display_options[@]}" | rofi \-theme "$HOME/.config/rofi/files/launchers/type-1"/'style-3-automation'.rasi -dmenu -i -l 3 -p '' )
+choice=$(printf '%s\n' "${display_options[@]}" | rofi \-theme "$HOME/.config/rofi/files/launchers/type-1"/'style-3-automation'.rasi -dmenu -i -l 5 -p '' )
 
 if [[ "$choice" == "Quit" ]]; then
     echo "Program terminated." && exit 1
