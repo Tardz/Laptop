@@ -15,5 +15,6 @@ declare -a options=(
 )
 
 display_options=$(printf '%s\n' "${options[@]}" | cut -d'|' -f1-1)
+files_last_update=$(jq -r '.date' "/home/jonalm/scripts/rofi/automation/save_files_data.json")
 
-export options
+export options, files_last_update, display_options
