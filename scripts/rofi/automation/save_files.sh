@@ -2,18 +2,17 @@
 
 git_path="/home/jonalm/laptopgit/Laptop"
 json_file="/home/jonalm/scripts/rofi/automation/save_files_data.json"
+current_date_time=$(date "+%Y-%m-%d %H:%M:%S")
 old_date=$(date "+%Y-%m-%d %H:%M:%S")
 
 if test -f "$json_file"; then
-  old_date=$(jq '.date' "$json_file")
+  old_date=$(jq -r '.date' "$json_file")
   old_number=$(jq '.number' "$json_file")
   new_number=$((old_number + 1))
 else
   new_number=1
   echo "{ \"number\": $new_number, \"date\": \"$current_date_time\", \"old_date\": \"$old_date\" }" | jq . > "$json_file"
 fi
-
-current_date_time=$(date "+%Y-%m-%d %H:%M:%S")
 
 sudo cp -r /home/jonalm/laptopgit/Laptop/ /home/jonalm/laptopgit/LaptopBackup/
 sudo cp -r /home/jonalm/scripts "$git_path"
