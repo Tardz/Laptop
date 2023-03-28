@@ -12,7 +12,7 @@ if test -f "$json_file"; then
   new_number=$((old_number + 1))
 else
   new_number=1
-  echo "{ \"number\": $new_number, \"date\": \"$current_date_time\, \"old_date\": \"$old_date\" }" | jq . > "$json_file"
+  echo "{ \"number\": $new_number, \"date\": \"$current_date_time\, \"oldDate\": \"$old_date\" }" | jq . > "$json_file"
 fi
 
 sudo cp -r /home/jonalm/laptopgit/Laptop/ /home/jonalm/laptopgit/LaptopBackup/
