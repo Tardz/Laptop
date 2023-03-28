@@ -3,10 +3,11 @@
 git_path="/home/jonalm/laptopgit/Laptop"
 json_file="/home/jonalm/scripts/rofi/automation/save_files_data.json"
 current_date_time=$(date "+%Y-%m-%d %H:%M:%S")
+old_date=$(date "+%Y-%m-%d %H:%M:%S")
 
 echo "$current_date_time"
 if test -f "$json_file"; then
-  old_date=$(ja '.date' "$json_file")
+  old_date=$(ja '.old_date' "$json_file")
   old_number=$(jq '.number' "$json_file")
   new_number=$((old_number + 1))
 else
