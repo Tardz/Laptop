@@ -1,29 +1,8 @@
 #!/bin/bash
 
+source /home/jonalm/scripts/rofi/config_options.sh 
+
 DMEDITOR="alacritty -e code -n"
-
-declare -a options=(
-"Qtile config all - $HOME/.config/qtile/"
-"Qtile config - $HOME/.config/qtile/config.py"
-"Qtile autostart - $HOME/.config/qtile/autostart.sh"
-"Neofetch config - $HOME/.config/neofetch/config.conf"
-"Alacritty config - $HOME/.config/alacritty/alacritty.yml"
-"Picom config - $HOME/.config/picom.conf"
-"Bashrc - $HOME/.bashrc"
-"Xinitrc - $HOME/.xinitrc"
-"Xauthority - $HOME/.Xauthority"
-"Synth shell config - $HOME/.config/synth-shell/synth-shell-prompt.config"
-"Show keys script - $HOME/scripts/term/show_keys.sh"
-"Rofi scripts - $HOME/scripts/rofi/"
-"Qtile scripts - $HOME/.config/qtile/qtile_scripts/"
-"Term scripts - $HOME/scripts/term/"
-"Generall scripts - $HOME/scripts/"
-"Rofi config - $HOME/.config/rofi/"
-"Doom init config - $HOME/.doom.d/init.el"
-"Quit"
-)
-
-display_options=$(printf '%s\n' "${options[@]}" | cut -d'-' -f1-1)
 
 choice=$(printf '%s\n' "${display_options[@]}" | rofi \-theme "$HOME/.config/rofi/files/launchers/type-1"/'style-3-config'.rasi -dmenu -i 20 -columns 25 -p '' )
 

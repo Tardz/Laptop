@@ -80,11 +80,11 @@ def spawn_alttab_once(qtile):
 
 @lazy.function
 def check(qtile):
-    qtile.cmd_spawn("python /home/jonalm/.config/qtile/qtile_scripts/check_and_launch_app.py " + "null")
+    qtile.cmd_spawn("python /home/jonalm/scripts/qtile/check_and_launch_app.py " + "null")
 
 @lazy.function
 def check_youtube(qtile):
-    qtile.cmd_spawn("python /home/jonalm/.config/qtile/qtile_scripts/check_and_launch_app.py " + "youtube")
+    qtile.cmd_spawn("python /home/jonalm/scripts/qtile/check_and_launch_app.py " + "youtube")
 
 @lazy.function
 def close_all_windows(qtile):
