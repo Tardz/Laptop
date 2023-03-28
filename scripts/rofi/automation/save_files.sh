@@ -11,6 +11,7 @@ if test -f "$json_file"; then
   echo "$old_date"
   echo "$old_number"
 else
+  old_date=$(date "+%Y-%m-%d %H:%M:%S")
   new_number=1
   echo "{ \"number\": $new_number, \"date\": \"$current_date_time\", \"old_date\": \"$old_date\" }" | jq . > "$json_file"
 fi
