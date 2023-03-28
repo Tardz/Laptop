@@ -1,4 +1,5 @@
 files_last_update=$(jq -r '.date' "/home/jonalm/scripts/rofi/automation/save_files_data.json")
+files_prev_update=$(jq -r '.old_date' "/home/jonalm/scripts/rofi/automation/save_files_data.json")
 
 declare -a options=(
 "Floating - Add | $HOME/scripts/qtile/update_floating.py"
@@ -12,7 +13,7 @@ declare -a options=(
 "Push - Add | $HOME/scripts/rofi/config_file_remove.sh"
 "Push - Remove | $HOME/scripts/rofi/config_file_remove.sh"
 "Files - Save [$files_last_update] | $HOME/scripts/rofi/automation/save_files.sh"
-"Files - Revert | $HOME/scripts/rofi/config_file_remove.sh"
+"Files - Revert [$files_prev_update] | $HOME/scripts/rofi/config_file_remove.sh"
 "Push - TDDD78 | $HOME/scripts/rofi/config_file_remove.sh"
 )
 
