@@ -17,6 +17,7 @@ declare -a options=(
 "Rofi scripts - $HOME/scripts/rofi/"
 "Qtile scripts - $HOME/.config/qtile/qtile_scripts/"
 "Term scripts - $HOME/scripts/term/"
+"Generall scripts - $HOME/scripts/"
 "Rofi config - $HOME/.config/rofi/"
 "Doom init config - $HOME/.doom.d/init.el"
 "Quit"

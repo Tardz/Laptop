@@ -1,15 +1,16 @@
 #!/bin/bash
 
 git_path="/home/jonalm/laptopgit/Laptop"
+json_file="/home/jonalm/scripts/term/save_files_data.json"
+current_date_time=$(date "+%Y-%m-%d %H:%M:%S")
 
-json_file="/home/jonalm/scripts/term/commit_number.json"
-
+echo "$current_date_time"
 if test -f "$json_file"; then
-  current_number=$(jq '.number' "$json_file")
-  new_number=$((current_number + 1))
+  old_number=$(jq '.number' "$json_file")
+  new_number=$((old_number + 1))
 else
   new_number=1
-  echo "{ \"number\": $new_number }" | jq . > "$json_file"
+  echo "{ \"number\": $new_number, \"date\": \"$current_date_time\" }" | jq . > "$json_file"
 fi
 
 sudo cp -r /home/jonalm/laptopgit/Laptop/ /home/jonalm/laptopgit/LaptopBackup/
@@ -22,15 +23,13 @@ sudo cp -r /home/jonalm/.imwheelrc "$git_path"
 sudo cp -r /home/jonalm/.inputrc "$git_path"
 sudo cp -r /home/jonalm/.doom.d "$git_path"
 
-
-
 cd /home/jonalm/laptopgit/Laptop/
 git add --all
 git commit -m "commit ${new_number}"
 git push -u -f origin main
 
 if [ $? -eq 0 ]; then
-  echo "{ \"number\": $new_number }" | jq . > "$json_file"
+  echo "{ \"number\": $new_number, \"date\": \"$current_date_time\" }" | jq . > "$json_file"
   echo "Commit successful!"
 else
   echo "Commit failed!"

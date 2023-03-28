@@ -166,14 +166,30 @@ keys = [
 ### GROUP SETTINGS ###
 #CIRCLE: 
 groups = [
-        Group('1', label = ""), #Other
-        Group('2', label = "", matches=[Match(wm_class=["brave-browser"])]), #Browser
-        Group('3', label = "", matches=[Match(wm_class=["code"]), Match(wm_class=["jetbrains-idea"])]), #Code
-        Group('4', label = "", matches=[Match(wm_class=["pcmanfm"])]), #Files
-        Group('5', label = "", matches=[Match(wm_class=["thunderbird"])]), #Mail
-        Group('6', label = "", matches=[Match(wm_class=["libreoffice"])]), #Docs
-        Group('7', label = "", matches=[Match(wm_class=["discord"])]), #Social
-        Group('8', label = "", matches=[Match(wm_class=["tlpui"])]), #Settings
+        Group('1', label = "",  matches=[ #Other
+            ]), 
+        Group('2', label = "", matches=[ #Browser
+            Match(wm_class=["brave-browser"])
+                ]), 
+        Group('3', label = "", matches=[ #Code
+            Match(wm_class=["code"]), 
+            Match(wm_class=["jetbrains-idea"])
+            ]), 
+        Group('4', label = "", matches=[ #Files
+            Match(wm_class=["pcmanfm"])
+            ]), 
+        Group('5', label = "", matches=[ #Mail
+            Match(wm_class=["thunderbird"])
+            ]), 
+        Group('6', label = "", matches=[ #Docs
+            Match(wm_class=["libreoffice"])
+            ]), 
+        Group('7', label = "", matches=[ #Social
+            Match(wm_class=["discord"])
+            ]), 
+        Group('8', label = "", matches=[ #Settings
+            Match(wm_class=["tlpui"])
+            ]), 
         Group('9', label = ""), #Scratchpad
 ]
 
@@ -579,7 +595,8 @@ floating_layout = Floating(
     border_width  = floating_border_width,
     float_rules   = [
         *Floating.default_float_rules,
-        Match(wm_class = "nitrogen"            ),
+        Match(wm_class = "nitrogen"),
+        Match(wm_class="ticktick"),
         Match(wm_class = "se-liu-davhe786_jonal155-pong-Main"),
         Match(wm_class = "qalculate-gtk"),
         Match(wm_class = "lxappearance"),

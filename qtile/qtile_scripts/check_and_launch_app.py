@@ -24,8 +24,6 @@ if not "Brave" in windows and group == "2":
         subprocess.call(["qtile", "run-cmd", "brave", "https://www.youtube.com/"])
     else:
         subprocess.call(["qtile", "run-cmd", "brave"])
-if not "Visual Studio Code" in windows and group == "3":
-    subprocess.call(["qtile", "run-cmd", "code"])
 if not "jonalm" or not "Desktop" in windows and group == "4":
     subprocess.call(["qtile", "run-cmd", "pcmanfm"])
 if not "Discord" in windows and group == "7":

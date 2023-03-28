@@ -56,7 +56,7 @@ window {
     location:                    center;
     anchor:                      center;
     fullscreen:                  false;
-    width:                       500px;
+    width:                       600px;
     x-offset:                    0px;
     y-offset:                    0px;
 
@@ -123,6 +123,7 @@ entry {
     enabled:                     true;
     background-color:            inherit;
     text-color:                  inherit;
+    padding:                     0px 10px;
     cursor:                      text;
     placeholder:                 "Scripts...";
     placeholder-color:           inherit;
