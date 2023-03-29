@@ -28,6 +28,7 @@ git add --all
 git commit -m "commit ${new_number}"
 git push -f origin main
 
+
 if [ $? -eq 0 ]; then
   echo "{ \"number\": $new_number, \"date\": \"$current_date_time\" }" | jq . > "$json_file"
   echo "Commit successful!"
