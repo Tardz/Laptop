@@ -13,15 +13,15 @@ else
   echo "{ \"number\": $new_number, \"date\": \"$current_date_time\" }" | jq . > "$json_file"
 fiawdawd
 
-sudo cp -r /home/jonalm/laptopgit/Laptop/ /home/jonalm/laptopgit/LaptopBackup/
-sudo cp -r /home/jonalm/scripts "$git_path"
-sudo cp -r /home/jonalm/.config/qtile "$git_path"
-sudo cp -r /home/jonalm/.config/rofi "$git_path"
-sudo cp -r /home/jonalm/.config/alacritty "$git_path"
-sudo cp -r /home/jonalm/.config/picom.conf "$git_path"
-sudo cp -r /home/jonalm/.imwheelrc "$git_path"
-sudo cp -r /home/jonalm/.inputrc "$git_path"
-sudo cp -r /home/jonalm/.doom.d "$git_path"
+sudo cp -r -f /home/jonalm/laptopgit/Laptop/ /home/jonalm/laptopgit/LaptopBackup/
+sudo cp -r -f /home/jonalm/scripts "$git_path"
+sudo cp -r -f /home/jonalm/.config/qtile "$git_path"
+sudo cp -r -f /home/jonalm/.config/rofi "$git_path"
+sudo cp -r -f /home/jonalm/.config/alacritty "$git_path"
+sudo cp -r -f /home/jonalm/.config/picom.conf "$git_path"
+sudo cp -r -f /home/jonalm/.imwheelrc "$git_path"
+sudo cp -r -f /home/jonalm/.inputrc "$git_path"
+sudo cp -r -f /home/jonalm/.doom.d "$git_path"
 
 cd /home/jonalm/laptopgit/Laptop/
 git add --all
