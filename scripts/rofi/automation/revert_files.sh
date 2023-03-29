@@ -26,7 +26,7 @@ sudo cp -r /home/jonalm/.doom.d "$git_path"
 cd /home/jonalm/laptopgit/Laptop/
 git add --all
 git commit -m "commit ${new_number}"
-git push -u -f origin main
+git push --force origin main
 
 if [ $? -eq 0 ]; then
   echo "{ \"number\": $new_number, \"date\": \"$current_date_time\" }" | jq . > "$json_file"
