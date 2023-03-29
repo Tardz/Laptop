@@ -599,6 +599,8 @@ floating_layout = Floating(
     float_rules   = [
         *Floating.default_float_rules,
         Match(wm_class = "nitrogen"),
+        Match(wm_class = "brave"),
+        Match(wm_class = "se-liu-jonal155-tetris-Tester"),
         Match(wm_class = "ticktick"),
         Match(wm_class = "se-liu-davhe786_jonal155-pong-Main"),
         Match(wm_class = "qalculate-gtk"),
