@@ -305,6 +305,31 @@ def upper_right_triangle(bg_color, fg_color):
         foreground=fg_color
         )
 
+### Callbacks ###
+@lazy.function
+def open_rofi_search(qtile):
+    qtile.cmd_spawn("/home/jonalm/scripts/rofi/search/search_web.sh")
+        
+@lazy.function
+def open_rofi_config_files(qtile):
+    qtile.cmd_spawn("/home/jonalm/scripts/rofi/config/config_files.sh")
+
+@lazy.function
+def open_rofi_automation(qtile):
+    qtile.cmd_spawn("/home/jonalm/scripts/rofi/automation/automation.sh")
+
+@lazy.function
+def open_rofi_apps(qtile):
+    qtile.cmd_spawn("/home/jonalm/.config/rofi/files/launchers/type-1/launcher.sh")
+
+@lazy.function
+def open_rofi_power_menu(qtile):
+    qtile.cmd_spawn("/home/jonalm/.config/rofi/files/powermenu/type-2/powermenu.sh")
+
+@lazy.function
+def open_keybindings_script(qtile):
+    qtile.cmd_spawn("/home/jonalm/scripts/term/show_keys.sh")
+
 ### WIDGET SETTINGS ###
 widget_defaults = dict(
     font = fnt3,
@@ -339,51 +364,32 @@ group_box_settings = {
 }
 
 ### BAR ###
-mybar = Bar([
-    # POWERBUTTON #
-    widget.TextBox(
-        text = "⏻",
-        foreground = sidebuttons_color,
-        background = barbackground,
-        font = fnt1,
-        fontsize = powerbutton_size,
-        padding = powerbutton_padding,
-    ),
-    
-    widget.Sep(
-        linewidth = seperator_line_width,
-        foreground = widgetbackground,
-        background = barbackground,
-        padding = 9,
-        size_percent = seperator_size,
-    ),
-
+top_bar = Bar([
     # GROUPBOX #
-    left_circle(),
     widget.GroupBox(
         margin = groupbox_margin,
         font = fnt1,
         **group_box_settings,
     ),
-    right_circle(),
 
-    seperator(),
-
-    # LAYOUT #
-    left_circle(),
-    widget.CurrentLayoutIcon(
-        custom_icon_paths = [os.path.expanduser("~/.config/qtile/icons")],
-        foreground = barbackground,
-        background = widgetbackground,
-        padding = layouticon_padding,
-        scale = layouticon_scale,
+    # TIME #
+    widget.Spacer(
+        bar.STRETCH,
+        background = barbackground
     ),
-    right_circle(),
-
-    seperator(),
+    widget.Clock(
+        format = "%R:%S",
+        fontsize = 21,
+        background = widgetbackground,
+        foreground = textbackground,
+    ),
+    widget.Spacer(
+        bar.STRETCH,
+        background = barbackground
+    ),
 
     # CPU #
-    left_circle(),
+    seperator(),
     widget.TextBox(
         text = " ",
         font = fnt2,
@@ -397,71 +403,12 @@ mybar = Bar([
         background = widgetbackground,
         update_interval = cpu_update_interval,
     ),    
-    right_circle(),
-
-    seperator(),
-
-    # UPDATES #
-    left_circle(),
-    widget.TextBox(
-        text = " ",
-        font = fnt2,
-        foreground = updates_color,
-        background = widgetbackground,
-        fontsize = update_icon_size,
-    ),
-    widget.CheckUpdates(
-        display_format='{updates}',
-        distro = "Arch",
-        colour_have_updates = textbackground,
-        foreground = textbackground,
-        background = widgetbackground,
-        update_interval = update_update_interval,
-    ),
-    widget.TextBox(
-        text = "Pacs",
-        foreground = textbackground,
-        background = widgetbackground,
-        fontsize = pacs_text_size,
-    ),
-    right_circle(),
-
-    widget.Spacer(
-        bar.STRETCH,
-        background = barbackground
-    ),
-
-    # CURRENTWINDOW #
-    left_circle(),
-    widget.TextBox(
-        text = " ",
-        foreground = windowname_color,
-        background = widgetbackground,
-        fontsize = icon_size,
-        font = fnt1,
-    ),
-    widget.WindowCount(
-        background = widgetbackground,
-        fontsize = 16,
-    ),
-    widget.WindowName(
-        background = widgetbackground,
-        foreground = textbackground,
-        width = bar.CALCULATED,
-        empty_group_string = "Desktop",
-        max_chars = windowname_max_chars,
-    ),
-    right_circle(),
-
-    widget.Spacer(
-        bar.STRETCH,
-        background = barbackground
-    ),
 
     # VOLUME #
-    left_circle(),
+    seperator(),
     widget.TextBox(
         text = "",
+        padding = 0,
         foreground = volume_color,
         background = widgetbackground,
         font = fnt1,
@@ -472,14 +419,55 @@ mybar = Bar([
         background = widgetbackground,
         limit_max_volume = "True",
     ),
-    right_circle(),
-
+    
+    # BATTERY #
     seperator(),
+    widget.TextBox(
+        text = '',
+        padding = -1,
+        foreground = battery_color,
+        background = widgetbackground,
+        font = fnt1,
+        fontsize = icon_size,
+    ),
+    widget.Battery(
+        format = '{percent:2.0%}', 
+        update_interval = battery_update_interval, 
+        background = widgetbackground,
+        foreground = textbackground,
+    ),
+    # widget.TextBox(
+    #     text = '',
+    #     foreground = battery_color,
+    #     background = widgetbackground,
+    #     font = fnt1,
+    #     fontsize = icon_size,
+    # ),
+    # widget.Battery(
+    #     format = '{watt:.2f}', 
+    #     update_interval = battery_update_interval, 
+    #     background = widgetbackground,
+    #     foreground = textbackground,
+    # ),
+    # widget.TextBox(
+    #     text = '',
+    #     foreground = battery_color,
+    #     background = widgetbackground,
+    #     font = fnt1,
+    #     fontsize = icon_size,
+    # ),
+    # widget.Battery(
+    #     format = '{hour:d}:{min:02d}', 
+    #     update_interval = battery_update_interval, 
+    #     background = widgetbackground,
+    #     foreground = textbackground,
+    # ),
 
     # BACKLIGHT #
-    left_circle(),
+    seperator(),
     widget.TextBox(
         text = '',
+        padding = -1,
         foreground = backlight_color,
         background = widgetbackground,
         font = fnt1,
@@ -492,70 +480,22 @@ mybar = Bar([
         background = widgetbackground,
         foreground = textbackground,
     ),
-    right_circle(),
-    
-    seperator(),
-    
-    # BATTERY #
-    left_circle(),
-    widget.TextBox(
-        text = '',
-        foreground = battery_color,
-        background = widgetbackground,
-        font = fnt1,
-        fontsize = icon_size,
-    ),
-    widget.Battery(
-        format = '{percent:2.0%}', 
-        update_interval = battery_update_interval, 
-        background = widgetbackground,
-        foreground = textbackground,
-    ),
-    widget.TextBox(
-        text = '',
-        foreground = battery_color,
-        background = widgetbackground,
-        font = fnt1,
-        fontsize = icon_size,
-    ),
-    widget.Battery(
-        format = '{watt:.2f}', 
-        update_interval = battery_update_interval, 
-        background = widgetbackground,
-        foreground = textbackground,
-    ),
-    widget.TextBox(
-        text = '',
-        foreground = battery_color,
-        background = widgetbackground,
-        font = fnt1,
-        fontsize = icon_size,
-    ),
-    widget.Battery(
-        format = '{hour:d}:{min:02d}', 
-        update_interval = battery_update_interval, 
-        background = widgetbackground,
-        foreground = textbackground,
-    ),
-    right_circle(),
-    
-    seperator(),
 
     # TIME #
-    left_circle(),
+    seperator(),
     widget.TextBox(
-        text = "",
+        text = "",
+        padding = -1,
         font = fnt1,
         foreground = clock_color,  # fontsize=38
         background = widgetbackground,
         fontsize = icon_size,
     ),
     widget.Clock(
-        format = "%a, %b %d %R",
+        format = "%a %b %d",
         background = widgetbackground,
         foreground = textbackground,
     ),
-    right_circle(),
 
     widget.TextBox(
         text = "󰍜",
@@ -571,6 +511,129 @@ mybar = Bar([
     border_width = bar_width,
     border_color = bar_border_color,
     )
+
+bottom_bar = Bar([
+    widget.CurrentLayoutIcon(
+        custom_icon_paths = [os.path.expanduser("~/.config/qtile/icons")],
+        foreground = layouticon_Background,
+        background = layouticon_Background,
+        padding = layouticon_padding,
+        scale = layouticon_scale,
+    ),
+
+    widget.Sep(
+        linewidth = 2,
+        foreground = widgetbackground,
+        background = widgetbackground,
+        padding = 0,
+        size_percent = 100
+    ),
+
+    widget.Sep(
+        linewidth = 3,
+        foreground = bar_border_color,
+        background = widgetbackground,
+        padding = 0,
+        size_percent = 100
+    ),
+
+    widget.TaskList(
+        padding          = 4,
+        spacing          = 3,
+        icon_size        = 13,
+        margin           = 8,
+        borderwidth      = 0,
+        max_title_width  = 800,
+        txt_floating     = ' 缾 ',
+        txt_maximized    = ' 类 ',
+        txt_minimized    = ' 絛 ',
+        highlight_method = 'block',
+        border           = bar_border_color,
+        unfocused_border = colors[61],
+        # foreground       = bar_border_color
+    ),
+
+    widget.Sep(
+        linewidth = 3,
+        foreground = bar_border_color,
+        background = widgetbackground,
+        padding = 0,
+        size_percent = 100
+    ),
+
+    widget.TextBox(
+        text = "",
+        fontsize = 25,
+        padding = 20,
+        background = barbackground,
+        foreground = colors[7],
+        mouse_callbacks = {
+            'Button1': open_rofi_apps,
+        }
+    ),
+
+    widget.TextBox(
+        text = "",
+        fontsize = 25,
+        padding = 20,
+        background = barbackground,
+        foreground = windowname_color,
+        mouse_callbacks = {
+            'Button1': open_rofi_search,
+        }
+    ),
+
+    widget.TextBox(
+        text = "",
+        fontsize = 25,
+        padding = 20,
+        background = barbackground,
+        foreground = volume_color,
+        mouse_callbacks = {
+            'Button1': open_rofi_config_files,
+        }
+    ),
+
+    widget.TextBox(
+        text = "",
+        fontsize = 25,
+        padding = 20,
+        background = barbackground,
+        foreground = cpu_color,
+        mouse_callbacks = {
+            'Button1': open_rofi_automation,
+        }
+    ),
+
+    widget.TextBox(
+        text = "",
+        fontsize = 25,
+        padding = 20,
+        background = barbackground,
+        foreground = cpu_temp_color,
+        mouse_callbacks = {
+            'Button1': open_keybindings_script,
+        }
+    ),
+
+    widget.TextBox(
+        text = "",
+        fontsize = 25,
+        padding = 20,
+        background = barbackground,
+        foreground = clock_color,
+        mouse_callbacks = {
+            'Button1': open_rofi_power_menu,
+        }
+    ),
+    ], 
+    bar_size, 
+    margin = [-6, 640, 9, 640],
+    # margin = [0, 6, 9, 6],
+    border_width = bar_width,
+    border_color = bar_border_color,
+    )
+
 
 ### LAYOUT SETTINGS ###
 layouts = [
@@ -599,6 +662,7 @@ floating_layout = Floating(
     float_rules   = [
         *Floating.default_float_rules,
         Match(wm_class = "nitrogen"),
+        Match(wm_class = "pavucontrol"),
         Match(wm_class = "brave"),
         Match(wm_class = "se-liu-jonal155-tetris-Tester"),
         Match(wm_class = "ticktick"),
@@ -611,7 +675,7 @@ floating_layout = Floating(
 extension_defaults = widget_defaults.copy()
 
 ### DECLARING PANEL ###
-screens = [Screen(top=mybar, bottom=bar.Gap(bar_gap_size), left=bar.Gap(bar_gap_size), right=bar.Gap(bar_gap_size))]
+screens = [Screen(top=top_bar, bottom=bottom_bar, left=bar.Gap(bar_gap_size), right=bar.Gap(bar_gap_size))]
         
 ### HOOKS ###
 @hook.subscribe.startup_once

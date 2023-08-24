@@ -70,16 +70,18 @@ colors = [
     #-More nord
     ["#ff726f", "#ff726f"],     # 58 nordlightred
     ["#ffcccb", "#ffcccb"],     # 59 nordlightrred
-    ["#ECEFF4", "#ECEFF4"]     # 60 nordwhite1
+    ["#ECEFF4", "#ECEFF4"],     # 60 nordwhite1
+    ["#2e3441", "#2e3441"],     # 61 darker grey
 ]
 
 #-UNIVERSAL
-barbackground                 = colors[0]
+barbackground                 = colors[14]
+bar_border_color              = colors[2][0]
 widgetbackground              = colors[14]
 textbackground                = colors[9]
     
 #-SPECIFIC    
-group_box_active              = colors[9]
+group_box_active              = colors[60]
 group_box_inactive            = colors[10]
 group_box_block_highlight     = colors[3]
 group_box_highlight           = colors[3]
@@ -91,13 +93,15 @@ group_box_urgentborder        = colors[3]
     
 sidebuttons_color             = colors[13]
 cpu_color                     = colors[7]
+cpu_temp_color                = colors[11]
 updates_color                 = colors[13]
 windowname_color              = colors[12]
 volume_color                  = colors[8]
-backlight_color               = colors[5]
+backlight_color               = colors[11]
 battery_color                 = colors[4]
 clock_color                   = colors[3]
-bar_border_color              = colors[2][0]
+layouticon_Background         = colors[14]
+time_color                    = colors[26]
 
 layout_normal_color_stack     = colors[2][0]
 layout_focus_color_stack      = colors[2][0]
@@ -130,7 +134,7 @@ widget_default_padding     = 8
 
 #-WIDTH
 middlewidgetwidth          = 265
-seperator_line_width       = 0
+seperator_line_width       = 15
 widget_default_width       = [8.8, 0, 6.8, 0]
 
 ##-SPECIFIC 
@@ -141,19 +145,19 @@ pacs_text_size             = 19
 menu_button_size           = 30
 bar_size                   = 48
 bar_gap_size               = -3
-layouticon_scale           = 0.31
+layouticon_scale           = 0.5
 
 #-PADDING
-powerbutton_padding        = 18
-layouticon_padding         = -10
+powerbutton_padding        = 16
+layouticon_padding         = -2
 menu_button_padding        = 26
 
 #-WIDTH
-bar_width                  = [0, 0, 5, 0]
+bar_width                  = 3
 
 #-MARGIN
 groupbox_margin            = 4
-bar_margin                 = 0
+bar_margin                 = [6, 6, 0, 6]
  
 #-UPDATE INTERVAL
 cpu_update_interval        = 5
@@ -167,7 +171,7 @@ windowname_max_chars       = 43
 ### LAYOUT VARIABLES ### 
 layout_margin              = 12
 layout_border_width        = 3
-floating_border_width      = 0
+floating_border_width      = 3
 layout_num_stacks          = 1
 
 ### QTILE SETTINGS ###
