@@ -14,18 +14,20 @@ if match:
 else:
     print("group not found. Error: ", match)
     exit
-
+    
 windows_start = data.find("'windows': [")
 windows_end = data.find("]", windows_start) + 1
 windows = data[windows_start:windows_end]
 
+print(windows)
+print(group)
+
 if not "Brave" in windows and group == "2":
-    if "youtube" in arg1:
-        subprocess.call(["qtile", "run-cmd", "brave", "https://www.youtube.com/"])
-    else:
-        subprocess.call(["qtile", "run-cmd", "brave"])
-if not "jonalm" or not "Desktop" in windows and group == "4":
-    subprocess.call(["qtile", "run-cmd", "pcmanfm"])
+    # if "youtube" in arg1:
+        # subprocess.call(["qtile", "run-cmd", "firefox", "https://www.youtube.com/"])
+    subprocess.call(["qtile", "run-cmd", "brave"])
+if not "Alacritty" in windows and group == "4":
+    subprocess.call(["qtile", "run-cmd", "alacritty", "-e", "ranger"])
 if not "Discord" in windows and group == "7":
     subprocess.call(["qtile", "run-cmd", "discord"])
 if not "Thunderbird" in windows and group == "5":

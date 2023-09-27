@@ -114,18 +114,19 @@ layout_focus_color_floating   = colors[2][0]
 focus_value                = True
 
 ### FONTS ###
-fnt1                       = "Font Awesome 6 Brands"
-fnt2                       = "TerminessTTF Nerd Font"
+fnt2                       = "ttf-dejavu"
 fnt3                       = "FiraCode Nerd Font"
 fnt1                       = "Font Awesome 6 Free Solid"
+
 
 ### BAR VARIABLES ###
 ##-UNIVERSAL
 #-SIZE
 icon_size                  = 18
+icon_size_bottom           = 22
 circle_size                = 26
 seperator_size             = 40
-widget_default_size        = 19     
+widget_default_size        = 20 
 
 #-PADDING
 circle_padding             = 0
@@ -143,9 +144,10 @@ powerbutton_size           = 24
 update_icon_size           = 25
 pacs_text_size             = 19
 menu_button_size           = 30
-bar_size                   = 48
+bar_size                   = 44
 bar_gap_size               = -3
 layouticon_scale           = 0.5
+font_size                  = 19
 
 #-PADDING
 powerbutton_padding        = 16
@@ -153,11 +155,15 @@ layouticon_padding         = -2
 menu_button_padding        = 26
 
 #-WIDTH
-bar_width                  = 3
+bar_width_top              = 2
+bar_width_bottom           = 2
 
 #-MARGIN
 groupbox_margin            = 4
-bar_margin                 = [6, 6, 0, 6]
+bar_margin_top             = [5, 5, 5, 5]
+# bar_margin_top             = [0, -4, 6, -4]
+bar_margin_bottom          = [5, 5, 5, 5]
+# bar_margin_bottom          = [4, 500, 9, 500]
  
 #-UPDATE INTERVAL
 cpu_update_interval        = 5
@@ -169,7 +175,7 @@ battery_update_interval    = 3
 windowname_max_chars       = 43
  
 ### LAYOUT VARIABLES ### 
-layout_margin              = 12
+layout_margin              = 8
 layout_border_width        = 3
 floating_border_width      = 3
 layout_num_stacks          = 1

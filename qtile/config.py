@@ -31,12 +31,9 @@ from settings import *
 
 ### LAZY FUNCTIONS ###
 @lazy.function
-def spawn_brave(qtile):
+def spawn_browser(qtile):
     if qtile.current_group.name == "2":
-        qtile.cmd_spawn("brave")
-    for window in qtile.windows():
-        if window.name == "Brave":
-            qtile.cmd_spawn("brave")
+        qtile.cmd_spawn(myBrowser)
 
 @lazy.function
 def spawn_code(qtile):
@@ -44,9 +41,9 @@ def spawn_code(qtile):
         qtile.cmd_spawn("code")
 
 @lazy.function
-def spawn_pcmanfm(qtile):
+def spawn_filemanager(qtile):
     if qtile.current_group.name == "4":
-        qtile.cmd_spawn("pcmanfm")
+        qtile.cmd_spawn("alacritty -e ranger")
 
 @lazy.function
 def spawn_thunderbird(qtile):
@@ -91,9 +88,13 @@ def close_all_windows(qtile):
     for group in qtile.groups:
         for window in group.windows:
             window.kill()
-        
+
+@lazy.function
+def mute_or_unmute(qtile):
+    qtile.cmd_spawn("/home/jonalm/scripts/qtile/mute_or_unmute.sh")
+
 ### KEYBINDINGS ###
-#-START_KEYS
+#-START_KEYS 
 keys = [
         #ESSENTIALS
         Key([mod], "Tab", lazy.next_layout(), desc='Toggle through layouts'),
@@ -111,15 +112,12 @@ keys = [
 
         #SCREEN
         Key([], "XF86MonBrightnessUp", lazy.spawn("sudo brillo -A 9"), desc='Increase display brightness'),
-        Key([], "XF86MonBrightnessDown", lazy.spawn("sudo brillo -U 9"), desc='Increase display brightness'),
+        Key([], "XF86MonBrightnessDown", lazy.spawn("sudo brillo -U 9"), desc='Increase display brightness'),        
         
         #AUDIO
-        # Key([], 'XF86AudioMute', lazy.spawn('ponymix toggle')),
-        # Key([], 'XF86AudioRaiseVolume', lazy.spawn('ponymix increase 5')),
-        # Key([], 'XF86AudioLowerVolume', lazy.spawn('ponymix decrease 5')),
-        # Key([], 'XF86AudioPlay', lazy.spawn(music_cmd + 'PlayPause')),
-        # Key([], 'XF86AudioNext', lazy.function(next_prev('Next'))),
-        # Key([], 'XF86AudioPrev', lazy.function(next_prev('Previous'))),
+        Key([], 'XF86AudioMute', mute_or_unmute),
+        Key([], 'XF86AudioRaiseVolume', lazy.spawn('pactl set-sink-volume @DEFAULT_SINK@ +5%')),
+        Key([], 'XF86AudioLowerVolume', lazy.spawn('pactl set-sink-volume @DEFAULT_SINK@ -5%')),
         
         #SWITCH MONITOR FOCUS AND GROUPS
         Key(["control"], "Tab", spawn_alttab_once, desc='alttab'),
@@ -140,11 +138,13 @@ keys = [
         Key([mod], "z", lazy.window.toggle_minimize(), lazy.group.next_window(), desc="Minimize window"),
 
         #APPS
-        Key([mod], "c", spawn_brave, lazy.group["2"].toscreen(), check, desc='Browser'),
-        Key([mod], "n", spawn_pcmanfm, lazy.group["4"].toscreen(), check,desc='Filemanager'),
+        Key([mod], "c", spawn_browser, lazy.group["2"].toscreen(), check, desc='Browser'),
+        Key([mod], "n", spawn_filemanager, lazy.group["4"].toscreen(), check,desc='Filemanager'),
         Key([mod], "d", spawn_discord, lazy.group["7"].toscreen(), check, desc='Discord'),
         Key([mod], "v", spawn_code, lazy.group["3"].toscreen(), check, desc='VScode'),
         Key([mod], "m", spawn_thunderbird, lazy.group["5"].toscreen(), check, desc='Mail'),
+        Key([mod], "period", lazy.spawn("pavucontrol"), desc='Sounds'),
+        Key([mod], "comma", lazy.spawn("blueman-manager"), desc='Bluetooth'),
 
         #URL
         Key([mod], "y", spawn_youtube, lazy.group["2"].toscreen(), check_youtube, desc='Youtube'),
@@ -165,13 +165,46 @@ keys = [
         
 ### GROUP SETTINGS ###
 groups = [
+        # Group('1', label = "", matches=[ #Other
+        #     ]), 
+        # Group('2', label = "", matches=[ #Browser
+        #     Match(wm_class = ["chromium"]),
+        #     Match(wm_class = ["brave-browser"])
+        #         ]), 
+        # Group('3', label = "", matches=[ #Code
+        #     Match(wm_class = ["jetbrains-clion"]),
+        #     Match(wm_class = ["code"]),
+        #     Match(wm_class = ["jetbrains-studio"]),
+        #     Match(wm_class = ["jetbrains-idea"]),
+        #     ]), 
+        # Group('4', label = "", matches=[ #Files
+        #     Match(wm_class = ["pcmanfm"]),
+        #     ]), 
+        # Group('5', label = "", matches=[ #Mail
+        #     Match(wm_class = ["thunderbird"]),
+        #     ]), 
+        # Group('6', label = "", matches=[ #Docs
+        #     Match(wm_class = ["libreoffice"]),
+        #     ]), 
+        # Group('7', label = "", matches=[ #Social
+        #     Match(wm_class = ["discord"]),
+        #     ]), 
+        # Group('8', label = "", matches=[ #Settings
+        #     Match(wm_class = ["lxappearance"]),
+        #     Match(wm_class = ["tlpui"]),
+        #     ]), 
+        # Group('9', label = ""), #Scratchpad
+
+
+
         Group('1', label = "", matches=[ #Other
             ]), 
-        Group('2', label = "", matches=[ #Browser
+        Group('2', label = "", matches=[ #Browser
             Match(wm_class = ["chromium"]),
             Match(wm_class = ["brave-browser"])
                 ]), 
         Group('3', label = "", matches=[ #Code
+            Match(wm_class = ["jetbrains-clion"]),
             Match(wm_class = ["code"]),
             Match(wm_class = ["jetbrains-studio"]),
             Match(wm_class = ["jetbrains-idea"]),
@@ -193,6 +226,7 @@ groups = [
             Match(wm_class = ["tlpui"]),
             ]), 
         Group('9', label = ""), #Scratchpad
+
 ]
 
 focus_value = True
@@ -251,12 +285,12 @@ def right_circle():
         padding = circle_padding,
     )
 
-def seperator():
+def seperator(padd = seperator_padding):
     return Sep(
         linewidth = seperator_line_width,
         foreground = widgetbackground,
         background = barbackground,
-        padding = seperator_padding,
+        padding = padd,
         size_percent = seperator_size,
     )
 
@@ -330,6 +364,10 @@ def open_rofi_power_menu(qtile):
 def open_keybindings_script(qtile):
     qtile.cmd_spawn("/home/jonalm/scripts/term/show_keys.sh")
 
+@lazy.function
+def open_powertop(qtile):
+    qtile.cmd_spawn("alacritty -e sudo powertop")
+
 ### WIDGET SETTINGS ###
 widget_defaults = dict(
     font = fnt3,
@@ -369,6 +407,7 @@ top_bar = Bar([
     widget.GroupBox(
         margin = groupbox_margin,
         font = fnt1,
+        fontsize = 19,
         **group_box_settings,
     ),
 
@@ -379,7 +418,7 @@ top_bar = Bar([
     ),
     widget.Clock(
         format = "%R:%S",
-        fontsize = 21,
+        fontsize = font_size + 1,
         background = widgetbackground,
         foreground = textbackground,
     ),
@@ -392,8 +431,9 @@ top_bar = Bar([
     seperator(),
     widget.TextBox(
         text = " ",
+        padding = -1,
         font = fnt2,
-        foreground = cpu_color,
+        foreground = volume_color,
         background = widgetbackground,
         fontsize = icon_size,
     ),
@@ -402,6 +442,7 @@ top_bar = Bar([
         foreground = textbackground,
         background = widgetbackground,
         update_interval = cpu_update_interval,
+        fontsize = font_size,
     ),    
 
     # VOLUME #
@@ -409,7 +450,7 @@ top_bar = Bar([
     widget.TextBox(
         text = "",
         padding = 0,
-        foreground = volume_color,
+        foreground = windowname_color,
         background = widgetbackground,
         font = fnt1,
         fontsize = icon_size,
@@ -418,6 +459,7 @@ top_bar = Bar([
         foreground = textbackground,
         background = widgetbackground,
         limit_max_volume = "True",
+        fontsize = font_size,
     ),
     
     # BATTERY #
@@ -435,34 +477,10 @@ top_bar = Bar([
         update_interval = battery_update_interval, 
         background = widgetbackground,
         foreground = textbackground,
+        mouse_callbacks = {"Button1": open_powertop},
+        fontsize = font_size,
     ),
-    # widget.TextBox(
-    #     text = '',
-    #     foreground = battery_color,
-    #     background = widgetbackground,
-    #     font = fnt1,
-    #     fontsize = icon_size,
-    # ),
-    # widget.Battery(
-    #     format = '{watt:.2f}', 
-    #     update_interval = battery_update_interval, 
-    #     background = widgetbackground,
-    #     foreground = textbackground,
-    # ),
-    # widget.TextBox(
-    #     text = '',
-    #     foreground = battery_color,
-    #     background = widgetbackground,
-    #     font = fnt1,
-    #     fontsize = icon_size,
-    # ),
-    # widget.Battery(
-    #     format = '{hour:d}:{min:02d}', 
-    #     update_interval = battery_update_interval, 
-    #     background = widgetbackground,
-    #     foreground = textbackground,
-    # ),
-
+    
     # BACKLIGHT #
     seperator(),
     widget.TextBox(
@@ -479,6 +497,7 @@ top_bar = Bar([
         update_interval = backlight_update_interval, 
         background = widgetbackground,
         foreground = textbackground,
+        fontsize = font_size,
     ),
 
     # TIME #
@@ -491,10 +510,12 @@ top_bar = Bar([
         background = widgetbackground,
         fontsize = icon_size,
     ),
+    seperator(-8),
     widget.Clock(
         format = "%a %b %d",
         background = widgetbackground,
         foreground = textbackground,
+        fontsize = font_size,
     ),
 
     widget.TextBox(
@@ -506,9 +527,9 @@ top_bar = Bar([
         padding = menu_button_padding,
     ),
     ], 
-    bar_size, 
-    margin = bar_margin,
-    border_width = bar_width,
+    bar_size - 3, 
+    margin = bar_margin_top,
+    border_width = bar_width_top,
     border_color = bar_border_color,
     )
 
@@ -563,7 +584,7 @@ bottom_bar = Bar([
 
     widget.TextBox(
         text = "",
-        fontsize = 25,
+        fontsize = icon_size_bottom,
         padding = 20,
         background = barbackground,
         foreground = colors[7],
@@ -574,10 +595,10 @@ bottom_bar = Bar([
 
     widget.TextBox(
         text = "",
-        fontsize = 25,
+        fontsize = icon_size_bottom,
         padding = 20,
         background = barbackground,
-        foreground = windowname_color,
+        foreground = volume_color,
         mouse_callbacks = {
             'Button1': open_rofi_search,
         }
@@ -585,10 +606,10 @@ bottom_bar = Bar([
 
     widget.TextBox(
         text = "",
-        fontsize = 25,
+        fontsize = icon_size_bottom,
         padding = 20,
         background = barbackground,
-        foreground = volume_color,
+        foreground = windowname_color,
         mouse_callbacks = {
             'Button1': open_rofi_config_files,
         }
@@ -596,10 +617,10 @@ bottom_bar = Bar([
 
     widget.TextBox(
         text = "",
-        fontsize = 25,
+        fontsize = icon_size_bottom,
         padding = 20,
         background = barbackground,
-        foreground = cpu_color,
+        foreground = battery_color,
         mouse_callbacks = {
             'Button1': open_rofi_automation,
         }
@@ -607,7 +628,7 @@ bottom_bar = Bar([
 
     widget.TextBox(
         text = "",
-        fontsize = 25,
+        fontsize = icon_size_bottom,
         padding = 20,
         background = barbackground,
         foreground = cpu_temp_color,
@@ -618,7 +639,7 @@ bottom_bar = Bar([
 
     widget.TextBox(
         text = "",
-        fontsize = 25,
+        fontsize = icon_size_bottom,
         padding = 20,
         background = barbackground,
         foreground = clock_color,
@@ -628,9 +649,8 @@ bottom_bar = Bar([
     ),
     ], 
     bar_size, 
-    margin = [-6, 640, 9, 640],
-    # margin = [0, 6, 9, 6],
-    border_width = bar_width,
+    margin = bar_margin_bottom,
+    border_width = bar_width_bottom,
     border_color = bar_border_color,
     )
 
@@ -646,8 +666,8 @@ layouts = [
         single_border_width = layout_border_width,
     ),
     Stack(
-        border_normal       = layout_normal_color_stack,
-        border_focus        = layout_focus_color_stack,
+        border_normal       = layout_normal_color_monadtall,
+        border_focus        = layout_focus_color_monadtall,
         margin              = layout_margin,
         num_stacks          = layout_num_stacks,
         border_width        = layout_border_width,
@@ -662,6 +682,11 @@ floating_layout = Floating(
     float_rules   = [
         *Floating.default_float_rules,
         Match(wm_class = "nitrogen"),
+        Match(wm_class = "TSP"),
+        Match(wm_class = "blueman-applet"),
+        Match(wm_class = "blueman-manager"),
+        Match(wm_class = "nitrogen"),
+        Match(wm_class = "pavucontrol"),
         Match(wm_class = "pavucontrol"),
         Match(wm_class = "brave"),
         Match(wm_class = "se-liu-jonal155-tetris-Tester"),
@@ -682,12 +707,5 @@ screens = [Screen(top=top_bar, bottom=bottom_bar, left=bar.Gap(bar_gap_size), ri
 def autostart():
     home = os.path.expanduser('~/.config/qtile/autostart.sh')
     subprocess.call([home])
-    alttab_spawned = False
-
-    # processes = [
-    #     ["alttab -bg '#2e3440' -fg '#d8dee9' -bc '#2e3440' -bw 18 -inact '#3b4252' -frame '#81a1c1' -d 2 &"]
-    # ]
-    # for p in processes:
-    #     subprocess.Popen(p)
 
 wmname = "LG3D"
