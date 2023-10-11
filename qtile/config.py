@@ -143,8 +143,6 @@ keys = [
         Key([mod], "d", spawn_discord, lazy.group["7"].toscreen(), check, desc='Discord'),
         Key([mod], "v", spawn_code, lazy.group["3"].toscreen(), check, desc='VScode'),
         Key([mod], "m", spawn_thunderbird, lazy.group["5"].toscreen(), check, desc='Mail'),
-        Key([mod], "period", lazy.spawn("pavucontrol"), desc='Sounds'),
-        Key([mod], "comma", lazy.spawn("blueman-manager"), desc='Bluetooth'),
 
         #URL
         Key([mod], "y", spawn_youtube, lazy.group["2"].toscreen(), check_youtube, desc='Youtube'),
@@ -254,9 +252,12 @@ for i in groups:
         Key([mod, "shift"], i.name, lazy.window.togroup(i.name), desc="move focused window to group {}".format(i.name)),
         Key([mod], i.name, lazy.group[i.name].toscreen(), desc="Switch to group {}".format(i.name)),
         #SCRATCHPAD
-        Key([mod], "Return", lazy.group['9'].dropdown_toggle('terminal')),
-        Key([mod], "s", lazy.group['9'].dropdown_toggle('music')),
-        Key([mod], "r", lazy.group['9'].dropdown_toggle('todo')), 
+        Key([mod], "Return", lazy.group['9'].dropdown_toggle('terminal'), desc='Terminal'),
+        Key([mod], "period", lazy.group['9'].dropdown_toggle('mixer'), desc='Volume'),
+        Key([mod], "minus", lazy.group['9'].dropdown_toggle('net'), desc='Wifi'),
+        Key([mod], "comma", lazy.group['9'].dropdown_toggle('bluetooth'), desc='Bluetooth'),
+        Key([mod], "s", lazy.group['9'].dropdown_toggle('music'), desc='Spotify'),
+        Key([mod], "r", lazy.group['9'].dropdown_toggle('todo'), desc='Ticktick'), 
     ])
 
 ### DRAG FLOATING LAYOUTS ###
