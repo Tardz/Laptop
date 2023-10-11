@@ -2,6 +2,8 @@ files_last_update=$(jq -r '.date' "/home/jonalm/scripts/rofi/automation/save_fil
 files_prev_update=$(jq -r '.old_date' "/home/jonalm/scripts/rofi/automation/save_files_data.json")
 
 declare -a options=(
+"Drive - sync | $HOME/scripts/drive/sync_drive.sh"
+"Drive - bisync | $HOME/scripts/drive/bisync_drive.sh"
 "Floating - Add | $HOME/scripts/qtile/update_floating.py"
 "Floating - Remove | $HOME/scripts/qtile/remove_floating.py"
 "Group Match - Add | $HOME/scripts/qtile/update_group_match.py"

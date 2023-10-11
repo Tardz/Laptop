@@ -1,3 +1,5 @@
+#OLD, NOT IN USE
+
 declare -a options=(
 'Google drive - https://drive.google.com/drive/home'
 'TDDC93 - https://www.ida.liu.se/~TDDC88/index.en.shtml'
