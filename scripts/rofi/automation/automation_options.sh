@@ -16,7 +16,6 @@ declare -a options=(
 "Push - Remove | $HOME/scripts/rofi/config_file_remove.sh"
 "Files - Save [$files_last_update] | $HOME/scripts/rofi/automation/save_files.sh"
 "Files - Revert [$files_prev_update] | $HOME/scripts/rofi/config_file_remove.sh"
-"Push - TDDD78 | $HOME/scripts/rofi/config_file_remove.sh"
 )
 
 display_options=$(printf '%s\n' "${options[@]}" | cut -d'|' -f1-1)
