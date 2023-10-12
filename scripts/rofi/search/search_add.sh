@@ -1,5 +1,12 @@
 #!/bin/bash
 
+/home/jonalm/scripts/other/check_internet.sh
+internet_status=$?
+
+if [ $internet_status -eq 1 ]; then
+    exit 1
+fi
+
 while [ -z "$WebName" ]; do
     WebName=$(rofi -theme "$HOME/.config/rofi/files/launchers/type-1/style-7-search-add-name.rasi" -dmenu -i -l 2 -p '') || exit
 done

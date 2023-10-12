@@ -1,5 +1,12 @@
 #!/bin/bash
 
+/home/jonalm/scripts/other/check_internet.sh
+internet_status=$?
+
+if [ $internet_status -eq 1 ]; then
+    exit 1
+fi
+
 source /home/jonalm/googleDrive/search_options.sh
 
 while [ -z "$engine" ]; do

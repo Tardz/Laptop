@@ -9,6 +9,10 @@ out, _ = p.communicate()
 # Extract the WM_CLASS value from the output
 wm_class = str(out).split('"')[1]
 
+# Check if the wm_class is empty (meaning the window doesn't have a WM_CLASS)
+if not wm_class:
+    exit(1)
+
 # Read the existing qtile config file
 with open('/home/jonalm/.config/qtile/config.py', 'r') as f:
     config_lines = f.readlines()
@@ -29,3 +33,6 @@ with open('/home/jonalm/.config/qtile/config.py', 'w') as f:
 
 # Restart qtile
 subprocess.run(["qtile", "cmd-obj", "-o", "cmd", "-f", "restart"])
+
+# Gives the root shell script the correct wm_class
+print(wm_class)

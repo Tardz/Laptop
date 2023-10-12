@@ -7,6 +7,9 @@ out, _ = p.communicate()
 
 wm_class = str(out).split('"')[1]
 
+if not wm_class:
+    exit(1)
+
 with open('/home/jonalm/.config/qtile/config.py', 'r') as f:
     config_lines = f.readlines()
 
@@ -21,3 +24,5 @@ with open('/home/jonalm/.config/qtile/config.py', 'w') as f:
     f.writelines(config_lines)
 
 subprocess.run(["qtile", "cmd-obj", "-o", "cmd", "-f", "restart"])
+
+print(wm_class)
