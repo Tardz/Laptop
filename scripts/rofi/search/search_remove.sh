@@ -11,9 +11,9 @@ if [ "$displayname" ]; then
     python3 "/home/jonalm/scripts/rofi/search/search_remove.py" "$displayname"
     python_exit_code=$?
     if [ $python_exit_code -eq 0 ]; then
-        echo "Python script completed successfully."
+        notify-send -t 3000 "Search option removed" "Option: <span foreground='#bf616a' size='medium'>$displayname</span>"
         /home/jonalm/scripts/drive/bisync_drive.sh
     else
-        echo "Python script encountered an error (Exit code: $python_exit_code)."
+        notify-send -u critical -t 3000 "Search option remove failed" "Error: <span foreground='#bf616a' size='medium'>$python_exit_code</span>"
     fi
 fi

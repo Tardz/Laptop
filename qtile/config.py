@@ -540,6 +540,13 @@ top_bar = Bar([
     )
 
 bottom_bar = Bar([
+    widget.Sep(
+        linewidth = 12,
+        foreground = widgetbackground,
+        background = widgetbackground,
+        padding = 0,
+        size_percent = 100
+    ),
     widget.CurrentLayoutIcon(
         custom_icon_paths = [os.path.expanduser("~/.config/qtile/icons")],
         foreground = layouticon_Background,
@@ -549,7 +556,7 @@ bottom_bar = Bar([
     ),
 
     widget.Sep(
-        linewidth = 2,
+        linewidth = 12,
         foreground = widgetbackground,
         background = widgetbackground,
         padding = 0,
@@ -557,18 +564,18 @@ bottom_bar = Bar([
     ),
 
     widget.Sep(
-        linewidth = 3,
+        linewidth = 2,
         foreground = bar_border_color,
         background = widgetbackground,
         padding = 0,
-        size_percent = 100
+        size_percent = 80
     ),
 
     widget.TaskList(
         padding          = 4,
         spacing          = 3,
         icon_size        = 13,
-        margin           = 8,
+        margin           = 5,
         borderwidth      = 0,
         max_title_width  = 800,
         txt_floating     = ' 缾 ',
@@ -581,11 +588,11 @@ bottom_bar = Bar([
     ),
 
     widget.Sep(
-        linewidth = 3,
+        linewidth = 2,
         foreground = bar_border_color,
         background = widgetbackground,
         padding = 0,
-        size_percent = 100
+        size_percent = 80
     ),
 
     widget.TextBox(
@@ -688,6 +695,7 @@ floating_layout = Floating(
     float_rules   = [
         *Floating.default_float_rules,
         Match(wm_class = "nitrogen"),
+        Match(wm_class = "brave-browser"),
         Match(wm_class = "TSP"),
         Match(wm_class = "blueman-applet"),
         Match(wm_class = "blueman-manager"),

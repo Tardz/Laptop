@@ -13,9 +13,15 @@ elif [ "$choice" ]; then
         option_formated=$(echo "$option" | cut -d'-' -f1-1)
         if [[ "$option_formated" == "$choice"* ]]; then
             cfg=$(echo "${option}" | cut -d'-' -f2- )
-            $DMEDITOR "$cfg"
-            qtile cmd-obj -o group 3 -f toscreen
-            break
+            # Attempt to open the editor
+            if $DMEDITOR "$cfg"; then
+                # Editor was opened successfully
+                notify-send -t 3000 "Open config" "Editor opened for <span foreground='#a3be8c' size='medium'>$choice</span>"
+                qtile cmd-obj -o group 3 -f toscreen
+            else
+                notify-send -u critical -t 3000 "Open config" "Failed to open the editor for <span foreground='#bf616a' size='medium'>$choice</span>"
+                # Editor failed to open
+            fi
         fi
     done
 else

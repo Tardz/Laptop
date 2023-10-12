@@ -14,9 +14,9 @@ if [[ "$Url" && "$WebName" ]]; then
     python3 "/home/jonalm/scripts/rofi/search/search_add.py" "$option"
     python_exit_code=$?
     if [ $python_exit_code -eq 0 ]; then
-        echo "Python script completed successfully."
+        notify-send -t 3000 "Search option added" "Option: <span foreground='#a3be8c' size='medium'>$WebName</span>"
         /home/jonalm/scripts/drive/bisync_drive.sh
     else
-        echo "Python script encountered an error (Exit code: $python_exit_code)."
+        notify-send -u critical -t 3000 "Search option add failed" "Error: <span foreground='#bf616a' size='medium'>$python_exit_code</span>"
     fi
 fi

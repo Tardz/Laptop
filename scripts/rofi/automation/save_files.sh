@@ -30,8 +30,8 @@ git commit -m "commit ${new_number}"
 git push -u -f origin main
 
 if [ $? -eq 0 ]; then
-  echo "{ \"number\": $new_number, \"date\": \"$current_date_time\", \"old_date\": \"$old_date\" }" | jq . > "$json_file"
-  echo "Commit successful!"
-else
-  echo "Commit failed!"
+    echo "{ \"number\": $new_number, \"date\": \"$current_date_time\", \"old_date\": \"$old_date\" }" | jq . > "$json_file"
+    notify-send -t 3000 "Files upload" "<span foreground='#a3be8c' size='medium'>Successful</span>"
+  else
+    notify-send -u critical -t 3000 "Files upload" "<span foreground='#bf616a' size='medium'>Faild</span>"
 fi

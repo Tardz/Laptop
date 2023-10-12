@@ -1,4 +1,5 @@
 declare -a options=(
+'Dunstrc - /home/jonalm/.config/dunst'
 "Qtile config all - $HOME/.config/qtile/"
 "Qtile config - $HOME/.config/qtile/config.py"
 "Qtile autostart - $HOME/.config/qtile/autostart.sh"

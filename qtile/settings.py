@@ -146,7 +146,7 @@ pacs_text_size             = 19
 menu_button_size           = 30
 bar_size                   = 44
 bar_gap_size               = -3
-layouticon_scale           = 0.5
+layouticon_scale           = 0.6
 font_size                  = 19
 
 #-PADDING
