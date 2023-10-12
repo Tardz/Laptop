@@ -102,6 +102,11 @@ keys = [
         Key([mod, "shift"], "r", lazy.restart(), lazy.spawn("/home/jonalm/scripts/term/reset_screens.sh"), desc='Restart Qtile'),
         Key([mod, "shift"], "q", lazy.shutdown(), desc='Shutdown Qtile'),
         Key([mod, "control"], "q", close_all_windows, desc='close all windows'),
+        KeyChord([mod], "x", [
+            Key([], "u", lazy.spawn("systemctl poweroff")),
+            Key([], "s", lazy.spawn("systemctl suspend")),
+            Key([], "r", lazy.spawn("systemctl reboot"))
+        ]),
 
         #ASUSCTL
         #Key([], "XF86Launch3", lazy.spawn("asusctl led-mode -n"), desc='Aurora key'),

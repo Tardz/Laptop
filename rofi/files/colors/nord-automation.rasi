@@ -11,7 +11,7 @@
     background-alt: #383E4AFF;
     foreground:     #D8DEE9FF;
     selected:       #81A1C1FF;
-    selected-box:   #d08770;
+    selected-box:   #BF616AFF;
     active:         #A3BE8CFF;
     urgent:         #BF616AFF;
 }
