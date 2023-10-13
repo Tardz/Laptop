@@ -172,7 +172,7 @@ groups = [
             ]), 
         Group('2', label = "", matches=[ #Browser
             Match(wm_class = ["chromium"]),
-            Match(wm_class = ["brave-browser"])
+            Match(wm_class = ["brave-browser"]),
                 ]), 
         Group('3', label = "", matches=[ #Code
             Match(wm_class = ["code"]),
@@ -663,7 +663,6 @@ floating_layout = Floating(
     float_rules   = [
         *Floating.default_float_rules,
         Match(wm_class = "nitrogen"),
-        Match(wm_class = "brave-browser"),
         Match(wm_class = "TSP"),
         Match(wm_class = "blueman-applet"),
         Match(wm_class = "blueman-manager"),
