@@ -663,6 +663,7 @@ floating_layout = Floating(
     float_rules   = [
         *Floating.default_float_rules,
         Match(wm_class = "nitrogen"),
+        Match(wm_class = "code"),
         Match(wm_class = "TSP"),
         Match(wm_class = "blueman-applet"),
         Match(wm_class = "blueman-manager"),

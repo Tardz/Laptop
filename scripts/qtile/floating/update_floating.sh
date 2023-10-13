@@ -5,6 +5,8 @@ python_exit_code=$?
 
 if [ $python_exit_code -eq 0 ]; then
     notify-send -u low -t 3000 "Floating added" "Option: <span foreground='#a3be8c' size='medium'>$wm_class</span>"
-else
-    notify-send -u critical -t 3000 "Floating add failed" "Error: <span foreground='#bf616a' size='medium'>$python_exit_code</span>"
+elif [ $python_exit_code -eq 1 ]; then
+    notify-send -u normal -t 3000 "Floating add stopped" "Error: WM class <span foreground='#bf616a' size='medium'>is empty</span>"
+elif [ $python_exit_code -eq 2 ]; then
+    notify-send -u normal -t 3000 "Floating add stopped" "Error: <span foreground='#bf616a' size='medium'>$wm_class</span> already floats"
 fi

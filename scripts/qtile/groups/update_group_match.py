@@ -25,7 +25,7 @@ if match:
 else:
     exit(2)
 
-for i, line in enumerate(config_lines):
+for line in config_lines:
     if f'            Match(wm_class = ["{wm_class}"]),' in line:
         print(wm_class)
         exit(3)

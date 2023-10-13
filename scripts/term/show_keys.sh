@@ -1,6 +1,6 @@
 #!/bin/bash
 
-sed -n '/START_KEYS/,/END_KEYS/p' ~/.config/qtile/keybindings_and_groups.py | \
+sed -n '/START_KEYS/,/END_KEYS/p' ~/.config/qtile/config.py | \
     grep -v "#Key" |\
     grep -v "keys" |\
     grep -v "#-"   |\
