@@ -10,6 +10,13 @@ while [ -z "$engine" ]; do
     engine=$(echo "$options" | cut -d' ' -f1-1)
 done
 
+/home/jonalm/scripts/other/check_internet.sh
+internet_status=$?
+
+if [ $internet_status -eq 1 ]; then
+    exit 1
+fi
+
 for option in "${options[@]}"; do
     option_formated=$(echo "$option" | cut -d'-' -f1-1)
     if [[ "$displayname" == "$option_formated" ]]; then
@@ -21,14 +28,14 @@ for option in "${options[@]}"; do
             done
             qtile cmd-obj -o group 2 -f toscreen
             $BROWSER "$url""$query"
-            notify-send -t 2400 "Search finished" "Website: <span foreground='#81a1c1' size='medium'>$displayname</span>"
+            notify-send -u low -t 2400 "Search finished" "Website: <span foreground='#81a1c1' size='medium'>$displayname</span>"
             exit 1
         fi
     fi
 done
 
 qtile cmd-obj -o group 2 -f toscreen
-notify-send -t 2400 "Search finished" "Website: <span foreground='#81a1c1' size='medium'>$displayname</span>"
+notify-send -u low -t 2400 "Search finished" "Website: <span foreground='#81a1c1' size='medium'>$displayname</span>"
 
 $BROWSER "$url"
 exit 1
