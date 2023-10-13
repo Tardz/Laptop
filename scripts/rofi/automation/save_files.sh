@@ -1,5 +1,12 @@
 #!/bin/bash
 
+/home/jonalm/scripts/other/check_internet.sh
+internet_status=$?
+
+if [ $internet_status -eq 1 ]; then
+  exit 1
+fi
+
 git_path="/home/jonalm/laptopgit/Laptop"
 json_file="/home/jonalm/scripts/rofi/automation/save_files_data.json"
 current_date_time=$(date "+%Y-%m-%d %H:%M:%S")
