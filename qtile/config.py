@@ -165,41 +165,9 @@ keys = [
         Key([mod], "k", lazy.spawn("/home/jonalm/scripts/rofi/automation/automation.sh"), desc='Rofi automation scripts'),
 #-END_KEYS
 ]
-        
+
 ### GROUP SETTINGS ###
 groups = [
-        # Group('1', label = "", matches=[ #Other
-        #     ]), 
-        # Group('2', label = "", matches=[ #Browser
-        #     Match(wm_class = ["chromium"]),
-        #     Match(wm_class = ["brave-browser"])
-        #         ]), 
-        # Group('3', label = "", matches=[ #Code
-        #     Match(wm_class = ["jetbrains-clion"]),
-        #     Match(wm_class = ["code"]),
-        #     Match(wm_class = ["jetbrains-studio"]),
-        #     Match(wm_class = ["jetbrains-idea"]),
-        #     ]), 
-        # Group('4', label = "", matches=[ #Files
-        #     Match(wm_class = ["pcmanfm"]),
-        #     ]), 
-        # Group('5', label = "", matches=[ #Mail
-        #     Match(wm_class = ["thunderbird"]),
-        #     ]), 
-        # Group('6', label = "", matches=[ #Docs
-        #     Match(wm_class = ["libreoffice"]),
-        #     ]), 
-        # Group('7', label = "", matches=[ #Social
-        #     Match(wm_class = ["discord"]),
-        #     ]), 
-        # Group('8', label = "", matches=[ #Settings
-        #     Match(wm_class = ["lxappearance"]),
-        #     Match(wm_class = ["tlpui"]),
-        #     ]), 
-        # Group('9', label = ""), #Scratchpad
-
-
-
         Group('1', label = "", matches=[ #Other
             ]), 
         Group('2', label = "", matches=[ #Browser
@@ -207,8 +175,8 @@ groups = [
             Match(wm_class = ["brave-browser"])
                 ]), 
         Group('3', label = "", matches=[ #Code
-            Match(wm_class = ["jetbrains-clion"]),
             Match(wm_class = ["code"]),
+            Match(wm_class = ["jetbrains-clion"]),
             Match(wm_class = ["jetbrains-studio"]),
             Match(wm_class = ["jetbrains-idea"]),
             ]), 

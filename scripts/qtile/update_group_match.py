@@ -10,6 +10,9 @@ out, _ = p.communicate()
 # Extract the WM_CLASS value from the output
 wm_class = str(out).split('"')[1]
 
+if not wm_class:
+    exit(1)
+
 # Read the existing qtile config file
 with open('/home/jonalm/.config/qtile/config.py', 'r') as f:
     config_lines = f.readlines()
@@ -20,21 +23,15 @@ match = re.search(r"'name': '(\d+)'", data)
 if match:
     group = match.group(1)
 else:
-    print("group not found. Error: ", match)
-    exit(1)
+    exit(2)
 
 for i, line in enumerate(config_lines):
-    # Search for the line you're interested in
     if f'            Match(wm_class = ["{wm_class}"]),' in line:
-        # If the line is found, print the index and the line itself
-        print("Wm class already exists!")
-        exit(1)
+        print(wm_class)
+        exit(3)
 
 for i, line in enumerate(config_lines):
-    # Search for the line you're interested in
     if f"Group('{match.group(1)}'," in line:
-        # If the line is found, print the index and the line itself
-        print(f"Line {i}: {line}")
         break
 
 # Find the index of the floating_layout line
@@ -50,3 +47,5 @@ with open('/home/jonalm/.config/qtile/config.py', 'w') as f:
 
 # # Restart qtile
 subprocess.run(["qtile", "cmd-obj", "-o", "cmd", "-f", "restart"])
+
+print(wm_class)

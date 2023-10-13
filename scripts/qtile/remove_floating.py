@@ -13,11 +13,15 @@ if not wm_class:
 with open('/home/jonalm/.config/qtile/config.py', 'r') as f:
     config_lines = f.readlines()
 
+line_index = None
 for i, line in enumerate(config_lines):
     if f'Match(wm_class = "{wm_class}")' in line:
         line_index = i
         break
 
+if not line_index:
+    exit(2)
+    
 config_lines.pop(line_index)
 
 with open('/home/jonalm/.config/qtile/config.py', 'w') as f:
