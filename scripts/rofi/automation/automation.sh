@@ -9,30 +9,37 @@ while true; do
         case "$choice" in
             "  Drive")
                 section_options=("${drive_options[@]}")
+                rofi_path="style-3-automation-drive.rasi"
                 icon=""
                 ;;
             "  Floating")
                 section_options=("${floating_options[@]}")
+                rofi_path="style-3-automation-floating.rasi"
                 icon=""
                 ;;
             "  Groups")
                 section_options=("${group_options[@]}")
+                rofi_path="style-3-automation-groups.rasi"
                 icon=""
                 ;;
             "  Search")
                 section_options=("${search_options[@]}")
+                rofi_path="style-3-automation-search.rasi"
                 icon=""
                 ;;
             "  Config")
                 section_options=("${config_options[@]}")
-                icon=""
+                rofi_path="style-3-automation-config.rasi"
+                icon=""
                 ;;
             "  Push")
                 section_options=("${push_options[@]}")
+                rofi_path="style-3-automation-push.rasi"
                 icon=""
                 ;;
             "  Files")
                 section_options=("${github_files_options[@]}")
+                rofi_path="style-3-automation-files.rasi"
                 icon=""
                 ;;
             *)
@@ -40,7 +47,7 @@ while true; do
                 ;;
         esac
 
-        section_choice=$(printf '%s\n' "${section_options[@]}" | cut -d'|' -f1-1 | rofi -theme "$HOME/.config/rofi/files/launchers/type-1/style-3-automation.rasi" -dmenu -i -l 6 -p $icon)
+        section_choice=$(printf '%s\n' "${section_options[@]}" | cut -d'|' -f1-1 | rofi -theme "$HOME/.config/rofi/files/launchers/type-1/$rofi_path" -dmenu -i -l 6 -p $icon)
 
         if [ "$section_choice" ]; then 
             for option in "${section_options[@]}"; do
