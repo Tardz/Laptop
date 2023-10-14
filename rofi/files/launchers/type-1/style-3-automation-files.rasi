@@ -126,7 +126,7 @@ entry {
     text-color:                  inherit;
     padding:                     0px 10px;
     cursor:                      text;
-    placeholder:                 "Scripts -> File...";
+    placeholder:                 "Scripts -> Files...";
     placeholder-color:           inherit;
 }
 num-filtered-rows {
