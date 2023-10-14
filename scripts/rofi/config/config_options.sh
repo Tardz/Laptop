@@ -17,7 +17,6 @@ declare -a options=(
 "Term scripts - $HOME/scripts/term/"
 "Generall scripts - $HOME/scripts/"
 "Rofi config - $HOME/.config/rofi/"
-"Quit"
 )
 
 display_options=$(printf '%s\n' "${options[@]}" | cut -d'-' -f1-1)

@@ -1,7 +1,10 @@
 #!/bin/bash
 
-if [ "$1" = "true" ] || [ "$1" = "1" ]; then
-    notify-send -u low -t 2300 "Power Connected" "Your laptop is now plugged in."
-elif [ "$1" = "false" ] || [ "$1" = "0" ]; then
-    notify-send -u low -t 2300 "Power disconnected" "Your laptop is now unplugged."
+# Redirect output and errors to a log file
+exec >> /tmp/script_output.log 2>&1
+
+if [ "$1" = "true" ]; then
+    notify-send -u low -t 3000 "Power Connected" "<span foreground='#a3be8c' size='medium'>Charging</span>"
+elif [ "$1" = "false" ]; then
+    notify-send -u low -t 3000 "Power disconnected" "<span foreground='#bf616a' size='medium'Discharging</span>"
 fi

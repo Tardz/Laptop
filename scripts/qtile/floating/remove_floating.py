@@ -20,6 +20,7 @@ for i, line in enumerate(config_lines):
         break
 
 if not line_index:
+    print(wm_class)
     exit(2)
     
 config_lines.pop(line_index)

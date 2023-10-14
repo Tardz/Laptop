@@ -6,9 +6,7 @@ DMEDITOR="alacritty -e code -n"
 
 choice=$(printf '%s\n' "${display_options[@]}" | rofi \-theme "$HOME/.config/rofi/files/launchers/type-1"/'style-3-config'.rasi -dmenu -i -l 5 -p '' )
 
-if [[ "$choice" == "Quit" ]]; then
-    echo "Program terminated." && exit 1
-elif [ "$choice" ]; then 
+if [ "$choice" ]; then 
     for option in "${options[@]}"; do
         option_formated=$(echo "$option" | cut -d'-' -f1-1)
         if [[ "$option_formated" == "$choice"* ]]; then
