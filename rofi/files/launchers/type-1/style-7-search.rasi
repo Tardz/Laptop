@@ -48,6 +48,7 @@ configuration {
     alternate-active-background: var(active);
     alternate-active-foreground: var(background);
     normal-selected:             var(selected-box);
+    lighter-background:          var(lighter-background);
 }
 
 /*****----- Main Window -----*****/
@@ -97,10 +98,10 @@ mainbox {
 /*****----- Inputbar -----*****/
 inputbar {
     enabled:                     true;
-    spacing:                     10px;
+    spacing:                     0px;
     margin:                      0px;
     padding:                     0px;
-    border:                      0px solid;
+    border:                      0px 0px 0px 0px solid;
     border-radius:               0px;
     border-color:                @border-colour;
     background-color:            transparent;
@@ -110,8 +111,10 @@ inputbar {
 
 prompt {
     enabled:                     true;
-    background-color:            inherit;
+    background-color:            transparent;
     text-color:                  inherit;
+    font:                        "Font Awesome Bold 15";
+    padding:                      2px;
 }
 textbox-prompt-colon {
     enabled:                     true;
@@ -122,11 +125,12 @@ textbox-prompt-colon {
 }
 entry {
     enabled:                     true;
-    background-color:            inherit;
+    background-color:            transparent;
     text-color:                  inherit;
     padding:                     0px 10px;
     cursor:                      text;
     placeholder:                 "Websearch...";
+    font:                        "JetBrainsMonoNL Nerd Font Bold 15";
     placeholder-color:           inherit;
 }
 num-filtered-rows {

@@ -104,7 +104,7 @@ configuration {
     }
 
 	/*---------- Keybindings ----------*/
-	kb-cancel: "Super_L+l, Super_L+k, Super_L+w";
+	kb-cancel: "Escape,Super_L+l,Super_L+k,Super_L+w,Super_L+space";
 
 /*
 	kb-primary-paste: "Control+V,Shift+Insert";

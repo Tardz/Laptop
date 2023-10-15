@@ -342,6 +342,10 @@ def open_keybindings_script(qtile):
 def open_powertop(qtile):
     qtile.cmd_spawn("alacritty -e sudo powertop")
 
+@lazy.function
+def show_history(qtile):
+    qtile.cmd_spawn("python3 /home/jonalm/scripts/other/get_notifications.py")
+
 ### WIDGET SETTINGS ###
 widget_defaults = dict(
     font = fnt3,
@@ -499,6 +503,8 @@ top_bar = Bar([
         font = fnt1,
         fontsize = menu_button_size,
         padding = menu_button_padding,
+        mouse_callbacks = {"Button1": show_history},
+
     ),
     ], 
     bar_size - 3, 

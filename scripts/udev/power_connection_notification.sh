@@ -1,5 +1,8 @@
 #!/bin/bash
 
+DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/$(id -u)/bus"
+export DBUS_SESSION_BUS_ADDRESS
+
 # Redirect output and errors to a log file
 exec >> /tmp/script_output.log 2>&1
 

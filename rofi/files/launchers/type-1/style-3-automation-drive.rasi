@@ -97,7 +97,7 @@ mainbox {
 /*****----- Inputbar -----*****/
 inputbar {
     enabled:                     true;
-    spacing:                     10px;
+    spacing:                     0px;
     margin:                      0px;
     padding:                     0px;
     border:                      0px solid;
@@ -112,6 +112,8 @@ prompt {
     enabled:                     true;
     background-color:            inherit;
     text-color:                  inherit;
+    font:                        "Font Awesome Bold 15";
+    padding:                      2px;
 }
 textbox-prompt-colon {
     enabled:                     true;
@@ -126,7 +128,8 @@ entry {
     text-color:                  inherit;
     padding:                     0px 10px;
     cursor:                      text;
-    placeholder:                 "Scripts -> Drive...";
+    placeholder:                 "Scripts ➔ Drive...";
+    font:                        "JetBrainsMonoNL Nerd Font Bold 15";
     placeholder-color:           inherit;
 }
 num-filtered-rows {
@@ -161,7 +164,7 @@ listview {
     lines:                       6;
     cycle:                       true;
     dynamic:                     true;
-    scrollbar:                   false;
+    scrollbar:                   true;
     layout:                      vertical;
     reverse:                     false;
     fixed-height:                true;
