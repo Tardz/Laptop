@@ -1,4 +1,5 @@
 declare -a options=(
+'wd - ad'
 'Dunstrc - /home/jonalm/.config/dunst'
 "Qtile config all - $HOME/.config/qtile/"
 "Qtile config - $HOME/.config/qtile/config.py"

@@ -25,19 +25,18 @@ else:
         for entry in data['data'][0]:
             message = entry['message']['data']
 
-            timestamp = entry['timestamp']['data']
-
-            timestamp_dt = datetime.fromtimestamp(timestamp / 100)
-
-            # Format the timestamp as a readable string
-            timestamp_str = timestamp_dt.strftime('%H:%M:%S')
-
+            timestamp = entry['appname']['data']
+            if "Time" in timestamp:
+                timestamp = timestamp[len("Time: "):]
+            else:
+                timestamp = ""
+                
             # Use a regular expression to extract title and body
             match = re.search(r'<b>(.*?)<\/b>(.*)', message, re.DOTALL)
 
             if match:
                 title = match.group(1)
-                body = match.group(2).strip() + " " + str(timestamp/60000)
+                body = match.group(2).strip() + " " + timestamp
             else:
                 title = "No title found"
                 body = "No body found"
