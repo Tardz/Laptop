@@ -36,7 +36,7 @@ git add --all
 git commit -m "commit ${new_number}"
 git push -u -f origin main
 
-current_time=$("Time: " + date +"%T")
+current_time="Time:$(date +'%T')"
 
 if [ $? -eq 0 ]; then
     echo "{ \"number\": $new_number, \"date\": \"$current_date_time\", \"old_date\": \"$old_date\" }" | jq . > "$json_file"

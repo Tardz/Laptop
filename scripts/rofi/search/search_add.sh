@@ -16,7 +16,7 @@ while [ -z "$Url" ]; do
 done
 
 option="$WebName - $Url"
-current_time=$("Time: " + date +"%T")
+current_time="Time:$(date +'%T')"
 
 if [[ "$Url" && "$WebName" ]]; then
     python3 "/home/jonalm/scripts/rofi/search/search_add.py" "$option"

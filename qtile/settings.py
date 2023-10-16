@@ -143,7 +143,7 @@ widget_default_width       = [8.8, 0, 6.8, 0]
 powerbutton_size           = 24
 update_icon_size           = 25
 pacs_text_size             = 19
-menu_button_size           = 30
+menu_button_size           = 26
 bar_size                   = 44
 bar_gap_size               = -3
 layouticon_scale           = 0.6
@@ -152,7 +152,7 @@ font_size                  = 19
 #-PADDING
 powerbutton_padding        = 16
 layouticon_padding         = -2
-menu_button_padding        = 26
+menu_button_padding        = 7
 
 #-WIDTH
 bar_width_top              = 2

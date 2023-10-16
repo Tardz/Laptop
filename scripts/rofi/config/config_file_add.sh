@@ -9,7 +9,7 @@ while [ -z "$Filepath" ]; do
 done
 
 option="$Name - $Filepath"
-current_time=$("Time: " + date +"%T")
+current_time="Time:$(date +'%T')"
 
 if [[ "$Name" && "$Filepath" ]]; then
     python3 "/home/jonalm/scripts/rofi/config/config_file_add.py" "$option"

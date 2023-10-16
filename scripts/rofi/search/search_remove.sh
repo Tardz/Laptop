@@ -14,7 +14,8 @@ while [ -z "$engine" ]; do
     engine=$(echo "$options" | cut -d' ' -f1-1)
 done
 
-current_time=$("Time: " + date +"%T")
+current_time="Time:$(date +'%T')"
+ 
 
 if [ "$displayname" ]; then
     python3 "/home/jonalm/scripts/rofi/search/search_remove.py" "$displayname"

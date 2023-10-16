@@ -2,7 +2,7 @@
 
 /home/jonalm/scripts/other/check_internet.sh
 internet_status=$?
-current_time=$("Time: " + date +"%T")
+current_time="Time:$(date +'%T')"
 
 if [ $internet_status -eq 0 ]; then
     rclone sync GoogleDrive:Arch-delat /home/jonalm/googleDrive/

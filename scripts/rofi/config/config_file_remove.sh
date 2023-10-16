@@ -1,12 +1,14 @@
 #!/bin/bash
 
 source /home/jonalm/scripts/rofi/config/config_options.sh
-current_time=$("Time: " + date +"%T")
 
 while [ -z "$engine" ]; do
     displayname=$(printf '%s\n' "${display_options[@]}" | rofi -config ~/.config/rofi/files/config.rasi \-theme "$HOME/.config/rofi/files/launchers/type-1"/'style-3-config-remove'.rasi -dmenu -i -l 6 -p '') || exit
     engine=$(echo "$options" | cut -d' ' -f1-1)
 done
+
+displayname=$(echo "$displayname" | sed 's/ //g')
+current_time="Time:$(date +'%T')"
 
 if [ "$displayname" ]; then
     python3 "/home/jonalm/scripts/rofi/config/config_file_remove.py" "$displayname"

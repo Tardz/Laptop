@@ -405,121 +405,120 @@ top_bar = Bar([
         background = barbackground
     ),
 
-    # CPU #
-    seperator(1),
-    widget.TextBox(
-        text = " ",
-        padding = -1,
-        font = fnt2,
-        foreground = volume_color,
-        background = widgetbackground,
-        fontsize = icon_size,
+    widget.Wlan(
+        # format='{essid} {percent:2.0%}',
+        decorations=[
+            BorderDecoration(
+                colour = colors[7],
+                border_width = [0, 0, 2, 0],
+            )
+        ],
     ),
-    widget.CPU(
-        format = '{load_percent}%',
-        foreground = textbackground,
-        background = widgetbackground,
-        update_interval = cpu_update_interval,
-        fontsize = font_size,
-    ),    
 
     # VOLUME #
     seperator(1),
-    widget.TextBox(
-        text = "",
-        padding = 0,
-        foreground = windowname_color,
-        background = widgetbackground,
-        font = fnt1,
-        fontsize = icon_size,
-    ),
-    widget.PulseVolume(
+    widget.Volume(
+        format="<span font='Font Awesome 6 free solid 15' foreground='#88c0d0'size='medium'>  </span>{percent:2.0%}",
+        markup=True,
         foreground = textbackground,
         background = widgetbackground,
         limit_max_volume = "True",
         fontsize = font_size,
+        decorations=[
+            BorderDecoration(
+                colour = volume_color,
+                border_width = [0, 0, 2, 0],
+            )
+        ],
     ),
+
+    # CPU #
+    seperator(1),
+    widget.CPU(
+        format="<span font='Font Awesome Bold 13' foreground='#8fbcbb'size='medium'>  </span>{load_percent}%",
+        markup=True,
+        foreground = textbackground,
+        background = widgetbackground,
+        update_interval = cpu_update_interval,
+        fontsize = font_size,
+        decorations=[
+            BorderDecoration(
+                colour = windowname_color,
+                border_width = [0, 0, 2, 0],
+            )
+        ],
+    ),    
     
     # BATTERY #
     seperator(1),
-    widget.TextBox(
-        text = '',
-        padding = -1,
-        foreground = battery_color,
-        background = widgetbackground,
-        font = fnt1,
-        fontsize = icon_size,
-    ),
     widget.Battery(
-        format = '{percent:2.0%}', 
+        format = "<span font='Font Awesome 6 free solid 15' foreground='#a3be8c'size='medium'>  </span>{percent:2.0%}", 
+        markup=True,
         update_interval = battery_update_interval, 
         background = widgetbackground,
         foreground = textbackground,
         mouse_callbacks = {"Button1": open_powertop},
         fontsize = font_size,
+        decorations=[
+            BorderDecoration(
+                colour = battery_color,
+                border_width = [0, 0, 2, 0],
+            )
+        ],
     ),
     
     # BACKLIGHT #
     seperator(1),
-    widget.TextBox(
-        text = '',
-        padding = -1,
-        foreground = backlight_color,
-        background = widgetbackground,
-        font = fnt1,
-        fontsize = icon_size,
-    ),
     widget.Backlight(
+        format="<span font='Font Awesome 6 free solid 15' foreground='#d08770'size='medium'>  </span>{percent:2.0%}",
+        markup=True,
         backlight_name = "amdgpu_bl0",
         brightness_file = "/sys/class/backlight/amdgpu_bl0/actual_brightness",
         update_interval = backlight_update_interval, 
         background = widgetbackground,
         foreground = textbackground,
         fontsize = font_size,
-    ),
-
-    # TIME #
-    seperator(1),
-    widget.TextBox(
-        text = "",
-        padding = -1,
-        font = fnt1,
-        foreground = clock_color,  # fontsize=38
-        background = widgetbackground,
-        fontsize = icon_size,
         decorations=[
             BorderDecoration(
-                colour = clock_color,
-                border_width = [0, 0, 1, 0],
-                padding = 1,
+                colour = backlight_color,
+                border_width = [0, 0, 2, 0],
             )
         ],
     ),
-    seperator(-6),
+    # TIME #
+    seperator(1),
     widget.Clock(
-        format = "%a %b %d",
+        format = "<span font='Font Awesome 6 free solid 15' foreground='#bf616a'size='medium'>   </span>%a %b %d",
         background = widgetbackground,
         foreground = textbackground,
         fontsize = font_size,
+        markup= True,
         decorations=[
             BorderDecoration(
                 colour = clock_color,
-                border_width = [0, 0, 1, 0],
-                padding = 1,
+                border_width = [0, 0, 2, 0],
             )
         ],
     ),
-
+    seperator(-5),
     widget.TextBox(
-        text = "󰍜",
-        foreground = sidebuttons_color,
+        text = "",
+        # foreground = colors[13],
+        foreground = colors[13],
         background = barbackground,
-        font = fnt1,
+        font = "Font Awesome 6 free solid 16",
         fontsize = menu_button_size,
         padding = menu_button_padding,
         mouse_callbacks = {"Button1": show_history},
-
+        # decorations=[
+        #     BorderDecoration(
+        #         colour = sidebuttons_color,
+        #         border_width = [0, 0, 2, 0],
+        #     )
+        # ],
     ),
+    seperator(-5),
+
     ], 
     bar_size - 3, 
     margin = bar_margin_top,
@@ -547,7 +546,7 @@ bottom_bar = Bar([
         linewidth = 12,
         foreground = widgetbackground,
         background = widgetbackground,
-        padding = 0,
+        padding = 1,
         size_percent = 100
     ),
 
@@ -555,32 +554,59 @@ bottom_bar = Bar([
         linewidth = 2,
         foreground = bar_border_color,
         background = widgetbackground,
-        padding = 0,
-        size_percent = 80
+        padding = 1,
+        size_percent = 60
     ),
 
     widget.TaskList(
         padding          = 4,
         spacing          = 0,
-        icon_size        = 13,
+        icon_size        = 19,
         margin           = 5,
         borderwidth      = 6,
-        max_title_width  = 800,
+        # max_title_width  = 800,
         txt_floating     = ' 缾 ',
         txt_maximized    = ' 类 ',
         txt_minimized    = ' 絛 ',
+        title_width_method = "uniform",
+        urgent_alert_method = "border",
         highlight_method = 'block',
         border           = bar_border_color,
         unfocused_border = colors[61],
         # foreground       = bar_border_color
     ),
 
+    #     widget.TaskList(
+    #     padding          = 2,
+    #     spacing          = 0,
+    #     icon_size        = 13,
+    #     margin           = 5,
+    #     borderwidth      = 6,
+    #     # max_title_width  = 800,
+    #     txt_floating     = ' 缾 ',
+    #     txt_maximized    = ' 类 ',
+    #     txt_minimized    = ' 絛 ',
+    #     rounded = False,
+    #     title_width_method = "uniform",
+    #     urgent_alert_method = "border",
+    #     highlight_method = 'block',
+    #     border           = barbackground,
+    #     unfocused_border = "#434C5E",
+    #     decorations=[
+    #         BorderDecoration(
+    #             colour = "#434C5E",
+    #             border_width = [0, 0, 5, 0],
+    #             padding = 5,
+    #         )
+    #     ],
+    #     # foreground       = bar_border_color
+    # ),
     widget.Sep(
         linewidth = 2,
         foreground = bar_border_color,
         background = widgetbackground,
         padding = 0,
-        size_percent = 80
+        size_percent = 60
     ),
 
     widget.TextBox(
