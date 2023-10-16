@@ -17,9 +17,11 @@ from qtile_extras.widget.decorations import BorderDecoration, RectDecoration
 from libqtile.widget.check_updates import CheckUpdates
 from libqtile.widget.textbox import TextBox
 from libqtile.widget.sep import Sep
+from libqtile.widget import base
 from qtile_extras import widget
 from libqtile.bar import Bar
 from libqtile import bar   
+
 
 ### LAYOUT IMPORTS ###
 from libqtile.layout.floating import Floating
@@ -379,6 +381,25 @@ group_box_settings = {
     "urgent_border": group_box_urgentborder,
 }
 
+class WifiSsidWidget(widget.TextBox):
+    def __init__(self):
+        super().__init__(
+            text="<span font='Font Awesome 6 free solid 15' foreground='#b48ead'size='medium'>  </span>" + self.get_wifi_ssid(),
+            decorations=[
+                BorderDecoration(
+                    colour = colors[7],
+                    border_width = [0, 0, 2, 0],
+                )
+            ],
+            )
+
+    def get_wifi_ssid(self):
+        try:
+            ssid = subprocess.check_output(['python3', '/home/jonalm/scripts/qtile/get_wifi_ssid.py'], text=True).strip()
+            return f'{ssid}'
+        except subprocess.CalledProcessError:
+            return 'Error'
+
 ### BAR ###
 top_bar = Bar([
     # GROUPBOX #
@@ -405,15 +426,7 @@ top_bar = Bar([
         background = barbackground
     ),
 
-    widget.Wlan(
-        # format='{essid} {percent:2.0%}',
-        decorations=[
-            BorderDecoration(
-                colour = colors[7],
-                border_width = [0, 0, 2, 0],
-            )
-        ],
-    ),
+    WifiSsidWidget(),
 
     # VOLUME #
     seperator(1),
