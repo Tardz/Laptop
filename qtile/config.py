@@ -406,7 +406,7 @@ top_bar = Bar([
     ),
 
     # CPU #
-    seperator(),
+    seperator(1),
     widget.TextBox(
         text = " ",
         padding = -1,
@@ -424,7 +424,7 @@ top_bar = Bar([
     ),    
 
     # VOLUME #
-    seperator(),
+    seperator(1),
     widget.TextBox(
         text = "",
         padding = 0,
@@ -441,7 +441,7 @@ top_bar = Bar([
     ),
     
     # BATTERY #
-    seperator(),
+    seperator(1),
     widget.TextBox(
         text = '',
         padding = -1,
@@ -460,7 +460,7 @@ top_bar = Bar([
     ),
     
     # BACKLIGHT #
-    seperator(),
+    seperator(1),
     widget.TextBox(
         text = '',
         padding = -1,
@@ -479,7 +479,7 @@ top_bar = Bar([
     ),
 
     # TIME #
-    seperator(),
+    seperator(1),
     widget.TextBox(
         text = "",
         padding = -1,
@@ -487,13 +487,27 @@ top_bar = Bar([
         foreground = clock_color,  # fontsize=38
         background = widgetbackground,
         fontsize = icon_size,
+        decorations=[
+            BorderDecoration(
+                colour = clock_color,
+                border_width = [0, 0, 1, 0],
+                padding = 1,
+            )
+        ],
     ),
-    seperator(-8),
+    seperator(-6),
     widget.Clock(
         format = "%a %b %d",
         background = widgetbackground,
         foreground = textbackground,
         fontsize = font_size,
+        decorations=[
+            BorderDecoration(
+                colour = clock_color,
+                border_width = [0, 0, 1, 0],
+                padding = 1,
+            )
+        ],
     ),
 
     widget.TextBox(
@@ -547,10 +561,10 @@ bottom_bar = Bar([
 
     widget.TaskList(
         padding          = 4,
-        spacing          = 3,
+        spacing          = 0,
         icon_size        = 13,
         margin           = 5,
-        borderwidth      = 0,
+        borderwidth      = 6,
         max_title_width  = 800,
         txt_floating     = ' 缾 ',
         txt_maximized    = ' 类 ',
