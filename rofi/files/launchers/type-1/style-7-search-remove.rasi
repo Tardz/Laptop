@@ -20,11 +20,11 @@ configuration {
 }
 
 /*****----- Global Properties -----*****/
-@import                          "~/.config/rofi/files/colors/nord-search.rasi"
+@import                          "~/.config/rofi/files/colors/nord-search-remove.rasi"
 @import                          "shared/fonts.rasi"
 
 * {
-    border-colour:               var(selected-box);
+    border-colour:               var(selected);
     handle-colour:               var(foreground);
     background-colour:           var(background);
     foreground-colour:           var(foreground);
