@@ -39,7 +39,7 @@ git push -u -f origin main
 if [ $? -eq 0 ]; then
     echo "{ \"number\": $new_number, \"date\": \"$current_date_time\", \"old_date\": \"$old_date\" }" | jq . > "$json_file"
     # notify-send -u low -t 3000 "Files upload" "<span foreground='#a3be8c' size='medium'>Successful</span>"
-    notify-send -u low -t 3000 "Files upload" "Successful <a href='your_custom_handler:success'>[Click here]</a>"
+    notify-send -u low -t 3000 "Files upload" "Successful <a href='https://www.youtube.com/'>[Click here]</a>"
   else
     notify-send -u critical -t 3000 "Files upload" "<span foreground='#bf616a' size='medium'>Faild</span>"
 fi
