@@ -19,20 +19,25 @@ else:
 
     notification_ids = []  # Store notification IDs
 
-    current_time = datetime.now()
-
     # Assuming you have a loop here
     if data['data'] != [[]]: 
         subprocess.run(['notify-send', '-t', '0', '-a', 'notification_center_clear', '-h', "int:transient:1", '-u', 'low', "⠀", "<span size='large'><b>Notification Center</b></span>\n<span foreground='#5a677f' size='large'>━━━━━━━━━━━━━━━━━━━</span>\n<span foreground='#a3be8c' size='medium'><b>" + history_count + "</b></span> <span size='medium'>Available</span> [<span foreground='#81a1c1' size='small'><b>Clear</b></span>]"])
         for entry in data['data'][0]:
             message = entry['message']['data']
 
+            timestamp = entry['timestamp']['data']
+
+            timestamp_dt = datetime.fromtimestamp(timestamp / 100)
+
+            # Format the timestamp as a readable string
+            timestamp_str = timestamp_dt.strftime('%H:%M:%S')
+
             # Use a regular expression to extract title and body
             match = re.search(r'<b>(.*?)<\/b>(.*)', message, re.DOTALL)
 
             if match:
                 title = match.group(1)
-                body = match.group(2).strip()
+                body = match.group(2).strip() + " " + str(timestamp/60000)
             else:
                 title = "No title found"
                 body = "No body found"
