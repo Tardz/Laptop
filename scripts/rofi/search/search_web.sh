@@ -28,14 +28,14 @@ for option in "${options[@]}"; do
             done
             qtile cmd-obj -o group 2 -f toscreen
             $BROWSER "$url""$query"
-            notify-send -u low -t 2400 "Search finished" "Website: <span foreground='#81a1c1' size='medium'>$displayname</span>"
+            notify-send -u low -t 2400 '-h' "int:transient:1" "Search finished" "Website: <span foreground='#81a1c1' size='medium'>$displayname</span>"
             exit 1
         fi
     fi
 done
 
 qtile cmd-obj -o group 2 -f toscreen
-notify-send -u low -t 2400 "Search finished" "Website: <span foreground='#81a1c1' size='medium'>$displayname</span>"
+notify-send -u low -t 2400 '-h' "int:transient:1" "Search finished" "Website: <span foreground='#81a1c1' size='medium'>$displayname</span>"
 
 $BROWSER "$url"
 exit 1
