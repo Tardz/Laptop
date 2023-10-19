@@ -31,7 +31,7 @@ from libqtile.layout.stack import Stack
 ### SETTINGS ###
 from settings import *
 
-### LAZY FUNCTIONS ###
+### LAZY FUNCTIONS FOR SHORTCUTS ###
 @lazy.function
 def spawn_browser(qtile):
     if qtile.current_group.name == "2":
@@ -79,11 +79,11 @@ def spawn_alttab_once(qtile):
 
 @lazy.function
 def check(qtile):
-    qtile.cmd_spawn("python /home/jonalm/scripts/qtile/check_and_launch_app.py " + "null")
+    qtile.cmd_spawn("python3 /home/jonalm/scripts/qtile/check_and_launch_app.py " + "null")
 
 @lazy.function
 def check_youtube(qtile):
-    qtile.cmd_spawn("python /home/jonalm/scripts/qtile/check_and_launch_app.py " + "youtube")
+    qtile.cmd_spawn("python3 /home/jonalm/scripts/qtile/check_and_launch_app.py " + "youtube")
 
 @lazy.function
 def close_all_windows(qtile):
@@ -96,9 +96,9 @@ def mute_or_unmute(qtile):
     qtile.cmd_spawn("/home/jonalm/scripts/qtile/mute_or_unmute.sh")
 
 ### KEYBINDINGS ###
-#-START_KEYS 
+#- KEYS_START 
 keys = [
-        #ESSENTIALS
+        #--[ESSENTIALS]--#
         Key([mod], "Tab", lazy.next_layout(), desc='Toggle through layouts'),
         Key([mod], "q", lazy.window.kill(), desc='Kill active window'),
         Key([mod, "shift"], "r", lazy.restart(), lazy.spawn("/home/jonalm/scripts/term/reset_screens.sh"), desc='Restart Qtile'),
@@ -110,28 +110,26 @@ keys = [
             Key([], "r", lazy.spawn("sudo systemctl reboot"))
         ]),
 
-        #ASUSCTL
-        #Key([], "XF86Launch3", lazy.spawn("asusctl led-mode -n"), desc='Aurora key'),
-        #Key([], "XF86Launch4", lazy.spawn("asusctl profile -n"), desc='Aurora key'),
+        #--[ASUSCTL]--#
         Key([], "XF86Launch1", lazy.spawn("sudo tlpui"), desc='Aurora key'),
         Key([], "XF86KbdBrightnessUp", lazy.spawn("brightnessctl --device='asus::kbd_backlight' set +1"), desc='Keyboardbrightness up'),
         Key([], "XF86KbdBrightnessDown", lazy.spawn("brightnessctl --device='asus::kbd_backlight' set 1-"), desc='Keyboardbrightness down'),
 
-        #SCREEN
+        #--[SCREEN]--#
         Key([], "XF86MonBrightnessUp", lazy.spawn("sudo brillo -A 9"), desc='Increase display brightness'),
         Key([], "XF86MonBrightnessDown", lazy.spawn("sudo brillo -U 9"), desc='Increase display brightness'),        
         
-        #AUDIO
+        #--[AUDIO]--#
         Key([], 'XF86AudioMute', mute_or_unmute),
         Key([], 'XF86AudioRaiseVolume', lazy.spawn('pactl set-sink-volume @DEFAULT_SINK@ +5%')),
         Key([], 'XF86AudioLowerVolume', lazy.spawn('pactl set-sink-volume @DEFAULT_SINK@ -5%')),
         
-        #SWITCH MONITOR FOCUS AND GROUPS
+        #--[SWITCH MONITOR FOCUS AND GROUPS]--#
         Key(["control"], "Tab", spawn_alttab_once, desc='alttab'),
         Key([mod], "Right", lazy.screen.next_group(), desc='Next group right'),
         Key([mod], "Left", lazy.screen.prev_group(), desc='Next group left'),
 
-        #WINDWOW CONTROLS  
+        #--[WINDWOW CONTROLS]--#
         Key([mod], "Down", lazy.layout.down(), desc='Move focus down in current stack pane'),
         Key([mod], "Up", lazy.layout.up(), desc='Move focus up in current stack pane'),
         Key([mod, "shift"], "Down", lazy.layout.shuffle_down(), lazy.layout.section_down(), desc='Move windows down in current stack'),
@@ -144,28 +142,27 @@ keys = [
         Key([mod, "shift"], "f", lazy.window.toggle_fullscreen(), desc='toggle fullscreen'),
         Key([mod], "z", lazy.window.toggle_minimize(), lazy.group.next_window(), desc="Minimize window"),
 
-        #APPS
+        #--[APPS]--#
         Key([mod], "c", spawn_browser, lazy.group["2"].toscreen(), check, desc='Browser'),
         Key([mod], "n", spawn_filemanager, lazy.group["4"].toscreen(), check,desc='Filemanager'),
         Key([mod], "d", spawn_discord, lazy.group["7"].toscreen(), check, desc='Discord'),
         Key([mod], "v", spawn_code, lazy.group["3"].toscreen(), check, desc='VScode'),
         Key([mod], "m", spawn_thunderbird, lazy.group["5"].toscreen(), check, desc='Mail'),
 
-        #URL
+        #--[URLS]--#
         Key([mod], "y", spawn_youtube, lazy.group["2"].toscreen(), check_youtube, desc='Youtube'),
 
-        #TERM
+        #--[TERM]--#
         Key([mod], "h", spawn_htop, lazy.group["8"].toscreen(), desc='Htop'),
         Key([mod], "plus", lazy.spawn("/home/jonalm/scripts/term/show_keys.sh"), desc='Keybindings'),
-        #Key([mod], "plus", lazy.spawn("/home/jonalm/scripts/term/show_keys.sh"), desc='Keybindings'),
 
-        #ROFI
+        #--[ROFI]--#
         Key([mod], "space", lazy.spawn("/home/jonalm/.config/rofi/files/launchers/type-1/launcher.sh"), desc='Rofi drun'),
         Key([mod], "Escape", lazy.spawn("/home/jonalm/.config/rofi/files/powermenu/type-2/powermenu.sh"), desc='Rofi powermenu'),
         Key([mod], "w", lazy.spawn("/home/jonalm/scripts/rofi/config/config_files.sh"), desc='Rofi config files'),
         Key([mod], "l", lazy.spawn("/home/jonalm/scripts/rofi/search/search_web.sh"), desc='Rofi web search'),
         Key([mod], "k", lazy.spawn("/home/jonalm/scripts/rofi/automation/automation.sh"), desc='Rofi automation scripts'),
-#-END_KEYS
+#- KEYS_END
 ]
 
 ### GROUP SETTINGS ###
@@ -202,37 +199,33 @@ groups = [
 
 ]
 
-focus_value = True
-
 ### SCRATCHPAD ###
 groups.append(ScratchPad('9', [
-    DropDown('terminal', 'alacritty', warp_pointer=True, width=0.35, height=0.55, x=0.33, y=0.18, opacity=1, on_focus_lost_hide = focus_value),
-    DropDown('mixer', 'pavucontrol', warp_pointer=True, width=0.4, height=0.4, x=0.3, y=0.25, opacity=1, on_focus_lost_hide = focus_value),
-    DropDown('net', 'nm-connection-editor', warp_pointer=True, width=0.4, height=0.4, x=0.3, y=0.25, opacity=1, on_focus_lost_hide = focus_value),
-    DropDown('bluetooth', 'blueman-manager', warp_pointer=True, width=0.4, height=0.4, x=0.3, y=0.25, opacity=1, on_focus_lost_hide = focus_value),
-    DropDown('filemanager', 'pcmanfm', warp_pointer=True, width=0.6, height=0.7, x=0.2, y=0.12, opacity=0.95, on_focus_lost_hide = focus_value),
-    DropDown('music', 'spotify', warp_pointer=True, width=0.6, height=0.7, x=0.2, y=0.12, opacity=1, on_focus_lost_hide = focus_value),
-    DropDown('todo', 'ticktick', warp_pointer=True, width=0.6, height=0.7, x=0.2, y=0.12, opacity=0.95, on_focus_lost_hide = focus_value),
-    #DropDown('passwords', '/home/jonalm/.webcatalog/LastPass/LastPass', warp_pointer=True, width=0.6, height=0.7, x=0.2, y=0.12, opacity=1, on_focus_lost_hide = focus_value),
-    #DropDown('drive', '/home/jonalm/.webcatalog/GoogleDrive/GoogleDrive', warp_pointer=True, width=0.6, height=0.7, x=0.2, y=0.12, opacity=1, on_focus_lost_hide = focus_value),
-    #DropDown('github', '/home/jonalm/.webcatalog/GitHub/GitHub', warp_pointer=True, width=0.6, height=0.7, x=0.2, y=0.12, opacity=0.95, on_focus_lost_hide = focus_value),
-    #DropDown('githubPushLabb', '/home/jonalm/scripts/term/gitpushlabb.sh', warp_pointer=True, width=0.6, height=0.7, x=0.2, y=0.12, opacity=0.95, on_focus_lost_hide = focus_value),
-    #DropDown('githubPush', '/home/jonalm/scripts/term/gitpush.sh', warp_pointer=True, width=0.4, height=0.4, x=0.3, y=0.25, opacity=1, on_focus_lost_hide = focus_value)
+    DropDown('terminal', 'alacritty', warp_pointer=True, width=0.35, height=0.55, x=0.33, y=0.18, opacity=1, on_focus_lost_hide = scratchpad_focus_value),
+    DropDown('mixer', 'pavucontrol', warp_pointer=True, width=0.4, height=0.4, x=0.3, y=0.25, opacity=1, on_focus_lost_hide = scratchpad_focus_value),
+    DropDown('net', 'nm-connection-editor', warp_pointer=True, width=0.4, height=0.4, x=0.3, y=0.25, opacity=1, on_focus_lost_hide = scratchpad_focus_value),
+    DropDown('bluetooth', 'blueman-manager', warp_pointer=True, width=0.4, height=0.4, x=0.3, y=0.25, opacity=1, on_focus_lost_hide = scratchpad_focus_value),
+    DropDown('filemanager', 'pcmanfm', warp_pointer=True, width=0.6, height=0.7, x=0.2, y=0.12, opacity=0.95, on_focus_lost_hide = scratchpad_focus_value),
+    DropDown('music', 'spotify', warp_pointer=True, width=0.6, height=0.7, x=0.2, y=0.12, opacity=1, on_focus_lost_hide = scratchpad_focus_value),
+    DropDown('todo', 'ticktick', warp_pointer=True, width=0.6, height=0.7, x=0.2, y=0.12, opacity=0.95, on_focus_lost_hide = scratchpad_focus_value),
 ]))
 
 ### MOVE WINDOW TO WORKSPACE AND DROPDOWNS ###
 for i in groups:
     keys.extend([
-        #WINDOWS
+#- SCRATCHPAD_KEYS_START
+
+        #--[WINDOWS]--#
         Key([mod, "shift"], i.name, lazy.window.togroup(i.name), desc="move focused window to group {}".format(i.name)),
         Key([mod], i.name, lazy.group[i.name].toscreen(), desc="Switch to group {}".format(i.name)),
-        #SCRATCHPAD
+        #--[SCRATCHPAD]--#
         Key([mod], "Return", lazy.group['9'].dropdown_toggle('terminal'), desc='Terminal'),
         Key([mod], "period", lazy.group['9'].dropdown_toggle('mixer'), desc='Volume'),
         Key([mod], "minus", lazy.group['9'].dropdown_toggle('net'), desc='Wifi'),
         Key([mod], "comma", lazy.group['9'].dropdown_toggle('bluetooth'), desc='Bluetooth'),
         Key([mod], "s", lazy.group['9'].dropdown_toggle('music'), desc='Spotify'),
         Key([mod], "r", lazy.group['9'].dropdown_toggle('todo'), desc='Ticktick'), 
+#- SCRATCHPAD_KEYS_END
     ])
 
 ### DRAG FLOATING LAYOUTS ###
@@ -240,170 +233,56 @@ mouse = [
     Drag([mod], "Button1", lazy.window.set_position_floating(), start=lazy.window.get_position() ),
     Drag([mod], "Button3", lazy.window.set_size_floating(), start=lazy.window.get_size()),
     Click([mod], "Button2", lazy.window.bring_to_front())
-    ]
+]
 
-### UNICODE FUNCTIONS ###
-def left_circle():
-    return TextBox(
-        text = "",
-        foreground = widget_background_color,
-        background = bar_background_color,
-        fontsize = circle_size,
-        padding = circle_padding,
-    )
-
-def right_circle():
-    return TextBox(
-        text="",
-        foreground = widget_background_color,
-        background = bar_background_color,
-        fontsize = circle_size,
-        padding = circle_padding,
-    )
-
-def seperator(padd = seperator_padding):
+### CUSTOM WIDGETS ###
+def seperator(custom_padding = seperator_padding):
     return Sep(
-        linewidth = seperator_line_width,
-        foreground = widget_background_color,
-        background = bar_background_color,
-        padding = padd,
+        linewidth    = seperator_line_width,
+        foreground   = widget_default_background_color,
+        background   = bar_background_color,
+        padding      = custom_padding,
         size_percent = seperator_size,
     )
 
-def lower_left_triangle(bg_color, fg_color):
-    return TextBox(
-        text='\u25e2',
-        padding=-8,
-        fontsize=50,
-        background=bg_color,
-        foreground=fg_color
-        )
-
-def left_arrow(bg_color, fg_color):
-    return TextBox(
-        text='\uE0B2',
-        padding=0,
-        fontsize=34,
-        background=bg_color,
-        foreground=fg_color
-        )
-
-def right_arrow(bg_color, fg_color):
-    return TextBox(
-        text='\uE0B0',
-        padding=0,
-        fontsize=34,
-        background=bg_color,
-        foreground=fg_color
-        )
-
-def upper_left_triangle(bg_color, fg_color):
-    return TextBox(
-        text="\u25E4",
-        padding=-10,
-        fontsize=100,
-        background=bg_color,
-        foreground=fg_color
-        )
-
-def upper_right_triangle(bg_color, fg_color):
-    return TextBox(
-        text="\u25E5",
-        padding=-10,
-        fontsize=100,
-        background=bg_color,
-        foreground=fg_color
-        )
-
-### Callbacks ###
-@lazy.function
-def open_rofi_search(qtile):
-    qtile.cmd_spawn("/home/jonalm/scripts/rofi/search/search_web.sh")
-        
-@lazy.function
-def open_rofi_config_files(qtile):
-    qtile.cmd_spawn("/home/jonalm/scripts/rofi/config/config_files.sh")
-
-@lazy.function
-def open_rofi_automation(qtile):
-    qtile.cmd_spawn("/home/jonalm/scripts/rofi/automation/automation.sh")
-
-@lazy.function
-def open_rofi_apps(qtile):
-    qtile.cmd_spawn("/home/jonalm/.config/rofi/files/launchers/type-1/launcher.sh")
-
-@lazy.function
-def open_rofi_power_menu(qtile):
-    qtile.cmd_spawn("/home/jonalm/.config/rofi/files/powermenu/type-2/powermenu.sh")
-
-@lazy.function
-def open_keybindings_script(qtile):
-    qtile.cmd_spawn("/home/jonalm/scripts/term/show_keys.sh")
-
-@lazy.function
-def open_powertop(qtile):
-    qtile.cmd_spawn("alacritty -e sudo powertop")
-
-@lazy.function
-def show_history(qtile):
-    qtile.cmd_spawn("python3 /home/jonalm/scripts/other/get_notifications.py")
-
-### WIDGET SETTINGS ###
-widget_defaults = dict(
-    font = normal_font,
-    fontsize = widget_default_size,
-    padding = widget_default_padding,
-    background = widget_background_color,
-    decorations = [
-        BorderDecoration(
-            colour = bar_background_color,
-            border_width = widget_default_width,
-        )
-    ],
-)
-
-class WifiSsidWidget(widget.TextBox):
-    def __init__(self, my_update_interval=2):
-        super().__init__(
-            text = self.update_wifi_ssid(),
-            font = "FiraCode Nerd Font Bold",
-            update_interval = my_update_interval,
-            mouse_callbacks = {"Button1": self.spawn_nmcli()},
+class WifiSsidWidget(widget.TextBox, base.InLoopPollText):
+    def __init__(self):
+        base.InLoopPollText.__init__(
+            self, 
+            update_interval = wifi_update_interval,
+            font            = bold_font,
+            mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("alacritty -e nmtui")},
             decorations = [
                 BorderDecoration(
-                    colour = colors[7],
+                    colour       = wifi_icon_color,
                     border_width = decorator_border_width,
-                    padding = decorator_padding,
+                    padding      = decorator_padding,
                 )
             ],
         )
         
-    def update(self):
-        self.update_wifi_ssid()
-        super().update()
-
-    def update_wifi_ssid(self):
-        try:
-            ssid = subprocess.check_output(['python3', '/home/jonalm/scripts/qtile/get_wifi_ssid.py'], text=True).strip()
-            if ssid == "lo":
-                return "<span font='Font Awesome 6 free solid 15' foreground='#b48ead' size='medium'></span>"
-            else:
-                return "<span font='Font Awesome 6 free solid 15' foreground='#b48ead' size='medium'>  </span>" + ssid
-        except subprocess.CalledProcessError as e:
-            return 'Error'
+    def poll(self):
+        ssid = subprocess.check_output(['python3', '/home/jonalm/scripts/qtile/get_wifi_ssid.py'], text=True).strip()
+        if ssid == "lo":
+            return "<span font='Font Awesome 6 free solid 15' foreground='#b48ead' size='medium'>  </span>Disconnected"
+        else:
+            return "<span font='Font Awesome 6 free solid 15' foreground='#b48ead' size='medium'>  </span>" + ssid
         
-    @lazy.function
-    def spawn_nmcli(qtile):
-        qtile.cmd_spawn("alacritty -e nmtui")
-
-# seperator(1),
-# widget.CurrentLayoutIcon(
-#     custom_icon_paths = [os.path.expanduser("~/.config/qtile/icons")],
-#     foreground = layouticon_Background,
-#     background = layouticon_Background,
-#     padding = layouticon_padding,
-#     scale = layouticon_scale,
-# ),
+### WIDGET SETTINGS ###
+widget_defaults = dict(
+    font        = bold_font,
+    fontsize    = widget_default_font_size,
+    padding     = widget_default_padding,
+    background  = widget_default_background_color,
+    foreground  = widget_default_foreground_color,
+    decorations = [
+        BorderDecoration(
+            colour       = bar_background_color,
+            border_width = decorator_border_width,
+            padding      = decorator_padding,
+        )
+    ],
+)
 
 ### BAR ###
 top_bar = Bar([
@@ -411,8 +290,6 @@ top_bar = Bar([
     widget.GroupBox(
         margin                      = groupbox_margin,
         font                        = icon_font,
-        fontsize                    = 19,
-        padding                     = 5,
         borderwidth                 = 6,
         active                      = group_box_active_color,
         inactive                    = group_box_inactive_color,
@@ -421,7 +298,7 @@ top_bar = Bar([
         highlight_method            = "block",
         disable_drag                = True,
         rounded                     = True,
-        this_current_screen_border  = widget_background_color,
+        this_current_screen_border  = widget_default_background_color,
         other_current_screen_border = group_box_other_border_color,
         this_screen_border          = group_box_this_border_color,
         other_screen_border         = group_box_other_border_color,
@@ -433,20 +310,16 @@ top_bar = Bar([
     # TIME #
     widget.Spacer(
         bar.STRETCH,
-        background = bar_background_color
     ),
     widget.Clock(
-        format     = "%R:%S",
-        fontsize   = font_size + 2,
-        background = widget_background_color,
-        foreground = text_background_color,
-        font       = bold_font,
+        format   = "%R:%S",
+        fontsize = widget_default_font_size + 2,
     ),
     widget.Spacer(
         bar.STRETCH,
-        background = bar_background_color
     ),
 
+    # WIFI #
     WifiSsidWidget(),
 
     # VOLUME #
@@ -454,12 +327,8 @@ top_bar = Bar([
     widget.Volume(
         format           = "<span font='Font Awesome 6 free solid 15' foreground='#88c0d0'size='medium'>  </span>{percent:2.0%}",
         markup           = True,
-        foreground       = text_background_color,
-        background       = widget_background_color,
         limit_max_volume = "True",
-        fontsize         = font_size,
-        font             = "FiraCode Nerd Font Bold",
-        decorations = [
+        decorations      = [
             BorderDecoration(
                 colour       = volume_icon_color,
                 border_width = decorator_border_width,
@@ -471,18 +340,14 @@ top_bar = Bar([
     # CPU #
     seperator(1),
     widget.CPU(
-        format="<span font='Font Awesome Bold 13' foreground='#8fbcbb'size='medium'>  </span>{load_percent}%",
-        markup=True,
-        foreground = text_background_color,
-        background = widget_background_color,
+        format          = "<span font='Font Awesome Bold 13' foreground='#8fbcbb'size='medium'>  </span>{load_percent}%",
+        markup          = True,
         update_interval = cpu_update_interval,
-        fontsize = font_size,
-        font = "FiraCode Nerd Font Bold",
-        decorations=[
+        decorations     = [
             BorderDecoration(
-                colour = cpu_icon_color,
+                colour       = cpu_icon_color,
                 border_width = decorator_border_width,
-                padding = decorator_padding,
+                padding      = decorator_padding,
             )
         ],
     ),    
@@ -490,19 +355,15 @@ top_bar = Bar([
     # BATTERY #
     seperator(1),
     widget.Battery(
-        format = "<span font='Font Awesome 6 free solid 15' foreground='#a3be8c'size='medium'>  </span>{percent:2.0%}", 
-        markup=True,
+        format          = "<span font='Font Awesome 6 free solid 15' foreground='#a3be8c'size='medium'>  </span>{percent:2.0%}", 
+        markup          = True,
         update_interval = battery_update_interval, 
-        background = widget_background_color,
-        foreground = text_background_color,
-        mouse_callbacks = {"Button1": open_powertop},
-        fontsize = font_size,
-        font = "FiraCode Nerd Font Bold",
-        decorations=[
+        mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("alacritty -e sudo powertop")},
+        decorations     = [
             BorderDecoration(
-                colour = battery_icon_color,
+                colour       = battery_icon_color,
                 border_width = decorator_border_width,
-                padding = decorator_padding,
+                padding      = decorator_padding,
             )
         ],
     ),
@@ -510,20 +371,16 @@ top_bar = Bar([
     # BACKLIGHT #
     seperator(1),
     widget.Backlight(
-        format="<span font='Font Awesome 6 free solid 15' foreground='#d08770'size='medium'>  </span>{percent:2.0%}",
-        markup=True,
-        backlight_name = "amdgpu_bl0",
+        format          ="<span font='Font Awesome 6 free solid 15' foreground='#d08770'size='medium'>  </span>{percent:2.0%}",
+        markup          =True,
+        backlight_name  = "amdgpu_bl0",
         brightness_file = "/sys/class/backlight/amdgpu_bl0/actual_brightness",
         update_interval = backlight_update_interval, 
-        background = widget_background_color,
-        foreground = text_background_color,
-        fontsize = font_size,
-        font = "FiraCode Nerd Font Bold",
-        decorations=[
+        decorations     = [
             BorderDecoration(
-                colour = backlight_icon_color,
+                colour       = backlight_icon_color,
                 border_width = decorator_border_width,
-                padding = decorator_padding,
+                padding      = decorator_padding,
             )
         ],
     ),
@@ -531,17 +388,13 @@ top_bar = Bar([
     # TIME #
     seperator(1),
     widget.Clock(
-        format = "<span font='Font Awesome 6 free solid 15' foreground='#bf616a'size='medium'>   </span>%a %b %d",
-        background = widget_background_color,
-        foreground = text_background_color,
-        fontsize = font_size,
-        font = "FiraCode Nerd Font Bold",
-        markup= True,
-        decorations=[
+        format      = "<span font='Font Awesome 6 free solid 15' foreground='#bf616a'size='medium'>   </span>%a %b %d",
+        markup      = True,
+        decorations = [
             BorderDecoration(
-                colour = clock_icon_color,
+                colour       = date_icon_color,
                 border_width = decorator_border_width,
-                padding = decorator_padding,
+                padding      = decorator_padding,
             )
         ],
     ),
@@ -549,75 +402,63 @@ top_bar = Bar([
     # NOTIFICATION HISTORY #
     seperator(-1),
     widget.TextBox(
-        text = "",
-        # foreground = colors[13],
-        foreground = colors[13],
-        background = bar_background_color,
-        font = "Font Awesome 6 free solid 16",
-        fontsize = menu_button_size,
-        padding = menu_button_padding,
-        mouse_callbacks = {"Button1": show_history},
+        text            = "",
+        font            = icon_font,
+        fontsize        = widget_default_font_size + 8,
+        padding         = widget_default_font_size - 12,
+        foreground      = notification_history_icon_color,
+        mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("python3 /home/jonalm/scripts/other/get_notifications.py")},
     ),
     seperator(-1),
-    ], 
-    bar_size - 3, 
-    margin = bar_margin_top,
-    border_width = bar_width_top,
-    border_color = bar_border_color,
-    )
+], bar_size, margin = bar_margin_top, border_width = bar_width_top, border_color = bar_border_color)
 
 bottom_bar = Bar([
     # ROFI APP LAUNCHER #
     widget.TextBox(
-        text = "",
-        fontsize = icon_size_bottom,
-        padding = 18,
-        background = bar_background_color,
-        foreground = colors[7],
+        text            = "",
+        font            = icon_font,
+        fontsize        = widget_default_font_size + bottom_icons_font_size_plus,
+        padding         = widget_default_padding + bottom_icons_padding_plus,
+        foreground      = wifi_icon_color,
         mouse_callbacks = {
-            'Button1': open_rofi_apps,
+            'Button1': lambda: Qtile.cmd_spawn("/home/jonalm/.config/rofi/files/launchers/type-1/launcher.sh"),
         }
     ),
     # ROFI SEARCH #
     widget.TextBox(
-        text = "",
-        fontsize = icon_size_bottom,
-        padding = 18,
-        background = bar_background_color,
-        foreground = volume_icon_color,
+        text            = "",
+        font            = icon_font,
+        fontsize        = widget_default_font_size + bottom_icons_font_size_plus,
+        padding         = widget_default_padding + bottom_icons_padding_plus,
+        foreground      = volume_icon_color,
         mouse_callbacks = {
-            'Button1': open_rofi_search,
+            'Button1': lambda: Qtile.cmd_spawn("/home/jonalm/scripts/rofi/search/search_web.sh"),
         }
     ),
 
     # ROFI CONFIG #
     widget.TextBox(
         text            = "",
-        fontsize        = icon_size_bottom,
-        padding         = 18,
-        background      = bar_background_color,
+        font            = icon_font,
+        fontsize        = widget_default_font_size + bottom_icons_font_size_plus,
+        padding         = widget_default_padding + bottom_icons_padding_plus,
         foreground      = cpu_icon_color,
         mouse_callbacks = {
-            'Button1': open_rofi_config_files,
+            'Button1': lambda: Qtile.cmd_spawn("/home/jonalm/scripts/rofi/config/config_files.sh"),
         }
     ),
 
-    seperator(-4),
-
     # CURRENT OPENED APPS #
     widget.Sep(
-        linewidth    = 2,
+        linewidth    = bottom_seperator_line_width,
         foreground   = bar_border_color,
-        background   = widget_background_color,
-        padding      = 1,
-        size_percent = 60
+        size_percent = bottom_seperator_size_percent,
+        padding      = bottom_seperator_padding
     ),
     widget.TaskList(
         font                = "FiraCode Nerd Font Bold",
-        fontsize            = font_size + 1,
-        padding             = 4,
-        spacing             = 0,
-        icon_size           = 19,
+        fontsize            = widget_default_font_size + 1,
+        padding             = widget_default_padding - 2,
         margin              = 5,
         borderwidth         = 6,
         txt_floating        = ' 缾 ',
@@ -628,60 +469,50 @@ bottom_bar = Bar([
         highlight_method    = 'block',
         border              = bar_border_color,
         unfocused_border    = colors[61],
-        # max_title_width  = 800,
-        # foreground       = bar_border_color
     ),
     widget.Sep(
-        linewidth = 2,
-        foreground = bar_border_color,
-        background = widget_background_color,
-        padding = 0,
-        size_percent = 60
+        linewidth    = bottom_seperator_line_width,
+        foreground   = bar_border_color,
+        size_percent = bottom_seperator_size_percent,
+        padding      = bottom_seperator_padding
     ),
 
     # ROFI AUTOMATION #
     widget.TextBox(
-        text = "",
-        fontsize = icon_size_bottom,
-        padding = 18,
-        background = bar_background_color,
-        foreground = battery_icon_color,
+        text            = "",
+        font            = icon_font,
+        fontsize        = widget_default_font_size + bottom_icons_font_size_plus,
+        padding         = widget_default_padding + bottom_icons_padding_plus,
+        foreground      = battery_icon_color,
         mouse_callbacks = {
-            'Button1': open_rofi_automation,
+            'Button1': lambda: Qtile.cmd_spawn("/home/jonalm/scripts/rofi/automation/automation.sh"),
         }
     ),
 
     # KEYBOARD SHORTCUTS #
     widget.TextBox(
-        text = "",
-        fontsize = icon_size_bottom,
-        padding = 18,
-        background = bar_background_color,
-        foreground = Brightness_icon_color,
+        text            = "",
+        font            = icon_font,
+        fontsize        = widget_default_font_size + bottom_icons_font_size_plus,
+        padding         = widget_default_padding + bottom_icons_padding_plus,
+        foreground      = backlight_icon_color,
         mouse_callbacks = {
-            'Button1': open_keybindings_script,
+            'Button1': lambda: Qtile.cmd_spawn("/home/jonalm/scripts/term/show_keys.sh"),
         }
     ),
 
     # ROFI POWER MENU #
     widget.TextBox(
-        text = "",
-        fontsize = icon_size_bottom,
-        padding = 18,
-        background = bar_background_color,
-        foreground = clock_icon_color,
+        text            = "",
+        font            = icon_font,
+        fontsize        = widget_default_font_size + bottom_icons_font_size_plus,
+        padding         = widget_default_padding + bottom_icons_padding_plus,
+        foreground      = date_icon_color,
         mouse_callbacks = {
-            'Button1': open_rofi_power_menu,
+            'Button1': lambda: Qtile.cmd_spawn("/home/jonalm/.config/rofi/files/powermenu/type-2/powermenu.sh"),
         }
     ),
-    seperator(-8),
-    ], 
-    bar_size, 
-    margin = bar_margin_bottom,
-    border_width = bar_width_bottom,
-    border_color = bar_border_color,
-    )
-
+], bar_size + 3, margin = bar_margin_bottom, border_width = bar_width_bottom, border_color = bar_border_color)
 
 ### LAYOUT SETTINGS ###
 layouts = [
@@ -710,6 +541,7 @@ floating_layout = Floating(
     float_rules   = [
         *Floating.default_float_rules,
         Match(wm_class = "nitrogen"),
+        Match(wm_class = "yad"),
         Match(wm_class = "TSP"),
         Match(wm_class = "blueman-applet"),
         Match(wm_class = "blueman-manager"),

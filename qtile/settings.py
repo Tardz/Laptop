@@ -5,6 +5,7 @@ myBrowser      = "brave"
 myTerm         = "alacritty"
 alttab_spawned = False
 
+
 ### COLORS ###
 colors = [
     #-Bar
@@ -74,42 +75,6 @@ colors = [
     ["#2e3441", "#2e3441"],     # 61 darker grey
 ]
 
-#-UNIVERSAL
-#-Bar colors
-bar_background_color            = colors[14]
-bar_border_color                = colors[2][0]
-
-#-Widget colors
-widget_background_color         = colors[14]
-text_background_color           = colors[9]
-    
-#-Group box colors    
-group_box_active_color          = colors[60]
-group_box_inactive_color        = colors[10]
-group_box_block_highlight_color = colors[3]
-group_box_highlight_color       = colors[3]
-group_box_this_border_color     = widget_background_color
-group_box_other_border_color    = colors[0]
-group_box_foreground_color      = colors[2]
-group_box_background_color      = widget_background_color
-group_box_urgentborder_color    = colors[3]
-    
-Brightness_icon_color           = colors[11]
-cpu_icon_color                  = colors[12]
-volume_icon_color               = colors[8]
-backlight_icon_color            = colors[11]
-battery_icon_color              = colors[4]
-clock_icon_color                = colors[3]
-layouticon_Background           = colors[14]
-time_color                      = colors[26]
-
-layout_normal_color_stack       = colors[2][0]
-layout_focus_color_stack        = colors[2][0]
-layout_normal_color_monadtall   = colors[2][0]
-layout_focus_color_monadtall    = colors[10][0]
-layout_normal_color_floating    = colors[2][0]
-layout_focus_color_floating     = colors[2][0]
-
 ### FONTS ###
 fnt2                            = "ttf-dejavu"
 normal_font                     = "FiraCode Nerd Font"
@@ -119,7 +84,6 @@ bold_font                       = "FiraCode Nerd Font Bold"
 ### BAR VARIABLES ###
 #-Icon
 icon_size                       = 18
-icon_size_bottom                = 22
 
 #-Circle
 circle_size                     = 26
@@ -130,9 +94,11 @@ seperator_size                  = 40
 seperator_padding               = 15
 seperator_line_width            = 15
 
-#-Widget
-widget_default_size             = 20 
-widget_default_padding          = 8     
+#-Widget defaults
+widget_default_foreground_color = colors[9]
+widget_default_background_color = colors[14]
+widget_default_font_size        = 18
+widget_default_padding          = 6     
 widget_default_width            = [8.8, 0, 6.8, 0]
 
 #-Power_button
@@ -142,18 +108,25 @@ powerbutton_padding             = 16
 #-Menu_button
 menu_button_size                = 26
 menu_button_padding             = 7
-font_size                       = 18
 
 #-Decorator
 decorator_padding               = -1
 decorator_border_width          = [0, 0, 3, 0]
 
 #-Layout_icon
+layout_normal_color_stack       = colors[2][0]
+layout_focus_color_stack        = colors[2][0]
+layout_normal_color_monadtall   = colors[2][0]
+layout_focus_color_monadtall    = colors[10][0]
+layout_normal_color_floating    = colors[2][0]
+layout_focus_color_floating     = colors[2][0]
 layouticon_padding              = -2
 layouticon_scale                = 0.48
 
 #-Bar
-bar_size                        = 44
+bar_background_color            = colors[14]
+bar_border_color                = colors[2][0]
+bar_size                        = 41
 bar_gap_size                    = -3
 bar_width_top                   = 3
 bar_width_bottom                = 3
@@ -161,17 +134,50 @@ bar_margin_top                  = [5, 5, 5, 5]
 bar_margin_bottom               = [5, 5, 5, 5]
 
 #-Groupbox
+group_box_active_color          = colors[60]
+group_box_inactive_color        = colors[10]
+group_box_block_highlight_color = colors[3]
+group_box_highlight_color       = colors[3]
+group_box_this_border_color     = widget_default_background_color
+group_box_other_border_color    = colors[0]
+group_box_foreground_color      = colors[2]
+group_box_background_color      = widget_default_background_color
+group_box_urgentborder_color    = colors[3]
 groupbox_margin                 = 4
 
 #-Cpu
-cpu_update_interval             = 5
+cpu_icon_color                  = colors[12]
+cpu_update_interval             = 10
  
 #-Backlight
-backlight_update_interval       = 3
+backlight_icon_color            = colors[11]
+backlight_update_interval       = 20
 
 #-Battery
-battery_update_interval         = 3
+battery_icon_color              = colors[4]
+battery_update_interval         = 20
+
+#-Wifi
+wifi_icon_color                 = colors[7]
+wifi_update_interval            = 20
  
+#-Volume
+volume_icon_color               = colors[8]
+
+#-Date
+date_icon_color                 = colors[3]
+
+#-Notification history
+notification_history_icon_color = colors[13] 
+
+#-Bottom icons
+bottom_icons_font_size_plus     = 2
+bottom_icons_padding_plus       = 6
+
+#-Bottom seperators
+bottom_seperator_line_width     = 2
+bottom_seperator_size_percent   = 60
+bottom_seperator_padding        = 12
 ### GROUPS ###
 focus_value                     = True
 
@@ -191,3 +197,4 @@ auto_fullscreen                 = True
 focus_on_window_activation      = "smart"
 reconfigure_screens             = True
 auto_minimize                   = True
+scratchpad_focus_value          = True
