@@ -21,19 +21,19 @@ else
   echo "{ \"number\": $new_number, \"date\": \"$current_date_time\", \"old_date\": \"$old_date\" }" | jq . > "$json_file"
 fi
 
-sudo cp -r /home/jonalm/laptopgit/Laptop/ /home/jonalm/laptopgit/LaptopBackup/
+sudo rsync -av --delete /home/jonalm/laptopgit/Laptop/ /home/jonalm/laptopgit/LaptopBackup/
 sudo rsync -av --delete /home/jonalm/scripts "$git_path"
-sudo cp -r /home/jonalm/.config/qtile "$git_path"
-sudo cp -r /home/jonalm/.config/rofi "$git_path"
-sudo cp -r /home/jonalm/.config/alacritty "$git_path"
-sudo cp -r /home/jonalm/.config/picom.conf "$git_path"
-sudo cp -r /home/jonalm/.config/fusuma "$git_path"
-sudo cp -r /home/jonalm/.config/gtk-3.0 "$git_path"
-sudo cp -r /home/jonalm/.config/tmux "$git_path"
-sudo cp -r /home/jonalm/.config/dunst "$git_path"
-sudo cp -r /home/jonalm/.config/eww "$git_path"
-sudo cp -r /home/jonalm/.imwheelrc "$git_path"
-sudo cp -r /home/jonalm/.inputrc "$git_path"
+sudo rsync -av --delete /home/jonalm/.config/qtile "$git_path"
+sudo rsync -av --delete /home/jonalm/.config/rofi "$git_path"
+sudo rsync -av --delete /home/jonalm/.config/alacritty "$git_path"
+sudo rsync -av --delete /home/jonalm/.config/picom.conf "$git_path"
+sudo rsync -av --delete /home/jonalm/.config/fusuma "$git_path"
+sudo rsync -av --delete /home/jonalm/.config/gtk-3.0 "$git_path"
+sudo rsync -av --delete /home/jonalm/.config/tmux "$git_path"
+sudo rsync -av --delete /home/jonalm/.config/dunst "$git_path"
+sudo rsync -av --delete /home/jonalm/.config/eww "$git_path"
+sudo rsync -av --delete /home/jonalm/.imwheelrc "$git_path"
+sudo rsync -av --delete /home/jonalm/.inputrc "$git_path"
 
 cd /home/jonalm/laptopgit/Laptop/
 git add --all
