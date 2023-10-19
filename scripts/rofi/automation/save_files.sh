@@ -39,7 +39,7 @@ sudo cp -r /home/jonalm/.inputrc "$git_path"
 cd /home/jonalm/laptopgit/Laptop/
 git add --all
 git commit -m "commit ${new_number}"
-git push -u -f origin main
+git push -u --force origin main
 
 current_time="Time:$(date +'%T')"
 
