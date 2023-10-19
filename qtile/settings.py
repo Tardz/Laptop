@@ -82,9 +82,6 @@ icon_font                       = "Font Awesome 6 Free Solid"
 bold_font                       = "FiraCode Nerd Font Bold"
 
 ### BAR VARIABLES ###
-#-Icon
-icon_size                       = 18
-
 #-Circle
 circle_size                     = 26
 circle_padding                  = 0
@@ -99,7 +96,6 @@ widget_default_foreground_color = colors[9]
 widget_default_background_color = colors[14]
 widget_default_font_size        = 18
 widget_default_padding          = 6     
-widget_default_width            = [8.8, 0, 6.8, 0]
 
 #-Power_button
 powerbutton_size                = 24
