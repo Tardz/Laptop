@@ -1,0 +1,16 @@
+configuration {
+    show-icons: false;
+    display-mycustommode: "My Custom Mode";
+}
+
+* {
+    /* Customize the appearance of your custom mode here */
+    background-color: #FFFFFF;
+    foreground-color: #000000;
+    ...
+}
+
+/* Define element styles specific to your custom mode */
+element {
+    
+}

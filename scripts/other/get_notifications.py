@@ -25,8 +25,9 @@ else:
         for entry in data['data'][0]:
             message = entry['message']['data']
 
-            timestamp = entry['appname']['data']
-            if "Time" in timestamp:
+            appname = entry['appname']['data']
+            if "Time" in appname:
+                timestamp = appname
                 timestamp = timestamp[len("Time:"):]
                 # Convert the specific time to a datetime object
                 specific_time = datetime.strptime(timestamp, "%H:%M:%S")

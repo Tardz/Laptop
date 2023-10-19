@@ -105,9 +105,9 @@ keys = [
         Key([mod, "shift"], "q", lazy.shutdown(), desc='Shutdown Qtile'),
         Key([mod, "control"], "q", close_all_windows, desc='close all windows'),
         KeyChord([mod], "x", [
-            Key([], "u", lazy.spawn("systemctl poweroff")),
-            Key([], "s", lazy.spawn("systemctl suspend")),
-            Key([], "r", lazy.spawn("systemctl reboot"))
+            Key([], "u", lazy.spawn("sudo systemctl poweroff")),
+            Key([], "s", lazy.spawn("sudo systemctl suspend")),
+            Key([], "r", lazy.spawn("sudo systemctl reboot"))
         ]),
 
         #ASUSCTL
@@ -246,8 +246,8 @@ mouse = [
 def left_circle():
     return TextBox(
         text = "",
-        foreground = widgetbackground,
-        background = barbackground,
+        foreground = widget_background_color,
+        background = bar_background_color,
         fontsize = circle_size,
         padding = circle_padding,
     )
@@ -255,8 +255,8 @@ def left_circle():
 def right_circle():
     return TextBox(
         text="",
-        foreground = widgetbackground,
-        background = barbackground,
+        foreground = widget_background_color,
+        background = bar_background_color,
         fontsize = circle_size,
         padding = circle_padding,
     )
@@ -264,8 +264,8 @@ def right_circle():
 def seperator(padd = seperator_padding):
     return Sep(
         linewidth = seperator_line_width,
-        foreground = widgetbackground,
-        background = barbackground,
+        foreground = widget_background_color,
+        background = bar_background_color,
         padding = padd,
         size_percent = seperator_size,
     )
@@ -350,80 +350,101 @@ def show_history(qtile):
 
 ### WIDGET SETTINGS ###
 widget_defaults = dict(
-    font = fnt3,
+    font = normal_font,
     fontsize = widget_default_size,
     padding = widget_default_padding,
-    background = widgetbackground,
+    background = widget_background_color,
     decorations = [
         BorderDecoration(
-            colour = barbackground,
+            colour = bar_background_color,
             border_width = widget_default_width,
         )
     ],
 )
 
-group_box_settings = {
-    "padding": 5,
-    "borderwidth": 6,
-    "active": group_box_active,
-    "inactive": group_box_inactive,
-    "block_highlight_text_color": group_box_block_highlight,
-    "highlight_color": group_box_highlight,
-    "highlight_method": "block",
-    "disable_drag": True,
-    "rounded": True,
-    "this_current_screen_border": widgetbackground,
-    "other_current_screen_border": group_box_other_border,
-    "this_screen_border": group_box_this_border,
-    "other_screen_border": group_box_other_border,
-    "foreground": group_box_foreground,
-    "background": group_box_background,
-    "urgent_border": group_box_urgentborder,
-}
-
 class WifiSsidWidget(widget.TextBox):
-    def __init__(self):
+    def __init__(self, my_update_interval=2):
         super().__init__(
-            text="<span font='Font Awesome 6 free solid 15' foreground='#b48ead'size='medium'>  </span>" + self.get_wifi_ssid(),
-            decorations=[
+            text = self.update_wifi_ssid(),
+            font = "FiraCode Nerd Font Bold",
+            update_interval = my_update_interval,
+            mouse_callbacks = {"Button1": self.spawn_nmcli()},
+            decorations = [
                 BorderDecoration(
                     colour = colors[7],
-                    border_width = [0, 0, 2, 0],
+                    border_width = decorator_border_width,
+                    padding = decorator_padding,
                 )
             ],
-            )
+        )
+        
+    def update(self):
+        self.update_wifi_ssid()
+        super().update()
 
-    def get_wifi_ssid(self):
+    def update_wifi_ssid(self):
         try:
             ssid = subprocess.check_output(['python3', '/home/jonalm/scripts/qtile/get_wifi_ssid.py'], text=True).strip()
-            return f'{ssid}'
-        except subprocess.CalledProcessError:
+            if ssid == "lo":
+                return "<span font='Font Awesome 6 free solid 15' foreground='#b48ead' size='medium'></span>"
+            else:
+                return "<span font='Font Awesome 6 free solid 15' foreground='#b48ead' size='medium'>  </span>" + ssid
+        except subprocess.CalledProcessError as e:
             return 'Error'
+        
+    @lazy.function
+    def spawn_nmcli(qtile):
+        qtile.cmd_spawn("alacritty -e nmtui")
+
+# seperator(1),
+# widget.CurrentLayoutIcon(
+#     custom_icon_paths = [os.path.expanduser("~/.config/qtile/icons")],
+#     foreground = layouticon_Background,
+#     background = layouticon_Background,
+#     padding = layouticon_padding,
+#     scale = layouticon_scale,
+# ),
 
 ### BAR ###
 top_bar = Bar([
     # GROUPBOX #
     widget.GroupBox(
-        margin = groupbox_margin,
-        font = fnt1,
-        fontsize = 19,
-        **group_box_settings,
+        margin                      = groupbox_margin,
+        font                        = icon_font,
+        fontsize                    = 19,
+        padding                     = 5,
+        borderwidth                 = 6,
+        active                      = group_box_active_color,
+        inactive                    = group_box_inactive_color,
+        block_highlight_text_color  = group_box_highlight_color,
+        highlight_color             = group_box_highlight_color,
+        highlight_method            = "block",
+        disable_drag                = True,
+        rounded                     = True,
+        this_current_screen_border  = widget_background_color,
+        other_current_screen_border = group_box_other_border_color,
+        this_screen_border          = group_box_this_border_color,
+        other_screen_border         = group_box_other_border_color,
+        foreground                  = group_box_foreground_color,
+        background                  = group_box_background_color,
+        urgent_border               = group_box_urgentborder_color,
     ),
 
     # TIME #
     widget.Spacer(
         bar.STRETCH,
-        background = barbackground
+        background = bar_background_color
     ),
     widget.Clock(
-        format = "%R:%S",
-        fontsize = font_size + 1,
-        background = widgetbackground,
-        foreground = textbackground,
+        format     = "%R:%S",
+        fontsize   = font_size + 2,
+        background = widget_background_color,
+        foreground = text_background_color,
+        font       = bold_font,
     ),
     widget.Spacer(
         bar.STRETCH,
-        background = barbackground
+        background = bar_background_color
     ),
 
     WifiSsidWidget(),
@@ -431,16 +452,18 @@ top_bar = Bar([
     # VOLUME #
     seperator(1),
     widget.Volume(
-        format="<span font='Font Awesome 6 free solid 15' foreground='#88c0d0'size='medium'>  </span>{percent:2.0%}",
-        markup=True,
-        foreground = textbackground,
-        background = widgetbackground,
+        format           = "<span font='Font Awesome 6 free solid 15' foreground='#88c0d0'size='medium'>  </span>{percent:2.0%}",
+        markup           = True,
+        foreground       = text_background_color,
+        background       = widget_background_color,
         limit_max_volume = "True",
-        fontsize = font_size,
-        decorations=[
+        fontsize         = font_size,
+        font             = "FiraCode Nerd Font Bold",
+        decorations = [
             BorderDecoration(
-                colour = volume_color,
-                border_width = [0, 0, 2, 0],
+                colour       = volume_icon_color,
+                border_width = decorator_border_width,
+                padding      = decorator_padding,
             )
         ],
     ),
@@ -450,14 +473,16 @@ top_bar = Bar([
     widget.CPU(
         format="<span font='Font Awesome Bold 13' foreground='#8fbcbb'size='medium'>  </span>{load_percent}%",
         markup=True,
-        foreground = textbackground,
-        background = widgetbackground,
+        foreground = text_background_color,
+        background = widget_background_color,
         update_interval = cpu_update_interval,
         fontsize = font_size,
+        font = "FiraCode Nerd Font Bold",
         decorations=[
             BorderDecoration(
-                colour = windowname_color,
-                border_width = [0, 0, 2, 0],
+                colour = cpu_icon_color,
+                border_width = decorator_border_width,
+                padding = decorator_padding,
             )
         ],
     ),    
@@ -468,14 +493,16 @@ top_bar = Bar([
         format = "<span font='Font Awesome 6 free solid 15' foreground='#a3be8c'size='medium'>  </span>{percent:2.0%}", 
         markup=True,
         update_interval = battery_update_interval, 
-        background = widgetbackground,
-        foreground = textbackground,
+        background = widget_background_color,
+        foreground = text_background_color,
         mouse_callbacks = {"Button1": open_powertop},
         fontsize = font_size,
+        font = "FiraCode Nerd Font Bold",
         decorations=[
             BorderDecoration(
-                colour = battery_color,
-                border_width = [0, 0, 2, 0],
+                colour = battery_icon_color,
+                border_width = decorator_border_width,
+                padding = decorator_padding,
             )
         ],
     ),
@@ -488,50 +515,50 @@ top_bar = Bar([
         backlight_name = "amdgpu_bl0",
         brightness_file = "/sys/class/backlight/amdgpu_bl0/actual_brightness",
         update_interval = backlight_update_interval, 
-        background = widgetbackground,
-        foreground = textbackground,
+        background = widget_background_color,
+        foreground = text_background_color,
         fontsize = font_size,
+        font = "FiraCode Nerd Font Bold",
         decorations=[
             BorderDecoration(
-                colour = backlight_color,
-                border_width = [0, 0, 2, 0],
+                colour = backlight_icon_color,
+                border_width = decorator_border_width,
+                padding = decorator_padding,
             )
         ],
     ),
+
     # TIME #
     seperator(1),
     widget.Clock(
         format = "<span font='Font Awesome 6 free solid 15' foreground='#bf616a'size='medium'>   </span>%a %b %d",
-        background = widgetbackground,
-        foreground = textbackground,
+        background = widget_background_color,
+        foreground = text_background_color,
         fontsize = font_size,
+        font = "FiraCode Nerd Font Bold",
         markup= True,
         decorations=[
             BorderDecoration(
-                colour = clock_color,
-                border_width = [0, 0, 2, 0],
+                colour = clock_icon_color,
+                border_width = decorator_border_width,
+                padding = decorator_padding,
             )
         ],
     ),
-    seperator(-5),
+
+    # NOTIFICATION HISTORY #
+    seperator(-1),
     widget.TextBox(
         text = "",
         # foreground = colors[13],
         foreground = colors[13],
-        background = barbackground,
+        background = bar_background_color,
         font = "Font Awesome 6 free solid 16",
         fontsize = menu_button_size,
         padding = menu_button_padding,
         mouse_callbacks = {"Button1": show_history},
-        # decorations=[
-        #     BorderDecoration(
-        #         colour = sidebuttons_color,
-        #         border_width = [0, 0, 2, 0],
-        #     )
-        # ],
     ),
-    seperator(-5),
-
+    seperator(-1),
     ], 
     bar_size - 3, 
     margin = bar_margin_top,
@@ -540,153 +567,114 @@ top_bar = Bar([
     )
 
 bottom_bar = Bar([
-    widget.Sep(
-        linewidth = 12,
-        foreground = widgetbackground,
-        background = widgetbackground,
-        padding = 0,
-        size_percent = 100
-    ),
-    widget.CurrentLayoutIcon(
-        custom_icon_paths = [os.path.expanduser("~/.config/qtile/icons")],
-        foreground = layouticon_Background,
-        background = layouticon_Background,
-        padding = layouticon_padding,
-        scale = layouticon_scale,
-    ),
-
-    widget.Sep(
-        linewidth = 12,
-        foreground = widgetbackground,
-        background = widgetbackground,
-        padding = 1,
-        size_percent = 100
-    ),
-
-    widget.Sep(
-        linewidth = 2,
-        foreground = bar_border_color,
-        background = widgetbackground,
-        padding = 1,
-        size_percent = 60
-    ),
-
-    widget.TaskList(
-        padding          = 4,
-        spacing          = 0,
-        icon_size        = 19,
-        margin           = 5,
-        borderwidth      = 6,
-        # max_title_width  = 800,
-        txt_floating     = ' 缾 ',
-        txt_maximized    = ' 类 ',
-        txt_minimized    = ' 絛 ',
-        title_width_method = "uniform",
-        urgent_alert_method = "border",
-        highlight_method = 'block',
-        border           = bar_border_color,
-        unfocused_border = colors[61],
-        # foreground       = bar_border_color
-    ),
-
-    #     widget.TaskList(
-    #     padding          = 2,
-    #     spacing          = 0,
-    #     icon_size        = 13,
-    #     margin           = 5,
-    #     borderwidth      = 6,
-    #     # max_title_width  = 800,
-    #     txt_floating     = ' 缾 ',
-    #     txt_maximized    = ' 类 ',
-    #     txt_minimized    = ' 絛 ',
-    #     rounded = False,
-    #     title_width_method = "uniform",
-    #     urgent_alert_method = "border",
-    #     highlight_method = 'block',
-    #     border           = barbackground,
-    #     unfocused_border = "#434C5E",
-    #     decorations=[
-    #         BorderDecoration(
-    #             colour = "#434C5E",
-    #             border_width = [0, 0, 5, 0],
-    #             padding = 5,
-    #         )
-    #     ],
-    #     # foreground       = bar_border_color
-    # ),
-    widget.Sep(
-        linewidth = 2,
-        foreground = bar_border_color,
-        background = widgetbackground,
-        padding = 0,
-        size_percent = 60
-    ),
-
+    # ROFI APP LAUNCHER #
     widget.TextBox(
         text = "",
         fontsize = icon_size_bottom,
-        padding = 20,
-        background = barbackground,
+        padding = 18,
+        background = bar_background_color,
         foreground = colors[7],
         mouse_callbacks = {
             'Button1': open_rofi_apps,
         }
     ),
-
+    # ROFI SEARCH #
     widget.TextBox(
         text = "",
         fontsize = icon_size_bottom,
-        padding = 20,
-        background = barbackground,
-        foreground = volume_color,
+        padding = 18,
+        background = bar_background_color,
+        foreground = volume_icon_color,
         mouse_callbacks = {
             'Button1': open_rofi_search,
         }
     ),
 
+    # ROFI CONFIG #
     widget.TextBox(
-        text = "",
-        fontsize = icon_size_bottom,
-        padding = 20,
-        background = barbackground,
-        foreground = windowname_color,
+        text            = "",
+        fontsize        = icon_size_bottom,
+        padding         = 18,
+        background      = bar_background_color,
+        foreground      = cpu_icon_color,
         mouse_callbacks = {
             'Button1': open_rofi_config_files,
         }
     ),
 
+    seperator(-4),
+
+    # CURRENT OPENED APPS #
+    widget.Sep(
+        linewidth    = 2,
+        foreground   = bar_border_color,
+        background   = widget_background_color,
+        padding      = 1,
+        size_percent = 60
+    ),
+    widget.TaskList(
+        font                = "FiraCode Nerd Font Bold",
+        fontsize            = font_size + 1,
+        padding             = 4,
+        spacing             = 0,
+        icon_size           = 19,
+        margin              = 5,
+        borderwidth         = 6,
+        txt_floating        = ' 缾 ',
+        txt_maximized       = ' 类 ',
+        txt_minimized       = ' 絛 ',
+        title_width_method  = "uniform",
+        urgent_alert_method = "border",
+        highlight_method    = 'block',
+        border              = bar_border_color,
+        unfocused_border    = colors[61],
+        # max_title_width  = 800,
+        # foreground       = bar_border_color
+    ),
+    widget.Sep(
+        linewidth = 2,
+        foreground = bar_border_color,
+        background = widget_background_color,
+        padding = 0,
+        size_percent = 60
+    ),
+
+    # ROFI AUTOMATION #
     widget.TextBox(
         text = "",
         fontsize = icon_size_bottom,
-        padding = 20,
-        background = barbackground,
-        foreground = battery_color,
+        padding = 18,
+        background = bar_background_color,
+        foreground = battery_icon_color,
         mouse_callbacks = {
             'Button1': open_rofi_automation,
         }
     ),
 
+    # KEYBOARD SHORTCUTS #
     widget.TextBox(
         text = "",
         fontsize = icon_size_bottom,
-        padding = 20,
-        background = barbackground,
-        foreground = cpu_temp_color,
+        padding = 18,
+        background = bar_background_color,
+        foreground = Brightness_icon_color,
         mouse_callbacks = {
             'Button1': open_keybindings_script,
         }
     ),
 
+    # ROFI POWER MENU #
     widget.TextBox(
         text = "",
         fontsize = icon_size_bottom,
-        padding = 20,
-        background = barbackground,
-        foreground = clock_color,
+        padding = 18,
+        background = bar_background_color,
+        foreground = clock_icon_color,
         mouse_callbacks = {
             'Button1': open_rofi_power_menu,
         }
     ),
+    seperator(-8),
     ], 
     bar_size, 
     margin = bar_margin_bottom,
@@ -733,7 +721,6 @@ floating_layout = Floating(
         Match(wm_class = "ticktick"),
         Match(wm_class = "se-liu-davhe786_jonal155-pong-Main"),
         Match(wm_class = "qalculate-gtk"),
-        Match(wm_class = "lxappearance"),
         ])
 
 ### DECLARING WIDGET SETTINGS ###

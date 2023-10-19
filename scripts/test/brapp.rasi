@@ -1,0 +1,39 @@
+/* Your custom mode */
+mode "my_mode" {
+    key: "M";
+}
+
+configuration {
+    modi: "run,drun,my_mode";  // Add "my_mode" to the list of modes
+    display-drun: "Applications";
+    display-run: "Run: ";
+    display-my_mode: "My Mode";  // Display name for your custom mode
+}
+
+
+window {
+    location: north;
+    y-offset: 600;
+    width: 20%;
+    padding: 20;
+    children: [
+        inputbar,
+        listview
+    ];
+}
+
+mainbox {
+    background-color: "#000";
+}
+
+inputbar {
+    background-color: "#000000";
+    prompt: "Search: ";
+    font: "mono 12";
+    height: 90;
+}
+
+listview {
+    lines: 10;
+    font: "mono 12";
+}

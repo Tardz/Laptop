@@ -665,8 +665,8 @@ colors: *Nord
 # Key bindings
 key_bindings:
     # (Windows, Linux, and BSD only)
-  - { key: V,         mods: Control|Shift, action: Paste                       }
-  - { key: C,         mods: Control|Shift, action: Copy                        }
+  - { key: V,         mods: Control,       action: Paste                       }
+  - { key: C,         mods: Control,       action: Copy                        }
   - { key: Insert,    mods: Shift,         action: PasteSelection              }
   - { key: Key0,      mods: Control,       action: ResetFontSize               }
   - { key: Equals,    mods: Control,       action: IncreaseFontSize            }
@@ -677,8 +677,8 @@ key_bindings:
   - { key: Copy,      mods: None,          action: Copy                        }
   - { key: L,         mods: Control,       action: ClearLogNotice              }
   - { key: L,         mods: Control,       chars: "\x0c"                       }
-    #  - { key: PageUp,    mods: None,          action: ScrollPageUp                }
-    #  - { key: PageDown,  mods: None,          action: ScrollPageDown              }
+    #- { key: PageUp,    mods: None,          action: ScrollPageUp                }
+    #- { key: PageDown,  mods: None,          action: ScrollPageDown              }
   - { key: Home,      mods: Shift,         action: ScrollToTop,    mode: ~Alt  }
   - { key: End,       mods: Shift,         action: ScrollToBottom, mode: ~Alt  }
   - { key: N,         mods: Control,       action: SpawnNewInstance            }

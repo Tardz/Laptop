@@ -75,118 +75,119 @@ colors = [
 ]
 
 #-UNIVERSAL
-barbackground                 = colors[14]
-bar_border_color              = colors[2][0]
-widgetbackground              = colors[14]
-textbackground                = colors[9]
-    
-#-SPECIFIC    
-group_box_active              = colors[60]
-group_box_inactive            = colors[10]
-group_box_block_highlight     = colors[3]
-group_box_highlight           = colors[3]
-group_box_this_border         = widgetbackground
-group_box_other_border        = colors[0]
-group_box_foreground          = colors[2]
-group_box_background          = widgetbackground
-group_box_urgentborder        = colors[3]
-    
-sidebuttons_color             = colors[13]
-cpu_color                     = colors[7]
-cpu_temp_color                = colors[11]
-updates_color                 = colors[13]
-windowname_color              = colors[12]
-volume_color                  = colors[8]
-backlight_color               = colors[11]
-battery_color                 = colors[4]
-clock_color                   = colors[3]
-layouticon_Background         = colors[14]
-time_color                    = colors[26]
+#-Bar colors
+bar_background_color            = colors[14]
+bar_border_color                = colors[2][0]
 
-layout_normal_color_stack     = colors[2][0]
-layout_focus_color_stack      = colors[2][0]
-layout_normal_color_monadtall = colors[2][0]
-layout_focus_color_monadtall  = colors[10][0]
-layout_normal_color_floating  = colors[2][0]
-layout_focus_color_floating   = colors[2][0]
+#-Widget colors
+widget_background_color         = colors[14]
+text_background_color           = colors[9]
+    
+#-Group box colors    
+group_box_active_color          = colors[60]
+group_box_inactive_color        = colors[10]
+group_box_block_highlight_color = colors[3]
+group_box_highlight_color       = colors[3]
+group_box_this_border_color     = widget_background_color
+group_box_other_border_color    = colors[0]
+group_box_foreground_color      = colors[2]
+group_box_background_color      = widget_background_color
+group_box_urgentborder_color    = colors[3]
+    
+Brightness_icon_color           = colors[11]
+cpu_icon_color                  = colors[12]
+volume_icon_color               = colors[8]
+backlight_icon_color            = colors[11]
+battery_icon_color              = colors[4]
+clock_icon_color                = colors[3]
+layouticon_Background           = colors[14]
+time_color                      = colors[26]
 
-### GROUPS ###
-focus_value                = True
+layout_normal_color_stack       = colors[2][0]
+layout_focus_color_stack        = colors[2][0]
+layout_normal_color_monadtall   = colors[2][0]
+layout_focus_color_monadtall    = colors[10][0]
+layout_normal_color_floating    = colors[2][0]
+layout_focus_color_floating     = colors[2][0]
 
 ### FONTS ###
-fnt2                       = "ttf-dejavu"
-fnt3                       = "FiraCode Nerd Font"
-fnt1                       = "Font Awesome 6 Free Solid"
-
+fnt2                            = "ttf-dejavu"
+normal_font                     = "FiraCode Nerd Font"
+icon_font                       = "Font Awesome 6 Free Solid"
+bold_font                       = "FiraCode Nerd Font Bold"
 
 ### BAR VARIABLES ###
-##-UNIVERSAL
-#-SIZE
-icon_size                  = 18
-icon_size_bottom           = 22
-circle_size                = 26
-seperator_size             = 40
-widget_default_size        = 20 
+#-Icon
+icon_size                       = 18
+icon_size_bottom                = 22
 
-#-PADDING
-circle_padding             = 0
-seperator_padding          = 15
-widget_default_padding     = 8     
+#-Circle
+circle_size                     = 26
+circle_padding                  = 0
 
-#-WIDTH
-middlewidgetwidth          = 265
-seperator_line_width       = 15
-widget_default_width       = [8.8, 0, 6.8, 0]
+#-Seperator
+seperator_size                  = 40
+seperator_padding               = 15
+seperator_line_width            = 15
 
-##-SPECIFIC 
-#-SIZE
-powerbutton_size           = 24
-update_icon_size           = 25
-pacs_text_size             = 19
-menu_button_size           = 26
-bar_size                   = 44
-bar_gap_size               = -3
-layouticon_scale           = 0.6
-font_size                  = 19
+#-Widget
+widget_default_size             = 20 
+widget_default_padding          = 8     
+widget_default_width            = [8.8, 0, 6.8, 0]
 
-#-PADDING
-powerbutton_padding        = 16
-layouticon_padding         = -2
-menu_button_padding        = 7
+#-Power_button
+powerbutton_size                = 24
+powerbutton_padding             = 16
 
-#-WIDTH
-bar_width_top              = 2
-bar_width_bottom           = 2
+#-Menu_button
+menu_button_size                = 26
+menu_button_padding             = 7
+font_size                       = 18
 
-#-MARGIN
-groupbox_margin            = 4
-bar_margin_top             = [5, 5, 5, 5]
-# bar_margin_top             = [0, -4, 6, -4]
-bar_margin_bottom          = [5, 5, 5, 5]
-# bar_margin_bottom          = [4, 500, 9, 500]
+#-Decorator
+decorator_padding               = -1
+decorator_border_width          = [0, 0, 3, 0]
+
+#-Layout_icon
+layouticon_padding              = -2
+layouticon_scale                = 0.48
+
+#-Bar
+bar_size                        = 44
+bar_gap_size                    = -3
+bar_width_top                   = 3
+bar_width_bottom                = 3
+bar_margin_top                  = [5, 5, 5, 5]
+bar_margin_bottom               = [5, 5, 5, 5]
+
+#-Groupbox
+groupbox_margin                 = 4
+
+#-Cpu
+cpu_update_interval             = 5
  
-#-UPDATE INTERVAL
-cpu_update_interval        = 5
-update_update_interval     = 120
-backlight_update_interval  = 3
-battery_update_interval    = 3
+#-Backlight
+backlight_update_interval       = 3
+
+#-Battery
+battery_update_interval         = 3
  
-#-OTHER
-windowname_max_chars       = 43
- 
+### GROUPS ###
+focus_value                     = True
+
 ### LAYOUT VARIABLES ### 
-layout_margin              = 8
-layout_border_width        = 3
-floating_border_width      = 3
-layout_num_stacks          = 1
+layout_margin                   = 8
+layout_border_width             = 3
+floating_border_width           = 3
+layout_num_stacks               = 1
 
 ### QTILE SETTINGS ###
-dgroups_key_binder         = None
-dgroups_app_rules          = [] 
-follow_mouse_focus         = True
-bring_front_click          = True
-cursor_warp                = False
-auto_fullscreen            = True
-focus_on_window_activation = "smart"
-reconfigure_screens        = True
-auto_minimize              = True
+dgroups_key_binder              = None
+dgroups_app_rules               = [] 
+follow_mouse_focus              = True
+bring_front_click               = True
+cursor_warp                     = False
+auto_fullscreen                 = True
+focus_on_window_activation      = "smart"
+reconfigure_screens             = True
+auto_minimize                   = True
