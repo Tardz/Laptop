@@ -22,7 +22,7 @@ else
 fi
 
 sudo cp -r /home/jonalm/laptopgit/Laptop/ /home/jonalm/laptopgit/LaptopBackup/
-sudo cp -r /home/jonalm/scripts "$git_path"
+sudo cp -ru /home/jonalm/scripts "$git_path"
 sudo cp -r /home/jonalm/.config/qtile "$git_path"
 sudo cp -r /home/jonalm/.config/rofi "$git_path"
 sudo cp -r /home/jonalm/.config/alacritty "$git_path"
