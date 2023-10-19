@@ -17,7 +17,7 @@ line_index = None
 for i, line in enumerate(config_lines):
     if f'Match(wm_class = "{wm_class}")' in line:
         line_index = i
-        break
+        break 
 
 if not line_index:
     print(wm_class)
