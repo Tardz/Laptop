@@ -22,7 +22,7 @@ else
 fi
 
 sudo cp -r /home/jonalm/laptopgit/Laptop/ /home/jonalm/laptopgit/LaptopBackup/
-sudo rsync -av /home/jonalm/scripts "$git_path"
+sudo rsync -av --delete /home/jonalm/scripts "$git_path"
 sudo cp -r /home/jonalm/.config/qtile "$git_path"
 sudo cp -r /home/jonalm/.config/rofi "$git_path"
 sudo cp -r /home/jonalm/.config/alacritty "$git_path"
