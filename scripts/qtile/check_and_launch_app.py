@@ -4,7 +4,13 @@ import subprocess
 import re
 import sys
 
-arg1 = sys.argv[1]
+app = sys.argv[1]
+specified_group = sys.argv[2]
+specified_command = ""
+
+if len(sys.argv) >= 4:
+    specified_command = sys.argv[3]
+
 data = subprocess.check_output(["qtile", "cmd-obj", "-o", "group", "-f", "info"]).decode().strip()
 
 match = re.search(r"'name': '(\d+)'", data)
@@ -14,23 +20,21 @@ if match:
 else:
     print("group not found. Error: ", match)
     exit
-    
+
 windows_start = data.find("'windows': [")
 windows_end = data.find("]", windows_start) + 1
 windows = data[windows_start:windows_end]
 
-print(windows)
-print(group)
+print(windows.lower(), group, app, specified_group)
 
-if not "Brave" in windows and group == "2":
-    # if "youtube" in arg1:
-        # subprocess.call(["qtile", "run-cmd", "firefox", "https://www.youtube.com/"])
-    subprocess.call(["qtile", "run-cmd", "brave"])
-if not "Alacritty" in windows and group == "4":
-    subprocess.call(["qtile", "run-cmd", "alacritty", "-e", "ranger"])
-if not "Discord" in windows and group == "7":
-    subprocess.call(["qtile", "run-cmd", "discord"])
-if not "Thunderbird" in windows and group == "5":
-    subprocess.call(["qtile", "run-cmd", "thunderbird"])
-if not "Steam" in windows and group == "A":
-    subprocess.call(["qtile", "run-cmd", "steam"])
+words = app.split()
+print(words[0])
+
+if group == specified_group:
+    if not app.lower() in windows.lower():
+        # if "youtube" in app:
+        #     subprocess.call(["qtile", "run-cmd", "brave", "https://www.youtube.com/"])
+        # else:
+        subprocess.run(specified_command + app, shell = True)
+    # else:
+        # subprocess.run(f"/home/jonalm/scripts/qtile/cycle_active_windows.py {app}", shell = True)

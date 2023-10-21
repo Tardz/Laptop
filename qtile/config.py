@@ -33,41 +33,6 @@ from settings import *
 
 ### LAZY FUNCTIONS FOR SHORTCUTS ###
 @lazy.function
-def spawn_browser(qtile):
-    if qtile.current_group.name == "2":
-        qtile.cmd_spawn(myBrowser)
-
-@lazy.function
-def spawn_code(qtile):
-    if qtile.current_group.name == "3":
-        qtile.cmd_spawn("code")
-
-@lazy.function
-def spawn_filemanager(qtile):
-    if qtile.current_group.name == "4":
-        qtile.cmd_spawn("alacritty -e ranger")
-
-@lazy.function
-def spawn_thunderbird(qtile):
-    if qtile.current_group.name == "5":
-        qtile.cmd_spawn("thunderbird")
-
-@lazy.function
-def spawn_discord(qtile):
-    if qtile.current_group.name == "7":
-        qtile.cmd_spawn("discord")
-
-@lazy.function
-def spawn_tlpui(qtile):
-    if qtile.current_group.name == "8":
-        qtile.cmd_spawn("sudo tlpui")
-
-@lazy.function
-def spawn_htop(qtile):
-    if qtile.current_group.name == "8":
-        qtile.cmd_spawn("alacritty -e htop")
-
-@lazy.function
 def spawn_youtube(qtile):
     if qtile.current_group.name == "2":
         qtile.cmd_spawn(myBrowser + " https://www.youtube.com/")
@@ -78,8 +43,9 @@ def spawn_alttab_once(qtile):
         qtile.cmd_spawn('alttab -bg "#2e3440" -fg "#d8dee9" -bc "#2e3440" -bw 18 -inact "#3b4252" -frame "#81a1c1"')
 
 @lazy.function
-def check(qtile):
-    qtile.cmd_spawn("python3 /home/jonalm/scripts/qtile/check_and_launch_app.py " + "null")
+def check(qtile, app, group, command=""):
+    cmd = ["/home/jonalm/scripts/qtile/check_and_launch_app.py", app, group, command]
+    qtile.cmd_spawn(cmd)
 
 @lazy.function
 def check_youtube(qtile):
@@ -143,17 +109,17 @@ keys = [
         Key([mod], "z", lazy.window.toggle_minimize(), lazy.group.next_window(), desc="Minimize window"),
 
         #--[APPS]--#
-        Key([mod], "c", spawn_browser, lazy.group["2"].toscreen(), check, desc='Browser'),
-        Key([mod], "n", spawn_filemanager, lazy.group["4"].toscreen(), check,desc='Filemanager'),
-        Key([mod], "d", spawn_discord, lazy.group["7"].toscreen(), check, desc='Discord'),
-        Key([mod], "v", spawn_code, lazy.group["3"].toscreen(), check, desc='VScode'),
-        Key([mod], "m", spawn_thunderbird, lazy.group["5"].toscreen(), check, desc='Mail'),
+        Key([mod], "c", lazy.group["2"].toscreen(), check("brave", "2"), desc='Browser'),
+        Key([mod], "n", lazy.group["4"].toscreen(), check("ranger", "4", "alacritty --title 'ranger' -e"), desc='Filemanager'),
+        Key([mod], "d", lazy.group["7"].toscreen(), check("discord", "7"), desc='Discord'),
+        Key([mod], "v", lazy.group["3"].toscreen(), desc='VScode'),
+        Key([mod], "m", lazy.group["5"].toscreen(), check("thunderbird", "5"), desc='Mail'),
 
         #--[URLS]--#
         Key([mod], "y", spawn_youtube, lazy.group["2"].toscreen(), check_youtube, desc='Youtube'),
 
         #--[TERM]--#
-        Key([mod], "h", spawn_htop, lazy.group["8"].toscreen(), desc='Htop'),
+        Key([mod], "h", lazy.group["8"].toscreen(), check("htop", "8", "alacritty --title 'htop' -e"), desc='Htop'),
         Key([mod], "plus", lazy.spawn("/home/jonalm/scripts/term/show_keys.sh"), desc='Keybindings'),
 
         #--[ROFI]--#
