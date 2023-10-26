@@ -4,8 +4,7 @@ mod            = "mod4"
 myBrowser      = "brave"
 myTerm         = "alacritty"
 alttab_spawned = False
-
-
+single_monitor = True
 ### COLORS ###
 colors = [
     #-Bar
@@ -141,10 +140,16 @@ group_box_background_color      = widget_default_background_color
 group_box_urgentborder_color    = colors[3]
 groupbox_margin                 = 4
 
+#-TIME
+time_decerator_colors           = colors[13]
+
 #-Cpu
 cpu_icon_color                  = colors[12]
 cpu_update_interval             = 10
  
+#-Notification
+notification_icon_color         = colors[5]
+
 #-Backlight
 backlight_icon_color            = colors[11]
 backlight_update_interval       = 20
@@ -168,12 +173,12 @@ notification_history_icon_color = colors[13]
 
 #-Bottom icons
 bottom_icons_font_size_plus     = 2
-bottom_icons_padding_plus       = 6
+bottom_icons_padding_plus       = 4
 
 #-Bottom seperators
 bottom_seperator_line_width     = 2
 bottom_seperator_size_percent   = 60
-bottom_seperator_padding        = 12
+bottom_seperator_padding        = 14
 ### GROUPS ###
 focus_value                     = True
 

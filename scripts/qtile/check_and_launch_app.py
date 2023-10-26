@@ -3,6 +3,14 @@
 import subprocess
 import re
 import sys
+import datetime
+import os
+
+# Specify the directory you want to change to
+new_directory = '/home/jonalm/scripts/qtile'
+
+# Change the working directory
+os.chdir(new_directory)
 
 app = sys.argv[1]
 specified_group = sys.argv[2]
@@ -25,16 +33,13 @@ windows_start = data.find("'windows': [")
 windows_end = data.find("]", windows_start) + 1
 windows = data[windows_start:windows_end]
 
-print(windows.lower(), group, app, specified_group)
+# Create a log file with a timestamp
+log_filename = f"log_{datetime.datetime.now().strftime('%Y%m%d%H%M%S')}.txt"
 
-words = app.split()
-print(words[0])
+print(windows.lower(), group, app, specified_group)
 
 if group == specified_group:
     if not app.lower() in windows.lower():
-        # if "youtube" in app:
-        #     subprocess.call(["qtile", "run-cmd", "brave", "https://www.youtube.com/"])
-        # else:
-        subprocess.run(specified_command + app, shell = True)
+        subprocess.run(f"{specified_command} {app}", shell = True)
     # else:
-        # subprocess.run(f"/home/jonalm/scripts/qtile/cycle_active_windows.py {app}", shell = True)
+        # subprocess.call(f"/home/jonalm/scripts/qtile/cycle_active_windows.py {app} {specified_group}", shell = True)
