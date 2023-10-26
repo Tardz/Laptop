@@ -72,7 +72,8 @@ keys = [
         KeyChord([mod], "x", [
             Key([], "u", lazy.spawn("sudo systemctl poweroff")),
             Key([], "s", lazy.spawn("sudo systemctl suspend")),
-            Key([], "r", lazy.spawn("sudo systemctl reboot"))
+            Key([], "r", lazy.spawn("sudo systemctl reboot")),
+            Key([], "h", lazy.spawn("sudo systemctl hibernate")),
         ]),
 
         #--[ASUSCTL]--#
@@ -115,7 +116,7 @@ keys = [
         Key([mod], "m", move_focus_and_mouse(1), lazy.group["5"].toscreen(), check("thunderbird", "5"), desc='Mail'),
 
         #--[URLS]--#
-        Key([mod], "y", move_focus_and_mouse(1), lazy.group["2"].toscreen(), desc='Youtube'),
+        Key([mod], "y", move_focus_and_mouse(1), lazy.group["2"].toscreen(), check("youtube.com", "2", "brave"), desc='Youtube'),
 
         #--[TERM]--#
         Key([mod], "h", move_focus_and_mouse(0), lazy.group["8"].toscreen(), check("htop", "8", "alacritty --title Htop -e"), desc='Htop'),
@@ -204,11 +205,35 @@ mouse = [
 def seperator(custom_padding = seperator_padding):
     return Sep(
         linewidth    = seperator_line_width,
-        foreground   = widget_default_background_color,
-        background   = bar_background_color,
+        foreground   = bar_background_color,
         padding      = custom_padding,
-        size_percent = seperator_size,
+        size_percent = 0,
     )
+
+def left_decor(color: str, padding_x=None, padding_y=9, round=False):
+    radius = 4 if round else [4, 0, 0, 4]
+    return [
+        RectDecoration(
+            colour=color,
+            radius=radius,
+            filled=True,
+            padding_x=padding_x,
+            padding_y=padding_y,
+        )
+    ]
+
+
+def right_decor(round=False, padding_x=0, padding_y=9):
+    radius = 4 if round else [0, 4, 4, 0]
+    return [
+        RectDecoration(
+            colour=bar_border_color,
+            radius=radius,
+            filled=True,
+            padding_y=padding_y,
+            padding_x=padding_x,
+        )
+    ]
 
 class WifiSsidWidget(widget.TextBox, base.InLoopPollText):
     def __init__(self):
@@ -216,22 +241,17 @@ class WifiSsidWidget(widget.TextBox, base.InLoopPollText):
             self, 
             update_interval = wifi_update_interval,
             font            = bold_font,
+            padding         = widget_default_padding,
             mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("alacritty -e nmtui")},
-            decorations = [
-                BorderDecoration(
-                    colour       = wifi_icon_color,
-                    border_width = decorator_border_width,
-                    padding      = decorator_padding,
-                )
-            ],
+            decorations     = right_decor(True)
         )
         
     def poll(self):
         ssid = subprocess.check_output(['python3', '/home/jonalm/scripts/qtile/get_wifi_ssid.py'], text=True).strip()
         if ssid == "lo":
-            return "<span font='Font Awesome 6 free solid 15' foreground='#b48ead' size='medium'>  </span>Disconnected"
+            return " Disconnected"
         else:
-            return "<span font='Font Awesome 6 free solid 15' foreground='#b48ead' size='medium'>  </span>" + ssid
+            return ssid
         
 class NotificationWidget(widget.TextBox, base.InLoopPollText):
     def __init__(self):
@@ -239,59 +259,52 @@ class NotificationWidget(widget.TextBox, base.InLoopPollText):
             self, 
             update_interval = wifi_update_interval,
             font            = bold_font,
+            padding         = widget_default_padding,
             mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("/home/jonalm/scripts/other/get_notifications.py")},
-            # max_chars       = 6,
-            decorations = [
-                BorderDecoration(
-                    colour       = notification_icon_color,
-                    border_width = decorator_border_width,
-                    padding      = decorator_padding,
-                )
-            ],
+            max_chars       = 6,
+            decorations     = right_decor(True)
         )
         
     def poll(self):
         notification_message = subprocess.check_output(['/home/jonalm/scripts/other/get_recent_urgent_notification.py'], text=True).strip()
         if notification_message:
-            return "<span font='Font Awesome 6 free solid 14' foreground='#ebcb8b' size='medium'> </span> " + notification_message + " "
-        else:
-            return "<span font='Font Awesome 6 free solid 14' foreground='#ebcb8b' size='medium'> </span> "
+            return notification_message
 
 ### WIDGET SETTINGS ###
 widget_defaults = dict(
     font        = bold_font,
     fontsize    = widget_default_font_size,
     padding     = widget_default_padding,
-    background  = widget_default_background_color,
     foreground  = widget_default_foreground_color,
-    decorations = [
-        BorderDecoration(
-            colour       = bar_background_color,
-            border_width = decorator_border_width,
-            padding      = decorator_padding,
-        )
-    ],
 )
 
 group_box_settings = {
         "margin"                      : groupbox_margin,
         "font"                        : icon_font,
+        "highlight_method"            : "box",
         "borderwidth"                 : 6,
+        "rounded"                     : True,
+        "disable_drag"                : True,
         "active"                      : group_box_active_color,
         "inactive"                    : group_box_inactive_color,
         "block_highlight_text_color"  : group_box_highlight_color,
         "highlight_color"             : group_box_highlight_color,
-        "highlight_method"            : "block",
-        "disable_drag"                : True,
-        "rounded"                     : True,
-        "this_current_screen_border"  : widget_default_background_color,
+        "this_current_screen_border"  : bar_background_color,
         "other_current_screen_border" : group_box_other_border_color,
         "this_screen_border"          : group_box_this_border_color,
         "other_screen_border"         : group_box_other_border_color,
         "foreground"                  : group_box_foreground_color,
-        "background"                  : group_box_background_color,
+        # "background"                  : group_box_background_color,
         "urgent_border"               : group_box_urgentborder_color,
 }
+
+# decorations = [
+    # BorderDecoration(
+    #     colour       = date_icon_color,
+    #     border_width = decorator_border_width,
+    #     padding      = decorator_padding,
+    # )
+# ],
 
 ### BAR ###
 top_bar_1 = Bar([
@@ -300,128 +313,124 @@ top_bar_1 = Bar([
         **group_box_settings,
     ),
 
-    # TIME #
-    # widget.Spacer(
-    #     bar.STRETCH,
-    # ),
-    # widget.Clock(
-    #     format   = "%R",
-    #     fontsize = widget_default_font_size + 2,
-    # ),
-    widget.Spacer(
-        bar.STRETCH,
+    seperator(icon_seperator_padding - 1),
+    widget.TextBox(        
+        text            = "<span font='Font Awesome 6 free solid 14' foreground='#000000' size='medium'></span>",
+        padding         = widget_default_font_size - 12,
+        decorations     = left_decor(round = True, color = "#b16286"),
     ),
 
-    # WIFI #
+    seperator(icon_seperator_padding),
+    widget.CurrentLayoutIcon(
+        custom_icon_paths = [os.path.expanduser("~/.config/qtile/icons")],
+        scale             = layouticon_scale,
+        decorations       = left_decor(round = True, color = "#a9a1e1"),
+    ),
+
+    seperator(icon_seperator_padding - 6),
+    widget.TaskList(
+        font                = "FiraCode Nerd Font Bold",
+        fontsize            = widget_default_font_size + 1,
+        padding_y           = widget_default_padding - 2,
+        margin              = 6,
+        borderwidth         = 6,
+        txt_floating        = ' 缾 ',
+        txt_maximized       = ' 类 ',
+        txt_minimized       = ' 絛 ',
+        title_width_method  = "uniform",
+        urgent_alert_method = "border",
+        highlight_method    = 'block',
+        border              = bar_border_color,
+        unfocused_border    = "#3c4455",
+    ),
+    seperator(icon_seperator_padding - 6),
+
+    #  WIFI #
+    widget.TextBox(        
+        text            = "<span font='Font Awesome 6 free solid 14' foreground='#000000' size='medium'></span>",
+        padding         = widget_default_font_size - 12,
+        foreground      = notification_history_icon_color,
+        decorations     = left_decor(wifi_icon_color, round = True),
+    ),
     WifiSsidWidget(),
 
-    # VOLUME #
-    seperator(1),
-    widget.Volume(
-        format           = "<span font='Font Awesome 6 free solid 15' foreground='#88c0d0'size='medium'>  </span>{percent:2.0%}",
-        markup           = True,
-        limit_max_volume = "True",
-        decorations      = [
-            BorderDecoration(
-                colour       = volume_icon_color,
-                border_width = decorator_border_width,
-                padding      = decorator_padding,
-            )
-        ],
-    ),
-
     # CPU #
-    seperator(1),
+    seperator(icon_seperator_padding),
+    widget.TextBox(        
+        text        = "<span font='Font Awesome 6 free solid 15' foreground='#000000'size='medium'></span>",
+        padding     = widget_default_font_size - 12,
+        decorations = left_decor(cpu_icon_color, round = True),
+    ),
     widget.CPU(
-        format          = "<span font='Font Awesome Bold 13' foreground='#8fbcbb'size='medium'>  </span>{load_percent}%",
+        format          = "{load_percent}%",
         markup          = True,
         update_interval = cpu_update_interval,
         mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("alacritty -e sudo auto-cpufreq --stats")},
-        decorations     = [
-            BorderDecoration(
-                colour       = cpu_icon_color,
-                border_width = decorator_border_width,
-                padding      = decorator_padding,
-            )
-        ],
+        decorations     = right_decor(True),
     ),    
     
     # BATTERY #
-    seperator(1),
+    seperator(icon_seperator_padding),
+    widget.TextBox(        
+        text        = "<span font='Font Awesome 6 free solid 14' foreground='#000000'size='medium'></span>",
+        padding     = widget_default_font_size - 12,
+        decorations = left_decor(battery_icon_color, round = True),
+    ),
     widget.Battery(
-        format          = "<span font='Font Awesome 6 free solid 15' foreground='#a3be8c'size='medium'>  </span>{percent:2.0%}", 
+        format          = "{percent:2.0%}", 
         markup          = True,
         update_interval = battery_update_interval, 
         mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("alacritty -e sudo powertop")},
-        decorations     = [
-            BorderDecoration(
-                colour       = battery_icon_color,
-                border_width = decorator_border_width,
-                padding      = decorator_padding,
-            )
-        ],
+        decorations     = right_decor(True),
     ),
     
+    # URGENT NOTIFICATION #
+    seperator(icon_seperator_padding),
+    widget.TextBox(        
+        text        = "<span font='Font Awesome 6 free solid 14' foreground='#000000' size='medium'></span>",
+        padding     = widget_default_font_size - 12,
+        decorations = left_decor(notification_icon_color, round = True),
+    ),
+    NotificationWidget(),
+    
     # BACKLIGHT #
-    seperator(1),
+    seperator(icon_seperator_padding),
+    widget.TextBox(        
+        text        = "<span font='Font Awesome 6 free solid 14' foreground='#000000'size='medium'></span>",
+        padding     = widget_default_font_size - 12,
+        decorations = left_decor(backlight_icon_color, round = True),
+    ),
     widget.Backlight(
-        format          ="<span font='Font Awesome 6 free solid 15' foreground='#d08770'size='medium'>  </span>{percent:2.0%}",
-        markup          =True,
+        format          = "{percent:2.0%}",
+        markup          = True,
         backlight_name  = "amdgpu_bl0",
         brightness_file = "/sys/class/backlight/amdgpu_bl0/actual_brightness",
         update_interval = backlight_update_interval, 
-        decorations     = [
-            BorderDecoration(
-                colour       = backlight_icon_color,
-                border_width = decorator_border_width,
-                padding      = decorator_padding,
-            )
-        ],
+        decorations     = right_decor(True),
     ),
-
-    seperator(1),
-    NotificationWidget(),
-
+    
     # DATE #
-    seperator(1),
+    seperator(icon_seperator_padding),
+    widget.TextBox(        
+        text        = "<span font='Font Awesome 6 free solid 14' foreground='#000000'size='medium'></span>",
+        padding     = widget_default_font_size - 12,
+        decorations = left_decor(date_icon_color, round = True),
+    ),
     widget.Clock(
-        format      = "<span font='Font Awesome 6 free solid 15' foreground='#bf616a'size='medium'>   </span>%a %b %d",
+        format      = "%a %b %d",
         markup      = True,
-        decorations = [
-            BorderDecoration(
-                colour       = date_icon_color,
-                border_width = decorator_border_width,
-                padding      = decorator_padding,
-            )
-        ],
+        decorations = right_decor(True),
     ),
-    # TIME #
-    seperator(1),
-    widget.Clock(
-        format   = "%R",
-        fontsize = widget_default_font_size + 2,
-        decorations = [
-            BorderDecoration(
-                colour       = time_decerator_colors,
-                border_width = decorator_border_width,
-                padding      = decorator_padding,
-            )
-        ],
-    ),
-    seperator(1),
 
-    # NOTIFICATION HISTORY #
-    # seperator(-1),
-    # widget.TextBox(
-    #     text            = "",
-    #     font            = icon_font,
-    #     fontsize        = widget_default_font_size + 8,
-    #     padding         = widget_default_font_size - 12,
-    #     foreground      = notification_history_icon_color,
-    #     mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("python3 /home/jonalm/scripts/other/get_notifications.py")},
-    # ),
-    # seperator(-1),
-], bar_size, margin = bar_margin_top, border_width = bar_width_top, border_color = bar_border_color)
+    # TIME #
+    seperator(icon_seperator_padding),
+    widget.Clock(
+        format      = "%R",
+        fontsize    = widget_default_font_size + 1,
+        decorations = right_decor(True),
+    ),
+    seperator(icon_seperator_padding),
+], bar_size, margin = bar_margin_top, background = bar_background_color, border_width = bar_width_top, border_color = bar_border_color, opacity=1)
 
 top_bar_2 = Bar([
     # GROUPBOX #
@@ -447,7 +456,7 @@ top_bar_2 = Bar([
     # VOLUME #
     seperator(1),
     widget.Volume(
-        format           = "<span font='Font Awesome 6 free solid 15' foreground='#88c0d0'size='medium'>  </span>{percent:2.0%}",
+        format           = "<span font='Font Awesome 6 free solid 14' foreground='#88c0d0'size='medium'>  </span>{percent:2.0%}",
         markup           = True,
         limit_max_volume = "True",
         decorations      = [
@@ -478,7 +487,7 @@ top_bar_2 = Bar([
     # BATTERY #
     seperator(1),
     widget.Battery(
-        format          = "<span font='Font Awesome 6 free solid 15' foreground='#a3be8c'size='medium'>  </span>{percent:2.0%}", 
+        format          = "<span font='Font Awesome 6 free solid 14' foreground='#a3be8c'size='medium'>  </span>{percent:2.0%}", 
         markup          = True,
         update_interval = battery_update_interval, 
         mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("alacritty -e sudo powertop")},
@@ -494,7 +503,7 @@ top_bar_2 = Bar([
     # BACKLIGHT #
     seperator(1),
     widget.Backlight(
-        format          ="<span font='Font Awesome 6 free solid 15' foreground='#d08770'size='medium'>  </span>{percent:2.0%}",
+        format          ="<span font='Font Awesome 6 free solid 14' foreground='#d08770'size='medium'>  </span>{percent:2.0%}",
         markup          =True,
         backlight_name  = "amdgpu_bl0",
         brightness_file = "/sys/class/backlight/amdgpu_bl0/actual_brightness",
@@ -511,7 +520,7 @@ top_bar_2 = Bar([
     # TIME #
     seperator(1),
     widget.Clock(
-        format      = "<span font='Font Awesome 6 free solid 15' foreground='#bf616a'size='medium'>   </span>%a %b %d",
+        format      = "<span font='Font Awesome 6 free solid 14' foreground='#bf616a'size='medium'>   </span>%a %b %d",
         markup      = True,
         decorations = [
             BorderDecoration(
@@ -533,215 +542,7 @@ top_bar_2 = Bar([
         mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("python3 /home/jonalm/scripts/other/get_notifications.py")},
     ),
     seperator(-1),
-], bar_size, margin = bar_margin_top, border_width = bar_width_top, border_color = bar_border_color)
-
-bottom_bar_1 = Bar([
-    seperator(-8),
-    # ROFI APP LAUNCHER #
-    widget.TextBox(
-        text            = "",
-        font            = icon_font,
-        fontsize        = widget_default_font_size + bottom_icons_font_size_plus,
-        padding         = widget_default_padding + bottom_icons_padding_plus,
-        foreground      = wifi_icon_color,
-        mouse_callbacks = {
-            'Button1': lambda: Qtile.cmd_spawn("/home/jonalm/.config/rofi/files/launchers/type-1/launcher.sh"),
-        }
-    ),
-    # ROFI SEARCH #
-    widget.TextBox(
-        text            = "",
-        font            = icon_font,
-        fontsize        = widget_default_font_size + bottom_icons_font_size_plus,
-        padding         = widget_default_padding + bottom_icons_padding_plus,
-        foreground      = volume_icon_color,
-        mouse_callbacks = {
-            'Button1': lambda: Qtile.cmd_spawn("/home/jonalm/scripts/rofi/search/search_web.sh"),
-        }
-    ),
-
-    # ROFI CONFIG #
-    widget.TextBox(
-        text            = "",
-        font            = icon_font,
-        fontsize        = widget_default_font_size + bottom_icons_font_size_plus,
-        padding         = widget_default_padding + bottom_icons_padding_plus,
-        foreground      = cpu_icon_color,
-        mouse_callbacks = {
-            'Button1': lambda: Qtile.cmd_spawn("/home/jonalm/scripts/rofi/config/config_files.sh"),
-        }
-    ),
-
-    # CURRENT OPENED APPS #
-    widget.Sep(
-        linewidth    = bottom_seperator_line_width,
-        foreground   = bar_border_color,
-        size_percent = bottom_seperator_size_percent,
-        padding      = bottom_seperator_padding
-    ),
-    widget.TaskList(
-        font                = "FiraCode Nerd Font Bold",
-        fontsize            = widget_default_font_size + 1,
-        padding             = widget_default_padding - 2,
-        margin              = 5,
-        borderwidth         = 6,
-        txt_floating        = ' 缾 ',
-        txt_maximized       = ' 类 ',
-        txt_minimized       = ' 絛 ',
-        title_width_method  = "uniform",
-        urgent_alert_method = "border",
-        highlight_method    = 'block',
-        border              = bar_border_color,
-        unfocused_border    = colors[61],
-    ),
-    widget.Sep(
-        linewidth    = bottom_seperator_line_width,
-        foreground   = bar_border_color,
-        size_percent = bottom_seperator_size_percent,
-        padding      = bottom_seperator_padding
-    ),
-
-    # ROFI AUTOMATION #
-    widget.TextBox(
-        text            = "",
-        font            = icon_font,
-        fontsize        = widget_default_font_size + bottom_icons_font_size_plus,
-        padding         = widget_default_padding + bottom_icons_padding_plus,
-        foreground      = battery_icon_color,
-        mouse_callbacks = {
-            'Button1': lambda: Qtile.cmd_spawn("/home/jonalm/scripts/rofi/automation/automation.sh"),
-        }
-    ),
-
-    # KEYBOARD SHORTCUTS #
-    widget.TextBox(
-        text            = "",
-        font            = icon_font,
-        fontsize        = widget_default_font_size + bottom_icons_font_size_plus,
-        padding         = widget_default_padding + bottom_icons_padding_plus,
-        foreground      = backlight_icon_color,
-        mouse_callbacks = {
-            'Button1': lambda: Qtile.cmd_spawn("/home/jonalm/scripts/term/show_keys.sh"),
-        }
-    ),
-
-    # ROFI POWER MENU #
-    widget.TextBox(
-        text            = "",
-        font            = icon_font,
-        fontsize        = widget_default_font_size + bottom_icons_font_size_plus,
-        padding         = widget_default_padding + bottom_icons_padding_plus,
-        foreground      = date_icon_color,
-        mouse_callbacks = {
-            'Button1': lambda: Qtile.cmd_spawn("/home/jonalm/.config/rofi/files/powermenu/type-2/powermenu.sh"),
-        }
-    ),
-    seperator(-8),
-], bar_size + 3, margin = bar_margin_bottom, border_width = bar_width_bottom, border_color = bar_border_color)
-
-bottom_bar_2 = Bar([
-    seperator(-8),
-    # ROFI APP LAUNCHER #
-    widget.TextBox(
-        text            = "",
-        font            = icon_font,
-        fontsize        = widget_default_font_size + bottom_icons_font_size_plus,
-        padding         = widget_default_padding + bottom_icons_padding_plus,
-        foreground      = wifi_icon_color,
-        mouse_callbacks = {
-            'Button1': lambda: Qtile.cmd_spawn("/home/jonalm/.config/rofi/files/launchers/type-1/launcher.sh"),
-        }
-    ),
-    # ROFI SEARCH #
-    widget.TextBox(
-        text            = "",
-        font            = icon_font,
-        fontsize        = widget_default_font_size + bottom_icons_font_size_plus,
-        padding         = widget_default_padding + bottom_icons_padding_plus,
-        foreground      = volume_icon_color,
-        mouse_callbacks = {
-            'Button1': lambda: Qtile.cmd_spawn("/home/jonalm/scripts/rofi/search/search_web.sh"),
-        }
-    ),
-
-    # ROFI CONFIG #
-    widget.TextBox(
-        text            = "",
-        font            = icon_font,
-        fontsize        = widget_default_font_size + bottom_icons_font_size_plus,
-        padding         = widget_default_padding + bottom_icons_padding_plus,
-        foreground      = cpu_icon_color,
-        mouse_callbacks = {
-            'Button1': lambda: Qtile.cmd_spawn("/home/jonalm/scripts/rofi/config/config_files.sh"),
-        }
-    ),
-
-    # CURRENT OPENED APPS #
-    widget.Sep(
-        linewidth    = bottom_seperator_line_width,
-        foreground   = bar_border_color,
-        size_percent = bottom_seperator_size_percent,
-        padding      = bottom_seperator_padding
-    ),
-    widget.TaskList(
-        font                = "FiraCode Nerd Font Bold",
-        fontsize            = widget_default_font_size + 1,
-        padding             = widget_default_padding - 2,
-        margin              = 5,
-        borderwidth         = 6,
-        txt_floating        = ' 缾 ',
-        txt_maximized       = ' 类 ',
-        txt_minimized       = ' 絛 ',
-        title_width_method  = "uniform",
-        urgent_alert_method = "border",
-        highlight_method    = 'block',
-        border              = bar_border_color,
-        unfocused_border    = colors[61],
-    ),
-    widget.Sep(
-        linewidth    = bottom_seperator_line_width,
-        foreground   = bar_border_color,
-        size_percent = bottom_seperator_size_percent,
-        padding      = bottom_seperator_padding
-    ),
-
-    # ROFI AUTOMATION #
-    widget.TextBox(
-        text            = "",
-        font            = icon_font,
-        fontsize        = widget_default_font_size + bottom_icons_font_size_plus,
-        padding         = widget_default_padding + bottom_icons_padding_plus,
-        foreground      = battery_icon_color,
-        mouse_callbacks = {
-            'Button1': lambda: Qtile.cmd_spawn("/home/jonalm/scripts/rofi/automation/automation.sh"),
-        }
-    ),
-
-    # KEYBOARD SHORTCUTS #
-    widget.TextBox(
-        text            = "",
-        font            = icon_font,
-        fontsize        = widget_default_font_size + bottom_icons_font_size_plus,
-        padding         = widget_default_padding + bottom_icons_padding_plus,
-        foreground      = backlight_icon_color,
-        mouse_callbacks = {
-            'Button1': lambda: Qtile.cmd_spawn("/home/jonalm/scripts/term/show_keys.sh"),
-        }
-    ),
-
-    # ROFI POWER MENU #
-    widget.TextBox(
-        text            = "",
-        font            = icon_font,
-        fontsize        = widget_default_font_size + bottom_icons_font_size_plus,
-        padding         = widget_default_padding + bottom_icons_padding_plus,
-        foreground      = date_icon_color,
-        mouse_callbacks = {
-            'Button1': lambda: Qtile.cmd_spawn("/home/jonalm/.config/rofi/files/powermenu/type-2/powermenu.sh"),
-        }
-    ),
-    seperator(-8),
-], bar_size + 3, margin = bar_margin_bottom, border_width = bar_width_bottom, border_color = bar_border_color)
+], bar_size, margin = bar_margin_top, background = bar_background_color, border_width = bar_width_top, border_color = bar_border_color, opacity=1)
 
 ### LAYOUT SETTINGS ###
 layouts = [
@@ -793,18 +594,14 @@ if "HDMI-A-0: connected" in screen_data:
     single_monitor   = False
     top_bar_1_var    = top_bar_1
     top_bar_2_var    = top_bar_2
-    bottom_bar_1_var = bottom_bar_1
-    bottom_bar_2_var = bottom_bar_2
 else:
     top_bar_1_var    = top_bar_1
     top_bar_2_var    = None
-    bottom_bar_1_var = bottom_bar_1
-    bottom_bar_2_var = None
 
 ### DECLARING PANEL ###
 screens = [
-    Screen(top=top_bar_1_var, bottom=bottom_bar_1_var, left=bar.Gap(bar_gap_size), right=bar.Gap(bar_gap_size)),
-    Screen(top=top_bar_2_var, bottom=bottom_bar_2_var, left=bar.Gap(bar_gap_size), right=bar.Gap(bar_gap_size)) 
+    Screen(top=top_bar_1_var, bottom=bar.Gap(bar_gap_size), left=bar.Gap(bar_gap_size), right=bar.Gap(bar_gap_size)),
+    Screen(top=top_bar_2_var, bottom=bar.Gap(bar_gap_size), left=bar.Gap(bar_gap_size), right=bar.Gap(bar_gap_size)) 
 
     ]
         

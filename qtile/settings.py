@@ -22,7 +22,7 @@ colors = [
     ["#d08770", "#d08770"],     # 11 orange
     ["#8fbcbb", "#8fbcbb"],     # 12 super cyan
     ["#5e81ac", "#5e81ac"],     # 13 super blue
-    ["#242831", "#242831"],     # 14 super dark background
+    ["#242831.85", "#242831.85"],     # 14 super dark background
     ["#434C5E", "#434C5E"],     # 15 darker grey
     #-Dark mode
     ["#00000000", "#00000000"], # 16 transp1
@@ -72,6 +72,7 @@ colors = [
     ["#ffcccb", "#ffcccb"],     # 59 nordlightrred
     ["#ECEFF4", "#ECEFF4"],     # 60 nordwhite1
     ["#2e3441", "#2e3441"],     # 61 darker grey
+    ["#000000AA", "#000000AA"], # 63 Transp
 ]
 
 ### FONTS ###
@@ -92,7 +93,7 @@ seperator_line_width            = 15
 
 #-Widget defaults
 widget_default_foreground_color = colors[9]
-widget_default_background_color = colors[14]
+widget_default_background_color = colors[62]
 widget_default_font_size        = 18
 widget_default_padding          = 6     
 
@@ -106,7 +107,7 @@ menu_button_padding             = 7
 
 #-Decorator
 decorator_padding               = -1
-decorator_border_width          = [0, 0, 3, 0]
+decorator_border_width          = [4, 0, 4, 0]
 
 #-Layout_icon
 layout_normal_color_stack       = colors[2][0]
@@ -120,13 +121,15 @@ layouticon_scale                = 0.48
 
 #-Bar
 bar_background_color            = colors[14]
-bar_border_color                = colors[2][0]
-bar_size                        = 41
+bar_border_color                = "#4f586e"
+bar_size                        = 46
+# bar_size                        = 41
 bar_gap_size                    = -3
-bar_width_top                   = 3
-bar_width_bottom                = 3
-bar_margin_top                  = [5, 5, 5, 5]
-bar_margin_bottom               = [5, 5, 5, 5]
+bar_width_top                   = [0, 0, 4, 0]
+bar_width_bottom                = 0
+bar_margin_top                  = 0
+bar_margin_bottom               = 0
+icon_seperator_padding          = -5
 
 #-Groupbox
 group_box_active_color          = colors[60]
@@ -136,12 +139,10 @@ group_box_highlight_color       = colors[3]
 group_box_this_border_color     = widget_default_background_color
 group_box_other_border_color    = colors[0]
 group_box_foreground_color      = colors[2]
-group_box_background_color      = widget_default_background_color
+group_box_background_color      = colors[3]
+group_box_highlight_text_color  = colors[3]
 group_box_urgentborder_color    = colors[3]
 groupbox_margin                 = 4
-
-#-TIME
-time_decerator_colors           = colors[13]
 
 #-Cpu
 cpu_icon_color                  = colors[12]
@@ -171,7 +172,11 @@ date_icon_color                 = colors[3]
 #-Notification history
 notification_history_icon_color = colors[13] 
 
+#-TIME
+time_decerator_colors           = colors[13]
+
 #-Bottom icons
+bottom_icons_color              = "#58627a"
 bottom_icons_font_size_plus     = 2
 bottom_icons_padding_plus       = 4
 
@@ -179,11 +184,12 @@ bottom_icons_padding_plus       = 4
 bottom_seperator_line_width     = 2
 bottom_seperator_size_percent   = 60
 bottom_seperator_padding        = 14
+
 ### GROUPS ###
 focus_value                     = True
 
 ### LAYOUT VARIABLES ### 
-layout_margin                   = 8
+layout_margin                   = 10
 layout_border_width             = 3
 floating_border_width           = 3
 layout_num_stacks               = 1
