@@ -15,7 +15,7 @@ if [ "$choice" ]; then
             if $DMEDITOR "$cfg"; then
                 # Editor was opened successfully
                 notify-send -u low -t 3000 '-h' "int:transient:1" "Open config" "<span foreground='#a3be8c' size='medium'>$choice</span>opened in vscode"
-                qtile cmd-obj -o group 3 -f toscreen
+                qtile cmd-obj -o group 2 -f toscreen
             else
                 notify-send -u critical -t 3000 '-h' "int:transient:1" "Open config failed" "Error for: <span foreground='#bf616a' size='medium'>$choice</span>"
                 # Editor failed to open

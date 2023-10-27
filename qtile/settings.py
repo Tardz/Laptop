@@ -129,7 +129,7 @@ bar_width_top                   = [0, 0, 4, 0]
 bar_width_bottom                = 0
 bar_margin_top                  = 0
 bar_margin_bottom               = 0
-icon_seperator_padding          = -5
+icon_seperator_padding          = -1
 
 #-Groupbox
 group_box_active_color          = colors[60]
@@ -160,7 +160,7 @@ battery_icon_color              = colors[4]
 battery_update_interval         = 20
 
 #-Wifi
-wifi_icon_color                 = colors[7]
+wifi_icon_color                 = "#81A1C1"
 wifi_update_interval            = 20
  
 #-Volume

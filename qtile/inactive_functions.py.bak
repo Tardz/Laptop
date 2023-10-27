@@ -185,3 +185,8 @@ def upper_right_triangle(bg_color, fg_color):
     # ),
     # seperator(-8),
 ], bar_size + 3, margin = bar_margin_bottom, background = bar_background_color, border_width = bar_width_bottom, border_color = bar_border_color, opacity=1)
+
+
+    widget.Spacer(
+        bar.STRETCH,
+    ),

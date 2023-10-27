@@ -109,17 +109,17 @@ keys = [
         Key([mod], "z", lazy.window.toggle_minimize(), lazy.group.next_window(), desc="Minimize window"),
 
         #--[APPS]--#
-        Key([mod], "c", move_focus_and_mouse(1), lazy.group["2"].toscreen(), check("brave", "2"), desc='Browser'),
-        Key([mod], "n", move_focus_and_mouse(1), lazy.group["4"].toscreen(), check("ranger", "4", "alacritty --title Ranger -e"), desc='Filemanager'),
-        Key([mod], "d", move_focus_and_mouse(1), lazy.group["7"].toscreen(), check("discord", "7"), desc='Discord'),
-        Key([mod], "v", move_focus_and_mouse(0), lazy.group["3"].toscreen(), desc='VScode'),
-        Key([mod], "m", move_focus_and_mouse(1), lazy.group["5"].toscreen(), check("thunderbird", "5"), desc='Mail'),
+        Key([mod], "c", move_focus_and_mouse(1), lazy.group["1"].toscreen(), check("brave", "1"), desc='Browser'),
+        Key([mod], "n", move_focus_and_mouse(1), lazy.group["3"].toscreen(), check("ranger", "3", "alacritty --title Ranger -e"), desc='Filemanager'),
+        Key([mod], "d", move_focus_and_mouse(1), lazy.group["4"].toscreen(), check("discord", "4"), desc='Discord'),
+        Key([mod], "v", move_focus_and_mouse(0), lazy.group["2"].toscreen(), desc='VScode'),
+        Key([mod], "m", move_focus_and_mouse(1), lazy.group["3"].toscreen(), check("thunderbird", "3"), desc='Mail'),
 
         #--[URLS]--#
-        Key([mod], "y", move_focus_and_mouse(1), lazy.group["2"].toscreen(), check("youtube.com", "2", "brave"), desc='Youtube'),
+        Key([mod], "y", move_focus_and_mouse(1), lazy.group["1"].toscreen(), check("youtube.com", "1", "brave"), desc='Youtube'),
 
         #--[TERM]--#
-        Key([mod], "h", move_focus_and_mouse(0), lazy.group["8"].toscreen(), check("htop", "8", "alacritty --title Htop -e"), desc='Htop'),
+        Key([mod], "h", move_focus_and_mouse(0), lazy.group["3"].toscreen(), check("htop", "3", "alacritty --title Htop -e"), desc='Htop'),
         Key([mod], "plus", lazy.spawn("/home/jonalm/scripts/term/show_keys.sh"), desc='Keybindings'),
 
         #--[ROFI]--#
@@ -133,37 +133,61 @@ keys = [
 
 ### GROUP SETTINGS ###
 groups = [
-        Group('1', label = "", matches=[ #Other
-            ]), 
-        Group('2', label = "", matches=[ #Browser
+        Group('1', label = "", matches=[ #Browser
             Match(wm_class = ["chromium"]),
             Match(wm_class = ["brave-browser"]),
                 ]), 
-        Group('3', label = "", matches=[ #Code
+        Group('2', label = "", matches=[ #Code
             Match(wm_class = ["code"]),
             Match(wm_class = ["jetbrains-clion"]),
             Match(wm_class = ["jetbrains-studio"]),
             Match(wm_class = ["jetbrains-idea"]),
             ]), 
-        Group('4', label = "", matches=[ #Files
+        Group('3', label = "", matches=[ #Files
             Match(wm_class = ["pcmanfm"]),
-            ]), 
-        Group('5', label = "", matches=[ #Mail
             Match(wm_class = ["thunderbird"]),
-            ]), 
-        Group('6', label = "", matches=[ #Docs
-            Match(wm_class = ["libreoffice"]),
-            ]), 
-        Group('7', label = "", matches=[ #Social
-            Match(wm_class = ["discord"]),
-            ]), 
-        Group('8', label = "", matches=[ #Settings
             Match(wm_class = ["lxappearance"]),
             Match(wm_class = ["tlpui"]),
+            ]), 
+        Group('4', label = "", matches=[ #Social
+            Match(wm_class = ["discord"]),
             ]), 
         Group('9', label = ""), #Scratchpad
 
 ]
+
+# groups = [
+#         Group('1', label = "", matches=[ #Other
+#             ]), 
+#         Group('2', label = "", matches=[ #Browser
+#             Match(wm_class = ["chromium"]),
+#             Match(wm_class = ["brave-browser"]),
+#                 ]), 
+#         Group('3', label = "", matches=[ #Code
+#             Match(wm_class = ["code"]),
+#             Match(wm_class = ["jetbrains-clion"]),
+#             Match(wm_class = ["jetbrains-studio"]),
+#             Match(wm_class = ["jetbrains-idea"]),
+#             ]), 
+#         Group('4', label = "", matches=[ #Files
+#             Match(wm_class = ["pcmanfm"]),
+#             ]), 
+#         Group('5', label = "", matches=[ #Mail
+#             Match(wm_class = ["thunderbird"]),
+#             ]), 
+#         Group('6', label = "", matches=[ #Docs
+#             Match(wm_class = ["libreoffice"]),
+#             ]), 
+#         Group('7', label = "", matches=[ #Social
+#             Match(wm_class = ["discord"]),
+#             ]), 
+#         Group('8', label = "", matches=[ #Settings
+#             Match(wm_class = ["lxappearance"]),
+#             Match(wm_class = ["tlpui"]),
+#             ]), 
+#         Group('9', label = ""), #Scratchpad
+
+# ]
 
 ### SCRATCHPAD ###
 groups.append(ScratchPad('9', [
@@ -281,15 +305,16 @@ widget_defaults = dict(
 group_box_settings = {
         "margin"                      : groupbox_margin,
         "font"                        : icon_font,
-        "highlight_method"            : "box",
+        "highlight_method"            : "block",
         "borderwidth"                 : 6,
         "rounded"                     : True,
         "disable_drag"                : True,
-        "active"                      : group_box_active_color,
-        "inactive"                    : group_box_inactive_color,
-        "block_highlight_text_color"  : group_box_highlight_color,
-        "highlight_color"             : group_box_highlight_color,
-        "this_current_screen_border"  : bar_background_color,
+        "active"                      : bar_border_color,
+        "inactive"                    : bar_background_color,
+        "block_highlight_text_color"  : "#000000",
+        "highlight_color"             : "#000000",
+        "this_current_screen_border"  : "#81A1C1",
+        "hide_unused"                 : True,
         "other_current_screen_border" : group_box_other_border_color,
         "this_screen_border"          : group_box_this_border_color,
         "other_screen_border"         : group_box_other_border_color,
@@ -298,42 +323,37 @@ group_box_settings = {
         "urgent_border"               : group_box_urgentborder_color,
 }
 
-# decorations = [
-    # BorderDecoration(
-    #     colour       = date_icon_color,
-    #     border_width = decorator_border_width,
-    #     padding      = decorator_padding,
-    # )
-# ],
-
 ### BAR ###
 top_bar_1 = Bar([
-    # GROUPBOX #
-    widget.GroupBox(
-        **group_box_settings,
-    ),
-
     seperator(icon_seperator_padding - 1),
     widget.TextBox(        
-        text            = "<span font='Font Awesome 6 free solid 14' foreground='#000000' size='medium'></span>",
-        padding         = widget_default_font_size - 12,
-        decorations     = left_decor(round = True, color = "#b16286"),
+        text        = "<span font='Font Awesome 6 free solid 14' foreground='#000000' size='medium'></span>",
+        padding     = widget_default_font_size - 12,
+        decorations = left_decor(round = True, color = battery_icon_color),
     ),
 
     seperator(icon_seperator_padding),
     widget.CurrentLayoutIcon(
         custom_icon_paths = [os.path.expanduser("~/.config/qtile/icons")],
         scale             = layouticon_scale,
-        decorations       = left_decor(round = True, color = "#a9a1e1"),
+        decorations       = left_decor(round = True, color = cpu_icon_color),
     ),
 
-    seperator(icon_seperator_padding - 6),
+    # GROUPBOX #
+    seperator(icon_seperator_padding),
+    widget.GroupBox(
+        **group_box_settings,
+        decorations = left_decor(round = True, color = wifi_icon_color),
+    ),
+
+    seperator(icon_seperator_padding - 10),
     widget.TaskList(
         font                = "FiraCode Nerd Font Bold",
         fontsize            = widget_default_font_size + 1,
         padding_y           = widget_default_padding - 2,
         margin              = 6,
         borderwidth         = 6,
+        spacing             = 2,
         txt_floating        = ' 缾 ',
         txt_maximized       = ' 类 ',
         txt_minimized       = ' 絛 ',
@@ -374,6 +394,7 @@ top_bar_1 = Bar([
     widget.TextBox(        
         text        = "<span font='Font Awesome 6 free solid 14' foreground='#000000'size='medium'></span>",
         padding     = widget_default_font_size - 12,
+        mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("python3 /home/jonalm/scripts/qtile/bar_menus/power_management.py")},
         decorations = left_decor(battery_icon_color, round = True),
     ),
     widget.Battery(
@@ -429,7 +450,7 @@ top_bar_1 = Bar([
         fontsize    = widget_default_font_size + 1,
         decorations = right_decor(True),
     ),
-    seperator(icon_seperator_padding),
+    seperator(icon_seperator_padding - 4),
 ], bar_size, margin = bar_margin_top, background = bar_background_color, border_width = bar_width_top, border_color = bar_border_color, opacity=1)
 
 top_bar_2 = Bar([
