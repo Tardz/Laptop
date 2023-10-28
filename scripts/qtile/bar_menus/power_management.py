@@ -1,20 +1,33 @@
 import gi
 gi.require_version('Gtk', '3.0')
 import subprocess
+import os
+from Xlib import display 
 from gi.repository import Gtk, Gdk
 
 class CustomDialog(Gtk.Dialog):
     def __init__(self):
+        self.pid_file = "/home/jonalm/scripts/qtile/bar_menus/power_managment_pid_file.pid"
         Gtk.Dialog.__init__(self, "Custom Dialog", None, 0)
         self.set_default_size(100, 40)
-        self.move(1985, 0)  # Set the x and y position
+
+        x, y = self.get_mouse_position()
+
+        if x is not None and y is not None:
+            self.move(x - 225, y - 50)
+
         self.connect("focus-out-event", self.on_focus_out)
 
         option = self.read_option_from_file()
 
         hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=6)
+        automatic_button = Gtk.Button("Automatic")
+        automatic_button.connect("clicked", self.on_automatic_button_clicked)
+        style = automatic_button.get_style_context()
+        style.add_class("Automatic")
+        automatic_button.set_hexpand(True)
+        automatic_button.set_vexpand(True)
 
-        # Create buttons with different styles
         powersave_button = Gtk.Button("Powersave")
         powersave_button.connect("clicked", self.on_powersave_button_clicked)
         style = powersave_button.get_style_context()
@@ -29,19 +42,36 @@ class CustomDialog(Gtk.Dialog):
         performance_button.set_hexpand(True)
         performance_button.set_vexpand(True)
 
-        if option == "powersave":
+        if option == "nor":
+            self.set_button_style(automatic_button, "#4f586e")
+        elif option == "powersave":
             self.set_button_style(powersave_button, "#4f586e")
-        else:
+        elif option == "performance":
             self.set_button_style(performance_button, "#4f586e")
 
-        # Add buttons to the dialog
+        hbox.pack_start(automatic_button, True, True, 0)
         hbox.pack_start(powersave_button, True, True, 0)
         hbox.pack_start(performance_button, True, True, 0)
         
         content_area = self.get_content_area()
+        # background_color = Gdk.RGBA()
+        # background_color.parse("#a3be8c")
+        # content_area.override_background_color(Gtk.StateType.NORMAL, background_color)        
+        
         content_area.add(hbox)
-
         self.show_all()
+
+    def get_mouse_position(self):
+        try:
+            d = display.Display()
+            s = d.screen()
+            root = s.root
+            root.change_attributes(event_mask=0x10000)
+            pointer = root.query_pointer()
+            x, y = pointer.root_x, pointer.root_y
+            return x, y
+        except Exception:
+            return None, None
 
     def read_option_from_file(self):
         try:
@@ -58,24 +88,51 @@ class CustomDialog(Gtk.Dialog):
         context = button.get_style_context()
         context.add_provider(style_provider, Gtk.STYLE_PROVIDER_PRIORITY_USER)
 
+    def on_automatic_button_clicked(self, button):
+        subprocess.call(["sudo auto-cpufreq --force=reset"], shell=True)
+        self.exit_remove_pid()        
+
     def on_powersave_button_clicked(self, button):
         subprocess.call(["sudo auto-cpufreq --force=powersave"], shell=True)
-        self.hide()
+        self.exit_remove_pid()
 
     def on_performance_button_clicked(self, button):
         subprocess.call(["sudo auto-cpufreq --force=performance"], shell=True)
-        self.hide()
+        subprocess.call(["notify-send -a $current_time -u low -t 3000 'Search option added' 'Option: <span foreground='#a3be8c' size='medium'>$WebName</span>'"], shell=True)
+        self.exit_remove_pid()
 
     def on_focus_out(self, widget, event):
-        self.destroy()
+        self.exit_remove_pid()
 
-### fix toggle ###
-##################
-dialog = CustomDialog()
-Gtk.main()
+    def exit_remove_pid(self):
+        pid = None
+        try:
+            with open(self.pid_file, "r") as file:
+                pid = int(file.read().strip())
+            try:
+                os.remove(self.pid_file)
+                os.kill(pid, 15)
+            except ProcessLookupError:
+                pass
+        finally:
+            exit(0)
 
+pid_file = "/home/jonalm/scripts/qtile/bar_menus/power_managment_pid_file.pid"
+dialog = None
 
-
-
-
-
+try:
+    if os.path.isfile(pid_file):
+        with open(pid_file, "r") as file:
+            pid = int(file.read().strip())
+        try:
+            os.remove(pid_file)
+            os.kill(pid, 15)            
+        except ProcessLookupError:
+            pass
+    else:
+        with open(pid_file, "w") as file:
+            file.write(str(os.getpid()))
+        dialog = CustomDialog()    
+        Gtk.main()
+except Exception as e:
+    print(f"An error occurred: {e}")
