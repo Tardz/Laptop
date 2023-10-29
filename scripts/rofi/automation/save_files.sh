@@ -32,6 +32,7 @@ sudo rsync -av --delete /home/jonalm/.config/gtk-3.0 "$git_path"
 sudo rsync -av --delete /home/jonalm/.config/tmux "$git_path"
 sudo rsync -av --delete /home/jonalm/.config/dunst "$git_path"
 sudo rsync -av --delete /home/jonalm/.config/eww "$git_path"
+sudo rsync -av --delete /home/jonalm/.config/redshift "$git_path"
 sudo rsync -av --delete /home/jonalm/.imwheelrc "$git_path"
 sudo rsync -av --delete /home/jonalm/.inputrc "$git_path"
 

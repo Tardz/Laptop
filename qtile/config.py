@@ -48,6 +48,7 @@ def spawn_alttab_once(qtile):
 
 @lazy.function
 def check(qtile, app, group, command = ""):
+    # if qtile.current_group.name != int(group):
     qtile.cmd_spawn(["/home/jonalm/scripts/qtile/check_and_launch_app.py", app, group, command])
 
 @lazy.function
