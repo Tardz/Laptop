@@ -125,10 +125,10 @@ bar_border_color                = "#4f586e"
 bar_size                        = 46
 # bar_size                        = 41
 bar_gap_size                    = -3
-bar_width_top                   = [0, 0, 4, 0]
+bar_width_top                   = [3, 3, 3, 3]
 bar_width_bottom                = 0
-bar_margin_top                  = 0
-bar_margin_bottom               = 0
+bar_margin_top                  = [6, 6, 4 ,6]
+bar_margin_bottom               = 6
 icon_seperator_padding          = -1
 
 #-Groupbox
@@ -171,6 +171,8 @@ date_icon_color                 = colors[3]
 
 #-Notification history
 notification_history_icon_color = colors[13] 
+
+#-Ticktick
 
 #-TIME
 time_decerator_colors           = colors[13]

@@ -11,39 +11,59 @@ class SoundControlDialog(Gtk.Dialog):
         self.pid_file = "/home/jonalm/scripts/qtile/bar_menus/power_managment_pid_file.pid"
         Gtk.Dialog.__init__(self, "Sound Control", None, 0)
         self.set_default_size(400, 50)
-        self.move(7, 4)
+        self.move(9, 4)
 
-        self.get_input_data()
+        self.ignore_focus_lost = False
+        self.previous_css_class = None
+
+        self.content_area = self.get_content_area()
+        self.content_area.set_name("content-area")
+        self.set_name("root")
+
+        fixed = Gtk.Fixed()
+        self.get_content_area().add(fixed)
+
+        self.get_slider_data()
         self.css()
         self.volume()
         self.display_brightness()
         self.keyboard_brightness()
         self.top()
-        self.get_input_data()
 
         self.connect("focus-out-event", self.on_focus_out)
+        self.connect("key-press-event", self.on_escape_press)
         self.connect("response", self.on_response)
 
-        content_area = self.get_content_area()
-        content_area.set_name("content-area")
-        content_area.set_margin_top(10)
-        content_area.set_margin_bottom(10)
-        content_area.set_margin_start(10)
-        content_area.set_margin_end(10)        
-        self.set_name("content-area")
-        content_area.pack_start(self.top_box, True, True, 0)
-        content_area.pack_start(self.volume_box, True, True, 0)
-        content_area.pack_start(self.display_box, True, True, 0)
-        content_area.pack_start(self.keyboard_box, True, True, 0)
+        self.content_area.pack_start(self.top_box, True, True, 0)
+        self.content_area.pack_start(self.volume_box, True, True, 0)
+        self.content_area.pack_start(self.display_box, True, True, 0)
+        # content_area.pack_start(self.keyboard_box, True, True, 0)
 
+        self.hide()
+        
+        self.animate_opening(fixed)
+
+    def animate_opening(self, container):
+        container.set_opacity(0.0)
         self.show_all()
 
+        def animation_tick():
+            opacity = container.get_opacity()
+            opacity += 0.05 
+            if opacity >= 1.0:
+                container.set_opacity(1.0)
+                return False 
+            container.set_opacity(opacity)
+            return True
+
+        GObject.timeout_add(5000, animation_tick)
+
     def top(self):
-        self.top_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=6)
+        self.top_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=0)
         self.toggles()
         self.rofi()
         
-        self.top_box.pack_start(self.toggle_box, False, False, 0)
+        self.top_box.pack_start(self.toggle_box, True, True, 0)
         self.top_box.pack_start(self.rofi_box, False, False, 0)
     
     def toggles(self):
@@ -60,10 +80,10 @@ class SoundControlDialog(Gtk.Dialog):
 
     def wifi_toggle(self):
         wifi_main_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=0)
-        wifi_main_box.set_margin_top(10)
-        wifi_main_box.set_margin_bottom(10)
-        wifi_main_box.set_margin_start(10)
-        wifi_main_box.set_margin_end(10)
+        wifi_main_box.set_margin_top(16)
+        wifi_main_box.set_margin_bottom(16)
+        wifi_main_box.set_margin_start(16)
+        wifi_main_box.set_margin_end(16)
 
         wifi_right_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
 
@@ -111,10 +131,10 @@ class SoundControlDialog(Gtk.Dialog):
 
     def bluetooth_toggle(self):
         bluetooth_main_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=0)
-        bluetooth_main_box.set_margin_top(10)
-        bluetooth_main_box.set_margin_bottom(10)
-        bluetooth_main_box.set_margin_start(10)
-        bluetooth_main_box.set_margin_end(10)
+        bluetooth_main_box.set_margin_top(16)
+        bluetooth_main_box.set_margin_bottom(16)
+        bluetooth_main_box.set_margin_start(16)
+        bluetooth_main_box.set_margin_end(16)
 
         bluetooth_right_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
 
@@ -165,10 +185,10 @@ class SoundControlDialog(Gtk.Dialog):
 
     def redshift_toggle(self):
         redshift_main_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=0)
-        redshift_main_box.set_margin_top(10)
-        redshift_main_box.set_margin_bottom(10)
-        redshift_main_box.set_margin_start(10)
-        redshift_main_box.set_margin_end(10)
+        redshift_main_box.set_margin_top(16)
+        redshift_main_box.set_margin_bottom(16)
+        redshift_main_box.set_margin_start(16)
+        redshift_main_box.set_margin_end(16)
 
         redshift_right_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
 
@@ -217,127 +237,110 @@ class SoundControlDialog(Gtk.Dialog):
     
     def rofi(self):
         self.rofi_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=16)
-        self.rofi_box.set_margin_top(10)
-        self.rofi_box.set_margin_bottom(10)
-        self.rofi_box.set_margin_start(10)
-        self.rofi_box.set_margin_end(10)
+        self.rofi_box.set_name("empty-box")
 
-        
         rofi_left_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=16)
 
-        app_launcher_box = Gtk.EventBox()
         app_launcher_icon = Gtk.Label()
         app_launcher_icon.set_text("")
-        app_launcher_icon.set_name("rofi-icons")
+        app_launcher_icon.get_style_context().add_class("rofi-icon")
+        app_launcher_icon.set_name("rofi-app-launcher-icon")
         app_launcher_icon.set_halign(Gtk.Align.START)
-        app_launcher_icon.set_margin_top(26)
-        app_launcher_icon.set_margin_bottom(26)
-        app_launcher_icon.set_margin_start(36)
-        app_launcher_icon.set_margin_end(36)
+        app_launcher_box = Gtk.EventBox()
+        app_launcher_box.connect("enter-notify-event", self.on_icon_hover)
+        app_launcher_box.connect("leave-notify-event", self.on_icon_leave)
         app_launcher_box.add(app_launcher_icon)
         app_launcher_box.set_name("rofi-icons")
+        app_launcher_box.connect("button-press-event", self.app_launcher_clicked)
 
-        search_box = Gtk.EventBox()
         search_icon = Gtk.Label()
         search_icon.set_text("")
-        search_icon.set_name("rofi-icons")
+        search_icon.get_style_context().add_class("rofi-icon")
+        search_icon.set_name("rofi-search-icon")
         search_icon.set_halign(Gtk.Align.START)
-        search_icon.set_margin_top(26)
-        search_icon.set_margin_bottom(26)
-        search_icon.set_margin_start(36)
-        search_icon.set_margin_end(36)
+        search_box = Gtk.EventBox()
+        search_box.connect("enter-notify-event", self.on_icon_hover)
+        search_box.connect("leave-notify-event", self.on_icon_leave)
         search_box.add(search_icon)
         search_box.set_name("rofi-icons")
+        search_box.connect("button-press-event", self.search_clicked)
 
-        config_box = Gtk.EventBox()
         config_icon = Gtk.Label()
         config_icon.set_text("")
-        config_icon.set_name("rofi-icons")
+        config_icon.get_style_context().add_class("rofi-icon")
+        config_icon.set_name("rofi-config-icon")
         config_icon.set_halign(Gtk.Align.START)
-        config_icon.set_margin_top(26)
-        config_icon.set_margin_bottom(26)
-        config_icon.set_margin_start(36)
-        config_icon.set_margin_end(36)
+        config_box = Gtk.EventBox()
+        config_box.connect("enter-notify-event", self.on_icon_hover)
+        config_box.connect("leave-notify-event", self.on_icon_leave)
         config_box.add(config_icon)
         config_box.set_name("rofi-icons")
+        config_box.connect("button-press-event", self.config_clicked)
 
         rofi_right_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=16)
       
-        power_menu_box = Gtk.EventBox()
         power_menu_icon = Gtk.Label()
         power_menu_icon.set_text("")
-        power_menu_icon.set_name("rofi-icons")
+        power_menu_icon.get_style_context().add_class("rofi-icon")
+        power_menu_icon.set_name("rofi-power-menu-icon")
         power_menu_icon.set_halign(Gtk.Align.START)
-        power_menu_icon.set_margin_top(26)
-        power_menu_icon.set_margin_bottom(26)
-        power_menu_icon.set_margin_start(36)
-        power_menu_icon.set_margin_end(36)
+        power_menu_box = Gtk.EventBox()
+        power_menu_box.connect("enter-notify-event", self.on_icon_hover)
+        power_menu_box.connect("leave-notify-event", self.on_icon_leave)
         power_menu_box.add(power_menu_icon)
         power_menu_box.set_name("rofi-icons")
+        power_menu_box.connect("button-press-event", self.power_menu_clicked)
 
-        automation_box = Gtk.EventBox()
         automation_icon = Gtk.Label()
         automation_icon.set_text("")
-        automation_icon.set_name("rofi-icons")
+        automation_icon.get_style_context().add_class("rofi-icon")
+        automation_icon.set_name("rofi-automation-icon")
         automation_icon.set_halign(Gtk.Align.START)
-        automation_icon.set_margin_top(26)
-        automation_icon.set_margin_bottom(26)
-        automation_icon.set_margin_start(36)
-        automation_icon.set_margin_end(36)
+        automation_box = Gtk.EventBox()
+        automation_box.connect("enter-notify-event", self.on_icon_hover)
+        automation_box.connect("leave-notify-event", self.on_icon_leave)
         automation_box.add(automation_icon)
         automation_box.set_name("rofi-icons")
+        automation_box.connect("button-press-event", self.automation_clicked)
 
-        keyboard_shortcuts_box = Gtk.EventBox()
         keyboard_shortcuts_icon = Gtk.Label()
         keyboard_shortcuts_icon.set_text("")
-        keyboard_shortcuts_icon.set_name("rofi-icons")
+        keyboard_shortcuts_icon.get_style_context().add_class("rofi-icon")
+        keyboard_shortcuts_icon.set_name("rofi-keyboard-shortcuts-icon")
         keyboard_shortcuts_icon.set_halign(Gtk.Align.START)
-        keyboard_shortcuts_icon.set_margin_top(26)
-        keyboard_shortcuts_icon.set_margin_bottom(26)
-        keyboard_shortcuts_icon.set_margin_start(36)
-        keyboard_shortcuts_icon.set_margin_end(36)
+        keyboard_shortcuts_box = Gtk.EventBox()
+        keyboard_shortcuts_box.connect("enter-notify-event", self.on_icon_hover)
+        keyboard_shortcuts_box.connect("leave-notify-event", self.on_icon_leave)
         keyboard_shortcuts_box.add(keyboard_shortcuts_icon)
         keyboard_shortcuts_box.set_name("rofi-icons")
+        keyboard_shortcuts_box.connect("button-press-event", self.keyboard_shortcut_clicked)
 
         rofi_left_box.pack_start(app_launcher_box, False, False, 0)
         rofi_left_box.pack_start(search_box, False, False, 0)
         rofi_left_box.pack_start(config_box, False, False, 0)
+
         rofi_right_box.pack_start(power_menu_box, False, False, 0)
         rofi_right_box.pack_start(automation_box, False, False, 0)
         rofi_right_box.pack_start(keyboard_shortcuts_box, False, False, 0)
+        
         self.rofi_box.pack_start(rofi_left_box, False, False, 0)
         self.rofi_box.pack_start(rofi_right_box, False, False, 0)
 
     def volume(self):
         self.volume_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
         self.volume_box.set_name("slider-box")
-        self.volume_box.set_margin_top(10)
-        self.volume_box.set_margin_bottom(10)
-        self.volume_box.set_margin_start(10)
-        self.volume_box.set_margin_end(10)
 
         volume_label = Gtk.Label()
         volume_label.set_text("Volume")
-        volume_label.set_name("label")
+        volume_label.set_name("slider-title")
         volume_label.set_halign(Gtk.Align.START)
-        volume_label.set_margin_top(10)
-        volume_label.set_margin_bottom(5)
-        volume_label.set_margin_start(14)
         self.volume_box.pack_start(volume_label, False, False, 0)
         
         volume_hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=6)
 
-        volume_icon = Gtk.Label("")
-        volume_icon.set_name("volume-icon")
-        volume_icon.set_margin_start(18)
-        volume_icon.set_margin_end(0)
-        volume_hbox.pack_start(volume_icon, False, False, 0)
-
         volume_adjustment = Gtk.Adjustment(value=self.current_volume, lower=0, upper=100, step_increment=1, page_increment=10)
         volume_scale = Gtk.HScale.new(volume_adjustment)
-
         volume_scale.set_digits(0)
-        volume_scale.set_margin_end(10)
         volume_scale.set_draw_value(False)
         volume_hbox.pack_start(volume_scale, True, True, 0)
 
@@ -348,33 +351,18 @@ class SoundControlDialog(Gtk.Dialog):
     def display_brightness(self):
         self.display_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
         self.display_box.set_name("slider-box")
-        self.display_box.set_margin_top(10)
-        self.display_box.set_margin_bottom(10)
-        self.display_box.set_margin_start(10)
-        self.display_box.set_margin_end(10)
 
         display_label = Gtk.Label()
         display_label.set_text("Display")
-        display_label.set_name("label")
+        display_label.set_name("slider-title")
         display_label.set_halign(Gtk.Align.START)
-        display_label.set_margin_top(10)
-        display_label.set_margin_bottom(5)
-        display_label.set_margin_start(14)
         self.display_box.pack_start(display_label, False, False, 0)
         
         display_hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=6)
 
-        display_icon = Gtk.Label("")
-        display_icon.set_name("icons")
-        display_icon.set_margin_start(15)
-        display_icon.set_margin_end(4)
-        display_hbox.pack_start(display_icon, False, False, 0)
-
         display_adjustment = Gtk.Adjustment(value=self.current_display_brightness, lower=0, upper=100, step_increment=1, page_increment=10)
         display_scale = Gtk.HScale.new(display_adjustment)
-
         display_scale.set_digits(0)
-        display_scale.set_margin_end(10)
         display_scale.set_draw_value(False)
         display_hbox.pack_start(display_scale, True, True, 0)
 
@@ -385,33 +373,18 @@ class SoundControlDialog(Gtk.Dialog):
     def keyboard_brightness(self):
         self.keyboard_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
         self.keyboard_box.set_name("slider-box")
-        self.keyboard_box.set_margin_top(10)
-        self.keyboard_box.set_margin_bottom(10)
-        self.keyboard_box.set_margin_start(10)
-        self.keyboard_box.set_margin_end(10)
 
         keyboard_label = Gtk.Label()
         keyboard_label.set_text("Keyboard")
-        keyboard_label.set_name("label")
+        keyboard_label.set_name("slider-title")
         keyboard_label.set_halign(Gtk.Align.START)
-        keyboard_label.set_margin_top(10)
-        keyboard_label.set_margin_bottom(5)
-        keyboard_label.set_margin_start(14)
         self.keyboard_box.pack_start(keyboard_label, False, False, 0)
         
         keyboard_hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=6)
 
-        keyboard_icon = Gtk.Label("")
-        keyboard_icon.set_name("icons")
-        keyboard_icon.set_margin_start(15)
-        keyboard_icon.set_margin_end(14)
-        keyboard_hbox.pack_start(keyboard_icon, False, False, 0)
-
         keyboard_adjustment = Gtk.Adjustment(value=self.current_keyboard_brightness, lower=0, upper=4, step_increment=1, page_increment=1)
         keyboard_scale = Gtk.HScale.new(keyboard_adjustment)
-
         keyboard_scale.set_digits(0)
-        keyboard_scale.set_margin_end(10)
         keyboard_scale.set_draw_value(False)
         keyboard_hbox.pack_start(keyboard_scale, True, True, 0)
 
@@ -424,116 +397,12 @@ class SoundControlDialog(Gtk.Dialog):
         provider = Gtk.CssProvider()
         style_context = Gtk.StyleContext()
         style_context.add_provider_for_screen(screen, provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION)
-        css = b"""
-        #content-area {
-            border-color: red;
-            background: #2e3440;
-        }
+        provider.load_from_path("/home/jonalm/scripts/qtile/bar_menus/main_menu_styles.css")
+        visual = screen.get_rgba_visual()
+        self.content_area.set_visual(visual)
+        self.set_visual(visual)
 
-        #slider-box {
-            border-radius: 5px;
-            background: #4f586e;
-        }
-
-        #toggle-box {
-            border-radius: 5px;
-            background: #4f586e;
-        }
-
-        #toggle-label-enabled {
-            color: black;
-            font-size: 20;
-            font-family: 'Font Awesome 6 Free Solid';
-        }
-
-        #toggle-label-disabled {
-            color: white;
-            font-size: 20;
-            font-family: 'Font Awesome 6 Free Solid';
-        }
-
-        #toggle-box-enabled {
-            border-radius: 5px;
-            background: #81a1c1;
-        }
-        
-        #toggle-box-disabled {
-            border-radius: 5px;
-            background: #2e3440;
-        }
-
-        #toggle-title {
-            color: white;
-            font-size: 19;
-            font-family: FiraCode Nerd Font;
-            font-weight: bold;
-        }
-        
-        #toggle-desc {
-            color: white;
-            font-size: 19;
-            font-family: FiraCode Nerd Font;
-        }
-
-        #toggle-bluetooth-label {
-            color: white;
-            font-size: 24;
-            font-family: 'Font Awesome 6 Free Solid';
-            font-weight: bold;
-        }
-
-        #rofi-icons {
-            border-radius: 5px;
-            background: #4f586e;
-            color: black;
-            font-size: 26;
-            font-family: 'Font Awesome 6 Free Solid';
-        }
-
-        #icons {
-            color: white;
-            font-size: 24;
-            font-family: 'Font Awesome 6 Free Solid';
-            font-weight: bold;
-        }
-
-        #volume-icon {
-            color: white;
-            font-size: 22;
-            font-family: 'Font Awesome 6 Free Solid';
-            font-weight: bold;
-        }
-
-        #label {
-            color: white;
-            font-size: 19;
-            font-family: FiraCode Nerd Font;
-            font-weight: bold;
-        }
-
-        scale trough {
-            border-radius: 6;
-            min-width: 10px;                                                                               
-            min-height: 18px;          
-        }   
-        
-        scale trough highlight {
-            background: white;
-            border-radius: 6;
-            min-width: 10px;                                                                               
-            min-height: 18px;          
-        }   
-
-        scale trough slider {
-            background: #d9dedf;
-            border-radius: 6;
-            min-width: 18px;                                                                               
-            min-height: 19px;          
-        }   
-        """
-        provider.load_from_data(css)
-
-    def get_input_data(self):
+    def get_slider_data(self):
         self.current_volume = subprocess.check_output("pactl get-sink-volume @DEFAULT_SINK@ | awk -F'/' '{print $2}' | awk -F'%' '{print $1}'", shell=True, text=True).strip()
         self.current_volume = float(self.current_volume)    
 
@@ -543,11 +412,20 @@ class SoundControlDialog(Gtk.Dialog):
         self.current_keyboard_brightness = subprocess.check_output("brightnessctl --device='asus::kbd_backlight' get", shell=True, text=True).strip()
         self.current_keyboard_brightness = float(self.current_keyboard_brightness)
     
+    def on_icon_hover(self, widget, event):
+        self.previous_css_class = widget.get_name() 
+        widget.set_name("rofi-icon-hover")
+
+    def on_icon_leave(self, widget, event):
+        if self.previous_css_class:
+            widget.set_name(self.previous_css_class)
+
     def get_wifi_ssid(self):
         process = subprocess.Popen(['python3', '/home/jonalm/scripts/qtile/get_wifi_ssid.py'], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
         stdout = process.communicate()
         ssid = stdout[0].strip()
-        print(ssid)
+        if not self.get_wifi_on():
+            return "Off" 
         if ssid == "lo":
             return "Disconnected"
         else:
@@ -586,6 +464,7 @@ class SoundControlDialog(Gtk.Dialog):
             subprocess.run(["nmcli",  "radio", "wifi", "on"])
             widget.set_name("toggle-box-enabled")
             self.wifi_icon.set_name("toggle-label-enabled")
+            self.wifi_ssid.set_text(self.get_wifi_ssid())
         
     def get_bluetooth_on(self):
         try:
@@ -616,7 +495,7 @@ class SoundControlDialog(Gtk.Dialog):
             gamma_values = None
             if start_index != -1:
                 gamma_values = redshift_state[start_index + len("Gamma: "):].strip()
-            if gamma_values == "1.0:1.1:1.1":
+            if gamma_values == "1.0:1.0:1.0":
                 return False
             else:
                 return True
@@ -625,7 +504,7 @@ class SoundControlDialog(Gtk.Dialog):
 
     def redshift_clicked(self, widget, event):
         if self.get_redshift_on() == True:
-            subprocess.run("redshift -P -O 5700", shell=True)
+            subprocess.run("redshift -P -O 6300", shell=True)
             widget.set_name("toggle-box-disabled")
             self.redshift_icon.set_name("toggle-label-disabled")
             self.redshift_desc.set_text("Off")
@@ -634,6 +513,30 @@ class SoundControlDialog(Gtk.Dialog):
             widget.set_name("toggle-box-enabled")
             self.redshift_icon.set_name("toggle-label-enabled")
             self.redshift_desc.set_text("On")
+
+    def app_launcher_clicked(self, widget, event):
+        subprocess.run(["/home/jonalm/.config/rofi/files/launchers/type-1/launcher.sh"])
+        self.exit_remove_pid()
+
+    def search_clicked(self, widget, event):
+        subprocess.run(["/home/jonalm/scripts/rofi/search/search_web.sh"])
+        self.exit_remove_pid()
+
+    def config_clicked(self, widget, event):
+        subprocess.run(["/home/jonalm/scripts/rofi/config/config_files.sh"])
+        self.exit_remove_pid()
+    
+    def power_menu_clicked(self, widget, event):
+        subprocess.run(["/home/jonalm/.config/rofi/files/powermenu/type-2/powermenu.sh"])
+        self.exit_remove_pid()
+    
+    def automation_clicked(self, widget, event):
+        subprocess.run(["/home/jonalm/scripts/rofi/automation/automation.sh"])
+        self.exit_remove_pid()
+
+    def keyboard_shortcut_clicked(self, widget, event):
+        subprocess.run(["/home/jonalm/scripts/term/show_keys.sh"])
+        self.exit_remove_pid()
 
     def on_volume_changed(self, scale):
         volume = int(scale.get_value())
@@ -648,7 +551,13 @@ class SoundControlDialog(Gtk.Dialog):
         subprocess.run([f"brightnessctl --device='asus::kbd_backlight' set {keyboard_brightness}"], shell=True, check=False)
    
     def on_focus_out(self, widget, event):
-        self.exit_remove_pid()
+        if not self.ignore_focus_lost:
+            self.exit_remove_pid()
+
+    def on_escape_press(self, widget, event):
+        keyval = event.keyval
+        if keyval == Gdk.KEY_Escape or keyval == Gdk.KEY_Escape_L:
+            self.on_focus_out(widget, event)
 
     def exit_remove_pid(self):
         try:

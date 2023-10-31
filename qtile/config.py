@@ -326,7 +326,7 @@ group_box_settings = {
 
 ### BAR ###
 top_bar_1 = Bar([
-    seperator(icon_seperator_padding - 1),
+    seperator(icon_seperator_padding - 2),
     widget.TextBox(        
         text        = "<span font='Font Awesome 6 free solid 14' foreground='#000000' size='medium'></span>",
         padding     = widget_default_font_size - 12,
@@ -340,12 +340,20 @@ top_bar_1 = Bar([
         scale             = layouticon_scale,
         decorations       = left_decor(round = True, color = cpu_icon_color),
     ),
-
+    
     # GROUPBOX #
     seperator(icon_seperator_padding),
     widget.GroupBox(
         **group_box_settings,
         decorations = left_decor(round = True, color = wifi_icon_color),
+    ),
+
+    seperator(icon_seperator_padding),
+    widget.TextBox(        
+        text        = "<span font='Font Awesome 6 free solid 14' foreground='#000000' size='medium'></span>",
+        padding     = widget_default_font_size - 12,
+        # mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("python3 /home/jonalm/scripts/qtile/bar_menus/main_menu.py")},
+        decorations = left_decor(round = True, color = "#b48ead"),
     ),
 
     seperator(icon_seperator_padding - 10),
@@ -381,6 +389,7 @@ top_bar_1 = Bar([
     widget.TextBox(        
         text        = "<span font='Font Awesome 6 free solid 15' foreground='#000000'size='medium'></span>",
         padding     = widget_default_font_size - 12,
+        mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("python3 /home/jonalm/scripts/qtile/bar_menus/cpu_stats_menu.py")},
         decorations = left_decor(cpu_icon_color, round = True),
     ),
     widget.CPU(
@@ -396,7 +405,7 @@ top_bar_1 = Bar([
     widget.TextBox(        
         text        = "<span font='Font Awesome 6 free solid 14' foreground='#000000'size='medium'></span>",
         padding     = widget_default_font_size - 12,
-        mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("python3 /home/jonalm/scripts/qtile/bar_menus/power_management.py")},
+        mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("python3 /home/jonalm/scripts/qtile/bar_menus/power_management_menu.py")},
         decorations = left_decor(battery_icon_color, round = True),
     ),
     widget.Battery(

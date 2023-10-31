@@ -1,4 +1,185 @@
-#volume-box {
-    border-radius: 10px;
-    background-color: #4f586e;
+#root {
+    margin-top: 5px;    
+    margin-right: 5px;  
+    margin-bottom: 5px;
+    margin-left: 5px;
+    border-radius: 0px;
+    border-width: 3px;
+    border-color: #4f586e;
+    /* background:rgba(36, 40, 49, 0.85); */
+    background: rgba(46, 52, 64, 0.85);
 }
+
+#content-area {
+    margin-top: 5px;    
+    margin-right: 5px;  
+    margin-bottom: 5px;
+    margin-left: 5px;
+    border-radius: 0px;
+    /* background:rgba(36, 40, 49, 0); */
+    background: rgba(46, 52, 64, 0);
+}
+
+#empty-box {
+    border-radius: 5px;
+    margin-top: 10px;    
+    margin-right: 10px;  
+    margin-bottom: 10px;
+    margin-left: 10px;
+}
+
+#toggle-box {
+    border-radius: 5px;
+    background: #4f586e;
+}
+
+#toggle-label-enabled {
+    color: black;
+    font-size: 20;
+    font-family: 'Font Awesome 6 Free Solid';
+}
+
+#toggle-label-disabled {
+    color: white;
+    font-size: 20;
+    font-family: 'Font Awesome 6 Free Solid';
+}
+
+#toggle-box-enabled {
+    border-radius: 5px;
+    background: #81a1c1;
+}
+
+#toggle-box-disabled {
+    border-radius: 5px;
+    background: #2e3440;
+}
+
+#toggle-title {
+    color: white;
+    font-size: 19;
+    font-family: FiraCode Nerd Font;
+    font-weight: bold;
+}
+
+#toggle-desc {
+    color: white;
+    font-size: 19;
+    font-family: FiraCode Nerd Font;
+}
+
+#toggle-bluetooth-label {
+    color: white;
+    font-size: 24;
+    font-family: 'Font Awesome 6 Free Solid';
+    font-weight: bold;
+}
+
+.rofi-icon {
+    margin-top: 26px;    
+    margin-right: 28px;  
+    margin-bottom: 26px;
+    margin-left: 28px;
+    font-size: 26;
+    font-family: 'Font Awesome 6 Free Solid';
+}
+
+#rofi-icon-hover {
+    background: #59637c; /* Hover color */
+    border-radius: 5px;
+}
+
+#rofi-app-launcher-icon {
+    color: #d08770;
+}
+
+#rofi-search-icon {
+    color: #81a1c1;
+}
+
+#rofi-config-icon {
+    color: #a3be8c;
+}
+
+#rofi-power-menu-icon {
+    color: #bf616a;
+}
+
+#rofi-automation-icon {
+    color: #ebcb8b;
+}
+
+#rofi-keyboard-shortcuts-icon {
+    color: #8fbcbb;
+}
+
+#rofi-active-icon {
+    color: #4f586e;
+}
+
+#rofi-icons {
+    border-radius: 5px;
+    background: #4f586e;
+    color: black;
+    font-size: 26;
+    font-family: 'Font Awesome 6 Free Solid';
+}
+
+#icons {
+    margin-right: 15px;  
+    margin-left: 4px;
+    color: white;
+    font-size: 24;
+    font-family: 'Font Awesome 6 Free Solid';
+    font-weight: bold;
+}
+
+#volume-icon {
+    color: white;
+    font-size: 22;
+    font-family: 'Font Awesome 6 Free Solid';
+    font-weight: bold;
+}
+
+#slider-box {
+    border-radius: 5px;
+    margin-top: 10px;    
+    margin-right: 10px;  
+    margin-bottom: 10px;
+    margin-left: 10px;
+    background: #4f586e;
+}
+
+#slider-title {
+    margin-top: 10px;    
+    margin-right: 14px;  
+    margin-bottom: 5px;
+    margin-left: 18px;
+    color: white;
+    font-size: 21;
+    font-family: FiraCode Nerd Font;
+    font-weight: bold;
+}
+
+scale trough {
+    margin-top: 0px;    
+    margin-right: 10px;  
+    margin-bottom: 10px;
+    margin-left: 10px;
+    border-radius: 7;
+    min-width: 10px;                                                                               
+    min-height: 22px;   
+    background: #3b4252  
+}   
+
+scale trough highlight {
+    border-radius: 8;
+    background: #81a1c1;
+}   
+
+scale trough slider {
+    background: #d9dedf;
+    border-radius: 10;
+    min-width: 24px;                                                                               
+    min-height: 24px;          
+}   
