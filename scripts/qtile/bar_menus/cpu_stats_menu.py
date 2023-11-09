@@ -3,18 +3,18 @@ gi.require_version('Gtk', '3.0')
 import subprocess
 import os
 from Xlib import display 
-from gi.repository import Gtk, Gdk, GLib
+from gi.repository import Gtk, Gdk, GLib, GObject
 
 class cpu_stats_menu(Gtk.Dialog):
     def __init__(self):
-        self.pid_file = "/home/jonalm/scripts/qtile/bar_menus/power_managment_pid_file.pid"
+        self.pid_file = "/home/jonalm/scripts/qtile/bar_menus/cpu_stats_pid_file.pid"
         Gtk.Dialog.__init__(self, "Custom Dialog", None, 0)
-        self.set_default_size(400, 60)
+        self.set_default_size(200, 60)
 
         x, y = self.get_mouse_position()
 
         if x and y:
-            self.move(x - 190, y - 50)
+            self.move(x - 200, y - 50)
 
         self.connect("focus-out-event", self.on_focus_out)
         self.connect("key-press-event", self.on_escape_press)
@@ -31,33 +31,85 @@ class cpu_stats_menu(Gtk.Dialog):
         self.show_all()
 
     def stats(self):
-        self.stats_main_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=10)
-        self.stats_main_box.set_name("root")
+        self.stats_main_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=0)
+        self.stats_main_box.set_name("main-box")
 
-        cpu_tmp_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=10)
-        cpu_tmp_box.set_name("main-box")
+        self.tmp()
+        self.freq()
 
-        cpu_tmp_icon_box = Gtk.EventBox()
-        cpu_tmp_icon_box.set_name("box-icon")
+        self.stats_main_box.pack_start(self.tmp_background_box, False, False, 0)
+        self.stats_main_box.pack_start(self.freq_background_box, False, False, 0)
 
-        cpu_tmp_icon = Gtk.Label()
-        cpu_tmp_icon.set_text("")
-        cpu_tmp_icon.set_name("icon")
-        cpu_tmp_icon.set_halign(Gtk.Align.START)
+    def tmp(self):
+        self.tmp_background_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=0)
+        self.tmp_background_box.set_name("sub-box")
+        self.tmp_main_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=0)
+        self.tmp_main_box.set_name("sub-box")
 
-        cpu_tmp_info = Gtk.Label()
-        cpu_tmp_info.get_style_context().add_class("box-title")
-        cpu_tmp_info.set_text("Info")
-        cpu_tmp_info.set_name("box-info")
-        cpu_tmp_info.set_halign(Gtk.Align.START)
+        tmp_right_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
 
-        cpu_tmp_icon_box.add(cpu_tmp_icon)
+        tmp_timeout = GObject.timeout_add(3000, self.update_tmp)  # Update label every 5 seconds
+        tmp_title = Gtk.Label()
+        tmp_title.set_text("Temperature")
+        tmp_title.set_name("box-title")
+        tmp_title.set_halign(Gtk.Align.START)
 
-        cpu_tmp_box.pack_start(cpu_tmp_icon_box, False, False, 0)
-        cpu_tmp_box.pack_start(cpu_tmp_info, False, False, 0)
+        self.tmp_info = Gtk.Label()
+        self.tmp_info.set_text(self.get_tmp())
+        self.tmp_info.set_name("box-info")
+        self.tmp_info.set_halign(Gtk.Align.START)
 
-        self.stats_main_box.pack_start(cpu_tmp_box, False, False, 0)
-    
+        tmp_left_box = Gtk.EventBox()
+        tmp_left_box.set_name("box-icon")
+
+        tmp_icon = Gtk.Label()
+        tmp_icon.set_name("tmp-icon")
+        tmp_icon.set_text("")
+        tmp_icon.set_halign(Gtk.Align.START)
+
+        tmp_left_box.add(tmp_icon)
+        tmp_right_box.add(tmp_title)
+        tmp_right_box.add(self.tmp_info)
+        
+        self.tmp_main_box.pack_start(tmp_left_box, False, False, 0)
+        self.tmp_main_box.pack_start(tmp_right_box, False, False, 0)
+        self.tmp_background_box.pack_start(self.tmp_main_box, False, False, 0)
+
+    def freq(self):
+        self.freq_background_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=0)
+        self.freq_background_box.set_name("sub-box")
+        self.freq_main_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=0)
+        self.freq_main_box.set_name("sub-box")
+
+        freq_right_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
+
+        freq_timeout = GObject.timeout_add(3000, self.update_freq)  # Update label every 5 seconds
+        freq_title = Gtk.Label()
+        freq_title.set_text("Frequency")
+        freq_title.set_name("box-title")
+        freq_title.set_halign(Gtk.Align.START)
+
+        self.freq_info = Gtk.Label()
+        self.freq_info.set_text(self.get_freq())
+        self.freq_info.set_name("box-info")
+        self.freq_info.set_halign(Gtk.Align.START)
+
+        freq_left_box = Gtk.EventBox()
+        freq_left_box.set_name("box-icon")
+
+        freq_icon = Gtk.Label()
+        freq_icon.set_name("freq-icon")
+        freq_icon.set_text("")
+        freq_icon.set_halign(Gtk.Align.START)
+
+        freq_left_box.add(freq_icon)
+        freq_right_box.add(freq_title)
+        freq_right_box.add(self.freq_info)
+
+        self.freq_main_box.pack_start(freq_left_box, False, False, 0)
+        self.freq_main_box.pack_start(freq_right_box, False, False, 0)
+        self.freq_background_box.pack_start(self.freq_main_box, False, False, 0)
+
     def css(self):
         screen = Gdk.Screen.get_default()
         provider = Gtk.CssProvider()
@@ -67,6 +119,25 @@ class cpu_stats_menu(Gtk.Dialog):
         visual = screen.get_rgba_visual()
         self.content_area.set_visual(visual)
         self.set_visual(visual)
+
+    def get_tmp(self):
+        cpu_avg_tmp = subprocess.check_output("sensors | grep temp1 | awk '{print $2}'", shell=True, stderr=subprocess.PIPE, text=True).strip()
+        return cpu_avg_tmp
+
+    def update_tmp(self):
+        self.tmp_info.set_text(self.get_tmp())
+        return True
+
+    def get_freq(self):
+        cpu_avg_freq = subprocess.check_output("cpupower frequency-info | grep 'current CPU frequency' | grep 'kernel' | awk '{print $4}'", shell=True, stderr=subprocess.PIPE, text=True).strip()
+        if "." in cpu_avg_freq:
+            return cpu_avg_freq + " GHz"
+        else:
+            return cpu_avg_freq + " Hz"
+
+    def update_freq(self):
+        self.freq_info.set_text(self.get_freq())
+        return True
 
     def get_mouse_position(self):
         try:

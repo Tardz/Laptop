@@ -1,5 +1,7 @@
 declare -a options=(
-'Dunstrc - /home/jonalm/.config/dunst'
+'Udev rules - /etc/udev/rules.d/'
+'SDDM themes - /usr/share/sddm/themes/'
+"Dunstrc - $HOME/.config/dunst"
 "Qtile config all - $HOME/.config/qtile/"
 "Qtile config - $HOME/.config/qtile/config.py"
 "Qtile autostart - $HOME/.config/qtile/autostart.sh"
@@ -20,6 +22,3 @@ declare -a options=(
 )
 
 display_options=$(printf '%s\n' "${options[@]}" | cut -d'-' -f1-1)
-
-export options
-

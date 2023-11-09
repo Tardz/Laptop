@@ -1,40 +1,67 @@
 #root {
-    margin-top: 5px;    
-    margin-right: 5px;  
-    margin-bottom: 5px;
-    margin-left: 5px;
-    background: rgba(46, 52, 64, 0.85);
+    background: rgba(46, 52, 64, 0.9);
+    margin-top: -5px;    
+    margin-right: 4px;  
+    margin-bottom: -5px;
+    margin-left: -5px;
 }
 
 #main-box {
+    background: rgba(46, 52, 64, 0);
     border-radius: 5px;
+}
+
+#sub-box {
+    border-radius: 5px;
+    margin-top: 10px;    
+    margin-right: 2px;    
+    margin-bottom: 10px;
+    margin-left: 10px;
     background: #4f586e;
 }
 
 #box-info {
-    margin-top: 26px;    
-    margin-right: 28px;  
-    margin-bottom: 26px;
-    margin-left: 28px;
-    font-size: 26;
-    font-family: 'Font Awesome 6 Free Solid';
+    margin-left: 10px;
+    font-size: 17px;
+    font-family: FiraCode Nerd Font;
+}
+
+#box-title {
+    margin-right: 5px;  
+    margin-bottom: 5px;
+    margin-left: 10px;
+    font-size: 18px;
+    font-family: FiraCode Nerd Font;
+    font-weight: bold;
 }
 
 #box-icon {
-    margin-top: 10px;    
-    margin-right: 10px;  
-    margin-bottom: 10px;
-    margin-left: 10px;
-    background: #2e3440;
+    border-radius: 5px;  
+    margin-top: 12px;    
+    margin-right: 12px;  
+    margin-bottom: 13px;
+    margin-left: 13px;
+    background: #bf616a;
+    /* background: #2e3440; */
     /* #5e81ac */
 }
 
-#icon {
-    margin-top: 10px;    
-    margin-right: 10px;  
-    margin-bottom: 10px;
-    margin-left: 10px;
+#tmp-icon {
+    margin-top: 12px;    
+    margin-right: 12px;  
+    margin-bottom: 13px;
+    margin-left: 13px;
     color: white;
-    font-size: 26;
+    font-size: 25;
+    font-family: 'Font Awesome 6 Free Solid';
+}
+
+#freq-icon {
+    margin-top: 12px;    
+    margin-right: 9px;  
+    margin-bottom: 13px;
+    margin-left: 9px;
+    color: white;
+    font-size: 24;
     font-family: 'Font Awesome 6 Free Solid';
 }

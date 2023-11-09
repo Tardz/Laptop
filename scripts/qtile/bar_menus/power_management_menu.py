@@ -18,7 +18,6 @@ class Power_managment_menu(Gtk.Dialog):
 
         self.connect("focus-out-event", self.on_focus_out)
         self.connect("key-press-event", self.on_escape_press)
-
         
         self.content_area = self.get_content_area()
 
@@ -29,7 +28,7 @@ class Power_managment_menu(Gtk.Dialog):
         self.content_area.pack_start(self.charge_main_box, True, True, 0)
         self.content_area.pack_start(self.options_main_box, True, True, 0)
         self.content_area.set_name("root")
-        self.set_name("root")
+        self.set_name("root-root")
         
         self.show_all()
 

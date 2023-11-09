@@ -1,0 +1,35 @@
+#root {
+    border-width: 3px;
+    border-color: #4f586e;
+    /* background:rgba(36, 40, 49, 0.85); */
+    background: rgba(46, 52, 64, 0.90);
+}
+
+#content-area {
+    background: rgba(46, 52, 64, 0);
+}
+
+#list-box {
+    border-radius: 5px;
+    background: #4f586e;
+}
+
+#list-obj-active {
+    background: #81a1c1;
+    color: black;
+    font-size: 18px;
+    font-family: FiraCode Nerd Font;
+}
+
+#list-obj {
+    border-radius: 5px;
+    font-size: 18px;
+    font-family: FiraCode Nerd Font;
+}
+
+#list {
+    border-radius: 5px;
+    background: #4f586e;
+    font-size: 18px;
+    font-family: FiraCode Nerd Font;
+}

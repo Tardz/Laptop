@@ -380,6 +380,7 @@ top_bar_1 = Bar([
         text            = "<span font='Font Awesome 6 free solid 14' foreground='#000000' size='medium'></span>",
         padding         = widget_default_font_size - 12,
         foreground      = notification_history_icon_color,
+        mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("python3 /home/jonalm/scripts/qtile/bar_menus/wifi_menu.py")},
         decorations     = left_decor(wifi_icon_color, round = True),
     ),
     WifiSsidWidget(),

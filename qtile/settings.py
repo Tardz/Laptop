@@ -115,7 +115,7 @@ layout_focus_color_stack        = colors[2][0]
 layout_normal_color_monadtall   = colors[2][0]
 layout_focus_color_monadtall    = colors[10][0]
 layout_normal_color_floating    = colors[2][0]
-layout_focus_color_floating     = colors[2][0]
+layout_focus_color_floating     = colors[10][0]
 layouticon_padding              = -2
 layouticon_scale                = 0.48
 
@@ -125,9 +125,9 @@ bar_border_color                = "#4f586e"
 bar_size                        = 46
 # bar_size                        = 41
 bar_gap_size                    = -3
-bar_width_top                   = [3, 3, 3, 3]
+bar_width_top                   = [0, 0, 3, 0]
 bar_width_bottom                = 0
-bar_margin_top                  = [6, 6, 4 ,6]
+bar_margin_top                  = [0, 0, 0 ,0]
 bar_margin_bottom               = 6
 icon_seperator_padding          = -1
 
@@ -192,7 +192,7 @@ focus_value                     = True
 
 ### LAYOUT VARIABLES ### 
 layout_margin                   = 10
-layout_border_width             = 3
+layout_border_width             = 4
 floating_border_width           = 3
 layout_num_stacks               = 1
 
