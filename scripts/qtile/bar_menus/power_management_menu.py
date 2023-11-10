@@ -18,6 +18,8 @@ class Power_managment_menu(Gtk.Dialog):
 
         self.connect("focus-out-event", self.on_focus_out)
         self.connect("key-press-event", self.on_escape_press)
+
+        self.inital_charge_limit = self.get_charge_limit()
         
         self.content_area = self.get_content_area()
 
@@ -71,7 +73,9 @@ class Power_managment_menu(Gtk.Dialog):
         charge_scale.connect("value-changed", self.update_display_value)        
 
     def buttons(self):
-        self.options_main_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=8)
+        self.options_main_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=8)
+
+        options_top_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=8)
 
         automatic_box = Gtk.EventBox()
         automatic_box.set_name("option-box-inactive")
@@ -80,7 +84,6 @@ class Power_managment_menu(Gtk.Dialog):
 
         automatic_button = Gtk.Label()
         automatic_button.set_text("Automatic")
-        automatic_button.connect("button-press-event", self.automatic_clicked)
         automatic_button.set_name("option-button-inactive")
 
         powersave_box = Gtk.EventBox()
@@ -90,7 +93,6 @@ class Power_managment_menu(Gtk.Dialog):
 
         powersave_button = Gtk.Label()
         powersave_button.set_text("Powersave")
-        powersave_button.connect("button-press-event", self.powersave_clicked)
         powersave_button.set_name("option-button-inactive")     
 
         performance_box = Gtk.EventBox()
@@ -100,19 +102,17 @@ class Power_managment_menu(Gtk.Dialog):
 
         performance_button = Gtk.Label()
         performance_button.set_text("Performance")
-        performance_button.connect("button-press-event", self.performance_clicked)
-
         performance_button.set_name("option-button-inactive")
 
-        option = self.read_option_from_file()
+        cpufreq_mode = self.read_cpufreq_mode()
 
-        if option == "nor":
+        if cpufreq_mode == "nor":
             automatic_button.set_name("option-button-active")       
             automatic_box.set_name("option-box-active")     
-        elif option == "powersave":
+        elif cpufreq_mode == "powersave":
             powersave_button.set_name("option-button-active")
             powersave_box.set_name("option-box-active")     
-        elif option == "performance":
+        elif cpufreq_mode == "performance":
             performance_button.set_name("option-button-active")
             performance_box.set_name("option-box-active")     
 
@@ -120,13 +120,72 @@ class Power_managment_menu(Gtk.Dialog):
         powersave_box.add(powersave_button)
         performance_box.add(performance_button)
 
-        self.options_main_box.pack_start(automatic_box, True, True, 0)
-        self.options_main_box.pack_start(powersave_box, True, True, 0)
-        self.options_main_box.pack_start(performance_box, True, True, 0)
+        options_bottom_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=8)
+
+        quiet_box = Gtk.EventBox()
+        quiet_box.set_name("option-box-inactive")
+        quiet_box.connect("enter-notify-event", self.on_mouse_enter)
+        quiet_box.connect("enter-notify-event", self.on_mouse_leave)
+
+        quiet_button = Gtk.Label()
+        quiet_button.set_text("Quiet")
+        quiet_button.set_name("option-button-inactive")
+
+        balanced_box = Gtk.EventBox()
+        balanced_box.set_name("option-box-inactive")
+        balanced_box.connect("leave-notify-event", self.on_mouse_enter)
+        balanced_box.connect("leave-notify-event", self.on_mouse_leave)
+
+        balanced_button = Gtk.Label()
+        balanced_button.set_text("Balanced")
+        balanced_button.set_name("option-button-inactive")     
+
+        loud_box = Gtk.EventBox()
+        loud_box.set_name("option-box-inactive")
+        loud_box.connect("leave-notify-event", self.on_mouse_enter)
+        loud_box.connect("leave-notify-event", self.on_mouse_leave)
+
+        loud_button = Gtk.Label()
+        loud_button.set_text("Loud")
+        loud_button.set_name("option-button-inactive")
+
+        fan_mode = self.get_fan_mode()
+        print(fan_mode, "dw")
+        if fan_mode == "Quiet":
+            print(fan_mode)
+            quiet_button.set_name("option-button-active")       
+            quiet_box.set_name("option-box-active")     
+        elif fan_mode == "Balanced":
+            print(fan_mode)
+            balanced_button.set_name("option-button-active")
+            balanced_box.set_name("option-box-active")     
+        elif fan_mode == "Performance":
+            print(fan_mode)
+            loud_button.set_name("option-button-active")
+            loud_box.set_name("option-box-active")     
+
+        quiet_box.add(quiet_button)
+        balanced_box.add(balanced_button)
+        loud_box.add(loud_button)
+
+        options_top_box.pack_start(automatic_box, True, True, 0)
+        options_top_box.pack_start(powersave_box, True, True, 0)
+        options_top_box.pack_start(performance_box, True, True, 0)
+
+        options_bottom_box.pack_start(quiet_box, True, True, 0)
+        options_bottom_box.pack_start(balanced_box, True, True, 0)
+        options_bottom_box.pack_start(loud_box, True, True, 0)
+
+        self.options_main_box.pack_start(options_top_box, True, True, 0)
+        self.options_main_box.pack_start(options_bottom_box, True, True, 0)
 
         automatic_box.connect("button-press-event", self.automatic_clicked)
         powersave_box.connect("button-press-event", self.powersave_clicked)
         performance_box.connect("button-press-event", self.performance_clicked)
+
+        quiet_box.connect("button-press-event", self.quiet_clicked)
+        balanced_box.connect("button-press-event", self.balanced_clicked)
+        loud_box.connect("button-press-event", self.loud_clicked)
 
     def css(self):
         screen = Gdk.Screen.get_default()
@@ -166,18 +225,24 @@ class Power_managment_menu(Gtk.Dialog):
             return None, None
         
     def on_mouse_enter(self, widget, event):
-        widget.add_css_class("option-box-hover")
+        pass
+        # widget.add_css_class("option-box-hover")
 
     def on_mouse_leave(self, widget, event):
-        widget.remove_css_class("option-box-inactive")
+        pass
+        # widget.remove_css_class("option-box-inactive")
 
-    def read_option_from_file(self):
+    def read_cpufreq_mode(self):
         try:
             with open("/sys/devices/system/cpu/cpu0/cpufreq/scaling_governor", "r") as file:
                 option = file.read().strip()
                 return option
         except FileNotFoundError:
             return ""
+        
+    def get_fan_mode(self):
+        fan_mode = subprocess.check_output("asusctl profile --profile-get | awk '{print $4}'", shell=True).decode("utf-8").strip()
+        return fan_mode
 
     def automatic_clicked(self, widget, event):
         subprocess.call(["sudo auto-cpufreq --force=reset"], shell=True)
@@ -189,12 +254,24 @@ class Power_managment_menu(Gtk.Dialog):
 
     def performance_clicked(self, widget, event):
         subprocess.call(["sudo auto-cpufreq --force=performance"], shell=True)
-        subprocess.call(["notify-send -a $current_time -u low -t 3000 'Search option added' 'Option: <span foreground='#a3be8c' size='medium'>$WebName</span>'"], shell=True)
+        self.exit_remove_pid()
+
+    def quiet_clicked(self, widget, event):
+        subprocess.call(["asusctl profile --profile-set quiet"], shell=True)
+        self.exit_remove_pid()        
+
+    def balanced_clicked(self, widget, event):
+        subprocess.call(["asusctl profile --profile-set balanced"], shell=True)
+        self.exit_remove_pid()
+
+    def loud_clicked(self, widget, event):
+        subprocess.call(["asusctl profile --profile-set performance"], shell=True)
         self.exit_remove_pid()
 
     def on_focus_out(self, widget, event):
         modified_value = self.charge_percentage.get_text().replace("%", "")
-        subprocess.run(["asusctl", "-c", modified_value]) 
+        if self.inital_charge_limit != int(modified_value):
+            subprocess.run(["asusctl", "-c", modified_value]) 
         self.exit_remove_pid()
 
     def on_escape_press(self, widget, event):

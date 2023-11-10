@@ -4,8 +4,10 @@ import subprocess
 import os
 import asyncio
 import threading
+import multiprocessing
+import time
 from Xlib import display 
-from gi.repository import Gtk, Gdk, Gio, GObject
+from gi.repository import Gtk, Gdk, Gio, GObject, GLib
 from dbus.mainloop.glib import DBusGMainLoop
 
 class WifiMenu(Gtk.Dialog):
@@ -22,6 +24,7 @@ class WifiMenu(Gtk.Dialog):
         self.ignore_focus_lost = False
         self.previous_css_class = None
         self.wifi_list_active = False
+        self.first_wifi_scan = True
 
         self.content_area = self.get_content_area()
         self.content_area.set_name("content-area")
@@ -43,8 +46,6 @@ class WifiMenu(Gtk.Dialog):
         self.list_box = Gtk.ListBox()
         self.list_box.set_name("list")
         self.list_box.set_selection_mode(Gtk.SelectionMode.NONE)
-        # self.wifi_list_timeout = GObject.timeout_add(5000, self.fetch_networks)
-        self.fetch_networks()
         
         scrolled_window = Gtk.ScrolledWindow()
         scrolled_window.set_name("list-box")
@@ -52,14 +53,16 @@ class WifiMenu(Gtk.Dialog):
         scrolled_window.add(self.list_box)  
 
         self.wifi_list_box.pack_start(scrolled_window, True, True, 0)
-        GObject.timeout_add(2000, self.fetch_networks)
+
+        self.fetch_networks()
+        GLib.timeout_add(8000, self.fetch_networks)
 
     def css(self):
         screen = Gdk.Screen.get_default()
         provider = Gtk.CssProvider()
         style_context = Gtk.StyleContext()
         style_context.add_provider_for_screen(screen, provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION)
-        provider.load_from_path("/home/jonalm/scripts/qtile/bar_menus/main_menu_styles.css")
+        provider.load_from_path("/home/jonalm/scripts/qtile/bar_menus/wifi_menu_styles.css")
         visual = screen.get_rgba_visual()
         self.content_area.set_visual(visual)
         self.set_visual(visual)
@@ -78,26 +81,34 @@ class WifiMenu(Gtk.Dialog):
             self.rofi_box.hide()
             self.wifi_list_box.show_all()
 
-    def run_nmcli(self):
-        output = subprocess.check_output("nmcli device wifi list", shell=True).decode("utf-8")
-        print(output)
-        return output
-    
     def update_ui_with_networks(self, networks):
         for child in self.list_box.get_children():
             self.list_box.remove(child)
         for network in networks:
             row = Gtk.ListBoxRow()
             label = Gtk.Label()
+            list_obj_box = Gtk.EventBox()
+
             if network["IN-USE"]:
                 label.set_name("list-obj-active")
             else:
                 label.set_name("list-obj")
             label.set_text(network["SSID"])
             label.set_halign(Gtk.Align.START)
-            row.add(label)
+            
+            list_obj_box.add(label)
+            row.add(list_obj_box)
             self.list_box.add(row)
         self.list_box.show_all()
+
+    def run_nmcli(self):
+        if self.first_wifi_scan:
+            output = subprocess.check_output("nmcli device wifi list --rescan no", shell=True).decode("utf-8")
+        else:
+            output = subprocess.check_output("nmcli device wifi list", shell=True).decode("utf-8")
+        
+        self.first_wifi_scan = False
+        return output
 
     def fetch_networks(self):
         nmcli_output = self.run_nmcli()
@@ -120,7 +131,7 @@ class WifiMenu(Gtk.Dialog):
             unique_networks.sort(key=lambda x: not x["IN-USE"])
 
             self.update_ui_with_networks(unique_networks)
-    
+
     def get_mouse_position(self):
         try:
             d = display.Display()

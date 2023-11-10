@@ -4,7 +4,7 @@ import subprocess
 import os
 import asyncio
 from Xlib import display 
-from gi.repository import Gtk, Gdk, Gio, GObject
+from gi.repository import Gtk, Gdk, Gio, GObject, GLib
 from dbus.mainloop.glib import DBusGMainLoop
 
 class MainMenu(Gtk.Dialog):
@@ -17,6 +17,7 @@ class MainMenu(Gtk.Dialog):
         self.ignore_focus_lost = False
         self.previous_css_class = None
         self.wifi_list_active = False
+        self.first_wifi_scan = True
 
         self.content_area = self.get_content_area()
         self.content_area.set_size_request(100, 50)
@@ -326,7 +327,6 @@ class MainMenu(Gtk.Dialog):
         self.list_box = Gtk.ListBox()
         self.list_box.set_name("list")
         self.list_box.set_selection_mode(Gtk.SelectionMode.NONE)
-        self.wifi_list_timeout = GObject.timeout_add(5000, self.update_wifi_list)
         
         scrolled_window = Gtk.ScrolledWindow()
         scrolled_window.set_name("list-box")
@@ -335,17 +335,8 @@ class MainMenu(Gtk.Dialog):
 
         self.wifi_list_box.pack_start(scrolled_window, True, True, 0)
 
-        for network in self.get_wifi_networks():
-            row = Gtk.ListBoxRow()
-            label = Gtk.Label()
-            if network["IN-USE"]:
-                label.set_name("list-obj-active")
-            else:
-                label.set_name("list-obj")
-            label.set_text(network["SSID"])
-            label.set_halign(Gtk.Align.START)
-            row.add(label)
-            self.list_box.add(row)
+        self.fetch_networks()
+        GLib.timeout_add(5000, self.fetch_networks)
 
     def volume(self):
         self.volume_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
@@ -489,23 +480,21 @@ class MainMenu(Gtk.Dialog):
             self.wifi_icon.set_name("toggle-icon-enabled")
             self.wifi_ssid.set_text(self.get_wifi_ssid())
 
-    def update_wifi_list(self):
-        if self.wifi_list_active:
-            for child in self.list_box.get_children():
-                self.list_box.remove(child)
-            for network in self.get_wifi_networks():
-                row = Gtk.ListBoxRow()
-                label = Gtk.Label()
-                if network["IN-USE"]:
-                    label.set_name("list-obj-active")
-                else:
-                    label.set_name("list-obj")
-                label.set_text(network["SSID"])
-                label.set_halign(Gtk.Align.START)
-                row.add(label)
-                self.list_box.add(row)
-            self.list_box.show_all()
-        return True
+    def update_ui_with_networks(self, networks):
+        for child in self.list_box.get_children():
+            self.list_box.remove(child)
+        for network in networks:
+            row = Gtk.ListBoxRow()
+            label = Gtk.Label()
+            if network["IN-USE"]:
+                label.set_name("list-obj-active")
+            else:
+                label.set_name("list-obj")
+            label.set_text(network["SSID"])
+            label.set_halign(Gtk.Align.START)
+            row.add(label)
+            self.list_box.add(row)
+        self.list_box.show_all()
 
     def show_wifi_list(self, widget, event):
         if self.wifi_list_active:
@@ -521,31 +510,34 @@ class MainMenu(Gtk.Dialog):
             self.rofi_box.hide()
             self.wifi_list_box.show_all()
 
-    async def run_nmcli(self):
-        try:
-            output = await asyncio.create_subprocess_shell(
-                "nmcli device wifi list",
-                stdout=subprocess.PIPE,
-                stderr=subprocess.PIPE,
-            )
-
-            stdout, stderr = await output.communicate()
-
-            if output.returncode == 0:
-                return stdout.decode()
+    def update_ui_with_networks(self, networks):
+        for child in self.list_box.get_children():
+            self.list_box.remove(child)
+        for network in networks:
+            row = Gtk.ListBoxRow()
+            label = Gtk.Label()
+            if network["IN-USE"]:
+                label.set_name("list-obj-active")
             else:
-                print("Error running nmcli:", stderr.decode())
-                return None
+                label.set_name("list-obj")
+            label.set_text(network["SSID"])
+            label.set_halign(Gtk.Align.START)
+            row.add(label)
+            self.list_box.add(row)
+        self.list_box.show_all()
 
-        except Exception as e:
-            print("Error:", e)
-            return None
+    def run_nmcli(self):
+        if self.first_wifi_scan:
+            output = subprocess.check_output("nmcli device wifi list --rescan no", shell=True).decode("utf-8")
+        else:
+            output = subprocess.check_output("nmcli device wifi list", shell=True).decode("utf-8")
+        
+        self.first_wifi_scan = False
+        return output
 
-    def get_wifi_networks(self):
-        loop = asyncio.get_event_loop()
-        nmcli_output = loop.run_until_complete(self.run_nmcli())
-
-        if nmcli_output is not None:
+    def fetch_networks(self):
+        nmcli_output = self.run_nmcli()
+        if nmcli_output:
             lines = nmcli_output.splitlines()
             unique_networks = []
 
@@ -563,9 +555,7 @@ class MainMenu(Gtk.Dialog):
 
             unique_networks.sort(key=lambda x: not x["IN-USE"])
 
-            return unique_networks
-
-        return []
+            self.update_ui_with_networks(unique_networks)
         
     def get_bluetooth_on(self):
         try:

@@ -1,11 +1,14 @@
 #root {
     border-width: 3px;
     border-color: #4f586e;
-    /* background:rgba(36, 40, 49, 0.85); */
     background: rgba(46, 52, 64, 0.90);
 }
 
 #content-area {
+    margin-top: 5px;    
+    margin-right: 5px;  
+    margin-bottom: 5px;
+    margin-left: 5px;
     background: rgba(46, 52, 64, 0);
 }
 
@@ -15,6 +18,10 @@
 }
 
 #list-obj-active {
+    margin-top: 5px;    
+    margin-right: 5px;  
+    margin-bottom: 5px;
+    margin-left: 5px;
     background: #81a1c1;
     color: black;
     font-size: 18px;
@@ -22,6 +29,10 @@
 }
 
 #list-obj {
+    margin-top: 5px;    
+    margin-right: 5px;  
+    margin-bottom: 5px;
+    margin-left: 5px;
     border-radius: 5px;
     font-size: 18px;
     font-family: FiraCode Nerd Font;
