@@ -16,16 +16,11 @@
 
 
 #charge-main-box {
-    margin-bottom: 10px;
-    border-radius: 5px;
+    margin-top: 7px;    
     background: rgba(46, 52, 64, 0);
 }
 
-#charge-box {
-    margin-top: 5px;    
-    margin-right: 5px;  
-    margin-bottom: 5px;
-    margin-left: 5px;    
+#charge-box { 
     border-radius: 5px;
     background: #4f586e;
 }
@@ -52,9 +47,9 @@
 
 #slider-title {
     margin-top: 10px;    
-    margin-right: 28px;  
+    margin-right: 10px;  
     margin-bottom: 10px;
-    margin-left: 24px;
+    margin-left: 10px;
     color: white;
     font-size: 18px;
     font-family: FiraCode Nerd Font;
@@ -84,19 +79,53 @@ scale trough slider {
     min-height: 20px;          
 }   
 
+#option-root-box {
+    border-radius: 5px;
+    background: #4f586e;
+}
+
+#option-box {
+    margin-top: 10px;    
+    margin-right: 10px;  
+    margin-bottom: 10px;
+    margin-left: 10px;
+    border-radius: 5px;
+}
+
+#option-box-title {
+    margin-top: 10px;    
+    margin-right: 10px;  
+    margin-bottom: 10px;
+    margin-left: 10px;
+    border-radius: 5px;
+    background: #4f586e;
+    color: white;
+    font-size: 18px;
+    font-family: FiraCode Nerd Font;
+    font-weight: bold;
+}
+
 #option-box-active {
+    margin-top: 10px;    
+    margin-right: 10px;  
+    margin-bottom: 10px;
+    margin-left: 10px;
     border-radius: 5px;
     background: #5e81ac;
+}
+
+#option-box-inactive {
+    margin-top: 30px;    
+    margin-right: 30px;  
+    margin-bottom: 30px;
+    margin-left: 30px;
+    border-radius: 5px;
+    background: rgba(46, 52, 64, 0.90);
 }
 
 #option-box-hover {
     border-radius: 5px;
     background: #65718d;
-}
-
-#option-box-inactive {
-    border-radius: 5px;
-    background: #4f586e;
 }
 
 #option-button-active {

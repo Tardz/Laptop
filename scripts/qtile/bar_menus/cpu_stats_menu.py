@@ -14,7 +14,7 @@ class cpu_stats_menu(Gtk.Dialog):
         x, y = self.get_mouse_position()
 
         if x and y:
-            self.move(x - 200, y - 50)
+            self.move(x - 200, y - 18)
 
         self.connect("focus-out-event", self.on_focus_out)
         self.connect("key-press-event", self.on_escape_press)
@@ -83,7 +83,7 @@ class cpu_stats_menu(Gtk.Dialog):
 
         freq_right_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
 
-        freq_timeout = GObject.timeout_add(3000, self.update_freq)  # Update label every 5 seconds
+        GObject.timeout_add(3000, self.update_freq)
         freq_title = Gtk.Label()
         freq_title.set_text("Frequency")
         freq_title.set_name("box-title")
