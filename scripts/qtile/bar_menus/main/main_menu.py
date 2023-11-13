@@ -9,7 +9,7 @@ from dbus.mainloop.glib import DBusGMainLoop
 
 class MainMenu(Gtk.Dialog):
     def __init__(self):
-        self.pid_file = "/home/jonalm/scripts/qtile/bar_menus/main_pid_file.pid"
+        self.pid_file = "/home/jonalm/scripts/qtile/bar_menus/main/main_pid_file.pid"
         Gtk.Dialog.__init__(self, "Sound Control", None, 0)
         self.set_default_size(100, 50)
         self.move(9, 4)
@@ -409,7 +409,7 @@ class MainMenu(Gtk.Dialog):
         provider = Gtk.CssProvider()
         style_context = Gtk.StyleContext()
         style_context.add_provider_for_screen(screen, provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION)
-        provider.load_from_path("/home/jonalm/scripts/qtile/bar_menus/main_menu_styles.css")
+        provider.load_from_path("/home/jonalm/scripts/qtile/bar_menus/main/main_menu_styles.css")
         visual = screen.get_rgba_visual()
         self.content_area.set_visual(visual)
         self.set_visual(visual)
@@ -664,7 +664,7 @@ class MainMenu(Gtk.Dialog):
             exit(0)
 
 
-pid_file = "/home/jonalm/scripts/qtile/bar_menus/main_pid_file.pid"
+pid_file = "/home/jonalm/scripts/qtile/bar_menus/main/main_pid_file.pid"
 dialog = None
 
 try:

@@ -272,11 +272,58 @@ class WifiSsidWidget(widget.TextBox, base.InLoopPollText):
         )
         
     def poll(self):
-        ssid = subprocess.check_output(['python3', '/home/jonalm/scripts/qtile/get_wifi_ssid.py'], text=True).strip()
-        if ssid == "lo":
-            return "Disconnected"
+        wifi_state = subprocess.check_output(["nmcli",  "radio", "wifi"]).strip().decode("utf-8")
+        if wifi_state == "disabled":
+            return "Off"
+
+        connection_output = subprocess.check_output(['nmcli', '-t', '-f', 'NAME', 'connection', 'show', '--active'], text=True)
+        connection_names = connection_output.strip().split('\n')
+
+        if connection_names:
+            ssid = connection_names[0]
+            if ssid == "lo":
+                return "Disconnected"
+            else:
+                return ssid
         else:
-            return ssid
+            return "Error"
+
+
+class BluetoothDeviceWidget(widget.TextBox, base.InLoopPollText):
+    def __init__(self):
+        base.InLoopPollText.__init__(
+            self, 
+            update_interval = wifi_update_interval,
+            font            = bold_font,
+            padding         = widget_default_padding,
+            decorations     = right_decor(True)
+        )
+        
+    def poll(self):
+        try:
+            bluetooth_state = subprocess.check_output("systemctl status bluetooth | grep Running", shell=True, stderr=subprocess.PIPE, text=True).strip()
+            if "Running" in bluetooth_state:
+                connected_devices_output = subprocess.check_output("bluetoothctl devices Connected", shell=True).decode("utf-8")
+                lines = connected_devices_output.splitlines()
+                
+                if connected_devices_output:
+                    lines = connected_devices_output.splitlines()
+
+                    parts = lines[0].split(" ", 2)
+
+                    device_name = parts[2]
+                    
+                    if device_name == "N/A":
+                        return 
+                    elif device_name == "Jonathans Bose QC35 II":
+                        return "Bose"
+                    elif device_name == "Jonathans pods share":
+                        return "AirPods"
+                    else:
+                        return device_name
+                
+        except subprocess.CalledProcessError as e:
+            return "Off"
         
 class NotificationWidget(widget.TextBox, base.InLoopPollText):
     def __init__(self):
@@ -330,7 +377,7 @@ top_bar_1 = Bar([
     widget.TextBox(        
         text        = "<span font='Font Awesome 6 free solid 14' foreground='#000000' size='medium'></span>",
         padding     = widget_default_font_size - 12,
-        mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("python3 /home/jonalm/scripts/qtile/bar_menus/main_menu.py")},
+        mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("python3 /home/jonalm/scripts/qtile/bar_menus/main/main_menu.py")},
         decorations = left_decor(round = True, color = battery_icon_color),
     ),
 
@@ -380,14 +427,10 @@ top_bar_1 = Bar([
         text            = "<span font='Font Awesome 6 free solid 16' foreground='#000000' size='medium'></span>",
         padding         = widget_default_font_size - 12,
         foreground      = notification_history_icon_color,
-        mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("python3 /home/jonalm/scripts/qtile/bar_menus/bluetooth_menu.py")},
+        mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("python3 /home/jonalm/scripts/qtile/bar_menus/bluetooth/bluetooth_menu.py")},
         decorations     = left_decor(round = True, color = "#b48ead"),
     ),
-    widget.Bluetooth(
-        format          = "Disconnected",
-        update_interval = cpu_update_interval,
-        decorations     = right_decor(True),
-    ),
+    BluetoothDeviceWidget(),
     seperator(icon_seperator_padding),
 
     #  WIFI #
@@ -395,7 +438,7 @@ top_bar_1 = Bar([
         text            = "<span font='Font Awesome 6 free solid 14' foreground='#000000' size='medium'></span>",
         padding         = widget_default_font_size - 12,
         foreground      = notification_history_icon_color,
-        mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("python3 /home/jonalm/scripts/qtile/bar_menus/wifi_menu.py")},
+        mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("python3 /home/jonalm/scripts/qtile/bar_menus/wifi/wifi_menu.py")},
         decorations     = left_decor(wifi_icon_color, round = True),
     ),
     WifiSsidWidget(),
@@ -405,7 +448,7 @@ top_bar_1 = Bar([
     widget.TextBox(        
         text        = "<span font='Font Awesome 6 free solid 15' foreground='#000000'size='medium'></span>",
         padding     = widget_default_font_size - 12,
-        mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("python3 /home/jonalm/scripts/qtile/bar_menus/cpu_stats_menu.py")},
+        mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("python3 /home/jonalm/scripts/qtile/bar_menus/cpu/cpu_stats_menu.py")},
         decorations = left_decor(cpu_icon_color, round = True),
     ),
     widget.CPU(
@@ -421,7 +464,7 @@ top_bar_1 = Bar([
     widget.TextBox(        
         text        = "<span font='Font Awesome 6 free solid 14' foreground='#000000'size='medium'></span>",
         padding     = widget_default_font_size - 12,
-        mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("python3 /home/jonalm/scripts/qtile/bar_menus/power_management_menu.py")},
+        mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("python3 /home/jonalm/scripts/qtile/bar_menus/power/power_management_menu.py")},
         decorations = left_decor(battery_icon_color, round = True),
     ),
     widget.Battery(

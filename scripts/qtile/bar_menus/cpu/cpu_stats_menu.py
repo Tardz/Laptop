@@ -7,14 +7,14 @@ from gi.repository import Gtk, Gdk, GLib, GObject
 
 class cpu_stats_menu(Gtk.Dialog):
     def __init__(self):
-        self.pid_file = "/home/jonalm/scripts/qtile/bar_menus/cpu_stats_pid_file.pid"
+        self.pid_file = "/home/jonalm/scripts/qtile/bar_menus/cpu/cpu_stats_pid_file.pid"
         Gtk.Dialog.__init__(self, "Custom Dialog", None, 0)
         self.set_default_size(200, 60)
 
         x, y = self.get_mouse_position()
 
         if x and y:
-            self.move(x - 200, y - 18)
+            self.move(x - 170, 5)
 
         self.connect("focus-out-event", self.on_focus_out)
         self.connect("key-press-event", self.on_escape_press)
@@ -115,7 +115,7 @@ class cpu_stats_menu(Gtk.Dialog):
         provider = Gtk.CssProvider()
         style_context = Gtk.StyleContext()
         style_context.add_provider_for_screen(screen, provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION)
-        provider.load_from_path("/home/jonalm/scripts/qtile/bar_menus/cpu_stats_menu_styles.css")
+        provider.load_from_path("/home/jonalm/scripts/qtile/bar_menus/cpu/cpu_stats_menu_styles.css")
         visual = screen.get_rgba_visual()
         self.content_area.set_visual(visual)
         self.set_visual(visual)
@@ -172,7 +172,7 @@ class cpu_stats_menu(Gtk.Dialog):
         finally:
             exit(0)
 
-pid_file = "/home/jonalm/scripts/qtile/bar_menus/cpu_stats_pid_file.pid"
+pid_file = "/home/jonalm/scripts/qtile/bar_menus/cpu/cpu_stats_pid_file.pid"
 dialog = None
 
 try:

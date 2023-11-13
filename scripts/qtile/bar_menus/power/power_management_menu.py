@@ -7,14 +7,14 @@ from gi.repository import Gtk, Gdk, GLib
 
 class Power_managment_menu(Gtk.Dialog):
     def __init__(self):
-        self.pid_file = "/home/jonalm/scripts/qtile/bar_menus/power_managment_pid_file.pid"
+        self.pid_file = "/home/jonalm/scripts/qtile/bar_menus/power/power_managment_pid_file.pid"
         Gtk.Dialog.__init__(self, "Custom Dialog", None, 0)
         self.set_default_size(400, 60)
 
         x, y = self.get_mouse_position()
 
         if x and y:
-            self.move(x - 190, y - 18)
+            self.move(x - 180, 5)
 
         self.connect("focus-out-event", self.on_focus_out)
         self.connect("key-press-event", self.on_escape_press)
@@ -204,7 +204,7 @@ class Power_managment_menu(Gtk.Dialog):
         provider = Gtk.CssProvider()
         style_context = Gtk.StyleContext()
         style_context.add_provider_for_screen(screen, provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION)
-        provider.load_from_path("/home/jonalm/scripts/qtile/bar_menus/power_managment_styles.css")
+        provider.load_from_path("/home/jonalm/scripts/qtile/bar_menus/power/power_managment_styles.css")
         visual = screen.get_rgba_visual()
         self.content_area.set_visual(visual)
         self.set_visual(visual)
@@ -391,7 +391,7 @@ class Power_managment_menu(Gtk.Dialog):
         finally:
             exit(0)
 
-pid_file = "/home/jonalm/scripts/qtile/bar_menus/power_managment_pid_file.pid"
+pid_file = "/home/jonalm/scripts/qtile/bar_menus/power/power_managment_pid_file.pid"
 dialog = None
 
 try:

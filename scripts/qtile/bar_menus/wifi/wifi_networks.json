@@ -1,0 +1,87 @@
+[
+  {
+    "SSID": "\u2582\u2584__ BOXER_E748",
+    "IN-USE": true,
+    "NETWORK-KNOWN": true
+  },
+  {
+    "SSID": "\u2582\u2584\u2586_ BOXER_E748",
+    "IN-USE": false,
+    "NETWORK-KNOWN": true
+  },
+  {
+    "SSID": "\u2582\u2584\u2586_ eduroam",
+    "IN-USE": false,
+    "NETWORK-KNOWN": false
+  },
+  {
+    "SSID": "\u2582\u2584\u2586_ dlink-5E2D",
+    "IN-USE": false,
+    "NETWORK-KNOWN": false
+  },
+  {
+    "SSID": "\u2582\u2584\u2586_ SG_Play",
+    "IN-USE": false,
+    "NETWORK-KNOWN": false
+  },
+  {
+    "SSID": "\u2582\u2584__ SONOS-AwgBA2ABIrjpN9cfPgA=",
+    "IN-USE": false,
+    "NETWORK-KNOWN": false
+  },
+  {
+    "SSID": "\u2582\u2584__ LukasDoNotUse_5G",
+    "IN-USE": false,
+    "NETWORK-KNOWN": false
+  },
+  {
+    "SSID": "\u2582\u2584__ LukasLager",
+    "IN-USE": false,
+    "NETWORK-KNOWN": false
+  },
+  {
+    "SSID": "\u2582\u2584__ dlink-5E2D-5GHz",
+    "IN-USE": false,
+    "NETWORK-KNOWN": false
+  },
+  {
+    "SSID": "\u2582\u2584__ TP-Link_A37D",
+    "IN-USE": false,
+    "NETWORK-KNOWN": false
+  },
+  {
+    "SSID": "\u2582___ NETGEAR80",
+    "IN-USE": false,
+    "NETWORK-KNOWN": false
+  },
+  {
+    "SSID": "\u2582___ TP-Link_A37D_5G",
+    "IN-USE": false,
+    "NETWORK-KNOWN": false
+  },
+  {
+    "SSID": "\u2582___ AuA_Wi-Fi5",
+    "IN-USE": false,
+    "NETWORK-KNOWN": false
+  },
+  {
+    "SSID": "\u2582___ AuA",
+    "IN-USE": false,
+    "NETWORK-KNOWN": false
+  },
+  {
+    "SSID": "\u2582___ Morell23",
+    "IN-USE": false,
+    "NETWORK-KNOWN": false
+  },
+  {
+    "SSID": "\u2582___ TP-Link_21DC",
+    "IN-USE": false,
+    "NETWORK-KNOWN": false
+  },
+  {
+    "SSID": "\u2582___ kuku.n040",
+    "IN-USE": false,
+    "NETWORK-KNOWN": false
+  }
+]

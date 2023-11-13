@@ -5,22 +5,29 @@ import os
 from Xlib import display 
 from gi.repository import Gtk, Gdk, Gio, GObject, GLib
 from dbus.mainloop.glib import DBusGMainLoop
+from multiprocessing import Process, Event
+import time
+import signal
+import json
 
 class WifiMenu(Gtk.Dialog):
-    def __init__(self):
-        self.pid_file = "/home/jonalm/scripts/qtile/bar_menus/wifi_menu_pid_file.pid"
+    def __init__(self, wifi_process):
+        self.pid_file = "/home/jonalm/scripts/qtile/bar_menus/wifi/wifi_menu_pid_file.pid"
         Gtk.Dialog.__init__(self, "Sound Control", None, 0)
+
+        self.wifi_process = wifi_process
+        signal.signal(signal.SIGTERM, self.handle_sigterm)
+
         if self.get_wifi_on():
             self.set_default_size(340, 500)
 
         x, y = self.get_mouse_position()
 
         if x and y:
-            self.move(x - 120, y - 18)
+            self.move(x - 160, 5)
 
         self.ignore_focus_lost = False
         self.previous_css_class = None
-        self.first_scan = True
         self.active_widget = None
         self.previouse_network_in_use = False
 
@@ -29,8 +36,8 @@ class WifiMenu(Gtk.Dialog):
         self.set_name("root")
 
         self.css()
-        self.list()
         self.title()
+        self.list()
 
         self.connect("focus-out-event", self.on_focus_out)
         self.connect("key-press-event", self.on_escape_press)
@@ -38,8 +45,6 @@ class WifiMenu(Gtk.Dialog):
         self.content_area.pack_start(self.title_box, False, False, 0)        
 
         if self.get_wifi_on():
-            # print(self.get_wifi_on)
-            print("iawdjoaiwjd")
             self.content_area.pack_start(self.list_main_box, True, True, 0)
         
         self.show_all()
@@ -48,10 +53,17 @@ class WifiMenu(Gtk.Dialog):
         self.title_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=0)
         self.title_box.set_name("toggle-box")
 
+        desc_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
+        desc_box.set_name("toggle-desc-box")
+
         title = Gtk.Label()
         title.set_text("Networks")
         title.set_name("toggle-title")
         title.set_halign(Gtk.Align.START)
+
+        self.desc = Gtk.Label()
+        self.desc.set_name("toggle-desc")
+        self.desc.set_halign(Gtk.Align.START)
 
         left_box = Gtk.EventBox()
         left_box.set_name("toggle-left-box")
@@ -69,10 +81,18 @@ class WifiMenu(Gtk.Dialog):
             self.icon_background_box.set_name("toggle-icon-background-disabled")
             self.icon.set_name("toggle-icon-disabled")
 
+        self.status_dot = Gtk.Label()
+        self.status_dot.set_text("")
+        self.status_dot.set_name("status-dot-inactive")
+        self.status_dot.set_halign(Gtk.Align.END)
+
         self.icon_background_box.pack_start(self.icon, False, False, 0)
         left_box.add(self.icon_background_box)
+        desc_box.pack_start(title, False, False, 0)
+        desc_box.pack_start(self.desc, False, False, 0)
         self.title_box.pack_start(left_box, False, False, 0)
-        self.title_box.pack_start(title, True, True, 0)
+        self.title_box.pack_start(desc_box, False, False, 0)
+        self.title_box.pack_start(self.status_dot, True, True, 0)
 
         left_box.connect("button-press-event", self.wifi_clicked)
 
@@ -90,18 +110,22 @@ class WifiMenu(Gtk.Dialog):
 
         self.list_main_box.pack_start(scrolled_window, True, True, 0)
 
-        self.fetch_networks()
-        GLib.timeout_add(8000, self.fetch_networks)
+        self.update_ui_with_networks()
+        GLib.timeout_add(7000, self.update_ui_with_networks)
 
     def css(self):
         screen = Gdk.Screen.get_default()
         provider = Gtk.CssProvider()
         style_context = Gtk.StyleContext()
         style_context.add_provider_for_screen(screen, provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION)
-        provider.load_from_path("/home/jonalm/scripts/qtile/bar_menus/wifi_menu_styles.css")
+        provider.load_from_path("/home/jonalm/scripts/qtile/bar_menus/wifi/wifi_menu_styles.css")
         visual = screen.get_rgba_visual()
         self.content_area.set_visual(visual)
         self.set_visual(visual)
+
+    def restore_status_dot(self):
+        self.status_dot.set_name("status-dot-inactive")
+        return False
 
     def wifi_clicked(self, widget, event):
         if self.get_wifi_on():
@@ -134,23 +158,19 @@ class WifiMenu(Gtk.Dialog):
             subprocess.call(f"nmcli device wifi connect {ssid} password {password}", shell=True)
             
         self.active_widget = None
-        self.first_scan = True
-        self.fetch_networks()
+        self.update_ui_with_networks()
 
     def on_disconnect_clicked(self, widget, event, network):
         ssid = network["SSID"][5:]
         subprocess.call(f"nmcli connection down id {ssid}", shell=True)
-        print("disconnected")
         self.active_widget = None
-        self.first_scan = True
-        self.fetch_networks()
+        self.update_ui_with_networks()
 
     def on_forget_clicked(self, widget, event, network):
         ssid = network["SSID"][5:]
         subprocess.call(f"nmcli connection delete {ssid}", shell=True)
         self.active_widget = None
-        self.first_scan = True
-        self.fetch_networks()
+        self.update_ui_with_networks()
 
     def network_clicked(self, widget, event, network, network_in_use):
         if self.active_widget:
@@ -198,88 +218,87 @@ class WifiMenu(Gtk.Dialog):
 
         self.active_widget = widget
         return True
+
+    def get_networks(self):
+        with open('/home/jonalm/scripts/qtile/bar_menus/wifi/wifi_networks.json', 'r') as json_file:
+            networks = json.load(json_file)
+        return networks
     
-    def update_ui_with_networks(self, networks):
-        for child in self.list_box.get_children():
-            self.list_box.remove(child)
-        for network in networks:
-            row = Gtk.ListBoxRow()
-            label = Gtk.Label()
+    def scan_offline(self):
+        nmcli_output = subprocess.check_output("nmcli device wifi list --rescan no", shell=True).decode("utf-8")
+        known_networks = get_known_networks()
+        if nmcli_output:
+            lines = nmcli_output.splitlines()
+            unique_networks = []
 
-            list_content_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
+            seen_ssids = set()
 
-            list_obj_clickable_box = Gtk.EventBox()
-            list_obj_clickable_box.connect("button-press-event", self.network_clicked, network, network["IN-USE"])
+            for line in lines[1:]:
+                parts = line.split()
+                in_use = False
 
-            if network["IN-USE"]:
-                label.set_name("list-obj")
-                list_content_box.set_name("list-obj-box-active")
-            else:
-                label.set_name("list-obj")
+                if parts[0] == "*":
+                    parts.pop(0)
+                    in_use = True
 
-            label.set_text(network["SSID"][:20])
-            label.set_halign(Gtk.Align.START)
-            
-            list_obj_clickable_box.add(label)
-            list_content_box.pack_start(list_obj_clickable_box, False, False, 0)
-            row.add(list_content_box)
-            self.list_box.add(row)
+                if parts[1] != "--" and "▂" in parts[7]:
+                    ssid = f'{parts[7]} {parts[1][:]}' 
 
-        self.list_box.show_all()
+                    network_known = False
+                    if ssid[5:] in known_networks:
+                        network_known = True
 
-    def scan_networks(self):
-        if self.first_scan:
-            output = subprocess.check_output("nmcli device wifi list --rescan no", shell=True).decode("utf-8")
-        else:
-            output = subprocess.check_output("nmcli device wifi list", shell=True).decode("utf-8")
-        
-        self.first_scan = False
-        return output
+                if ssid[5:] not in seen_ssids or in_use:
+                    unique_networks.append({"SSID": ssid, "IN-USE": in_use, "NETWORK-KNOWN": network_known})
+                    seen_ssids.add(ssid[5:])
+
+            unique_networks.sort(key=lambda x: (not x["IN-USE"], not x["NETWORK-KNOWN"]))
+
+        return unique_networks
     
-    def get_known_networks(self):
-        known_networks_output = subprocess.check_output("nmcli connection show ", shell=True).decode("utf-8")
-        lines = known_networks_output.splitlines()
-        known_networks = []
+    def update_ui_with_networks(self):
+        if not self.active_widget:
+            self.status_dot.set_name("status-dot-list-update")
+            GLib.timeout_add(300, self.restore_status_dot)
+    
+            networks = self.get_networks()
+            if not networks:
+                networks = self.scan_offline()
 
-        for line in lines[1:]:
-            parts = line.split()
-            ssid = parts[0]
-            known_networks.append(ssid)
+            self.desc.set_text(f"{len(networks)} Avaibable")
             
-        return known_networks
+            if not networks:
+                return True
 
-    def fetch_networks(self):
-        if not self.active_widget:            
-            nmcli_output = self.scan_networks()
-            known_networks = self.get_known_networks()
-            if nmcli_output:
-                lines = nmcli_output.splitlines()
-                unique_networks = []
+            for child in self.list_box.get_children():
+                self.list_box.remove(child)
 
-                seen_ssids = set()
+            for network in networks:
+                row = Gtk.ListBoxRow()
+                label = Gtk.Label()
 
-                for line in lines[1:]:
-                    parts = line.split()
-                    in_use = False
+                list_content_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
 
-                    if parts[0] == "*":
-                        parts.pop(0)
-                        in_use = True
+                list_obj_clickable_box = Gtk.EventBox()
+                list_obj_clickable_box.connect("button-press-event", self.network_clicked, network, network["IN-USE"])
 
-                    if parts[1] != "--" and "▂" in parts[7]:
-                        ssid = f'{parts[7]} {parts[1][:]}' 
+                if network["IN-USE"]:
+                    label.set_name("list-obj")
+                    list_content_box.set_name("list-obj-box-active")
+                else:
+                    label.set_name("list-obj")
 
-                        network_known = False
-                        if ssid[5:] in known_networks:
-                            network_known = True
+                label.set_text(network["SSID"][:20])
+                label.set_halign(Gtk.Align.START)
+                
+                list_obj_clickable_box.add(label)
+                list_content_box.pack_start(list_obj_clickable_box, False, False, 0)
+                row.add(list_content_box)
+                self.list_box.add(row)
 
-                    if ssid[5:] not in seen_ssids or in_use:
-                        unique_networks.append({"SSID": ssid, "IN-USE": in_use, "NETWORK-KNOWN": network_known})
-                        seen_ssids.add(ssid[5:])
+            self.list_box.show_all()
 
-                unique_networks.sort(key=lambda x: (not x["IN-USE"], not x["NETWORK-KNOWN"]))
-
-                self.update_ui_with_networks(unique_networks)
+        return True
 
     def get_mouse_position(self):
         try:
@@ -302,8 +321,15 @@ class WifiMenu(Gtk.Dialog):
         if keyval == Gdk.KEY_Escape or keyval == Gdk.KEY_Escape_L:
             self.on_focus_out(widget, event)
 
+    def handle_sigterm(self, signum, frame):
+        self.exit_remove_pid() 
+
     def exit_remove_pid(self):
         try:
+            if self.wifi_process.is_alive():
+                self.wifi_process.terminate()
+                self.wifi_process.join() 
+
             with open(self.pid_file, "r") as file:
                 pid = int(file.read().strip())
             try:
@@ -314,8 +340,56 @@ class WifiMenu(Gtk.Dialog):
         finally:
             exit(0)
 
+def get_known_networks():
+    known_networks_output = subprocess.check_output("nmcli connection show ", shell=True).decode("utf-8")
+    lines = known_networks_output.splitlines()
+    known_networks = []
+
+    for line in lines[1:]:
+        parts = line.split()
+        ssid = parts[0]
+        known_networks.append(ssid)
+        
+    return known_networks
+
+def wifi_process():
+    while True:
+        nmcli_output = subprocess.check_output("nmcli device wifi list", shell=True).decode("utf-8")
+        known_networks = get_known_networks()
+        if nmcli_output:
+            lines = nmcli_output.splitlines()
+            unique_networks = []
+
+            seen_ssids = set()
+
+            for line in lines[1:]:
+                parts = line.split()
+                in_use = False
+
+                if parts[0] == "*":
+                    parts.pop(0)
+                    in_use = True
+
+                if parts[1] != "--" and "▂" in parts[7]:
+                    ssid = f'{parts[7]} {parts[1][:]}' 
+
+                    network_known = False
+                    if ssid[5:] in known_networks:
+                        network_known = True
+
+                if ssid[5:] not in seen_ssids or in_use:
+                    unique_networks.append({"SSID": ssid, "IN-USE": in_use, "NETWORK-KNOWN": network_known})
+                    seen_ssids.add(ssid[5:])
+
+            unique_networks.sort(key=lambda x: (not x["IN-USE"], not x["NETWORK-KNOWN"]))
+
+        with open('/home/jonalm/scripts/qtile/bar_menus/wifi/wifi_networks.json', 'w') as json_file:
+            json.dump(unique_networks, json_file, indent=2)
+
+        time.sleep(4)
+
 if __name__ == '__main__':
-    pid_file = "/home/jonalm/scripts/qtile/bar_menus/wifi_menu_pid_file.pid"
+    pid_file = "/home/jonalm/scripts/qtile/bar_menus/wifi/wifi_menu_pid_file.pid"
     dialog = None
 
     try:
@@ -330,7 +404,11 @@ if __name__ == '__main__':
         else:
             with open(pid_file, "w") as file:
                 file.write(str(os.getpid()))
-            dialog = WifiMenu()
+
+            process = Process(target=wifi_process)
+            process.start()
+
+            dialog = WifiMenu(process)
             Gtk.main()
                     
     except Exception as e:

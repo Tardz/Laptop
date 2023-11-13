@@ -161,7 +161,7 @@ battery_update_interval         = 20
 
 #-Wifi
 wifi_icon_color                 = "#81A1C1"
-wifi_update_interval            = 20
+wifi_update_interval            = 10
  
 #-Volume
 volume_icon_color               = colors[8]

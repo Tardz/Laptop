@@ -1,0 +1,16 @@
+[
+  {
+    "DEVICE": "OnePlus 8T",
+    "MAC-ADDR": "D0:49:7C:B6:88:C8",
+    "CONNECTED": false,
+    "DEVICE-KNOWN": false,
+    "DEVICE-TRUSTED": false
+  },
+  {
+    "DEVICE": "LAPTOP-R7SR563I",
+    "MAC-ADDR": "64:BC:58:47:C7:59",
+    "CONNECTED": false,
+    "DEVICE-KNOWN": false,
+    "DEVICE-TRUSTED": false
+  }
+]

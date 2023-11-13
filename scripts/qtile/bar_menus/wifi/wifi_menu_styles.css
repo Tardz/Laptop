@@ -12,6 +12,26 @@
     background: rgba(46, 52, 64, 0);
 }
 
+#status-dot-inactive {
+    margin-top: 10px;    
+    margin-right: 20px;  
+    margin-bottom: 10px;
+    margin-left: 10px;
+    color: rgba(46, 52, 64, 0.9);
+    font-size: 12px;
+    font-family: 'Font Awesome 6 Free Solid';
+}
+
+#status-dot-list-update {
+    margin-top: 10px;    
+    margin-right: 20px;  
+    margin-bottom: 10px;
+    margin-left: 10px;
+    color: #81a1c1;
+    font-size: 12px;
+    font-family: 'Font Awesome 6 Free Solid';
+}
+
 #toggle-box {
     margin-bottom: 8px;
     border-radius: 5px;
@@ -19,14 +39,24 @@
 }
 
 #toggle-title {
-    margin-top: 12px;    
+    margin-top: 9px;    
     margin-right: 10px;  
-    margin-bottom: 10px;
+    margin-bottom: 0px;
     margin-left: 2px;
     color: white;
-    font-size: 22px;
+    font-size: 20px;
     font-family: FiraCode Nerd Font;
     font-weight: bold;
+}
+
+#toggle-desc {
+    margin-top: 2px;    
+    margin-right: 10px;  
+    margin-bottom: 0px;
+    margin-left: 2px;
+    color: white;
+    font-size: 14px;
+    font-family: FiraCode Nerd Font;
 }
 
 #toggle-left-box {
@@ -58,19 +88,19 @@
     margin-left: 10px;
     border-radius: 5px;
     color: black;
-    font-size: 18px;
+    font-size: 24px;
     font-family: 'Font Awesome 6 Free Solid';
     background: #81a1c1;
 }
 
 #toggle-icon-disabled {
-    margin-top: 10px;    
-    margin-right: 10px;  
-    margin-bottom: 10px;
-    margin-left: 10px;
+    margin-top: 12px;    
+    margin-right: 12px;  
+    margin-bottom: 12px;
+    margin-left: 12px;
     border-radius: 5px;
     color: white;
-    font-size: 18px;
+    font-size: 20px;
     font-family: 'Font Awesome 6 Free Solid';
     background: #2e3440;
 }
