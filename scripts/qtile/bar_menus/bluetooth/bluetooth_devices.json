@@ -1,5 +1,12 @@
 [
   {
+    "DEVICE": "8BitDo Adapter",
+    "MAC-ADDR": "E4:17:D8:5B:75:6F",
+    "CONNECTED": false,
+    "DEVICE-KNOWN": false,
+    "DEVICE-TRUSTED": false
+  },
+  {
     "DEVICE": "OnePlus 8T",
     "MAC-ADDR": "D0:49:7C:B6:88:C8",
     "CONNECTED": false,

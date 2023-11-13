@@ -247,6 +247,7 @@ class WifiMenu(Gtk.Dialog):
                     network_known = False
                     if ssid[5:] in known_networks:
                         network_known = True
+                        ssid = ssid + " "
 
                 if ssid[5:] not in seen_ssids or in_use:
                     unique_networks.append({"SSID": ssid, "IN-USE": in_use, "NETWORK-KNOWN": network_known})
@@ -292,6 +293,7 @@ class WifiMenu(Gtk.Dialog):
                 label.set_halign(Gtk.Align.START)
                 
                 list_obj_clickable_box.add(label)
+
                 list_content_box.pack_start(list_obj_clickable_box, False, False, 0)
                 row.add(list_content_box)
                 self.list_box.add(row)
@@ -376,6 +378,7 @@ def wifi_process():
                     network_known = False
                     if ssid[5:] in known_networks:
                         network_known = True
+                        ssid = ssid + " *"
 
                 if ssid[5:] not in seen_ssids or in_use:
                     unique_networks.append({"SSID": ssid, "IN-USE": in_use, "NETWORK-KNOWN": network_known})

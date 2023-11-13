@@ -1,18 +1,13 @@
 [
   {
-    "SSID": "\u2582\u2584__ BOXER_E748",
+    "SSID": "\u2582\u2584__ BOXER_E748 *",
     "IN-USE": true,
     "NETWORK-KNOWN": true
   },
   {
-    "SSID": "\u2582\u2584\u2586_ BOXER_E748",
+    "SSID": "\u2582\u2584\u2586_ BOXER_E748 *",
     "IN-USE": false,
     "NETWORK-KNOWN": true
-  },
-  {
-    "SSID": "\u2582\u2584\u2586_ eduroam",
-    "IN-USE": false,
-    "NETWORK-KNOWN": false
   },
   {
     "SSID": "\u2582\u2584\u2586_ dlink-5E2D",
@@ -25,7 +20,12 @@
     "NETWORK-KNOWN": false
   },
   {
-    "SSID": "\u2582\u2584__ SONOS-AwgBA2ABIrjpN9cfPgA=",
+    "SSID": "\u2582\u2584\u2586_ eduroam",
+    "IN-USE": false,
+    "NETWORK-KNOWN": false
+  },
+  {
+    "SSID": "\u2582\u2584\u2586_ SONOS-AwgBA2ABIrjpN9cfPgA=",
     "IN-USE": false,
     "NETWORK-KNOWN": false
   },
@@ -35,7 +35,7 @@
     "NETWORK-KNOWN": false
   },
   {
-    "SSID": "\u2582\u2584__ LukasLager",
+    "SSID": "\u2582\u2584__ Blau",
     "IN-USE": false,
     "NETWORK-KNOWN": false
   },
@@ -45,22 +45,32 @@
     "NETWORK-KNOWN": false
   },
   {
+    "SSID": "\u2582\u2584__ LukasLager",
+    "IN-USE": false,
+    "NETWORK-KNOWN": false
+  },
+  {
     "SSID": "\u2582\u2584__ TP-Link_A37D",
     "IN-USE": false,
     "NETWORK-KNOWN": false
   },
   {
-    "SSID": "\u2582___ NETGEAR80",
+    "SSID": "\u2582\u2584__ kuku.n040",
     "IN-USE": false,
     "NETWORK-KNOWN": false
   },
   {
-    "SSID": "\u2582___ TP-Link_A37D_5G",
+    "SSID": "\u2582\u2584__ NETGEAR80",
     "IN-USE": false,
     "NETWORK-KNOWN": false
   },
   {
-    "SSID": "\u2582___ AuA_Wi-Fi5",
+    "SSID": "\u2582\u2584__ ASUS",
+    "IN-USE": false,
+    "NETWORK-KNOWN": false
+  },
+  {
+    "SSID": "\u2582___ dlink-BC62",
     "IN-USE": false,
     "NETWORK-KNOWN": false
   },
@@ -70,17 +80,17 @@
     "NETWORK-KNOWN": false
   },
   {
+    "SSID": "\u2582___ AuA_Wi-Fi5",
+    "IN-USE": false,
+    "NETWORK-KNOWN": false
+  },
+  {
     "SSID": "\u2582___ Morell23",
     "IN-USE": false,
     "NETWORK-KNOWN": false
   },
   {
-    "SSID": "\u2582___ TP-Link_21DC",
-    "IN-USE": false,
-    "NETWORK-KNOWN": false
-  },
-  {
-    "SSID": "\u2582___ kuku.n040",
+    "SSID": "\u2582___ TP-Link_A37D_5G",
     "IN-USE": false,
     "NETWORK-KNOWN": false
   }
