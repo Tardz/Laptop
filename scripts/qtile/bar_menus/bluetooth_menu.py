@@ -6,11 +6,11 @@ from Xlib import display
 from gi.repository import Gtk, Gdk, Gio, GObject, GLib
 from dbus.mainloop.glib import DBusGMainLoop
 
-class WifiMenu(Gtk.Dialog):
+class BluetoothMenu(Gtk.Dialog):
     def __init__(self):
         self.pid_file = "/home/jonalm/scripts/qtile/bar_menus/wifi_menu_pid_file.pid"
         Gtk.Dialog.__init__(self, "Sound Control", None, 0)
-        if self.get_wifi_on():
+        if self.get_bluetooth_on():
             self.set_default_size(340, 500)
 
         x, y = self.get_mouse_position()
@@ -22,7 +22,7 @@ class WifiMenu(Gtk.Dialog):
         self.previous_css_class = None
         self.first_scan = True
         self.active_widget = None
-        self.previouse_network_in_use = False
+        self.previouse_widget_in_use = False
 
         self.content_area = self.get_content_area()
         self.content_area.set_name("content-area")
@@ -37,9 +37,7 @@ class WifiMenu(Gtk.Dialog):
 
         self.content_area.pack_start(self.title_box, False, False, 0)        
 
-        if self.get_wifi_on():
-            # print(self.get_wifi_on)
-            print("iawdjoaiwjd")
+        if self.get_bluetooth_on():
             self.content_area.pack_start(self.list_main_box, True, True, 0)
         
         self.show_all()
@@ -49,7 +47,7 @@ class WifiMenu(Gtk.Dialog):
         self.title_box.set_name("toggle-box")
 
         title = Gtk.Label()
-        title.set_text("Networks")
+        title.set_text("Devices")
         title.set_name("toggle-title")
         title.set_halign(Gtk.Align.START)
 
@@ -59,10 +57,10 @@ class WifiMenu(Gtk.Dialog):
         self.icon_background_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=0)
 
         self.icon = Gtk.Label()
-        self.icon.set_text("")
+        self.icon.set_text("")
         self.icon.set_halign(Gtk.Align.START)
 
-        if self.get_wifi_on():
+        if self.get_bluetooth_on():
             self.icon_background_box.set_name("toggle-icon-background-enabled")
             self.icon.set_name("toggle-icon-enabled")
         else:
@@ -74,7 +72,7 @@ class WifiMenu(Gtk.Dialog):
         self.title_box.pack_start(left_box, False, False, 0)
         self.title_box.pack_start(title, True, True, 0)
 
-        left_box.connect("button-press-event", self.wifi_clicked)
+        left_box.connect("button-press-event", self.bluetooth_clicked)
 
     def list(self):
         self.list_main_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=16)
@@ -90,38 +88,42 @@ class WifiMenu(Gtk.Dialog):
 
         self.list_main_box.pack_start(scrolled_window, True, True, 0)
 
-        self.fetch_networks()
-        GLib.timeout_add(8000, self.fetch_networks)
+        self.fetch_bluetooth_devices()
+        GLib.timeout_add(8000, self.fetch_bluetooth_devices)
 
     def css(self):
         screen = Gdk.Screen.get_default()
         provider = Gtk.CssProvider()
         style_context = Gtk.StyleContext()
         style_context.add_provider_for_screen(screen, provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION)
-        provider.load_from_path("/home/jonalm/scripts/qtile/bar_menus/wifi_menu_styles.css")
+        provider.load_from_path("/home/jonalm/scripts/qtile/bar_menus/bluetooth_menu_styles.css")
         visual = screen.get_rgba_visual()
         self.content_area.set_visual(visual)
         self.set_visual(visual)
 
-    def wifi_clicked(self, widget, event):
-        if self.get_wifi_on():
-            subprocess.run(["nmcli",  "radio", "wifi", "off"])
+    def bluetooth_clicked(self, widget, event):
+        if self.get_bluetooth_on():
+            subprocess.run(["sudo", "systemctl",  "stop", "bluetooth"])
             self.icon_background_box.set_name("toggle-icon-background-disabled")
             self.icon.set_name("toggle-icon-disabled")
             self.content_area.remove(self.list_main_box)
             self.set_default_size(0, 0)
         else:
-            subprocess.run(["nmcli",  "radio", "wifi", "on"])
+            subprocess.run(["sudo", "systemctl",  "start", "bluetooth"])
             self.icon_background_box.set_name("toggle-icon-background-enabled")
             self.icon.set_name("toggle-icon-enabled")
             self.content_area.pack_start(self.list_main_box, True, True, 0)
             self.set_default_size(300, 500)
 
-    def get_wifi_on(self):
-        wifi_state = subprocess.check_output(["nmcli",  "radio", "wifi"]).strip().decode("utf-8")
-        if wifi_state == "enabled":
-            return True
-        elif wifi_state == "disabled":
+    def get_bluetooth_on(self):
+        try:
+            bluetooth_state = subprocess.check_output("systemctl status bluetooth | grep Running", shell=True, stderr=subprocess.PIPE, text=True).strip()
+            if "Running" in bluetooth_state:
+                return True
+            else:
+                return False
+        except subprocess.CalledProcessError as e:
+            print(f"Error: Unable to determine Bluetooth state. Error message: {e}")
             return False
 
     def on_connect_clicked(self, widget, event, network, password_entry):
@@ -135,7 +137,7 @@ class WifiMenu(Gtk.Dialog):
             
         self.active_widget = None
         self.first_scan = True
-        self.fetch_networks()
+        self.fetch_bluetooth_devices()
 
     def on_disconnect_clicked(self, widget, event, network):
         ssid = network["SSID"][5:]
@@ -143,16 +145,16 @@ class WifiMenu(Gtk.Dialog):
         print("disconnected")
         self.active_widget = None
         self.first_scan = True
-        self.fetch_networks()
+        self.fetch_bluetooth_devices()
 
     def on_forget_clicked(self, widget, event, network):
         ssid = network["SSID"][5:]
         subprocess.call(f"nmcli connection delete {ssid}", shell=True)
         self.active_widget = None
         self.first_scan = True
-        self.fetch_networks()
+        self.fetch_bluetooth_devices()
 
-    def network_clicked(self, widget, event, network, network_in_use):
+    def device_clicked(self, widget, event, device):
         if self.active_widget:
             buttons = self.active_widget.get_parent().get_children()
             for child in buttons[1:]:
@@ -160,9 +162,9 @@ class WifiMenu(Gtk.Dialog):
             
             self.active_widget.get_parent().set_name("list-content-box-inactive")
 
-            if self.previouse_network_in_use:
+            if self.previouse_widget_in_use:
                 self.active_widget.get_parent().set_name("list-obj-box-active")
-                self.previouse_network_in_use = False
+                self.previouse_widget_in_use = False
 
             if self.active_widget == widget:
                 self.active_widget = None
@@ -176,21 +178,21 @@ class WifiMenu(Gtk.Dialog):
         
         password_entry = Gtk.Entry()
 
-        if network["NETWORK-KNOWN"]:
-            remove_button = Gtk.Button(label = "Remove")
-            remove_button.connect("button-press-event", self.on_forget_clicked, network)
-            button_box.pack_start(remove_button, True, True, 0)
-        else:
-            password_entry.set_placeholder_text("Password")
-            button_box.pack_start(password_entry, True, True, 0)
+        # if device["NETWORK-KNOWN"]:
+        #     remove_button = Gtk.Button(label = "Remove")
+        #     remove_button.connect("button-press-event", self.on_forget_clicked, device)
+        #     button_box.pack_start(remove_button, True, True, 0)
+        # else:
+        #     password_entry.set_placeholder_text("Password")
+        #     button_box.pack_start(password_entry, True, True, 0)
         
-        if network_in_use:
-            connection_button.set_label("Disconnect")
-            connection_button.connect("button-press-event", self.on_disconnect_clicked, network)
-            self.previouse_network_in_use = True
-        else:
-            connection_button.set_label("Connect")
-            connection_button.connect("button-press-event", self.on_connect_clicked, network, password_entry)
+        # if network_in_use:
+        #     connection_button.set_label("Disconnect")
+        #     connection_button.connect("button-press-event", self.on_disconnect_clicked, device)
+        #     self.previouse_widget_in_use = True
+        # else:
+        connection_button.set_label("Connect")
+        connection_button.connect("button-press-event", self.on_connect_clicked, device, password_entry)
         
         widget.get_parent().set_name("list-content-box-active")
         widget.get_parent().pack_start(button_box, False, False, 0)     
@@ -199,25 +201,25 @@ class WifiMenu(Gtk.Dialog):
         self.active_widget = widget
         return True
     
-    def update_ui_with_networks(self, networks):
+    def update_ui_with_networks(self, devices):
         for child in self.list_box.get_children():
             self.list_box.remove(child)
-        for network in networks:
+        for device in devices:
             row = Gtk.ListBoxRow()
             label = Gtk.Label()
 
             list_content_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
 
             list_obj_clickable_box = Gtk.EventBox()
-            list_obj_clickable_box.connect("button-press-event", self.network_clicked, network, network["IN-USE"])
+            list_obj_clickable_box.connect("button-press-event", self.device_clicked, device)
 
-            if network["IN-USE"]:
+            if device["IN-USE"]:
                 label.set_name("list-obj")
                 list_content_box.set_name("list-obj-box-active")
             else:
                 label.set_name("list-obj")
 
-            label.set_text(network["SSID"][:20])
+            label.set_text(device["DEVICE"][:20])
             label.set_halign(Gtk.Align.START)
             
             list_obj_clickable_box.add(label)
@@ -227,59 +229,43 @@ class WifiMenu(Gtk.Dialog):
 
         self.list_box.show_all()
 
-    def scan_networks(self):
-        if self.first_scan:
-            output = subprocess.check_output("nmcli device wifi list --rescan no", shell=True).decode("utf-8")
-        else:
-            output = subprocess.check_output("nmcli device wifi list", shell=True).decode("utf-8")
-        
-        self.first_scan = False
+    def scan_devices(self):
+        output = subprocess.check_output("hcitool scan", shell = True).decode("utf-8")
         return output
     
-    def get_known_networks(self):
-        known_networks_output = subprocess.check_output("nmcli connection show ", shell=True).decode("utf-8")
-        lines = known_networks_output.splitlines()
-        known_networks = []
+    # def get_known_devices(self):
+    #     known_networks_output = subprocess.check_output("bluetoothctl devices", shell=True).decode("utf-8")
+    #     lines = known_networks_output.splitlines()
+    #     print(lines)
+    #     known_networks = []
 
-        for line in lines[1:]:
-            parts = line.split()
-            ssid = parts[0]
-            known_networks.append(ssid)
+    #     for line in lines[1:]:
+    #         parts = line.split()
+    #         ssid = parts[0]
+    #         known_networks.append(ssid)
             
-        return known_networks
+    #     return known_networks
 
-    def fetch_networks(self):
+    def fetch_bluetooth_devices(self):
         if not self.active_widget:            
-            nmcli_output = self.scan_networks()
-            known_networks = self.get_known_networks()
-            if nmcli_output:
-                lines = nmcli_output.splitlines()
-                unique_networks = []
-
-                seen_ssids = set()
+            bluetooth_output = self.scan_devices()
+            if bluetooth_output:
+                lines = bluetooth_output.splitlines()
+                unique_devices = []
 
                 for line in lines[1:]:
-                    parts = line.split()
-                    in_use = False
+                    parts = line.split("\t", 2)
+                    parts.pop(0)
 
-                    if parts[0] == "*":
-                        parts.pop(0)
+                    device_name = parts[1]
+                    in_use = False
+                    if device_name == "Jonathans Bose QC35 II":
+                        device_name = " " + device_name
                         in_use = True
 
-                    if parts[1] != "--" and "▂" in parts[7]:
-                        ssid = f'{parts[7]} {parts[1][:]}' 
+                    unique_devices.append({"DEVICE": device_name, "MAC-ADDR": parts[0], "IN-USE": in_use})
 
-                        network_known = False
-                        if ssid[5:] in known_networks:
-                            network_known = True
-
-                    if ssid[5:] not in seen_ssids or in_use:
-                        unique_networks.append({"SSID": ssid, "IN-USE": in_use, "NETWORK-KNOWN": network_known})
-                        seen_ssids.add(ssid[5:])
-
-                unique_networks.sort(key=lambda x: (not x["IN-USE"], not x["NETWORK-KNOWN"]))
-
-                self.update_ui_with_networks(unique_networks)
+                self.update_ui_with_networks(unique_devices)
 
     def get_mouse_position(self):
         try:
@@ -315,7 +301,7 @@ class WifiMenu(Gtk.Dialog):
             exit(0)
 
 if __name__ == '__main__':
-    pid_file = "/home/jonalm/scripts/qtile/bar_menus/wifi_menu_pid_file.pid"
+    pid_file = "/home/jonalm/scripts/qtile/bar_menus/bluetooth_menu_pid_file.pid"
     dialog = None
 
     try:
@@ -330,7 +316,7 @@ if __name__ == '__main__':
         else:
             with open(pid_file, "w") as file:
                 file.write(str(os.getpid()))
-            dialog = WifiMenu()
+            dialog = BluetoothMenu()
             Gtk.main()
                     
     except Exception as e:

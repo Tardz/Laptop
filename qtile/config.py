@@ -10,7 +10,7 @@ import os
 ### KEYBINDING AND GROUPS IMPORTS ###
 from libqtile.config import Match, Key, KeyChord, Click, Drag, ScratchPad, Group, DropDown
 from libqtile.extension.dmenu import DmenuRun
-from libqtile import qtile as Qtile
+from libqtile import qtile as Qtile, widget as normal_widget
 
 ### BAR IMPORTS ###
 from qtile_extras.widget.decorations import BorderDecoration, RectDecoration
@@ -374,6 +374,21 @@ top_bar_1 = Bar([
         unfocused_border    = "#3c4455",
     ),
     seperator(icon_seperator_padding - 10),
+
+    # BLUETOOTH #
+    widget.TextBox(        
+        text            = "<span font='Font Awesome 6 free solid 16' foreground='#000000' size='medium'></span>",
+        padding         = widget_default_font_size - 12,
+        foreground      = notification_history_icon_color,
+        mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("python3 /home/jonalm/scripts/qtile/bar_menus/bluetooth_menu.py")},
+        decorations     = left_decor(round = True, color = "#b48ead"),
+    ),
+    widget.Bluetooth(
+        format          = "Disconnected",
+        update_interval = cpu_update_interval,
+        decorations     = right_decor(True),
+    ),
+    seperator(icon_seperator_padding),
 
     #  WIFI #
     widget.TextBox(        
