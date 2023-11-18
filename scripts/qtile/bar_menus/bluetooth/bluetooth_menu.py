@@ -50,12 +50,13 @@ class BluetoothMenu(Gtk.Dialog):
 
         self.main_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=8)
         self.main_box.pack_start(self.title_box, False, False, 0)
-        if self.bluetooth_on:
-            self.main_box.pack_start(self.list_main_box, True, True, 0)        
+        self.main_box.pack_start(self.list_main_box, True, True, 0)        
 
         self.content_area.pack_start(self.main_box, True, True, 0)        
 
         self.show_all()
+        if not self.bluetooth_on:
+            self.list_main_box.hide()
 
     def title(self):
         self.title_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=0)
@@ -147,7 +148,7 @@ class BluetoothMenu(Gtk.Dialog):
             subprocess.run(["sudo", "systemctl",  "stop", "bluetooth"])
             self.icon_background_box.set_name("toggle-icon-background-disabled")
             self.icon.set_name("toggle-icon-disabled")
-            self.main_box.remove(self.list_main_box)
+            self.list_main_box.hide()
         else:
             self.bluetooth_on = True
             self.resize(self.window_width, self.window_height)
@@ -156,7 +157,6 @@ class BluetoothMenu(Gtk.Dialog):
             subprocess.run(["sudo", "systemctl",  "start", "bluetooth"])
             self.icon_background_box.set_name("toggle-icon-background-enabled")
             self.icon.set_name("toggle-icon-enabled")
-            self.main_box.pack_start(self.list_main_box, True, True, 0)
             self.main_box.show_all()
 
     def get_bluetooth_on(self):

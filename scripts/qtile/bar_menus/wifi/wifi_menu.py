@@ -30,12 +30,14 @@ class WifiMenu(Gtk.Dialog):
         if self.wifi_on:
             self.set_size_request(self.window_width, self.window_height)
         else:
-            self.set_size_request(self.window_width, 20)
+            self.set_size_request(self.window_width, 10)
 
         self.ignore_focus_lost = False
         self.previous_css_class = None
         self.active_widget = None
-        self.previouse_network_in_use = False
+        self.previous_network_in_use = False
+        self.history_shown = False
+        self.active_known_widget = None
 
         self.content_area = self.get_content_area()
         self.content_area.set_name("content-area")
@@ -44,18 +46,24 @@ class WifiMenu(Gtk.Dialog):
         self.css()
         self.title()
         self.list()
+        self.list_options()
 
         self.connect("focus-out-event", self.on_focus_out)
         self.connect("key-press-event", self.on_escape_press)
 
         self.main_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=8)
         self.main_box.pack_start(self.title_box, False, False, 0)
-        if self.wifi_on:
-            self.main_box.pack_start(self.list_main_box, True, True, 0)        
+        self.main_box.pack_start(self.list_main_box, True, True, 0)        
+        self.main_box.pack_start(self.list_options_main_box, False, False, 0)
 
         self.content_area.pack_start(self.main_box, True, True, 0)   
 
         self.show_all()
+
+        if not self.wifi_on:
+            self.resize(self.window_width, 10)
+            self.set_size_request(self.window_width, 10)
+            self.list_main_box.hide()
 
     def title(self):
         self.title_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=0)
@@ -126,6 +134,29 @@ class WifiMenu(Gtk.Dialog):
         self.update_ui_with_networks()
         GLib.timeout_add(7000, self.update_ui_with_networks)
 
+    def list_options(self):
+        self.list_options_main_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=8)
+        self.scan_box = Gtk.EventBox()
+        self.scan_box.set_name("toggle-box-list-options-active")
+        self.scan_title = Gtk.Label()
+        self.scan_title.set_text("")
+        self.scan_title.set_name("list-opitons-title-active")
+
+        self.config_box = Gtk.EventBox()
+        self.config_box.set_name("toggle-box-list-options-inactive")
+        self.config_title = Gtk.Label()
+        self.config_title.set_text("")
+        self.config_title.set_name("list-opitons-title-inactive")
+
+        self.scan_box.add(self.scan_title)
+        self.config_box.add(self.config_title)
+
+        self.list_options_main_box.pack_start(self.scan_box, True, True, 0)
+        self.list_options_main_box.pack_start(self.config_box, True, True, 0)
+
+        self.scan_box.connect("button-press-event", self.scan_clicked)
+        self.config_box.connect("button-press-event", self.history_clicked)
+
     def css(self):
         screen = Gdk.Screen.get_default()
         provider = Gtk.CssProvider()
@@ -150,7 +181,7 @@ class WifiMenu(Gtk.Dialog):
             subprocess.run(["nmcli",  "radio", "wifi", "off"])
             self.icon_background_box.set_name("toggle-icon-background-disabled")
             self.icon.set_name("toggle-icon-disabled")
-            self.main_box.remove(self.list_main_box)
+            self.list_main_box.hide()
         else:
             self.wifi_on = True
             self.resize(self.window_width, self.window_height)
@@ -159,8 +190,24 @@ class WifiMenu(Gtk.Dialog):
             subprocess.run(["nmcli",  "radio", "wifi", "on"])
             self.icon_background_box.set_name("toggle-icon-background-enabled")
             self.icon.set_name("toggle-icon-enabled")
-            self.main_box.pack_start(self.list_main_box, True, True, 0)
             self.main_box.show_all()
+
+    def scan_clicked(self, widget, event):
+        self.history_shown = False
+        self.active_known_widget = None
+        self.config_box.set_name("toggle-box-list-options-inactive")
+        self.config_title.set_name("list-opitons-title-inactive")
+        self.scan_box.set_name("toggle-box-list-options-active")
+        self.scan_title.set_name("list-opitons-title-active")
+        self.update_ui_with_networks()
+        
+    def history_clicked(self, widget, event):
+        self.history_shown = True
+        self.config_box.set_name("toggle-box-list-options-active")
+        self.config_title.set_name("list-opitons-title-active")
+        self.scan_box.set_name("toggle-box-list-options-inactive")
+        self.scan_title.set_name("list-opitons-title-inactive")
+        self.update_ui_with_known_networks()
 
     def get_wifi_on(self):
         wifi_state = subprocess.check_output(["nmcli",  "radio", "wifi"]).strip().decode("utf-8")
@@ -187,11 +234,16 @@ class WifiMenu(Gtk.Dialog):
         self.active_widget = None
         self.update_ui_with_networks()
 
-    def on_forget_clicked(self, widget, event, network):
-        ssid = network["SSID"][5:]
+    def on_forget_clicked(self, widget, event, network, use_network_name):
+        if use_network_name:
+            ssid = network
+            self.active_known_widget = None
+            self.update_ui_with_known_networks()
+        else:
+            ssid = network["SSID"][5:]
+            self.active_widget = None
+            self.update_ui_with_networks()
         subprocess.call(f"nmcli connection delete {ssid}", shell=True)
-        self.active_widget = None
-        self.update_ui_with_networks()
 
     def network_clicked(self, widget, event, network, network_in_use):
         if self.active_widget:
@@ -201,9 +253,9 @@ class WifiMenu(Gtk.Dialog):
             
             self.active_widget.get_parent().set_name("list-content-box-inactive")
 
-            if self.previouse_network_in_use:
+            if self.previous_network_in_use:
                 self.active_widget.get_parent().set_name("list-obj-box-active")
-                self.previouse_network_in_use = False
+                self.previous_network_in_use = False
 
             if self.active_widget == widget:
                 self.active_widget = None
@@ -228,7 +280,7 @@ class WifiMenu(Gtk.Dialog):
         if network_in_use:
             connection_button.set_label("Disconnect")
             connection_button.connect("button-press-event", self.on_disconnect_clicked, network)
-            self.previouse_network_in_use = True
+            self.previous_network_in_use = True
         else:
             connection_button.set_label("Connect")
             connection_button.connect("button-press-event", self.on_connect_clicked, network, password_entry)
@@ -238,6 +290,31 @@ class WifiMenu(Gtk.Dialog):
         widget.get_parent().show_all()
 
         self.active_widget = widget
+        return True
+    
+    def known_network_clicked(self, widget, event, network_name):
+        if self.active_known_widget:
+            buttons = self.active_known_widget.get_parent().get_children()
+            for child in buttons[1:]:
+                self.active_known_widget.get_parent().remove(child)
+            
+            self.active_known_widget.get_parent().set_name("list-content-box-inactive")
+
+            if self.active_known_widget == widget:
+                self.active_known_widget = None
+                return True
+
+        button_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=0)
+
+        remove_button = Gtk.Button(label = "Remove")
+        remove_button.connect("button-press-event", self.on_forget_clicked, network_name, True)
+        button_box.pack_start(remove_button, True, True, 0)
+        
+        widget.get_parent().set_name("list-content-box-active")
+        widget.get_parent().pack_start(button_box, False, False, 0)     
+        widget.get_parent().show_all()
+
+        self.active_known_widget = widget
         return True
 
     def get_networks(self):
@@ -279,7 +356,7 @@ class WifiMenu(Gtk.Dialog):
         return unique_networks
     
     def update_ui_with_networks(self):
-        if not self.active_widget and self.wifi_on:
+        if not self.active_widget and self.wifi_on and not self.history_shown:
             self.status_dot.set_name("status-dot-list-update")
             GLib.timeout_add(300, self.restore_status_dot)
     
@@ -322,6 +399,53 @@ class WifiMenu(Gtk.Dialog):
             self.list_box.show_all()
 
         return True
+    
+    def update_ui_with_known_networks(self):
+        known_networks = self.get_known_networks()
+
+        self.desc.set_text(f"{len(known_networks)} Known")
+        
+        if not known_networks:
+            return True
+
+        for child in self.list_box.get_children():
+            self.list_box.remove(child)
+
+        for network_name in known_networks:
+            row = Gtk.ListBoxRow()
+            label = Gtk.Label()
+
+            list_content_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
+
+            list_obj_clickable_box = Gtk.EventBox()
+            list_obj_clickable_box.connect("button-press-event", self.known_network_clicked, network_name)
+
+            label.set_name("list-obj")
+
+            label.set_text(network_name[:20])
+            label.set_halign(Gtk.Align.START)
+            
+            list_obj_clickable_box.add(label)
+
+            list_content_box.pack_start(list_obj_clickable_box, False, False, 0)
+            row.add(list_content_box)
+            self.list_box.add(row)
+
+        self.list_box.show_all()
+
+        return True
+    
+    def get_known_networks(self):
+        known_networks_output = subprocess.check_output("nmcli connection show ", shell=True).decode("utf-8")
+        lines = known_networks_output.splitlines()
+        known_networks = []
+
+        for line in lines[1:]:
+            parts = line.split()
+            ssid = parts[0]
+            known_networks.append(ssid)
+            
+        return known_networks
 
     def get_mouse_position(self):
         try:

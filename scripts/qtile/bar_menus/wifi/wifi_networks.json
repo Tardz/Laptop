@@ -5,22 +5,17 @@
     "NETWORK-KNOWN": true
   },
   {
-    "SSID": "\u2582\u2584\u2586_ Studerande *",
+    "SSID": "\u2582\u2584__ Studerande *",
     "IN-USE": false,
     "NETWORK-KNOWN": true
   },
   {
+    "SSID": "\u2582___ Personal",
+    "IN-USE": false,
+    "NETWORK-KNOWN": false
+  },
+  {
     "SSID": "\u2582\u2584\u2586_ Konferens",
-    "IN-USE": false,
-    "NETWORK-KNOWN": false
-  },
-  {
-    "SSID": "\u2582\u2584\u2586_ Personal",
-    "IN-USE": false,
-    "NETWORK-KNOWN": false
-  },
-  {
-    "SSID": "\u2582___ Hyresg\u00e4st",
     "IN-USE": false,
     "NETWORK-KNOWN": false
   },

@@ -47,6 +47,38 @@
     background: #4f586e;
 }
 
+#toggle-box-list-options-inactive {
+    border-radius: 3px;
+    background: #4f586e;
+}
+
+#toggle-box-list-options-active {
+    border-radius: 3px;
+    background: #81a1c1;
+}
+
+#list-opitons-title-active {
+    margin-top: 10px;    
+    margin-right: 8px;  
+    margin-bottom: 8px;
+    margin-left: 8px;
+    color: black;
+    font-size: 20px;
+    font-family: 'Font Awesome 6 Free Solid';
+    font-weight: bold;
+}
+
+#list-opitons-title-inactive {
+    margin-top: 10px;    
+    margin-right: 8px;  
+    margin-bottom: 8px;
+    margin-left: 8px;
+    color: white;
+    font-size: 20px;
+    font-family: 'Font Awesome 6 Free Solid';
+    font-weight: bold;
+}
+
 #toggle-title {
     margin-top: 9px;    
     margin-right: 10px;  
