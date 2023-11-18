@@ -18,13 +18,19 @@ class WifiMenu(Gtk.Dialog):
         self.wifi_process = wifi_process
         signal.signal(signal.SIGTERM, self.handle_sigterm)
 
-        if self.get_wifi_on():
-            self.set_default_size(340, 500)
-
         x, y = self.get_mouse_position()
 
         if x and y:
             self.move(x - 160, 5)
+
+        self.window_width = 330
+        self.window_height = 400
+
+        self.wifi_on = self.get_wifi_on()
+        if self.wifi_on:
+            self.set_size_request(self.window_width, self.window_height)
+        else:
+            self.set_size_request(self.window_width, 20)
 
         self.ignore_focus_lost = False
         self.previous_css_class = None
@@ -42,11 +48,13 @@ class WifiMenu(Gtk.Dialog):
         self.connect("focus-out-event", self.on_focus_out)
         self.connect("key-press-event", self.on_escape_press)
 
-        self.content_area.pack_start(self.title_box, False, False, 0)        
+        self.main_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=8)
+        self.main_box.pack_start(self.title_box, False, False, 0)
+        if self.wifi_on:
+            self.main_box.pack_start(self.list_main_box, True, True, 0)        
 
-        if self.get_wifi_on():
-            self.content_area.pack_start(self.list_main_box, True, True, 0)
-        
+        self.content_area.pack_start(self.main_box, True, True, 0)   
+
         self.show_all()
 
     def title(self):
@@ -62,6 +70,8 @@ class WifiMenu(Gtk.Dialog):
         title.set_halign(Gtk.Align.START)
 
         self.desc = Gtk.Label()
+        if not self.wifi_on:
+            self.desc.set_text("Off")
         self.desc.set_name("toggle-desc")
         self.desc.set_halign(Gtk.Align.START)
 
@@ -74,7 +84,7 @@ class WifiMenu(Gtk.Dialog):
         self.icon.set_text("")
         self.icon.set_halign(Gtk.Align.START)
 
-        if self.get_wifi_on():
+        if self.wifi_on:
             self.icon_background_box.set_name("toggle-icon-background-enabled")
             self.icon.set_name("toggle-icon-enabled")
         else:
@@ -83,7 +93,10 @@ class WifiMenu(Gtk.Dialog):
 
         self.status_dot = Gtk.Label()
         self.status_dot.set_text("")
-        self.status_dot.set_name("status-dot-inactive")
+        if self.wifi_on:
+            self.status_dot.set_name("status-dot-inactive")
+        else:
+            self.status_dot.set_name("status-dot-off")
         self.status_dot.set_halign(Gtk.Align.END)
 
         self.icon_background_box.pack_start(self.icon, False, False, 0)
@@ -128,18 +141,26 @@ class WifiMenu(Gtk.Dialog):
         return False
 
     def wifi_clicked(self, widget, event):
-        if self.get_wifi_on():
+        if self.wifi_on:
+            self.wifi_on = False
+            self.resize(self.window_width, 10)
+            self.set_size_request(self.window_width, 10)
+            self.desc.set_text("Off")
+            self.status_dot.set_name("status-dot-off")
             subprocess.run(["nmcli",  "radio", "wifi", "off"])
             self.icon_background_box.set_name("toggle-icon-background-disabled")
             self.icon.set_name("toggle-icon-disabled")
-            self.content_area.remove(self.list_main_box)
-            self.set_default_size(0, 0)
+            self.main_box.remove(self.list_main_box)
         else:
+            self.wifi_on = True
+            self.resize(self.window_width, self.window_height)
+            self.set_size_request(self.window_width, self.window_height)
+            self.status_dot.set_name("status-dot-inactive")
             subprocess.run(["nmcli",  "radio", "wifi", "on"])
             self.icon_background_box.set_name("toggle-icon-background-enabled")
             self.icon.set_name("toggle-icon-enabled")
-            self.content_area.pack_start(self.list_main_box, True, True, 0)
-            self.set_default_size(300, 500)
+            self.main_box.pack_start(self.list_main_box, True, True, 0)
+            self.main_box.show_all()
 
     def get_wifi_on(self):
         wifi_state = subprocess.check_output(["nmcli",  "radio", "wifi"]).strip().decode("utf-8")
@@ -247,7 +268,7 @@ class WifiMenu(Gtk.Dialog):
                     network_known = False
                     if ssid[5:] in known_networks:
                         network_known = True
-                        ssid = ssid + " "
+                        ssid = ssid + " *"
 
                 if ssid[5:] not in seen_ssids or in_use:
                     unique_networks.append({"SSID": ssid, "IN-USE": in_use, "NETWORK-KNOWN": network_known})
@@ -258,7 +279,7 @@ class WifiMenu(Gtk.Dialog):
         return unique_networks
     
     def update_ui_with_networks(self):
-        if not self.active_widget:
+        if not self.active_widget and self.wifi_on:
             self.status_dot.set_name("status-dot-list-update")
             GLib.timeout_add(300, self.restore_status_dot)
     
@@ -266,7 +287,7 @@ class WifiMenu(Gtk.Dialog):
             if not networks:
                 networks = self.scan_offline()
 
-            self.desc.set_text(f"{len(networks)} Avaibable")
+            self.desc.set_text(f"{len(networks)} Available")
             
             if not networks:
                 return True
@@ -354,42 +375,52 @@ def get_known_networks():
         
     return known_networks
 
+def get_wifi_on():
+    wifi_state = subprocess.check_output(["nmcli",  "radio", "wifi"]).strip().decode("utf-8")
+    if wifi_state == "enabled":
+        return True
+    elif wifi_state == "disabled":
+        return False
+
 def wifi_process():
     while True:
-        nmcli_output = subprocess.check_output("nmcli device wifi list", shell=True).decode("utf-8")
-        known_networks = get_known_networks()
-        if nmcli_output:
-            lines = nmcli_output.splitlines()
-            unique_networks = []
+        if get_wifi_on():
+            nmcli_output = subprocess.check_output("nmcli device wifi list", shell=True).decode("utf-8")
+            known_networks = get_known_networks()
+            if nmcli_output:
+                lines = nmcli_output.splitlines()
+                unique_networks = []
 
-            seen_ssids = set()
+                seen_ssids = set()
 
-            for line in lines[1:]:
-                parts = line.split()
-                in_use = False
+                for line in lines[1:]:
+                    parts = line.split()
+                    in_use = False
 
-                if parts[0] == "*":
-                    parts.pop(0)
-                    in_use = True
+                    if parts[0] == "*":
+                        parts.pop(0)
+                        in_use = True
 
-                if parts[1] != "--" and "▂" in parts[7]:
-                    ssid = f'{parts[7]} {parts[1][:]}' 
+                    if parts[1] != "--" and "▂" in parts[7]:
+                        ssid = f'{parts[7]} {parts[1][:]}' 
 
-                    network_known = False
-                    if ssid[5:] in known_networks:
-                        network_known = True
-                        ssid = ssid + " *"
+                        network_known = False
+                        if ssid[5:] in known_networks:
+                            network_known = True
+                            ssid = ssid + " *"
 
-                if ssid[5:] not in seen_ssids or in_use:
-                    unique_networks.append({"SSID": ssid, "IN-USE": in_use, "NETWORK-KNOWN": network_known})
-                    seen_ssids.add(ssid[5:])
+                    if ssid[5:] not in seen_ssids or in_use:
+                        unique_networks.append({"SSID": ssid, "IN-USE": in_use, "NETWORK-KNOWN": network_known})
+                        seen_ssids.add(ssid[5:])
 
-            unique_networks.sort(key=lambda x: (not x["IN-USE"], not x["NETWORK-KNOWN"]))
+                unique_networks.sort(key=lambda x: (not x["IN-USE"], not x["NETWORK-KNOWN"]))
 
-        with open('/home/jonalm/scripts/qtile/bar_menus/wifi/wifi_networks.json', 'w') as json_file:
-            json.dump(unique_networks, json_file, indent=2)
+            with open('/home/jonalm/scripts/qtile/bar_menus/wifi/wifi_networks.json', 'w') as json_file:
+                json.dump(unique_networks, json_file, indent=2)
 
-        time.sleep(4)
+            time.sleep(4)
+        else:
+            time.sleep(4)
 
 if __name__ == '__main__':
     pid_file = "/home/jonalm/scripts/qtile/bar_menus/wifi/wifi_menu_pid_file.pid"

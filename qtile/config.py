@@ -312,13 +312,17 @@ class BluetoothDeviceWidget(widget.TextBox, base.InLoopPollText):
                     parts = lines[0].split(" ", 2)
 
                     device_name = parts[2]
+                    headphone_icon = "<span font='Font Awesome 6 free solid 12' foreground='white' size='medium'> </span>"
+                    airpods_icon = "<span font='Font Awesome 6 fvree solid 12' foreground='white' size='medium'> </span>"
                     
                     if device_name == "N/A":
                         return 
                     elif device_name == "Jonathans Bose QC35 II":
-                        return "Bose"
-                    elif device_name == "Jonathans pods share":
-                        return "AirPods"
+                        return f"{headphone_icon} Bose"
+                    elif device_name == "Jonathans Pods - Find My":
+                        return f"{airpods_icon} AirPods"
+                    elif device_name == "controller available":
+                        return "Error"
                     else:
                         return device_name
                 

@@ -18,13 +18,19 @@ class BluetoothMenu(Gtk.Dialog):
         self.bluetooth_process = bluetooth_process
         signal.signal(signal.SIGTERM, self.handle_sigterm)
 
-        if self.get_bluetooth_on():
-            self.set_size_request(420, 300)
-
         x, y = self.get_mouse_position()
 
         if x and y:
-            self.move(x - 200, 5)
+            self.move(x - 160, 5)
+
+        self.window_width = 330
+        self.window_height = 300
+
+        self.bluetooth_on = self.get_bluetooth_on()
+        if self.bluetooth_on:
+            self.set_size_request(self.window_width, self.window_height)
+        else:
+            self.set_size_request(self.window_width, 20)
 
         self.ignore_focus_lost = False
         self.previous_css_class = None
@@ -42,11 +48,13 @@ class BluetoothMenu(Gtk.Dialog):
         self.connect("focus-out-event", self.on_focus_out)
         self.connect("key-press-event", self.on_escape_press)
 
-        self.content_area.pack_start(self.title_box, False, False, 0)        
+        self.main_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=8)
+        self.main_box.pack_start(self.title_box, False, False, 0)
+        if self.bluetooth_on:
+            self.main_box.pack_start(self.list_main_box, True, True, 0)        
 
-        if self.get_bluetooth_on():
-            self.content_area.pack_start(self.list_main_box, True, True, 0)
-        
+        self.content_area.pack_start(self.main_box, True, True, 0)        
+
         self.show_all()
 
     def title(self):
@@ -62,6 +70,8 @@ class BluetoothMenu(Gtk.Dialog):
         title.set_halign(Gtk.Align.START)
 
         self.desc = Gtk.Label()
+        if not self.bluetooth_on:
+            self.desc.set_text("Off")
         self.desc.set_name("toggle-desc")
         self.desc.set_halign(Gtk.Align.START)
 
@@ -74,7 +84,7 @@ class BluetoothMenu(Gtk.Dialog):
         self.icon.set_text("")
         self.icon.set_halign(Gtk.Align.START)
 
-        if self.get_bluetooth_on():
+        if self.bluetooth_on:
             self.icon_background_box.set_name("toggle-icon-background-enabled")
             self.icon.set_name("toggle-icon-enabled")
         else:
@@ -128,18 +138,26 @@ class BluetoothMenu(Gtk.Dialog):
         return False
 
     def bluetooth_clicked(self, widget, event):
-        if self.get_bluetooth_on():
+        if self.bluetooth_on:
+            self.bluetooth_on = False
+            self.resize(self.window_width, 10)
+            self.set_size_request(self.window_width, 10)
+            self.desc.set_text("Off")
+            self.status_dot.set_name("status-dot-off")
             subprocess.run(["sudo", "systemctl",  "stop", "bluetooth"])
             self.icon_background_box.set_name("toggle-icon-background-disabled")
             self.icon.set_name("toggle-icon-disabled")
-            self.content_area.remove(self.list_main_box)
-            self.set_size_request(0, 0)
+            self.main_box.remove(self.list_main_box)
         else:
+            self.bluetooth_on = True
+            self.resize(self.window_width, self.window_height)
+            self.set_size_request(self.window_width, self.window_height)
+            self.status_dot.set_name("status-dot-inactive")
             subprocess.run(["sudo", "systemctl",  "start", "bluetooth"])
             self.icon_background_box.set_name("toggle-icon-background-enabled")
             self.icon.set_name("toggle-icon-enabled")
-            self.content_area.pack_start(self.list_main_box, True, True, 0)
-            self.set_size_request(300, 500)
+            self.main_box.pack_start(self.list_main_box, True, True, 0)
+            self.main_box.show_all()
 
     def get_bluetooth_on(self):
         try:
@@ -149,7 +167,6 @@ class BluetoothMenu(Gtk.Dialog):
             else:
                 return False
         except subprocess.CalledProcessError as e:
-            print(f"Error: Unable to determine Bluetooth state. Error message: {e}")
             return False
 
     def on_connect_clicked(self, widget, event, device):
@@ -278,6 +295,9 @@ class BluetoothMenu(Gtk.Dialog):
                 device_addr = parts[0]
                 device_name = parts[1]
 
+                if device_addr == "default":
+                    return
+
                 trusted = False
                 if trusted_devices:
                     if device_addr in trusted_devices:
@@ -288,7 +308,7 @@ class BluetoothMenu(Gtk.Dialog):
         return connected_devices
     
     def update_ui_with_devices(self):
-        if not self.active_widget:
+        if not self.active_widget and self.bluetooth_on:
             self.status_dot.set_name("status-dot-list-update")
             GLib.timeout_add(300, self.restore_status_dot)
 
@@ -307,7 +327,7 @@ class BluetoothMenu(Gtk.Dialog):
                             devices.pop(i) 
                     devices.append(connected_device)
 
-            self.desc.set_text(f"{len(devices)} Avaibable")
+            self.desc.set_text(f"{len(devices)} Available")
 
             devices.sort(key=lambda x: (not x["CONNECTED"], not x["DEVICE-KNOWN"]))
 
@@ -412,37 +432,50 @@ def get_trusted_devices():
                     
     return connected_devices
 
+def get_bluetooth_on():
+    try:
+        bluetooth_state = subprocess.check_output("systemctl status bluetooth | grep Running", shell=True, stderr=subprocess.PIPE, text=True).strip()
+        if "Running" in bluetooth_state:
+            return True
+        else:
+            return False
+    except subprocess.CalledProcessError as e:
+        return False
+    
 def bluetooth_process():
     while True:
-        bluetooth_output = scan_devices()
-        known_devices = get_known_devices()
-        trusted_devices = get_trusted_devices()
-        if bluetooth_output:
-            lines = bluetooth_output.splitlines()
-            unique_devices = []
+        if get_bluetooth_on():
+            bluetooth_output = scan_devices()
+            known_devices = get_known_devices()
+            trusted_devices = get_trusted_devices()
+            if bluetooth_output:
+                lines = bluetooth_output.splitlines()
+                unique_devices = []
 
-            for line in lines[1:]:
-                parts = line.split("\t", 2)
-                parts.pop(0)
+                for line in lines[1:]:
+                    parts = line.split("\t", 2)
+                    parts.pop(0)
 
-                device_name = parts[1]
-                device_addr = parts[0]
+                    device_name = parts[1]
+                    device_addr = parts[0]
 
-                known = False
-                if known_devices:
-                    if device_addr in known_devices:
-                        known = True
+                    known = False
+                    if known_devices:
+                        if device_addr in known_devices:
+                            known = True
 
-                trusted = False
-                if trusted_devices:
-                    if device_addr in trusted_devices:
-                        trusted = True
-                
-                if device_name != "n/a":
-                    unique_devices.append({"DEVICE": device_name, "MAC-ADDR": device_addr, "CONNECTED": False, "DEVICE-KNOWN": known, "DEVICE-TRUSTED": trusted})
-        
-        with open('/home/jonalm/scripts/qtile/bar_menus/bluetooth/bluetooth_devices.json', 'w') as json_file:
-            json.dump(unique_devices, json_file, indent=2)
+                    trusted = False
+                    if trusted_devices:
+                        if device_addr in trusted_devices:
+                            trusted = True
+                    
+                    if device_name != "n/a":
+                        unique_devices.append({"DEVICE": device_name, "MAC-ADDR": device_addr, "CONNECTED": False, "DEVICE-KNOWN": known, "DEVICE-TRUSTED": trusted})
+            
+            with open('/home/jonalm/scripts/qtile/bar_menus/bluetooth/bluetooth_devices.json', 'w') as json_file:
+                json.dump(unique_devices, json_file, indent=2)
+        else:
+            time.sleep(4)
 
 if __name__ == '__main__':
     pid_file = "/home/jonalm/scripts/qtile/bar_menus/bluetooth/bluetooth_menu_pid_file.pid"
@@ -463,7 +496,7 @@ if __name__ == '__main__':
 
             process = Process(target=bluetooth_process)
             process.start()
-
+            
             dialog = BluetoothMenu(process)
             Gtk.main()
                     
