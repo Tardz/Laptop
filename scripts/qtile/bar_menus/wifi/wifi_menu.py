@@ -2,12 +2,8 @@ import gi
 gi.require_version('Gtk', '3.0')
 import subprocess
 import os
-from Xlib import display 
-from gi.repository import Gtk, Gdk, Gio, GObject, GLib
-from dbus.mainloop.glib import DBusGMainLoop
-from multiprocessing import Process, Event
+from gi.repository import Gtk, Gdk, GLib
 import time
-import signal
 import json
 
 class WifiMenu(Gtk.Dialog):
@@ -15,6 +11,7 @@ class WifiMenu(Gtk.Dialog):
         self.pid_file = "/home/jonalm/scripts/qtile/bar_menus/wifi/wifi_menu_pid_file.pid"
         Gtk.Dialog.__init__(self, "Sound Control", None, 0)
 
+        import signal
         self.wifi_process = wifi_process
         signal.signal(signal.SIGTERM, self.handle_sigterm)
 
@@ -64,6 +61,7 @@ class WifiMenu(Gtk.Dialog):
             self.resize(self.window_width, 10)
             self.set_size_request(self.window_width, 10)
             self.list_main_box.hide()
+            self.list_options_main_box.hide()
 
     def title(self):
         self.title_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=0)
@@ -182,6 +180,7 @@ class WifiMenu(Gtk.Dialog):
             self.icon_background_box.set_name("toggle-icon-background-disabled")
             self.icon.set_name("toggle-icon-disabled")
             self.list_main_box.hide()
+            self.list_options_main_box.hide()
         else:
             self.wifi_on = True
             self.resize(self.window_width, self.window_height)
@@ -203,6 +202,7 @@ class WifiMenu(Gtk.Dialog):
         
     def history_clicked(self, widget, event):
         self.history_shown = True
+        self.active_widget = None
         self.config_box.set_name("toggle-box-list-options-active")
         self.config_title.set_name("list-opitons-title-active")
         self.scan_box.set_name("toggle-box-list-options-inactive")
@@ -238,12 +238,13 @@ class WifiMenu(Gtk.Dialog):
         if use_network_name:
             ssid = network
             self.active_known_widget = None
+            subprocess.call(f"nmcli connection delete '{ssid}'", shell=True)
             self.update_ui_with_known_networks()
         else:
             ssid = network["SSID"][5:]
             self.active_widget = None
+            subprocess.call(f"nmcli connection delete '{ssid}'", shell=True)
             self.update_ui_with_networks()
-        subprocess.call(f"nmcli connection delete {ssid}", shell=True)
 
     def network_clicked(self, widget, event, network, network_in_use):
         if self.active_widget:
@@ -436,18 +437,25 @@ class WifiMenu(Gtk.Dialog):
         return True
     
     def get_known_networks(self):
-        known_networks_output = subprocess.check_output("nmcli connection show ", shell=True).decode("utf-8")
-        lines = known_networks_output.splitlines()
+        known_networks_output = subprocess.check_output("nmcli connection show ", shell=True).decode("utf-8").strip()
         known_networks = []
+        from io import StringIO
+        import pandas as pd
 
-        for line in lines[1:]:
-            parts = line.split()
-            ssid = parts[0]
-            known_networks.append(ssid)
+        df = pd.read_fwf(StringIO(known_networks_output), header=0)
+
+        data = df.to_dict(orient='records')
+
+        for line in data:
+            ssid = line["NAME"]
+            type = line["TYPE"]
+            if type == "wifi":
+                known_networks.append(ssid)
             
         return known_networks
 
     def get_mouse_position(self):
+        from Xlib import display 
         try:
             d = display.Display()
             s = d.screen()
@@ -563,6 +571,7 @@ if __name__ == '__main__':
             with open(pid_file, "w") as file:
                 file.write(str(os.getpid()))
 
+            from multiprocessing import Process
             process = Process(target=wifi_process)
             process.start()
 

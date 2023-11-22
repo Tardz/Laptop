@@ -460,7 +460,6 @@ class BluetoothMenu(Gtk.Dialog):
         
     def history_clicked(self, widget, event):
         self.history_shown = True
-        self.active_widget = None
         self.config_box.set_name("toggle-box-list-options-active")
         self.config_title.set_name("list-opitons-title-active")
         self.scan_box.set_name("toggle-box-list-options-inactive")

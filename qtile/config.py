@@ -71,10 +71,10 @@ keys = [
         Key([mod, "shift"], "q", lazy.shutdown(), desc='Shutdown Qtile'),
         Key([mod, "control"], "q", close_all_windows, desc='close all windows'),
         KeyChord([mod], "x", [
-            Key([], "u", lazy.spawn("sudo systemctl poweroff")),
-            Key([], "s", lazy.spawn("sudo systemctl suspend")),
-            Key([], "r", lazy.spawn("sudo systemctl reboot")),
-            Key([], "h", lazy.spawn("sudo systemctl hibernate")),
+            Key([], "u", lazy.spawn("systemctl poweroff")),
+            Key([], "s", lazy.spawn("systemctl suspend")),
+            Key([], "r", lazy.spawn("systemctl reboot")),
+            Key([], "h", lazy.spawn("systemctl hibernate")),
         ]),
 
         #--[ASUSCTL]--#
@@ -318,9 +318,9 @@ class BluetoothDeviceWidget(widget.TextBox, base.InLoopPollText):
                     if device_name == "N/A":
                         return 
                     elif device_name == "Jonathans Bose QC35 II":
-                        return f"{headphone_icon} Bose"
+                        return "Bose"
                     elif device_name == "Jonathans Pods - Find My":
-                        return f"{airpods_icon} AirPods"
+                        return "AirPods"
                     elif device_name == "controller available":
                         return "Error"
                     else:
@@ -365,7 +365,7 @@ group_box_settings = {
         "inactive"                    : bar_background_color,
         "block_highlight_text_color"  : "#000000",
         "highlight_color"             : "#000000",
-        "this_current_screen_border"  : "#81A1C1",
+        "this_current_screen_border"  : "#9B98B7",
         "hide_unused"                 : True,
         "other_current_screen_border" : group_box_other_border_color,
         "this_screen_border"          : group_box_this_border_color,
@@ -382,21 +382,21 @@ top_bar_1 = Bar([
         text        = "<span font='Font Awesome 6 free solid 14' foreground='#000000' size='medium'></span>",
         padding     = widget_default_font_size - 12,
         mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("python3 /home/jonalm/scripts/qtile/bar_menus/main/main_menu.py")},
-        decorations = left_decor(round = True, color = battery_icon_color),
+        decorations = left_decor(round = True, color = cpu_icon_color),
     ),
 
     seperator(icon_seperator_padding),
     widget.CurrentLayoutIcon(
         custom_icon_paths = [os.path.expanduser("~/.config/qtile/icons")],
         scale             = layouticon_scale,
-        decorations       = left_decor(round = True, color = cpu_icon_color),
+        decorations       = left_decor(round = True, color = wifi_icon_color),
     ),
     
     # GROUPBOX #
     seperator(icon_seperator_padding),
     widget.GroupBox(
         **group_box_settings,
-        decorations = left_decor(round = True, color = wifi_icon_color),
+        decorations = left_decor(round = True, color = "#9B98B7"),
     ),
 
     seperator(icon_seperator_padding),
@@ -426,13 +426,25 @@ top_bar_1 = Bar([
     ),
     seperator(icon_seperator_padding - 10),
 
+    widget.TextBox(        
+        text            = "<span font='Font Awesome 6 free solid 14' foreground='#000000' size='medium'></span>",
+        padding         = widget_default_font_size - 12,
+        foreground      = notification_history_icon_color,
+        mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("python3 /home/jonalm/scripts/qtile/bar_menus/volume/volume_menu.py")},
+        decorations     = left_decor(round = True, color = "#b48ead"),
+    ),
+    widget.PulseVolume(
+        decorations     = right_decor(True),
+    ),
+    seperator(icon_seperator_padding),
+
     # BLUETOOTH #
     widget.TextBox(        
         text            = "<span font='Font Awesome 6 free solid 16' foreground='#000000' size='medium'></span>",
-        padding         = widget_default_font_size - 12,
+        padding         = widget_default_font_size - 8,
         foreground      = notification_history_icon_color,
         mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("python3 /home/jonalm/scripts/qtile/bar_menus/bluetooth/bluetooth_menu.py")},
-        decorations     = left_decor(round = True, color = "#b48ead"),
+        decorations     = left_decor(round = True, color = "#9B98B7"),
     ),
     BluetoothDeviceWidget(),
     seperator(icon_seperator_padding),
@@ -467,7 +479,7 @@ top_bar_1 = Bar([
     seperator(icon_seperator_padding),
     widget.TextBox(        
         text        = "<span font='Font Awesome 6 free solid 14' foreground='#000000'size='medium'></span>",
-        padding     = widget_default_font_size - 12,
+        padding     = widget_default_font_size - 10,
         mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("python3 /home/jonalm/scripts/qtile/bar_menus/power/power_management_menu.py")},
         decorations = left_decor(battery_icon_color, round = True),
     ),
@@ -498,8 +510,8 @@ top_bar_1 = Bar([
     widget.Backlight(
         format          = "{percent:2.0%}",
         markup          = True,
-        backlight_name  = "amdgpu_bl0",
-        brightness_file = "/sys/class/backlight/amdgpu_bl0/actual_brightness",
+        backlight_name  = "amdgpu_bl1",
+        brightness_file = "/sys/class/backlight/amdgpu_bl1/actual_brightness",
         update_interval = backlight_update_interval, 
         decorations     = right_decor(True),
     ),
@@ -666,6 +678,7 @@ floating_layout = Floating(
     float_rules   = [
         *Floating.default_float_rules,
         Match(wm_class = "nitrogen"),
+        Match(wm_class = "gnuplot"),
         Match(wm_class = "yad"),
         Match(wm_class = "TSP"),
         Match(wm_class = "blueman-applet"),
