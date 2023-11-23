@@ -215,6 +215,11 @@ class WifiMenu(Gtk.Dialog):
             return True
         elif wifi_state == "disabled":
             return False
+        
+    def get_networks(self):
+        with open('/home/jonalm/scripts/qtile/bar_menus/wifi/wifi_networks.json', 'r') as json_file:
+            networks = json.load(json_file)
+        return networks
 
     def on_connect_clicked(self, widget, event, network, password_entry):
         ssid = network["SSID"][5:]
@@ -317,11 +322,6 @@ class WifiMenu(Gtk.Dialog):
 
         self.active_known_widget = widget
         return True
-
-    def get_networks(self):
-        with open('/home/jonalm/scripts/qtile/bar_menus/wifi/wifi_networks.json', 'r') as json_file:
-            networks = json.load(json_file)
-        return networks
     
     def scan_offline(self):
         nmcli_output = subprocess.check_output("nmcli device wifi list --rescan no", shell=True).decode("utf-8")
@@ -363,13 +363,10 @@ class WifiMenu(Gtk.Dialog):
     
             networks = self.get_networks()
             if not networks:
-                networks = self.scan_offline()
+                return True
 
             self.desc.set_text(f"{len(networks)} Available")
             
-            if not networks:
-                return True
-
             for child in self.list_box.get_children():
                 self.list_box.remove(child)
 

@@ -2,20 +2,16 @@
 from libqtile.config import Screen
 from libqtile import hook, bar
 from libqtile.lazy import lazy
-from typing import List
 import subprocess
-import libqtile
 import os
 
 ### KEYBINDING AND GROUPS IMPORTS ###
 from libqtile.config import Match, Key, KeyChord, Click, Drag, ScratchPad, Group, DropDown
 from libqtile.extension.dmenu import DmenuRun
-from libqtile import qtile as Qtile, widget as normal_widget
+from libqtile import qtile as Qtile
 
 ### BAR IMPORTS ###
 from qtile_extras.widget.decorations import BorderDecoration, RectDecoration
-from libqtile.widget.check_updates import CheckUpdates
-from libqtile.widget.textbox import TextBox
 from libqtile.widget.sep import Sep
 from libqtile.widget import base
 from qtile_extras import widget
@@ -267,7 +263,6 @@ class WifiSsidWidget(widget.TextBox, base.InLoopPollText):
             update_interval = wifi_update_interval,
             font            = bold_font,
             padding         = widget_default_padding,
-            mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("alacritty -e nmtui")},
             decorations     = right_decor(True)
         )
         

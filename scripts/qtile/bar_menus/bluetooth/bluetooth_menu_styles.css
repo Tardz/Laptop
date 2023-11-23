@@ -1,3 +1,7 @@
+* {
+    -gtk-icon-effect: none;
+}   
+
 #root {
     border-width: 3px;
     border-color: #4f586e;
@@ -9,6 +13,10 @@
     margin-right: 5px;  
     margin-bottom: 5px;
     margin-left: 5px;
+    background: rgba(46, 52, 64, 0);
+}
+
+#option-window-content-area {
     background: rgba(46, 52, 64, 0);
 }
 
@@ -177,7 +185,88 @@
     background: #4f586e;
 }
 
+#list-icon-headphone {
+    margin-top: 12px;    
+    margin-right: 10px;  
+    margin-bottom: 12px;
+    margin-left: 2px;
+    color: white;
+    font-size: 18px;
+    font-family: 'Font Awesome 6 Free Solid';
+    font-weight: bold;   
+}
+
+#list-icon-speaker {
+    margin-top: 12px;    
+    margin-right: 9px;  
+    margin-bottom: 12px;
+    margin-left: 1px;
+    color: white;
+    font-size: 16px;
+    font-family: 'Font Awesome 6 Free Solid';
+    font-weight: bold;   
+}
+
+#list-icon-unknown {
+    margin-top: 12px;    
+    margin-right: 14px;  
+    margin-bottom: 12px;
+    margin-left: 6px;
+    color: white;
+    font-size: 16px;
+    font-family: 'Font Awesome 6 Free Solid';
+    font-weight: bold;   
+}
+
+#list-battery-over-20 {
+    margin-top: 1px;    
+    margin-right: 10px;  
+    margin-left: -5px;
+    color: #a3be8c;
+    font-size: 16px;
+    font-family: "FiraCode Nerd Font";
+    font-weight: bold;   
+}
+
+#list-battery-under-20 {
+    margin-top: 1px;    
+    margin-right: 10px;  
+    margin-left: -5px;
+    color: #bf616a;
+    font-size: 16px;
+    font-family: "FiraCode Nerd Font";
+    font-weight: bold;   
+}
+
+#list-battery-box {
+    border-radius: 0px 0px 0px 0px;
+    background: #2e3440;
+}
+
+#list-icon-box-if-battery {
+    border-radius: 5px 0px 0px 5px;
+    background: #2e3440;
+}
+
+#list-icon-box {
+    border-radius: 5px;
+    /* border-radius: 5px 0px 0px 5px; */
+    background: #2e3440;
+}
+
+#list-obj-box-inactive {
+    margin-top: 5px;    
+    margin-bottom: 5px;  
+    border-radius: 5px;
+    background: #434b5d;  
+    color: white;
+    font-size: 18px;
+    font-family: FiraCode Nerd Font;
+}
+
 #list-obj-box-active {
+    margin-top: 5px;    
+    margin-bottom: 5px;  
     border-radius: 5px;
     background: #9B98B7;
     color: black;
@@ -185,27 +274,32 @@
     font-family: FiraCode Nerd Font;
 }
 
-#list-obj-active {
-    margin-top: 10px;    
-    margin-right: 10px;  
-    margin-bottom: 10px;
-    margin-left: 10px;
+#list-obj-box-active-clicked {
+    margin-top: 5px;    
+    margin-bottom: 5px;  
     border-radius: 5px;
-    background: #81a1c1;
-    color: black;
+    background: rgba(46, 52, 64, 0.90);
+    font-size: 18px;
+}
+
+#list-obj-box-inactive-clicked {
+    margin-top: 5px;    
+    margin-bottom: 5px;  
+    border-radius: 5px;
+    background: rgba(46, 52, 64, 0.90);
+    font-size: 18px;
+}
+
+#list-obj {
+    border-radius: 5px;
     font-size: 18px;
     font-family: FiraCode Nerd Font;
 }
 
-#list-obj {
-    margin-top: 10px;    
-    margin-right: 10px;  
-    margin-bottom: 10px;
-    margin-left: 10px;
+#row {
+    margin-left: 5px;
+    margin-right: 5px;
     border-radius: 5px;
-    font-size: 18px;
-    font-family: FiraCode Nerd Font;
-    font-weight: bold;
 }
 
 #list {
@@ -224,4 +318,11 @@
 
 #list-content-box-inactive {
     background: #4f586e;
+}
+
+#buttons {
+    font-size: 18px;
+    border-radius: 0px;
+    font-family: "FiraCode Nerd Font";
+    font-weight: lighter;
 }

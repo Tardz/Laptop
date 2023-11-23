@@ -9,8 +9,6 @@ from multiprocessing import Process, Event
 import time
 import signal
 import json
-import pulsectl
-
 
 class OptionWindow(Gtk.Dialog):
     def __init__(self, parent, main_window, device, active_widget):
@@ -28,7 +26,7 @@ class OptionWindow(Gtk.Dialog):
 
         self.set_name("root")
         content_area = self.get_content_area()
-        content_area.set_name("option-window-content-area")
+        content_area.set_name("content-area")
 
         connection_button = Gtk.Button()
         connection_button.set_name("buttons")
@@ -76,39 +74,53 @@ class OptionWindow(Gtk.Dialog):
     def on_trust_clicked(self, widget, event):
         device_addr = self.device["MAC-ADDR"]
         subprocess.call(f"bluetoothctl trust {device_addr}", shell=True)
+
+        self.main_window.active_widget = None
+        self.main_window.update_ui_with_devices()
         self.exit()
 
     def on_untrust_clicked(self, widget, event):
         device_addr = self.device["MAC-ADDR"]
         subprocess.call(f"bluetoothctl untrust {device_addr}", shell=True)
+
+        self.main_window.active_widget = None
+        self.main_window.update_ui_with_devices()
         self.exit()
 
     def on_remove_clicked(self, widget, event):
         device_addr = self.device["MAC-ADDR"]
         subprocess.call(f"bluetoothctl remove {device_addr}", shell=True)
+
+        self.main_window.active_widget = None
+        self.main_window.update_ui_with_devices()
         self.exit()
 
     def on_disconnect_clicked(self, widget, event):
         device_addr = self.device["MAC-ADDR"]
         subprocess.call(f"bluetoothctl disconnect {device_addr}", shell=True)
+
+        self.main_window.active_widget = None
+        self.main_window.update_ui_with_devices()
         self.exit()
 
     def on_connect_clicked(self, widget, event):
         device_addr = self.device["MAC-ADDR"]
         subprocess.call(f"bluetoothctl connect {device_addr}", shell=True)
+            
+        self.main_window.active_widget = None
+        self.main_window.update_ui_with_devices()
         self.exit()
     
     def on_focus_out(self, widget, event):
         self.exit()
 
     def exit(self):
-        self.main_window.active_widget = None
-        self.main_window.ignore_focus_lost = False
         if self.device["CONNECTED"]:
             self.active_widget.get_parent().get_parent().set_name("list-obj-box-active")
         else: 
             self.active_widget.get_parent().get_parent().set_name("list-obj-box-inactive")
-        self.main_window.update_ui_with_devices(False)
+        self.main_window.ignore_focus_lost = False
+        self.main_window.active_widget = None
         self.destroy()
 
 class BluetoothMenu(Gtk.Dialog):
@@ -136,12 +148,12 @@ class BluetoothMenu(Gtk.Dialog):
         self.previous_css_class = None
         self.active_widget = None
         self.previouse_widget_in_use = False
+        self.history_shown = False
         self.active_known_widget = None
         self.load_bars_active = False
         self.load_speed = 40
         self.load_icon = ""
         self.no_devices = False
-        self.known_shown = False
 
         self.content_area = self.get_content_area()
         self.content_area.set_name("content-area")
@@ -172,8 +184,8 @@ class BluetoothMenu(Gtk.Dialog):
             self.set_size_request(self.window_width, 10)
             self.list_main_box.hide()
             self.list_options_main_box.hide()
-
-        self.update_ui_with_devices(False)
+        
+        self.update_ui_with_devices()
 
     def title(self):
         self.title_main_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
@@ -242,7 +254,7 @@ class BluetoothMenu(Gtk.Dialog):
 
         self.list_main_box.pack_start(scrolled_window, True, True, 0)
 
-        GLib.timeout_add(6000, self.update_ui_with_devices, False)
+        GLib.timeout_add(6000, self.update_ui_with_devices)
 
     def list_options(self):
         self.list_options_main_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=8)
@@ -265,7 +277,7 @@ class BluetoothMenu(Gtk.Dialog):
         self.list_options_main_box.pack_start(self.config_box, True, True, 0)
 
         self.scan_box.connect("button-press-event", self.scan_clicked)
-        self.config_box.connect("button-press-event", self.known_clicked)
+        self.config_box.connect("button-press-event", self.history_clicked)
 
     def initialize_loading_screen(self):
         self.load_bar_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=0)
@@ -544,27 +556,28 @@ class BluetoothMenu(Gtk.Dialog):
             self.icon_background_box.set_name("toggle-icon-background-enabled")
             self.icon.set_name("toggle-icon-enabled")
             self.main_box.show_all()
-            self.update_ui_with_devices(False)
+            self.update_ui_with_devices()
 
     def scan_clicked(self, widget, event):
-        self.known_shown = False
+        self.history_shown = False
         self.active_known_widget = None
         self.config_box.set_name("toggle-box-list-options-inactive")
         self.config_title.set_name("list-opitons-title-inactive")
         self.scan_box.set_name("toggle-box-list-options-active")
         self.scan_title.set_name("list-opitons-title-active")
-        self.update_ui_with_devices(False)
+        self.update_ui_with_devices()
         if self.no_devices:
             x, y = self.get_mouse_position()
             subprocess.run(f"xdotool mousemove {x} {y - 175}", shell = True)
         
-    def known_clicked(self, widget, event):
+    def history_clicked(self, widget, event):
+        self.history_shown = True
         self.active_widget = None
         self.config_box.set_name("toggle-box-list-options-active")
         self.config_title.set_name("list-opitons-title-active")
         self.scan_box.set_name("toggle-box-list-options-inactive")
         self.scan_title.set_name("list-opitons-title-inactive")
-        self.update_ui_with_devices(True)
+        self.update_ui_with_known_devices()
 
     def get_bluetooth_on(self):
         try:
@@ -628,6 +641,9 @@ class BluetoothMenu(Gtk.Dialog):
         self.active_known_widget = widget
         return True
     
+    def refresh_clicked(self, widget, event):
+        self.update_ui_with_devices()
+    
     def get_bluetooth_devices(self):
         with open('/home/jonalm/scripts/qtile/bar_menus/bluetooth/bluetooth_devices.json', 'r') as json_file:
             devices = json.load(json_file)
@@ -635,40 +651,21 @@ class BluetoothMenu(Gtk.Dialog):
     
     def get_known_devices(self):
         known_devices_output = subprocess.check_output("bluetoothctl devices", shell=True).decode("utf-8")
-        known_devices = []
-
         if known_devices_output:
             lines = known_devices_output.splitlines()
+            known_devices = []
 
             for line in lines:
                 parts = line.split(" ", 2)
-                parts.pop(0)
-                device_addr = parts[0]
-                known_devices.append(device_addr)
+                device_name = parts[2]
+                known_devices.append(device_name)
             
-        return known_devices
+            return known_devices
     
     def get_trusted_devices(self):
-        trusted_devices_output = subprocess.check_output("bluetoothctl devices Trusted", shell=True).decode("utf-8")
-        trusted_devices = []
-
-        if trusted_devices_output:
-            lines = trusted_devices_output.splitlines()
-
-            for line in lines:
-                parts = line.split(" ", 2)
-                parts.pop(0)
-                device_addr = parts[0]
-
-                trusted_devices.append(device_addr)
-                        
-        return trusted_devices
-    
-    def get_connected_devices(self):
-        connected_devices_output = subprocess.check_output("bluetoothctl devices Connected", shell=True).decode("utf-8")
+        connected_devices_output = subprocess.check_output("bluetoothctl devices Trusted", shell=True).decode("utf-8")
         lines = connected_devices_output.splitlines()
         connected_devices = []
-
         if connected_devices_output:
             lines = connected_devices_output.splitlines()
 
@@ -681,142 +678,68 @@ class BluetoothMenu(Gtk.Dialog):
                         
         return connected_devices
     
-    def get_connected_devices_with_names(self):
+    def get_connected_devices(self):
         connected_devices_output = subprocess.check_output("bluetoothctl devices Connected", shell=True).decode("utf-8")
         lines = connected_devices_output.splitlines()
         connected_devices = []
+        trusted_devices = self.get_trusted_devices()
 
+        import pulsectl
+        pulse = pulsectl.Pulse()
+        sinks = pulse.sink_list()
+        
         if connected_devices_output:
             lines = connected_devices_output.splitlines()
 
             for line in lines:
                 parts = line.split(" ", 2)
                 parts.pop(0)
+
                 device_addr = parts[0]
                 device_name = parts[1]
+                icon = None
+                battery = None
 
-                connected_devices.append({"DEVICE": device_name, "MAC-ADDR": device_addr})
+                for sink in sinks:
+                    if device_name == sink.description:
+                        icon = sink.proplist["device.icon_name"]
+                        battery = sink.proplist["bluetooth.battery"]
+
+                if device_addr == "default":
+                    return
+
+                trusted = False
+                if trusted_devices:
+                    if device_addr in trusted_devices:
+                        trusted = True
+
+                connected_devices.append({"DEVICE": device_name, "MAC-ADDR": device_addr, "CONNECTED": True, "DEVICE-KNOWN": True, "DEVICE-TRUSTED": trusted, "DEVICE-TYPE": icon, "BATTERY": battery})
                         
         return connected_devices
-        
-    def get_known_devices_with_names(self):
-        known_devices_output = subprocess.check_output("bluetoothctl devices", shell=True).decode("utf-8")
-        lines = known_devices_output.splitlines()
-        known_devices = []
-
-        if known_devices_output:
-            lines = known_devices_output.splitlines()
-
-            for line in lines:
-                parts = line.split(" ", 2)
-                parts.pop(0)
-                device_addr = parts[0]
-                device_name = parts[1]
-
-                known_devices.append({"DEVICE": device_name, "MAC-ADDR": device_addr})
-                        
-        return known_devices
     
-    def get_devices(self, get_known):
-            devices = []
-            connected_devices = self.get_connected_devices()
-            trusted_devices = self.get_trusted_devices()
-            known_devices = self.get_known_devices()
-            
-            pulse = pulsectl.Pulse()
-            sinks = pulse.sink_list()
-
-            complete_devices = []
-            if not get_known:
-                devices = self.get_bluetooth_devices()
-                for device in devices:
-                    icon = None
-                    battery = None
-
-                    for sink in sinks:
-                        if device["DEVICE"] == sink.description:
-                            icon = sink.proplist["device.icon_name"]
-                            battery = sink.proplist["bluetooth.battery"].replace("%", "")
-
-                    complete_device = {
-                        "DEVICE": device["DEVICE"], 
-                        "MAC-ADDR": device["MAC-ADDR"], 
-                        "CONNECTED": device["MAC-ADDR"] in connected_devices, 
-                        "DEVICE-KNOWN": device["MAC-ADDR"] in known_devices, 
-                        "DEVICE-TRUSTED": device["MAC-ADDR"] in trusted_devices, 
-                        "DEVICE-TYPE": icon, 
-                        "BATTERY": battery
-                    }
-
-                    if complete_device["DEVICE-KNOWN"]:
-                        complete_devices.append(complete_device)
-            else:
-                devices = self.get_known_devices_with_names()
-                for device in devices:
-                    icon = None
-                    battery = None
-
-                    for sink in sinks:
-                        if device["DEVICE"] == sink.description:
-                            icon = sink.proplist["device.icon_name"]
-                            battery = sink.proplist["bluetooth.battery"].replace("%", "")
-
-                    complete_device = {
-                        "DEVICE": device["DEVICE"], 
-                        "MAC-ADDR": device["MAC-ADDR"], 
-                        "CONNECTED": device["MAC-ADDR"] in connected_devices, 
-                        "DEVICE-KNOWN": True, 
-                        "DEVICE-TRUSTED": device["MAC-ADDR"] in trusted_devices, 
-                        "DEVICE-TYPE": icon, 
-                        "BATTERY": battery
-                    }
-
-                    if complete_device["DEVICE-KNOWN"]:
-                        complete_devices.append(complete_device)
-
-            for connected_device in self.get_connected_devices_with_names():
-                if (connected_device["MAC-ADDR"] not in devices and not get_known) or (connected_device["MAC-ADDR"] not in known_devices and get_known):
-                    icon = None
-                    battery = None
-
-                    for sink in sinks:
-                        if connected_device["DEVICE"] == sink.description:
-                            icon = sink.proplist["device.icon_name"]
-                            battery = sink.proplist["bluetooth.battery"].replace("%", "")
-
-                    complete_devices.append({
-                        "DEVICE": connected_device["DEVICE"], 
-                        "MAC-ADDR": connected_device["MAC-ADDR"], 
-                        "CONNECTED": True, 
-                        "DEVICE-KNOWN": connected_device["MAC-ADDR"] in known_devices, 
-                        "DEVICE-TRUSTED": connected_device["MAC-ADDR"] in trusted_devices, 
-                        "DEVICE-TYPE": icon, 
-                        "BATTERY": battery
-                    })
-
-            
-            complete_devices.sort(key=lambda x: (not x["CONNECTED"], not x["DEVICE-KNOWN"]))
-
-            return complete_devices
-
-    def update_ui_with_devices(self, get_known):
-        if not self.active_widget and self.bluetooth_on and not self.known_shown:
-            if get_known:
-                self.known_shown = True
+    def update_ui_with_devices(self):
+        if not self.active_widget and self.bluetooth_on and not self.history_shown:
             self.status_dot.set_name("status-dot-list-update")
             GLib.timeout_add(300, self.restore_status_dot)
-
-            devices = self.get_devices(get_known)
 
             for child in self.list_box.get_children():
                 self.list_box.remove(child)
 
+            devices = self.get_bluetooth_devices()
+            connected_devices = self.get_connected_devices()
+            if connected_devices:
+                for connected_device in connected_devices:
+                    for i, device in enumerate(devices):
+                        if device["DEVICE"] == connected_device["DEVICE"]:
+                            devices.pop(i) 
+                    devices.append(connected_device)
+
             if not devices:
-                self.main_box.show_all()
-                self.resize(self.window_width, 10)
-                self.set_size_request(self.window_width, 10)
-                self.list_main_box.hide()
-                if not self.load_bars_active and not get_known:
+                if not self.load_bars_active:
+                    self.main_box.show_all()
+                    self.resize(self.window_width, 10)
+                    self.set_size_request(self.window_width, 10)
+                    self.list_main_box.hide()
                     self.desc.hide()
                     self.load_bars_active = True
                     self.activate_load_bars(3)
@@ -831,6 +754,7 @@ class BluetoothMenu(Gtk.Dialog):
 
             self.desc.set_text(f"{len(devices)} Available")
 
+            devices.sort(key=lambda x: (not x["CONNECTED"], not x["DEVICE-KNOWN"]))
 
             for device in devices:
                 row = Gtk.ListBoxRow()
@@ -863,9 +787,9 @@ class BluetoothMenu(Gtk.Dialog):
 
                 battery_percentage = device["BATTERY"]
                 if battery_percentage:
-                    battery.set_text(battery_percentage + "%")
+                    battery.set_text(battery_percentage)
                     list_obj_icon_box.set_name("list-icon-box-if-battery")
-                    if int(battery_percentage) <= 20:
+                    if int(battery_percentage[:1]) <= 20:
                         battery.set_name("list-battery-under-20")
                     else:
                         battery.set_name("list-battery-over-20")
@@ -899,10 +823,52 @@ class BluetoothMenu(Gtk.Dialog):
                 row.add(list_content_main_box)
                 self.list_box.add(row)
 
-            self.list_box.show_all()  
+            self.list_box.show_all()
 
         return True
     
+    def update_ui_with_known_devices(self):
+        self.load_bars_active = False
+        self.main_box.show_all()
+        self.load_bar_box.hide()
+        self.resize(self.window_width, self.window_height)
+        self.set_size_request(self.window_width, self.window_height)
+        
+        for child in self.list_box.get_children():
+            self.list_box.remove(child)
+
+        devices = self.get_known_devices()
+
+        self.desc.set_text(f"{len(devices)} Known")
+
+        for device in devices:
+            row = Gtk.ListBoxRow()
+            row.set_name("row")
+            label = Gtk.Label()
+
+            list_content_main_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
+            list_content_main_box.set_name("list-obj-box-inactive")
+
+            list_content_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
+
+            list_obj_clickable_box = Gtk.EventBox()
+            list_obj_clickable_box.connect("button-press-event", self.on_device_clicked, device)
+
+            label.set_name("list-obj")
+
+            label.set_text(device[:20])
+            label.set_halign(Gtk.Align.START)
+            
+            list_obj_clickable_box.add(label)
+            list_content_box.pack_start(list_obj_clickable_box, False, False, 0)
+
+            list_content_main_box.pack_start(list_content_box, False, False, 0)
+
+            row.add(list_content_main_box)
+            self.list_box.add(row)
+
+        self.list_box.show_all()
+
     def get_mouse_position(self):
         try:
             d = display.Display()
@@ -946,6 +912,36 @@ def scan_devices():
     subprocess.run("bluetoothctl --timeout 5 scan on", shell = True)
     output = subprocess.check_output("hcitool scan", shell = True).decode("utf-8")
     return output
+    
+def get_known_devices():
+    known_devices_output = subprocess.check_output("bluetoothctl devices", shell=True).decode("utf-8")
+    if known_devices_output:
+        lines = known_devices_output.splitlines()
+        known_devices = []
+
+        for line in lines:
+            parts = line.split(" ")
+            device_addr = parts[1] 
+            known_devices.append(device_addr)
+        
+        return known_devices
+
+def get_trusted_devices():
+    connected_devices_output = subprocess.check_output("bluetoothctl devices Trusted", shell=True).decode("utf-8")
+    lines = connected_devices_output.splitlines()
+    connected_devices = []
+    if connected_devices_output:
+        lines = connected_devices_output.splitlines()
+
+        for line in lines:
+            parts = line.split(" ", 2)
+            parts.pop(0)
+
+            device_addr = parts[0]
+
+            connected_devices.append(device_addr)
+                    
+    return connected_devices
 
 def get_bluetooth_on():
     try:
@@ -961,6 +957,8 @@ def bluetooth_process():
     while True:
         if get_bluetooth_on():
             bluetooth_output = scan_devices()
+            known_devices = get_known_devices()
+            trusted_devices = get_trusted_devices()
             if bluetooth_output:
                 lines = bluetooth_output.splitlines()
                 unique_devices = []
@@ -972,8 +970,18 @@ def bluetooth_process():
                     device_name = parts[1]
                     device_addr = parts[0]
 
+                    known = False
+                    if known_devices:
+                        if device_addr in known_devices:
+                            known = True
+
+                    trusted = False
+                    if trusted_devices:
+                        if device_addr in trusted_devices:
+                            trusted = True
+                    
                     if device_name != "n/a":
-                        unique_devices.append({"DEVICE": device_name, "MAC-ADDR": device_addr})
+                        unique_devices.append({"DEVICE": device_name, "MAC-ADDR": device_addr, "CONNECTED": False, "DEVICE-KNOWN": known, "DEVICE-TRUSTED": trusted, "DEVICE-TYPE": None, "BATTERY": None})
             
             with open('/home/jonalm/scripts/qtile/bar_menus/bluetooth/bluetooth_devices.json', 'w') as json_file:
                 json.dump(unique_devices, json_file, indent=2)
