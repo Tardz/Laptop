@@ -585,48 +585,6 @@ class BluetoothMenu(Gtk.Dialog):
             widget.get_parent().get_parent().set_name("list-obj-box-inactive-clicked")
         dialog = OptionWindow(self, self, device, widget)
         dialog.run()
-        
-    def known_device_clicked(self, widget, event, device_name):
-        if self.active_known_widget:
-            buttons = self.active_known_widget.get_parent().get_children()
-            for child in buttons[1:]:
-                self.active_known_widget.get_parent().remove(child)
-            
-            self.active_known_widget.get_parent().set_name("list-content-box-inactive")
-
-            if self.active_known_widget == widget:
-                self.active_known_widget = None
-                return
-
-        button_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=0)
-
-        connection_button = Gtk.Button()
-        connection_button.connect("key-press-event", self.on_connect_clicked)
-        button_box.pack_start(connection_button, True, True, 0)
-        
-        connection_button.set_label("Connect")
-        connection_button.connect("button-press-event", self.on_connect_clicked, device_name)
-
-        trust_button = Gtk.Button()
-        button_box.pack_start(trust_button, True, True, 0)
-        if device_name["device_name-TRUSTED"]:
-            trust_button.set_label("Untrust")
-            trust_button.connect("button-press-event", self.on_untrust_clicked, device_name)
-        else:
-            trust_button.set_label("Trust")
-            trust_button.connect("button-press-event", self.on_trust_clicked, device_name)
-
-        if device_name["device_name-KNOWN"]:
-            remove_button = Gtk.Button(label = "Remove")
-            remove_button.connect("button-press-event", self.on_remove_clicked, device_name)
-            button_box.pack_start(remove_button, True, True, 0)
-        
-        widget.get_parent().set_name("list-content-box-active")
-        widget.get_parent().pack_start(button_box, False, False, 0)     
-        widget.get_parent().show_all()
-
-        self.active_known_widget = widget
-        return True
     
     def get_bluetooth_devices(self):
         with open('/home/jonalm/scripts/qtile/bar_menus/bluetooth/bluetooth_devices.json', 'r') as json_file:

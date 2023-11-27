@@ -112,6 +112,11 @@ keys = [
         Key([mod], "v", move_focus_and_mouse(0), lazy.group["2"].toscreen(), desc='VScode'),
         Key([mod], "m", move_focus_and_mouse(1), lazy.group["3"].toscreen(), check("thunderbird", "3"), desc='Mail'),
 
+        #--[MENUS]--#
+        Key([mod], "comma", lazy.spawn("xdotool mousemove 1630 140"), lazy.spawn("python3 /home/jonalm/scripts/qtile/bar_menus/volume/volume_menu.py"), desc='Volume'),
+        Key([mod], "period", lazy.spawn("xdotool mousemove 1700 140"), lazy.spawn("python3 /home/jonalm/scripts/qtile/bar_menus/bluetooth/bluetooth_menu.py"), desc='bluetooth'),
+        Key([mod], "minus", lazy.spawn("xdotool mousemove 1750 140"), lazy.spawn("python3 /home/jonalm/scripts/qtile/bar_menus/wifi/wifi_menu.py"), desc='wifi'),
+
         #--[URLS]--#
         Key([mod], "y", move_focus_and_mouse(1), lazy.group["1"].toscreen(), check("youtube.com", "1", "brave"), desc='Youtube'),
 
@@ -189,9 +194,6 @@ groups = [
 ### SCRATCHPAD ###
 groups.append(ScratchPad('9', [
     DropDown('terminal', 'alacritty --title alacritty', warp_pointer=True, width=0.35, height=0.55, x=0.33, y=0.18, opacity=1, on_focus_lost_hide = scratchpad_focus_value),
-    DropDown('mixer', 'pavucontrol', warp_pointer=True, width=0.4, height=0.4, x=0.3, y=0.25, opacity=1, on_focus_lost_hide = scratchpad_focus_value),
-    DropDown('net', 'nm-connection-editor', warp_pointer=True, width=0.4, height=0.4, x=0.3, y=0.25, opacity=1, on_focus_lost_hide = scratchpad_focus_value),
-    DropDown('bluetooth', 'blueman-manager', warp_pointer=True, width=0.4, height=0.4, x=0.3, y=0.25, opacity=1, on_focus_lost_hide = scratchpad_focus_value),
     DropDown('filemanager', 'pcmanfm', warp_pointer=True, width=0.6, height=0.7, x=0.2, y=0.12, opacity=0.95, on_focus_lost_hide = scratchpad_focus_value),
     DropDown('music', 'spotify', warp_pointer=True, width=0.6, height=0.7, x=0.2, y=0.12, opacity=1, on_focus_lost_hide = scratchpad_focus_value),
     DropDown('todo', 'ticktick', warp_pointer=True, width=0.6, height=0.7, x=0.2, y=0.12, opacity=0.95, on_focus_lost_hide = scratchpad_focus_value),
@@ -207,9 +209,6 @@ for i in groups:
         Key([mod], i.name, lazy.group[i.name].toscreen(), desc="Switch to group {}".format(i.name)),
         #--[SCRATCHPAD]--#
         Key([mod], "Return", lazy.group['9'].dropdown_toggle('terminal'), desc='Terminal'),
-        Key([mod], "period", lazy.group['9'].dropdown_toggle('mixer'), desc='Volume'),
-        Key([mod], "minus", lazy.group['9'].dropdown_toggle('net'), desc='Wifi'),
-        Key([mod], "comma", lazy.group['9'].dropdown_toggle('bluetooth'), desc='Bluetooth'),
         Key([mod], "s", lazy.group['9'].dropdown_toggle('music'), desc='Spotify'),
         Key([mod], "r", lazy.group['9'].dropdown_toggle('todo'), desc='Ticktick'), 
 #- SCRATCHPAD_KEYS_END

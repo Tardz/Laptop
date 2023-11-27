@@ -2,9 +2,323 @@ import gi
 gi.require_version('Gtk', '3.0')
 import subprocess
 import os
-from gi.repository import Gtk, Gdk, GLib
+from gi.repository import Gtk, Gdk, GLib, Pango
 import time
 import json
+from Xlib import display 
+from multiprocessing import Process, Value
+
+class OptionWindow(Gtk.Dialog):
+    def __init__(self, parent, main_window, network, active_widget):
+        super(OptionWindow, self).__init__(title="Device Options", transient_for=parent)
+        self.main_window = main_window
+        self.active_widget = active_widget
+        self.network = network
+
+        self.set_size_request(130, 100)
+
+        x, y = self.get_mouse_position()
+        self.move(x, y)
+
+        self.ignore_focus_lost = False
+        self.load_speed = 300
+        
+        self.wrong_password = Value('b', False)
+        self.connect_process_successful = Value('b', False)
+        self.connect_process = None 
+        self.ping_process_successful = Value('b', False)
+        self.ping_process = None 
+
+        self.connect("focus-out-event", self.on_focus_out)
+        self.connect("key-press-event", self.on_escape_press)
+
+        self.set_name("root")
+        self.content_area = self.get_content_area()
+        self.content_area.set_name("option-window-content-area")
+
+        connection_button = Gtk.Button()
+        connection_button.set_name("buttons")
+        self.content_area.pack_start(connection_button, True, True, 0)
+        
+        password_entry = Gtk.Entry()
+        password_entry.set_name("buttons")
+
+        from functools import partial
+
+        if self.network["KNOWN"]:
+            remove_button = Gtk.Button(label = "Remove")
+            remove_button.set_name("buttons")
+            remove_button.connect("button-press-event", self.on_remove_clicked)
+            remove_button.connect("activate", self.on_remove_clicked)
+
+            self.content_area.pack_start(remove_button, True, True, 0)
+        else:
+            password_entry.set_placeholder_text("Password")
+            self.content_area.pack_start(password_entry, True, True, 0)
+        
+        if self.network["CONNECTED"]:
+            connection_button.set_label("Disconnect")
+            connection_button.connect("button-press-event", self.on_disconnect_clicked)
+            connection_button.connect("activate", self.on_disconnect_clicked)
+            self.main_window.previous_network_in_use = True
+        else:
+            connection_button.set_label("Connect")
+            if self.network["KNOWN"]:
+                connection_button.connect("button-press-event", self.on_connect_clicked)
+                connection_button.connect("activate", self.on_connect_clicked)
+                password_entry.connect("activate", self.on_password_pressed)
+            else:
+                connection_button.connect("button-press-event", self.on_connect_clicked, password_entry)
+                connection_button.connect("activate", self.on_password_pressed, password_entry)
+                password_entry.connect("activate", self.on_password_pressed, password_entry)
+                password_entry.grab_focus()
+
+        self.show_all()
+
+    def get_mouse_position(self):
+        try:
+            d = display.Display()
+            s = d.screen()
+            root = s.root
+            root.change_attributes(event_mask=0x10000)
+            pointer = root.query_pointer()
+            x, y = pointer.root_x, pointer.root_y
+            return x, y
+        except Exception:
+            return None, None
+        
+    def on_password_pressed(self, entry=False, password_entry=False):
+        self.on_connect_clicked(password_entry=password_entry)
+
+    def on_connect_clicked(self, widget=False, event=False, password_entry=False):
+        password = None
+        if password_entry:
+            password = password_entry.get_text()
+            print(password)
+            if not password:
+                return False
+        
+        for child in self.content_area.get_children():
+            self.content_area.remove(child)
+
+        self.ignore_focus_lost = True
+        x, y = self.main_window.get_position()
+        width, height = self.main_window.get_size()
+        dialog_width, dialog_height = width - 80, 80
+        self.set_size_request(dialog_width, dialog_height)
+        self.resize(dialog_width, dialog_height)
+        animation_window_x, animation_window_y = x + (width - dialog_width)/2, y + (height/3) 
+        self.move(animation_window_x, animation_window_y)
+
+        connect_animation_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=4)
+        connect_animation_box.set_name("connect-animation-box")
+
+        self.laptop_icon = Gtk.Label()
+        self.laptop_icon.set_text("")
+        self.laptop_icon.set_name("connect-animation-icon-active")
+
+        self.load_circle_1 = Gtk.Label()
+        self.load_circle_1.set_text("")
+        self.load_circle_1.set_name("connect-animation-circle-inactive")
+
+        self.load_circle_2 = Gtk.Label()
+        self.load_circle_2.set_text("")
+        self.load_circle_2.set_name("connect-animation-circle-inactive")
+
+        self.load_circle_3 = Gtk.Label()
+        self.load_circle_3.set_text("")
+        self.load_circle_3.set_name("connect-animation-circle-inactive")
+
+        self.network_icon = Gtk.Label()
+        self.network_icon.set_text("")
+        self.network_icon.set_name("connect-animation-icon-inactive")
+
+        self.load_circle_4 = Gtk.Label()
+        self.load_circle_4.set_text("")
+        self.load_circle_4.set_name("connect-animation-circle-inactive")
+
+        self.load_circle_5 = Gtk.Label()
+        self.load_circle_5.set_text("")
+        self.load_circle_5.set_name("connect-animation-circle-inactive")
+
+        self.load_circle_6 = Gtk.Label()
+        self.load_circle_6.set_text("")
+        self.load_circle_6.set_name("connect-animation-circle-inactive")
+
+        self.internet_icon = Gtk.Label()
+        self.internet_icon.set_text("")
+        self.internet_icon.set_name("connect-animation-icon-inactive")
+
+        connect_animation_box.pack_start(self.laptop_icon,   True, False, 0)
+        connect_animation_box.pack_start(self.load_circle_1, True, False, 0)
+        connect_animation_box.pack_start(self.load_circle_2, True, False, 0)
+        connect_animation_box.pack_start(self.load_circle_3, True, False, 0)
+        connect_animation_box.pack_start(self.network_icon,  True, False, 0)
+        connect_animation_box.pack_start(self.load_circle_4, True, False, 0)
+        connect_animation_box.pack_start(self.load_circle_5, True, False, 0)
+        connect_animation_box.pack_start(self.load_circle_6, True, False, 0)
+        connect_animation_box.pack_start(self.internet_icon, True, False, 0)
+
+        self.content_area.pack_start(connect_animation_box, True, False, 0)
+        self.content_area.show_all()
+        
+        self.activate_load_circle_stage_1()
+        self.connect_process = Process(target=self.connect_process_start, args=(password,))
+        self.connect_process.start()
+
+    def connect_process_start(self, password):
+        ssid = self.network["SSID"]
+        result = None
+        if self.network["KNOWN"]:
+            result = subprocess.call(f"nmcli connection up id {ssid}", shell=True)
+        else: 
+            result = subprocess.call(f"nmcli device wifi connect {ssid} password {password}", shell=True)
+
+        if result == 0:
+            with self.connect_process_successful.get_lock():
+                self.connect_process_successful.value = True
+        elif result == 4:
+            with self.wrong_password.get_lock():
+                self.wrong_password = True
+        else:
+            self.connect_process_start(password)
+
+    def activate_load_circle_stage_1(self):
+        self.load_circle_1.set_name("connect-animation-circle-active")
+        GLib.timeout_add(self.load_speed, self.activate_load_circle_2)
+        return False
+
+    def activate_load_circle_2(self):
+        self.load_circle_2.set_name("connect-animation-circle-active")
+        GLib.timeout_add(self.load_speed, self.activate_load_circle_3)
+        return False
+    
+    def activate_load_circle_3(self):
+        self.load_circle_3.set_name("connect-animation-circle-active")
+        GLib.timeout_add(self.load_speed, self.deactivate_load_circle_stage_1)
+        return False
+    
+    def deactivate_load_circle_stage_1(self):
+        with self.wrong_password.get_lock():
+            if self.wrong_password.value:
+                for child in self.content_area.get_children():
+                    self.content_area.remove(child)
+                self.wrong_password = False
+                self.terminate_connect_process()
+                return False
+        
+        with self.connect_process_successful.get_lock():
+            if self.connect_process_successful.value:
+                self.terminate_connect_process()
+                self.network_icon.set_name("connect-animation-icon-active")
+                self.ping_process = Process(target=self.ping_process_start)
+                self.ping_process.start()
+                GLib.timeout_add(self.load_speed, self.activate_load_circle_stage_2)
+            else:
+                self.load_circle_1.set_name("connect-animation-circle-inactive")
+                self.load_circle_2.set_name("connect-animation-circle-inactive")
+                self.load_circle_3.set_name("connect-animation-circle-inactive")
+                GLib.timeout_add(self.load_speed, self.activate_load_circle_stage_1)
+        return False
+    
+    def terminate_connect_process(self):
+        print("TERMINATING")
+        self.connect_process.terminate()
+        self.connect_process.join()
+        self.connect_process_successful = False
+        self.connect_process = None 
+
+    def ping_process_start(self):
+        result = subprocess.call("ping -c 2 google.com", shell=True)
+        if result == 0:
+            with self.ping_process_successful.get_lock():
+                self.ping_process_successful.value = True
+                print(f"Worker: {self.ping_process_successful.value}")
+        else:
+            time.sleep(3)
+            self.ping_process_start()
+    
+    def activate_load_circle_stage_2(self):
+        self.load_circle_4.set_name("connect-animation-circle-active")
+        GLib.timeout_add(self.load_speed, self.activate_load_circle_4)
+        return False
+
+    def activate_load_circle_4(self):
+        self.load_circle_5.set_name("connect-animation-circle-active")
+        GLib.timeout_add(self.load_speed, self.activate_load_circle_5)
+        return False
+    
+    def activate_load_circle_5(self):
+        self.load_circle_6.set_name("connect-animation-circle-active")
+        GLib.timeout_add(self.load_speed, self.deactivate_load_circle_stage_2)
+        return False
+
+    def deactivate_load_circle_stage_2(self):
+        with self.ping_process_successful.get_lock():
+            if self.ping_process_successful.value:
+                self.ping_process_successful = False
+                self.ping_process.terminate()
+                self.ping_process.join()
+                self.ping_process = None
+                self.internet_icon.set_name("connect-animation-icon-active")
+                self.ignore_focus_lost = False
+                GLib.timeout_add(self.load_speed, self.connection_successful_animation)
+            else:
+                self.load_circle_4.set_name("connect-animation-circle-inactive")
+                self.load_circle_5.set_name("connect-animation-circle-inactive")
+                self.load_circle_6.set_name("connect-animation-circle-inactive")
+                GLib.timeout_add(self.load_speed, self.activate_load_circle_stage_2)
+        return False
+    
+    def connection_successful_animation(self):
+        self.laptop_icon.set_name("connect-animation-icon-success")
+        self.network_icon.set_name("connect-animation-icon-success")
+        self.internet_icon.set_name("connect-animation-icon-success")
+        self.load_circle_1.set_name("connect-animation-circle-success")
+        self.load_circle_2.set_name("connect-animation-circle-success")
+        self.load_circle_3.set_name("connect-animation-circle-success")
+        self.load_circle_4.set_name("connect-animation-circle-success")
+        self.load_circle_5.set_name("connect-animation-circle-success")
+        self.load_circle_6.set_name("connect-animation-circle-success")
+        
+        GLib.timeout_add(400, self.exit)
+        return False
+    
+    def on_disconnect_clicked(self, entry=False, widget=False, event=False):
+        ssid = self.network["SSID"]
+        subprocess.call(f"nmcli connection down id {ssid}", shell=True)
+        self.exit()
+
+    def on_remove_clicked(self, entry=False, widget=False, event=False):
+        ssid = self.network["SSID"]
+        subprocess.call(f"nmcli connection delete '{ssid}'", shell=True)
+        self.exit()
+    
+    def on_escape_press(self, widget, event):
+        keyval = event.keyval
+        if keyval == Gdk.KEY_Escape:
+            self.on_focus_out(widget, event)
+
+    def on_focus_out(self, widget, event):
+        if not self.ignore_focus_lost:
+            self.exit()
+
+    def exit(self):
+        if self.ping_process and self.ping_process.is_alive():
+            self.ping_process.terminate()
+            self.ping_process.join() 
+        if self.connect_process and self.connect_process.is_alive():
+            self.connect_process.terminate()
+            self.connect_process.join()
+            
+        self.main_window.active_widget = None
+        self.main_window.ignore_focus_lost = False
+        if self.network["CONNECTED"]:
+            self.active_widget.get_parent().get_parent().set_name("list-obj-box-active")
+        else: 
+            self.active_widget.get_parent().get_parent().set_name("list-obj-box-inactive")
+        self.main_window.update_list_with_networks(scan_offline=True)
+        self.destroy()
 
 class WifiMenu(Gtk.Dialog):
     def __init__(self, wifi_process):
@@ -20,7 +334,7 @@ class WifiMenu(Gtk.Dialog):
         if x and y:
             self.move(x - 160, 5)
 
-        self.window_width = 330
+        self.window_width = 340
         self.window_height = 400
 
         self.wifi_on = self.get_wifi_on()
@@ -35,6 +349,7 @@ class WifiMenu(Gtk.Dialog):
         self.previous_network_in_use = False
         self.history_shown = False
         self.active_known_widget = None
+        self.skip_update = False
 
         self.content_area = self.get_content_area()
         self.content_area.set_name("content-area")
@@ -129,8 +444,8 @@ class WifiMenu(Gtk.Dialog):
 
         self.list_main_box.pack_start(scrolled_window, True, True, 0)
 
-        self.update_ui_with_networks()
-        GLib.timeout_add(7000, self.update_ui_with_networks)
+        self.update_list_with_networks()
+        GLib.timeout_add(7000, self.update_list_with_networks)
 
     def list_options(self):
         self.list_options_main_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=8)
@@ -198,7 +513,7 @@ class WifiMenu(Gtk.Dialog):
         self.config_title.set_name("list-opitons-title-inactive")
         self.scan_box.set_name("toggle-box-list-options-active")
         self.scan_title.set_name("list-opitons-title-active")
-        self.update_ui_with_networks()
+        self.update_list_with_networks()
         
     def history_clicked(self, widget, event):
         self.history_shown = True
@@ -220,83 +535,19 @@ class WifiMenu(Gtk.Dialog):
         with open('/home/jonalm/scripts/qtile/bar_menus/wifi/wifi_networks.json', 'r') as json_file:
             networks = json.load(json_file)
         return networks
-
-    def on_connect_clicked(self, widget, event, network, password_entry):
-        ssid = network["SSID"][5:]
-
-        if network["NETWORK-KNOWN"]:
-            subprocess.call(f"nmcli connection up id {ssid}", shell=True)
-        else: 
-            password = password_entry.get_text()
-            subprocess.call(f"nmcli device wifi connect {ssid} password {password}", shell=True)
-            
-        self.active_widget = None
-        self.update_ui_with_networks()
-
-    def on_disconnect_clicked(self, widget, event, network):
-        ssid = network["SSID"][5:]
-        subprocess.call(f"nmcli connection down id {ssid}", shell=True)
-        self.active_widget = None
-        self.update_ui_with_networks()
-
-    def on_forget_clicked(self, widget, event, network, use_network_name):
-        if use_network_name:
-            ssid = network
-            self.active_known_widget = None
-            subprocess.call(f"nmcli connection delete '{ssid}'", shell=True)
-            self.update_ui_with_known_networks()
-        else:
-            ssid = network["SSID"][5:]
-            self.active_widget = None
-            subprocess.call(f"nmcli connection delete '{ssid}'", shell=True)
-            self.update_ui_with_networks()
-
-    def network_clicked(self, widget, event, network, network_in_use):
-        if self.active_widget:
-            buttons = self.active_widget.get_parent().get_children()
-            for child in buttons[1:]:
-                self.active_widget.get_parent().remove(child)
-            
-            self.active_widget.get_parent().set_name("list-content-box-inactive")
-
-            if self.previous_network_in_use:
-                self.active_widget.get_parent().set_name("list-obj-box-active")
-                self.previous_network_in_use = False
-
-            if self.active_widget == widget:
-                self.active_widget = None
-                return True
-
-        button_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=0)
-
-        connection_button = Gtk.Button()
-        connection_button.connect("key-press-event", self.on_connect_clicked)
-        button_box.pack_start(connection_button, True, True, 0)
-        
-        password_entry = Gtk.Entry()
-
-        if network["NETWORK-KNOWN"]:
-            remove_button = Gtk.Button(label = "Remove")
-            remove_button.connect("button-press-event", self.on_forget_clicked, network)
-            button_box.pack_start(remove_button, True, True, 0)
-        else:
-            password_entry.set_placeholder_text("Password")
-            button_box.pack_start(password_entry, True, True, 0)
-        
-        if network_in_use:
-            connection_button.set_label("Disconnect")
-            connection_button.connect("button-press-event", self.on_disconnect_clicked, network)
-            self.previous_network_in_use = True
-        else:
-            connection_button.set_label("Connect")
-            connection_button.connect("button-press-event", self.on_connect_clicked, network, password_entry)
-        
-        widget.get_parent().set_name("list-content-box-active")
-        widget.get_parent().pack_start(button_box, False, False, 0)     
-        widget.get_parent().show_all()
-
+    
+    def on_network_clicked(self, widget, event=False, network=False):
+        self.ignore_focus_lost = True
         self.active_widget = widget
-        return True
+        if network["CONNECTED"]:
+            widget.get_parent().get_parent().set_name("list-obj-box-active-clicked")
+        else:
+            widget.get_parent().get_parent().set_name("list-obj-box-inactive-clicked")
+        dialog = OptionWindow(self, self, network, widget)
+        dialog.run()
+
+    def on_network_pressed(self, entry, widget, network):
+        self.on_network_clicked(widget=widget, network=network)
     
     def known_network_clicked(self, widget, event, network_name):
         if self.active_known_widget:
@@ -313,7 +564,7 @@ class WifiMenu(Gtk.Dialog):
         button_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=0)
 
         remove_button = Gtk.Button(label = "Remove")
-        remove_button.connect("button-press-event", self.on_forget_clicked, network_name, True)
+        remove_button.connect("button-press-event", self.on_remove_clicked, network_name, True)
         button_box.pack_start(remove_button, True, True, 0)
         
         widget.get_parent().set_name("list-content-box-active")
@@ -323,7 +574,7 @@ class WifiMenu(Gtk.Dialog):
         self.active_known_widget = widget
         return True
     
-    def scan_offline(self):
+    def get_networks_offline(self):
         nmcli_output = subprocess.check_output("nmcli device wifi list --rescan no", shell=True).decode("utf-8")
         known_networks = get_known_networks()
         if nmcli_output:
@@ -334,37 +585,63 @@ class WifiMenu(Gtk.Dialog):
 
             for line in lines[1:]:
                 parts = line.split()
-                in_use = False
+                connected = False
+                network_known = False
+                connected_marker = parts[0]
 
-                if parts[0] == "*":
+                if connected_marker == "*":
                     parts.pop(0)
-                    in_use = True
+                    connected = True
+                
+                ssid = parts[1]
+                strength = parts[7]
 
-                if parts[1] != "--" and "▂" in parts[7]:
-                    ssid = f'{parts[7]} {parts[1][:]}' 
-
-                    network_known = False
-                    if ssid[5:] in known_networks:
+                if ssid == "--" or "▂" not in strength:
+                    ssid = None
+                elif ssid in known_networks:
                         network_known = True
-                        ssid = ssid + " *"
+                        ssid = ssid
 
-                if ssid[5:] not in seen_ssids or in_use:
-                    unique_networks.append({"SSID": ssid, "IN-USE": in_use, "NETWORK-KNOWN": network_known})
-                    seen_ssids.add(ssid[5:])
+                if ssid and (ssid not in seen_ssids or connected):
+                    if strength == "▂▄▆_":
+                        strength = "▂▄▆▂"
+                    elif strength == "▂▄__":
+                        strength = "▂▄▂▂"                        
+                    elif strength == "▂___":
+                        strength = "▂▂▂▂"
 
-            unique_networks.sort(key=lambda x: (not x["IN-USE"], not x["NETWORK-KNOWN"]))
+                    unique_networks.append({
+                        "SSID": ssid, 
+                        "STRENGTH": strength, 
+                        "CONNECTED": connected, 
+                        "KNOWN": network_known
+                    })
+                    seen_ssids.add(ssid)
+
+            unique_networks.sort(key=lambda x: (not x["CONNECTED"], not x["KNOWN"]))
 
         return unique_networks
     
-    def update_ui_with_networks(self):
+    def update_list_with_networks(self, get_known=False, scan_offline=False):
+        if self.skip_update and not scan_offline:
+            self.skip_update = False
+            return True
         if not self.active_widget and self.wifi_on and not self.history_shown:
+            if get_known:
+                self.history_shown = True
+                
             self.status_dot.set_name("status-dot-list-update")
             GLib.timeout_add(300, self.restore_status_dot)
-    
-            networks = self.get_networks()
+            
+            if scan_offline:
+                networks = self.get_networks_offline()
+                self.skip_update = True
+            else:
+                networks = self.get_networks()
+
             if not networks:
                 return True
-
+            
             self.desc.set_text(f"{len(networks)} Available")
             
             for child in self.list_box.get_children():
@@ -372,26 +649,53 @@ class WifiMenu(Gtk.Dialog):
 
             for network in networks:
                 row = Gtk.ListBoxRow()
+                row.set_name("row")
                 label = Gtk.Label()
 
-                list_content_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
+                list_content_main_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
+
+                list_content_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=0)
+
+                list_obj_icon_box = Gtk.EventBox()
+                list_obj_icon_box.set_name("list-icon-box")
+                icon = Gtk.Label()
+                
+                icon.set_name("list-icon")
+                icon.set_text(network["STRENGTH"])
 
                 list_obj_clickable_box = Gtk.EventBox()
-                list_obj_clickable_box.connect("button-press-event", self.network_clicked, network, network["IN-USE"])
+                list_obj_clickable_box.connect("button-press-event", self.on_network_clicked, network)
 
-                if network["IN-USE"]:
+                if network["CONNECTED"]:
                     label.set_name("list-obj")
-                    list_content_box.set_name("list-obj-box-active")
+                    list_content_main_box.set_name("list-obj-box-active")
                 else:
+                    list_content_main_box.set_name("list-obj-box-inactive")
                     label.set_name("list-obj")
 
-                label.set_text(network["SSID"][:20])
+                label.set_text(network["SSID"][:15])
                 label.set_halign(Gtk.Align.START)
-                
-                list_obj_clickable_box.add(label)
 
+                list_obj_icon_box.add(icon)
+                list_obj_clickable_box.add(label)
+                    
+                list_content_box.pack_start(list_obj_icon_box, False, False, 0)
                 list_content_box.pack_start(list_obj_clickable_box, False, False, 0)
-                row.add(list_content_box)
+
+                if network["KNOWN"]:
+                    known_icon = Gtk.Label()
+                    known_icon.set_halign(Gtk.Align.END)
+                    if network["CONNECTED"]:
+                        known_icon.set_name("known-icon-active-obj")
+                    else:
+                        known_icon.set_name("known-icon-inactive-obj")
+                    known_icon.set_text("")
+                    list_content_box.pack_start(known_icon, True, True, 0)
+                    
+                list_content_main_box.pack_start(list_content_box, False, False, 0)
+                
+                row.add(list_content_main_box)
+                row.connect("activate", self.on_network_pressed, list_obj_clickable_box, network)
                 self.list_box.add(row)
 
             self.list_box.show_all()
@@ -420,7 +724,7 @@ class WifiMenu(Gtk.Dialog):
 
             label.set_name("list-obj")
 
-            label.set_text(network_name[:20])
+            label.set_text(network_name[:15])
             label.set_halign(Gtk.Align.START)
             
             list_obj_clickable_box.add(label)
@@ -452,7 +756,6 @@ class WifiMenu(Gtk.Dialog):
         return known_networks
 
     def get_mouse_position(self):
-        from Xlib import display 
         try:
             d = display.Display()
             s = d.screen()
@@ -464,14 +767,14 @@ class WifiMenu(Gtk.Dialog):
         except Exception:
             return None, None
 
-    def on_focus_out(self, widget, event):
-        if not self.ignore_focus_lost:
+    def on_focus_out(self, widget, event, escape=False):
+        if not self.ignore_focus_lost or escape:
             self.exit_remove_pid()
 
     def on_escape_press(self, widget, event):
         keyval = event.keyval
-        if keyval == Gdk.KEY_Escape or keyval == Gdk.KEY_Escape_L:
-            self.on_focus_out(widget, event)
+        if keyval == Gdk.KEY_Escape:
+            self.on_focus_out(widget, event, True)
 
     def handle_sigterm(self, signum, frame):
         self.exit_remove_pid() 
@@ -500,6 +803,7 @@ def get_known_networks():
     for line in lines[1:]:
         parts = line.split()
         ssid = parts[0]
+
         known_networks.append(ssid)
         
     return known_networks
@@ -524,25 +828,40 @@ def wifi_process():
 
                 for line in lines[1:]:
                     parts = line.split()
-                    in_use = False
+                    connected = False
+                    network_known = False
+                    connected_marker = parts[0]
 
-                    if parts[0] == "*":
+                    if connected_marker == "*":
                         parts.pop(0)
-                        in_use = True
+                        connected = True
+                    
+                    ssid = parts[1]
+                    strength = parts[7]
 
-                    if parts[1] != "--" and "▂" in parts[7]:
-                        ssid = f'{parts[7]} {parts[1][:]}' 
-
-                        network_known = False
-                        if ssid[5:] in known_networks:
+                    if ssid == "--" or "▂" not in strength:
+                        ssid = None
+                    elif ssid in known_networks:
                             network_known = True
-                            ssid = ssid + " *"
+                            ssid = ssid
 
-                    if ssid[5:] not in seen_ssids or in_use:
-                        unique_networks.append({"SSID": ssid, "IN-USE": in_use, "NETWORK-KNOWN": network_known})
-                        seen_ssids.add(ssid[5:])
+                    if ssid and (ssid not in seen_ssids or connected):
+                        if strength == "▂▄▆_":
+                            strength = "▂▄▆▂"
+                        elif strength == "▂▄__":
+                            strength = "▂▄▂▂"                        
+                        elif strength == "▂___":
+                            strength = "▂▂▂▂"
 
-                unique_networks.sort(key=lambda x: (not x["IN-USE"], not x["NETWORK-KNOWN"]))
+                        unique_networks.append({
+                            "SSID": ssid, 
+                            "STRENGTH": strength, 
+                            "CONNECTED": connected, 
+                            "KNOWN": network_known
+                        })
+                        seen_ssids.add(ssid)
+
+                unique_networks.sort(key=lambda x: (not x["CONNECTED"], not x["KNOWN"]))
 
             with open('/home/jonalm/scripts/qtile/bar_menus/wifi/wifi_networks.json', 'w') as json_file:
                 json.dump(unique_networks, json_file, indent=2)
@@ -568,7 +887,6 @@ if __name__ == '__main__':
             with open(pid_file, "w") as file:
                 file.write(str(os.getpid()))
 
-            from multiprocessing import Process
             process = Process(target=wifi_process)
             process.start()
 
