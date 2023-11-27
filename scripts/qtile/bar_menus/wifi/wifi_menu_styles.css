@@ -1,5 +1,5 @@
 #root {
-    border-width: 3px;
+    border-width: 5px;
     border-color: #4f586e;
     background: rgba(46, 52, 64, 0.90);
 }
@@ -230,6 +230,9 @@
 }
 
 #list-obj {
+    margin-right: 10px;
+    margin-top: 10px;    
+    margin-bottom: 10px;  
     border-radius: 5px;
     font-size: 18px;
     font-family: FiraCode Nerd Font;
@@ -261,7 +264,7 @@
 
 #buttons {
     font-size: 18px;
-    border-radius: 0px;
+    border-radius: 5px;
     font-family: "FiraCode Nerd Font";
     font-weight: lighter;
 }

@@ -3,7 +3,7 @@
 }   
 
 #root {
-    border-width: 3px;
+    border-width: 5px;
     border-color: #4f586e;
     background: rgba(46, 52, 64, 0.90);
 }
@@ -322,7 +322,56 @@
 
 #buttons {
     font-size: 18px;
-    border-radius: 0px;
+    border-radius: 5px;
     font-family: "FiraCode Nerd Font";
     font-weight: lighter;
+}
+
+#connect-animation-box { 
+    margin-top: 17px;    
+    margin-bottom: 17px;
+    margin-right: 15px;  
+    margin-left: 15px;
+}
+
+#connect-animation-icon-success {
+    color: #a3be8c;
+    font-size: 22px;
+    font-family: 'Font Awesome 6 Free Solid';
+    font-weight: bold;   
+}
+
+#connect-animation-icon-active {
+    color: #81a1c1;
+    font-size: 22px;
+    font-family: 'Font Awesome 6 Free Solid';
+    font-weight: bold;   
+}
+
+#connect-animation-icon-inactive {
+    color: #4f586e;
+    font-size: 22px;
+    font-family: 'Font Awesome 6 Free Solid';
+    font-weight: bold;   
+}
+
+#connect-animation-circle-success {
+    color: #a3be8c;
+    font-size: 7px;
+    font-family: 'Font Awesome 6 Free Solid';
+    font-weight: bold;   
+}
+
+#connect-animation-circle-active {
+    color: #81a1c1;
+    font-size: 7px;
+    font-family: 'Font Awesome 6 Free Solid';
+    font-weight: bold;   
+}
+
+#connect-animation-circle-inactive {
+    color: #4f586e;
+    font-size: 7px;
+    font-family: 'Font Awesome 6 Free Solid';
+    font-weight: bold;   
 }

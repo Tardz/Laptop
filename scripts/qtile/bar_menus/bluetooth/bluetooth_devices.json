@@ -1,1 +1,10 @@
-[]
+[
+  {
+    "DEVICE": "8BitDo Adapter",
+    "MAC-ADDR": "E4:17:D8:5B:75:6F"
+  },
+  {
+    "DEVICE": "Jonathans Bose QC35 II",
+    "MAC-ADDR": "28:11:A5:DB:40:B6"
+  }
+]

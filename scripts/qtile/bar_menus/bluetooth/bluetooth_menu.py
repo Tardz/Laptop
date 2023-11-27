@@ -3,9 +3,8 @@ gi.require_version('Gtk', '3.0')
 import subprocess
 import os
 from Xlib import display 
-from gi.repository import Gtk, Gdk, Gio, GObject, GLib
-from dbus.mainloop.glib import DBusGMainLoop
-from multiprocessing import Process, Event
+from gi.repository import Gtk, Gdk, GLib
+from multiprocessing import Process, Value
 import time
 import signal
 import json
@@ -19,47 +18,183 @@ class OptionWindow(Gtk.Dialog):
         self.active_widget = active_widget
         self.device = device
 
-        self.set_default_size(150, 100)
+        self.set_size_request(130, 135)
         
         x, y = self.get_mouse_position()
         self.move(x, y)
 
+        self.ignore_focus_lost = False
+        self.load_speed = 300
+        
+        self.connect_process_successful = Value('b', False)
+        self.connect_process = None 
+
         self.connect("focus-out-event", self.on_focus_out)
+        self.connect("key-press-event", self.on_escape_press)
 
         self.set_name("root")
-        content_area = self.get_content_area()
-        content_area.set_name("option-window-content-area")
+        self.content_area = self.get_content_area()
+        self.content_area.set_name("option-window-content-area")
 
         connection_button = Gtk.Button()
         connection_button.set_name("buttons")
-        content_area.pack_start(connection_button, True, True, 0)
+        self.content_area.pack_start(connection_button, True, True, 0)
         
         if self.device["CONNECTED"]:
             connection_button.set_label("Disconnect")
+            connection_button.connect("activate", self.on_disconnect_clicked)
+
             connection_button.connect("button-press-event", self.on_disconnect_clicked)
             self.previouse_widget_in_use = True
         else:
             connection_button.set_label("Connect")
+            connection_button.connect("activate", self.on_connect_clicked)
             connection_button.connect("button-press-event", self.on_connect_clicked)
 
         trust_button = Gtk.Button()
         trust_button.set_name("buttons")
-        content_area.pack_start(trust_button, True, True, 0)
+        self.content_area.pack_start(trust_button, True, True, 0)
 
         if self.device["DEVICE-TRUSTED"]:
             trust_button.set_label("Untrust")
+            trust_button.connect("activate", self.on_untrust_clicked)
             trust_button.connect("button-press-event", self.on_untrust_clicked)
         else:
             trust_button.set_label("Trust")
+            trust_button.connect("activate", self.on_trust_clicked)
             trust_button.connect("button-press-event", self.on_trust_clicked)
 
         if self.device["DEVICE-KNOWN"]:
             remove_button = Gtk.Button(label = "Remove")
+            remove_button.connect("activate", self.on_remove_clicked)
             remove_button.set_name("buttons")
             remove_button.connect("button-press-event", self.on_remove_clicked)
-            content_area.pack_start(remove_button, True, True, 0)
+            self.content_area.pack_start(remove_button, True, True, 0)
 
         self.show_all()
+
+    def on_connect_clicked(self, widget=False, event=False, entry=False):
+        for child in self.content_area.get_children():
+            self.content_area.remove(child)
+
+        self.ignore_focus_lost = True
+        x, y = self.main_window.get_position()
+        width, height = self.main_window.get_size()
+        dialog_width, dialog_height = width - 80, 80
+        self.set_size_request(dialog_width, dialog_height)
+        self.resize(dialog_width, dialog_height)
+        animation_window_x, animation_window_y = x + (width - dialog_width)/2, y + (height/3) 
+        self.move(animation_window_x, animation_window_y)
+
+        connect_animation_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=4)
+        connect_animation_box.set_name("connect-animation-box")
+
+        self.laptop_icon = Gtk.Label()
+        self.laptop_icon.set_text("")
+        self.laptop_icon.set_name("connect-animation-icon-active")
+
+        self.load_circle_1 = Gtk.Label()
+        self.load_circle_1.set_text("")
+        self.load_circle_1.set_name("connect-animation-circle-inactive")
+
+        self.load_circle_2 = Gtk.Label()
+        self.load_circle_2.set_text("")
+        self.load_circle_2.set_name("connect-animation-circle-inactive")
+
+        self.load_circle_3 = Gtk.Label()
+        self.load_circle_3.set_text("")
+        self.load_circle_3.set_name("connect-animation-circle-inactive")
+
+        self.device_icon = Gtk.Label()
+        self.device_icon.set_text("")
+        self.device_icon.set_name("connect-animation-icon-inactive")
+
+        connect_animation_box.pack_start(self.laptop_icon,   True, False, 0)
+        connect_animation_box.pack_start(self.load_circle_1, True, False, 0)
+        connect_animation_box.pack_start(self.load_circle_2, True, False, 0)
+        connect_animation_box.pack_start(self.load_circle_3, True, False, 0)
+        connect_animation_box.pack_start(self.device_icon,  True, False, 0)
+
+        self.content_area.pack_start(connect_animation_box, True, False, 0)
+        self.content_area.show_all()
+        
+        self.activate_load_circle_stage_1()
+        self.connect_process = Process(target=self.connect_process_start)
+        self.connect_process.start()
+
+    def connect_process_start(self):
+        device_addr = self.device["MAC-ADDR"]
+
+        result = subprocess.call(f"bluetoothctl connect {device_addr}", shell=True)
+        if result == 0:
+            with self.connect_process_successful.get_lock():
+                self.connect_process_successful.value = True
+        else:
+            self.connect_process_start()
+
+    def activate_load_circle_stage_1(self):
+        self.load_circle_1.set_name("connect-animation-circle-active")
+        GLib.timeout_add(self.load_speed, self.activate_load_circle_2)
+        return False
+
+    def activate_load_circle_2(self):
+        self.load_circle_2.set_name("connect-animation-circle-active")
+        GLib.timeout_add(self.load_speed, self.activate_load_circle_3)
+        return False
+    
+    def activate_load_circle_3(self):
+        self.load_circle_3.set_name("connect-animation-circle-active")
+        GLib.timeout_add(self.load_speed, self.deactivate_load_circle_stage_1)
+        return False
+    
+    def deactivate_load_circle_stage_1(self):
+        with self.connect_process_successful.get_lock():
+            if self.connect_process_successful.value:
+                self.terminate_connect_process()
+                self.device_icon.set_name("connect-animation-icon-active")
+                GLib.timeout_add(self.load_speed, self.connection_successful_animation)
+            else:
+                self.load_circle_1.set_name("connect-animation-circle-inactive")
+                self.load_circle_2.set_name("connect-animation-circle-inactive")
+                self.load_circle_3.set_name("connect-animation-circle-inactive")
+                GLib.timeout_add(self.load_speed, self.activate_load_circle_stage_1)
+        return False
+    
+    def terminate_connect_process(self):
+        self.connect_process.terminate()
+        self.connect_process.join()
+        self.connect_process_successful = False
+        self.connect_process = None 
+    
+    def connection_successful_animation(self):
+        self.laptop_icon.set_name("connect-animation-icon-success")
+        self.device_icon.set_name("connect-animation-icon-success")
+        self.load_circle_1.set_name("connect-animation-circle-success")
+        self.load_circle_2.set_name("connect-animation-circle-success")
+        self.load_circle_3.set_name("connect-animation-circle-success")
+        
+        GLib.timeout_add(400, self.exit)
+        return False
+
+    def on_disconnect_clicked(self, widget=False, event=False, entry=False):
+        device_addr = self.device["MAC-ADDR"]
+        subprocess.call(f"bluetoothctl disconnect {device_addr}", shell=True)
+        self.exit()
+
+    def on_trust_clicked(self, widget=False, event=False, entry=False):
+        device_addr = self.device["MAC-ADDR"]
+        subprocess.call(f"bluetoothctl trust {device_addr}", shell=True)
+        self.exit()
+
+    def on_untrust_clicked(self, widget=False, event=False, entry=False):
+        device_addr = self.device["MAC-ADDR"]
+        subprocess.call(f"bluetoothctl untrust {device_addr}", shell=True)
+        self.exit()
+
+    def on_remove_clicked(self, widget=False, event=False, entry=False):
+        device_addr = self.device["MAC-ADDR"]
+        subprocess.call(f"bluetoothctl remove {device_addr}", shell=True)
+        self.exit()
 
     def get_mouse_position(self):
         try:
@@ -72,43 +207,30 @@ class OptionWindow(Gtk.Dialog):
             return x, y
         except Exception:
             return None, None
-
-    def on_trust_clicked(self, widget, event):
-        device_addr = self.device["MAC-ADDR"]
-        subprocess.call(f"bluetoothctl trust {device_addr}", shell=True)
-        self.exit()
-
-    def on_untrust_clicked(self, widget, event):
-        device_addr = self.device["MAC-ADDR"]
-        subprocess.call(f"bluetoothctl untrust {device_addr}", shell=True)
-        self.exit()
-
-    def on_remove_clicked(self, widget, event):
-        device_addr = self.device["MAC-ADDR"]
-        subprocess.call(f"bluetoothctl remove {device_addr}", shell=True)
-        self.exit()
-
-    def on_disconnect_clicked(self, widget, event):
-        device_addr = self.device["MAC-ADDR"]
-        subprocess.call(f"bluetoothctl disconnect {device_addr}", shell=True)
-        self.exit()
-
-    def on_connect_clicked(self, widget, event):
-        device_addr = self.device["MAC-ADDR"]
-        subprocess.call(f"bluetoothctl connect {device_addr}", shell=True)
-        self.exit()
+        
+    def on_escape_press(self, widget, event):
+        keyval = event.keyval
+        if keyval == Gdk.KEY_Escape:
+            self.on_focus_out(widget, event)
     
     def on_focus_out(self, widget, event):
-        self.exit()
+        if not self.ignore_focus_lost:
+            self.exit()
 
     def exit(self):
+        if self.connect_process and self.connect_process.is_alive():
+            self.connect_process.terminate()
+            self.connect_process.join()
+
         self.main_window.active_widget = None
         self.main_window.ignore_focus_lost = False
+        
         if self.device["CONNECTED"]:
             self.active_widget.get_parent().get_parent().set_name("list-obj-box-active")
         else: 
             self.active_widget.get_parent().get_parent().set_name("list-obj-box-inactive")
-        self.main_window.update_ui_with_devices(False)
+
+        self.main_window.update_ui_with_devices()
         self.destroy()
 
 class BluetoothMenu(Gtk.Dialog):
@@ -173,7 +295,7 @@ class BluetoothMenu(Gtk.Dialog):
             self.list_main_box.hide()
             self.list_options_main_box.hide()
 
-        self.update_ui_with_devices(False)
+        self.update_ui_with_devices()
 
     def title(self):
         self.title_main_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
@@ -242,7 +364,7 @@ class BluetoothMenu(Gtk.Dialog):
 
         self.list_main_box.pack_start(scrolled_window, True, True, 0)
 
-        GLib.timeout_add(6000, self.update_ui_with_devices, False)
+        GLib.timeout_add(6000, self.update_ui_with_devices)
 
     def list_options(self):
         self.list_options_main_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=8)
@@ -544,7 +666,7 @@ class BluetoothMenu(Gtk.Dialog):
             self.icon_background_box.set_name("toggle-icon-background-enabled")
             self.icon.set_name("toggle-icon-enabled")
             self.main_box.show_all()
-            self.update_ui_with_devices(False)
+            self.update_ui_with_devices()
 
     def scan_clicked(self, widget, event):
         self.known_shown = False
@@ -553,7 +675,7 @@ class BluetoothMenu(Gtk.Dialog):
         self.config_title.set_name("list-opitons-title-inactive")
         self.scan_box.set_name("toggle-box-list-options-active")
         self.scan_title.set_name("list-opitons-title-active")
-        self.update_ui_with_devices(False)
+        self.update_ui_with_devices()
         if self.no_devices:
             x, y = self.get_mouse_position()
             subprocess.run(f"xdotool mousemove {x} {y - 175}", shell = True)
@@ -585,7 +707,10 @@ class BluetoothMenu(Gtk.Dialog):
             widget.get_parent().get_parent().set_name("list-obj-box-inactive-clicked")
         dialog = OptionWindow(self, self, device, widget)
         dialog.run()
-    
+
+    def on_device_pressed(self, entry, widget, device):
+        self.on_device_clicked(widget=widget, device=device)
+
     def get_bluetooth_devices(self):
         with open('/home/jonalm/scripts/qtile/bar_menus/bluetooth/bluetooth_devices.json', 'r') as json_file:
             devices = json.load(json_file)
@@ -733,15 +858,20 @@ class BluetoothMenu(Gtk.Dialog):
                         complete_devices.append(complete_device)
 
             for connected_device in self.get_connected_devices_with_names():
-                if (connected_device["MAC-ADDR"] not in devices and not get_known) or (connected_device["MAC-ADDR"] not in known_devices and get_known):
-                    icon = None
-                    battery = None
+                already_exists = False
+                for main_dev in device:
+                    if connected_device == main_dev:
+                        already_exists = True
 
-                    for sink in sinks:
-                        if connected_device["DEVICE"] == sink.description:
-                            icon = sink.proplist["device.icon_name"]
-                            battery = sink.proplist["bluetooth.battery"].replace("%", "")
+                icon = None
+                battery = None
 
+                for sink in sinks:
+                    if connected_device["DEVICE"] == sink.description:
+                        icon = sink.proplist["device.icon_name"]
+                        battery = sink.proplist["bluetooth.battery"].replace("%", "")
+                
+                if not already_exists:
                     complete_devices.append({
                         "DEVICE": connected_device["DEVICE"], 
                         "MAC-ADDR": connected_device["MAC-ADDR"], 
@@ -757,10 +887,11 @@ class BluetoothMenu(Gtk.Dialog):
 
             return complete_devices
 
-    def update_ui_with_devices(self, get_known):
+    def update_ui_with_devices(self, get_known=False):
         if not self.active_widget and self.bluetooth_on and not self.known_shown:
             if get_known:
                 self.known_shown = True
+                
             self.status_dot.set_name("status-dot-list-update")
             GLib.timeout_add(300, self.restore_status_dot)
 
@@ -790,7 +921,7 @@ class BluetoothMenu(Gtk.Dialog):
             self.desc.set_text(f"{len(devices)} Available")
 
 
-            for device in devices:
+            for i, device in enumerate(devices):
                 row = Gtk.ListBoxRow()
                 row.set_name("row")
                 label = Gtk.Label()
@@ -855,6 +986,11 @@ class BluetoothMenu(Gtk.Dialog):
                 list_content_main_box.pack_start(list_content_box, False, False, 0)
                 
                 row.add(list_content_main_box)
+                row.connect("activate", self.on_device_clicked, list_obj_clickable_box, device)
+                
+                if i == 0:
+                    row.grab_focus()
+
                 self.list_box.add(row)
 
             self.list_box.show_all()  
