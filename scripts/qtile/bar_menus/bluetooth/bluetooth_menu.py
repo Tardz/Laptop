@@ -106,7 +106,11 @@ class OptionWindow(Gtk.Dialog):
         self.load_circle_3.set_name("connect-animation-circle-inactive")
 
         self.device_icon = Gtk.Label()
-        self.device_icon.set_text("")
+        if "Bose" or "pods" in self.device["DEVICE"]:
+            self.device_icon.set_text("")
+        else:
+            self.device_icon.set_text("")
+
         self.device_icon.set_name("connect-animation-icon-inactive")
 
         connect_animation_box.pack_start(self.laptop_icon,   True, False, 0)
@@ -130,6 +134,7 @@ class OptionWindow(Gtk.Dialog):
             with self.connect_process_successful.get_lock():
                 self.connect_process_successful.value = True
         else:
+            time.sleep(4)
             self.connect_process_start()
 
     def activate_load_circle_stage_1(self):
@@ -644,29 +649,42 @@ class BluetoothMenu(Gtk.Dialog):
 
     def bluetooth_clicked(self, widget, event):
         if self.bluetooth_on:
-            self.bluetooth_on = False
-            self.resize(self.window_width, 10)
-            self.set_size_request(self.window_width, 10)
-            self.desc.set_text("Off")
-            self.status_dot.set_name("status-dot-off")
-            subprocess.run(["sudo", "systemctl",  "stop", "bluetooth"])
-            self.icon_background_box.set_name("toggle-icon-background-disabled")
-            self.icon.set_name("toggle-icon-disabled")
-            self.load_bars_active = False
-            self.main_box.show_all()
-            self.load_bar_box.hide()
-            self.list_main_box.hide()
-            self.list_options_main_box.hide()
+            off_result = subprocess.call(["sudo", "systemctl",  "stop", "bluetooth"])
+            if off_result == 0:
+                self.bluetooth_on = False
+                
+                self.resize(self.window_width, 10)
+                self.set_size_request(self.window_width, 10)
+                
+                self.desc.set_text("Off")
+                self.status_dot.set_name("status-dot-off")
+                self.load_bars_active = False
+                
+                self.icon_background_box.set_name("toggle-icon-background-disabled")
+                self.icon.set_name("toggle-icon-disabled")
+                
+                self.main_box.show_all()
+                self.load_bar_box.hide()
+                self.list_main_box.hide()
+                self.list_options_main_box.hide()
         else:
-            self.bluetooth_on = True
-            self.resize(self.window_width, self.window_height)
-            self.set_size_request(self.window_width, self.window_height)
-            self.status_dot.set_name("status-dot-inactive")
-            subprocess.run(["sudo", "systemctl",  "start", "bluetooth"])
-            self.icon_background_box.set_name("toggle-icon-background-enabled")
-            self.icon.set_name("toggle-icon-enabled")
-            self.main_box.show_all()
-            self.update_ui_with_devices()
+            on_result = subprocess.call(["sudo", "systemctl",  "start", "bluetooth"])
+            if on_result == 0:
+                self.bluetooth_on = True
+                
+                # self.resize(self.window_width, self.window_height)
+                # self.set_size_request(self.window_width, self.window_height)
+
+                self.status_dot.set_name("status-dot-inactive")
+                
+                self.icon_background_box.set_name("toggle-icon-background-enabled")
+                self.icon.set_name("toggle-icon-enabled")
+                
+                self.main_box.show_all()
+                if self.known_shown:
+                    self.update_ui_with_devices(True)
+                else:
+                    self.update_ui_with_devices(False)
 
     def scan_clicked(self, widget, event):
         self.known_shown = False
@@ -687,6 +705,10 @@ class BluetoothMenu(Gtk.Dialog):
         self.scan_box.set_name("toggle-box-list-options-inactive")
         self.scan_title.set_name("list-opitons-title-inactive")
         self.update_ui_with_devices(True)
+        if self.no_devices:
+            x, y = self.get_mouse_position()
+            subprocess.run(f"xdotool mousemove {x} {y - 175}", shell = True)
+        
 
     def get_bluetooth_on(self):
         try:
@@ -812,14 +834,18 @@ class BluetoothMenu(Gtk.Dialog):
             complete_devices = []
             if not get_known:
                 devices = self.get_bluetooth_devices()
+                print(devices)
                 for device in devices:
                     icon = None
                     battery = None
 
                     for sink in sinks:
                         if device["DEVICE"] == sink.description:
-                            icon = sink.proplist["device.icon_name"]
-                            battery = sink.proplist["bluetooth.battery"].replace("%", "")
+                            try:
+                                icon = sink.proplist["device.icon_name"]
+                                battery = sink.proplist["bluetooth.battery"].replace("%", "")
+                            except:
+                                print("Could not access bluetooth.battery or device.icon_name")
 
                     complete_device = {
                         "DEVICE": device["DEVICE"], 
@@ -831,8 +857,7 @@ class BluetoothMenu(Gtk.Dialog):
                         "BATTERY": battery
                     }
 
-                    if complete_device["DEVICE-KNOWN"]:
-                        complete_devices.append(complete_device)
+                    complete_devices.append(complete_device)
             else:
                 devices = self.get_known_devices_with_names()
                 for device in devices:
@@ -841,8 +866,11 @@ class BluetoothMenu(Gtk.Dialog):
 
                     for sink in sinks:
                         if device["DEVICE"] == sink.description:
-                            icon = sink.proplist["device.icon_name"]
-                            battery = sink.proplist["bluetooth.battery"].replace("%", "")
+                            try:
+                                icon = sink.proplist["device.icon_name"]
+                                battery = sink.proplist["bluetooth.battery"].replace("%", "")
+                            except:
+                                print("Could not access bluetooth.battery or device.icon_name")
 
                     complete_device = {
                         "DEVICE": device["DEVICE"], 
@@ -859,8 +887,8 @@ class BluetoothMenu(Gtk.Dialog):
 
             for connected_device in self.get_connected_devices_with_names():
                 already_exists = False
-                for main_dev in device:
-                    if connected_device == main_dev:
+                for main_device in devices:
+                    if connected_device["MAC-ADDR"] == main_device["MAC-ADDR"]:
                         already_exists = True
 
                 icon = None
@@ -868,8 +896,11 @@ class BluetoothMenu(Gtk.Dialog):
 
                 for sink in sinks:
                     if connected_device["DEVICE"] == sink.description:
-                        icon = sink.proplist["device.icon_name"]
-                        battery = sink.proplist["bluetooth.battery"].replace("%", "")
+                        try:
+                            icon = sink.proplist["device.icon_name"]
+                            battery = sink.proplist["bluetooth.battery"].replace("%", "")
+                        except:
+                            print("Could not access bluetooth.battery or device.icon_name")
                 
                 if not already_exists:
                     complete_devices.append({
@@ -891,7 +922,7 @@ class BluetoothMenu(Gtk.Dialog):
         if not self.active_widget and self.bluetooth_on and not self.known_shown:
             if get_known:
                 self.known_shown = True
-                
+
             self.status_dot.set_name("status-dot-list-update")
             GLib.timeout_add(300, self.restore_status_dot)
 
@@ -918,8 +949,9 @@ class BluetoothMenu(Gtk.Dialog):
                 self.load_bar_box.hide()
                 self.no_devices = False
 
-            self.desc.set_text(f"{len(devices)} Available")
-
+            if not self.load_bars_active:
+                self.desc.show()
+                self.desc.set_text(f"{len(devices)} Available")
 
             for i, device in enumerate(devices):
                 row = Gtk.ListBoxRow()
@@ -989,7 +1021,7 @@ class BluetoothMenu(Gtk.Dialog):
                 row.connect("activate", self.on_device_clicked, list_obj_clickable_box, device)
                 
                 if i == 0:
-                    row.grab_focus()
+                    self.list_box.grab_focus()
 
                 self.list_box.add(row)
 
@@ -1037,7 +1069,7 @@ class BluetoothMenu(Gtk.Dialog):
             exit(0)
 
 def scan_devices():
-    subprocess.run("bluetoothctl --timeout 5 scan on", shell = True)
+    subprocess.run("bluetoothctl --timeout 10 scan on", shell = True)
     output = subprocess.check_output("hcitool scan", shell = True).decode("utf-8")
     return output
 
@@ -1071,8 +1103,6 @@ def bluetooth_process():
             
             with open('/home/jonalm/scripts/qtile/bar_menus/bluetooth/bluetooth_devices.json', 'w') as json_file:
                 json.dump(unique_devices, json_file, indent=2)
-        else:
-            time.sleep(4)
 
 if __name__ == '__main__':
     pid_file = "/home/jonalm/scripts/qtile/bar_menus/bluetooth/bluetooth_menu_pid_file.pid"

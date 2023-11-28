@@ -193,7 +193,8 @@ groups = [
 
 ### SCRATCHPAD ###
 groups.append(ScratchPad('9', [
-    DropDown('terminal', 'alacritty --title alacritty', warp_pointer=True, width=0.35, height=0.55, x=0.33, y=0.18, opacity=1, on_focus_lost_hide = scratchpad_focus_value),
+    DropDown('terminal', 'alacritty --title alacritty', warp_pointer=True, width=0.45, height=0.55, x=0.28, y=0.18, opacity=1, on_focus_lost_hide = scratchpad_focus_value),
+    # DropDown('terminal', 'alacritty --title alacritty', warp_pointer=True, width=0.35, height=0.55, x=0.33, y=0.18, opacity=1, on_focus_lost_hide = scratchpad_focus_value),
     DropDown('filemanager', 'pcmanfm', warp_pointer=True, width=0.6, height=0.7, x=0.2, y=0.12, opacity=0.95, on_focus_lost_hide = scratchpad_focus_value),
     DropDown('music', 'spotify', warp_pointer=True, width=0.6, height=0.7, x=0.2, y=0.12, opacity=1, on_focus_lost_hide = scratchpad_focus_value),
     DropDown('todo', 'ticktick', warp_pointer=True, width=0.6, height=0.7, x=0.2, y=0.12, opacity=0.95, on_focus_lost_hide = scratchpad_focus_value),

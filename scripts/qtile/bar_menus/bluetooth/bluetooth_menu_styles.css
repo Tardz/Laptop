@@ -335,6 +335,7 @@
 }
 
 #connect-animation-icon-success {
+    margin-bottom: 4px;
     color: #a3be8c;
     font-size: 22px;
     font-family: 'Font Awesome 6 Free Solid';
@@ -342,6 +343,7 @@
 }
 
 #connect-animation-icon-active {
+    margin-bottom: 4px;
     color: #81a1c1;
     font-size: 22px;
     font-family: 'Font Awesome 6 Free Solid';
@@ -356,6 +358,7 @@
 }
 
 #connect-animation-circle-success {
+    margin-bottom: 4px;
     color: #a3be8c;
     font-size: 7px;
     font-family: 'Font Awesome 6 Free Solid';
@@ -363,6 +366,7 @@
 }
 
 #connect-animation-circle-active {
+    margin-bottom: 4px;
     color: #81a1c1;
     font-size: 7px;
     font-family: 'Font Awesome 6 Free Solid';

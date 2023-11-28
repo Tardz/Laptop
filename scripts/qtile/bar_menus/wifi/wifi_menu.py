@@ -99,7 +99,7 @@ class OptionWindow(Gtk.Dialog):
         animation_window_x, animation_window_y = x + (width - dialog_width)/2, y + (height/3) 
         self.move(animation_window_x, animation_window_y)
 
-        connect_animation_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=4)
+        connect_animation_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=12)
         connect_animation_box.set_name("connect-animation-box")
 
         self.laptop_icon = Gtk.Label()
@@ -119,7 +119,10 @@ class OptionWindow(Gtk.Dialog):
         self.load_circle_3.set_name("connect-animation-circle-inactive")
 
         self.network_icon = Gtk.Label()
-        self.network_icon.set_text("")
+        if "phone" in self.network["SSID"]:
+            self.network_icon.set_text("")
+        else:
+            self.network_icon.set_text("")
         self.network_icon.set_name("connect-animation-icon-inactive")
 
         self.load_circle_4 = Gtk.Label()
