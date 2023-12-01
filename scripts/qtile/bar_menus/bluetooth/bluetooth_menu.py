@@ -10,7 +10,6 @@ import signal
 import json
 import pulsectl
 
-
 class OptionWindow(Gtk.Dialog):
     def __init__(self, parent, main_window, device, active_widget):
         super(OptionWindow, self).__init__(title="Device Options", transient_for=parent)
@@ -18,8 +17,6 @@ class OptionWindow(Gtk.Dialog):
         self.active_widget = active_widget
         self.device = device
 
-        self.set_size_request(130, 135)
-        
         x, y = self.get_mouse_position()
         self.move(x, y)
 
@@ -32,12 +29,11 @@ class OptionWindow(Gtk.Dialog):
         self.connect("focus-out-event", self.on_focus_out)
         self.connect("key-press-event", self.on_escape_press)
 
-        self.set_name("root")
         self.content_area = self.get_content_area()
-        self.content_area.set_name("option-window-content-area")
+        self.content_area.get_style_context().add_class('root')
 
         connection_button = Gtk.Button()
-        connection_button.set_name("buttons")
+        connection_button.get_style_context().add_class("buttons")
         self.content_area.pack_start(connection_button, True, True, 0)
         
         if self.device["CONNECTED"]:
@@ -52,7 +48,7 @@ class OptionWindow(Gtk.Dialog):
             connection_button.connect("button-press-event", self.on_connect_clicked)
 
         trust_button = Gtk.Button()
-        trust_button.set_name("buttons")
+        trust_button.get_style_context().add_class("buttons")
         self.content_area.pack_start(trust_button, True, True, 0)
 
         if self.device["DEVICE-TRUSTED"]:
@@ -66,10 +62,14 @@ class OptionWindow(Gtk.Dialog):
 
         if self.device["DEVICE-KNOWN"]:
             remove_button = Gtk.Button(label = "Remove")
+            remove_button.get_style_context().add_class("buttons")
             remove_button.connect("activate", self.on_remove_clicked)
             remove_button.set_name("buttons")
             remove_button.connect("button-press-event", self.on_remove_clicked)
             self.content_area.pack_start(remove_button, True, True, 0)
+            self.set_size_request(130, 135)
+        else:
+            self.set_size_request(130, 90)
 
         self.show_all()
 
@@ -81,37 +81,41 @@ class OptionWindow(Gtk.Dialog):
         x, y = self.main_window.get_position()
         width, height = self.main_window.get_size()
         dialog_width, dialog_height = width - 80, 80
-        self.set_size_request(dialog_width, dialog_height)
         self.resize(dialog_width, dialog_height)
+        self.set_size_request(dialog_width, dialog_height)
         animation_window_x, animation_window_y = x + (width - dialog_width)/2, y + (height/3) 
         self.move(animation_window_x, animation_window_y)
 
         connect_animation_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=4)
-        connect_animation_box.set_name("connect-animation-box")
+        connect_animation_box.get_style_context().add_class('connect-animation-box')
 
         self.laptop_icon = Gtk.Label()
         self.laptop_icon.set_text("")
-        self.laptop_icon.set_name("connect-animation-icon-active")
+        self.laptop_icon.get_style_context().add_class('connect-animation-icon')
+        self.laptop_icon.set_name("connect-animation-active")
 
         self.load_circle_1 = Gtk.Label()
         self.load_circle_1.set_text("")
-        self.load_circle_1.set_name("connect-animation-circle-inactive")
+        self.load_circle_1.get_style_context().add_class('connect-animation-circle')
+        self.load_circle_1.set_name("connect-animation-inactive")
 
         self.load_circle_2 = Gtk.Label()
         self.load_circle_2.set_text("")
-        self.load_circle_2.set_name("connect-animation-circle-inactive")
+        self.load_circle_2.get_style_context().add_class('connect-animation-circle')
+        self.load_circle_2.set_name("connect-animation-inactive")
 
         self.load_circle_3 = Gtk.Label()
         self.load_circle_3.set_text("")
-        self.load_circle_3.set_name("connect-animation-circle-inactive")
+        self.load_circle_3.get_style_context().add_class('connect-animation-circle')
+        self.load_circle_3.set_name("connect-animation-inactive")
 
         self.device_icon = Gtk.Label()
         if "Bose" or "pods" in self.device["DEVICE"]:
             self.device_icon.set_text("")
         else:
             self.device_icon.set_text("")
-
-        self.device_icon.set_name("connect-animation-icon-inactive")
+        self.device_icon.get_style_context().add_class('connect-animation-icon')
+        self.device_icon.set_name("connect-animation-inactive")
 
         connect_animation_box.pack_start(self.laptop_icon,   True, False, 0)
         connect_animation_box.pack_start(self.load_circle_1, True, False, 0)
@@ -138,17 +142,17 @@ class OptionWindow(Gtk.Dialog):
             self.connect_process_start()
 
     def activate_load_circle_stage_1(self):
-        self.load_circle_1.set_name("connect-animation-circle-active")
+        self.load_circle_1.set_name("connect-animation-active")
         GLib.timeout_add(self.load_speed, self.activate_load_circle_2)
         return False
 
     def activate_load_circle_2(self):
-        self.load_circle_2.set_name("connect-animation-circle-active")
+        self.load_circle_2.set_name("connect-animation-active")
         GLib.timeout_add(self.load_speed, self.activate_load_circle_3)
         return False
     
     def activate_load_circle_3(self):
-        self.load_circle_3.set_name("connect-animation-circle-active")
+        self.load_circle_3.set_name("connect-animation-active")
         GLib.timeout_add(self.load_speed, self.deactivate_load_circle_stage_1)
         return False
     
@@ -156,12 +160,12 @@ class OptionWindow(Gtk.Dialog):
         with self.connect_process_successful.get_lock():
             if self.connect_process_successful.value:
                 self.terminate_connect_process()
-                self.device_icon.set_name("connect-animation-icon-active")
+                self.device_icon.set_name("connect-animation-active")
                 GLib.timeout_add(self.load_speed, self.connection_successful_animation)
             else:
-                self.load_circle_1.set_name("connect-animation-circle-inactive")
-                self.load_circle_2.set_name("connect-animation-circle-inactive")
-                self.load_circle_3.set_name("connect-animation-circle-inactive")
+                self.load_circle_1.set_name("connect-animation-inactive")
+                self.load_circle_2.set_name("connect-animation-inactive")
+                self.load_circle_3.set_name("connect-animation-inactive")
                 GLib.timeout_add(self.load_speed, self.activate_load_circle_stage_1)
         return False
     
@@ -172,11 +176,11 @@ class OptionWindow(Gtk.Dialog):
         self.connect_process = None 
     
     def connection_successful_animation(self):
-        self.laptop_icon.set_name("connect-animation-icon-success")
-        self.device_icon.set_name("connect-animation-icon-success")
-        self.load_circle_1.set_name("connect-animation-circle-success")
-        self.load_circle_2.set_name("connect-animation-circle-success")
-        self.load_circle_3.set_name("connect-animation-circle-success")
+        self.laptop_icon.set_name("connect-animation-success")
+        self.device_icon.set_name("connect-animation-success")
+        self.load_circle_1.set_name("connect-animation-success")
+        self.load_circle_2.set_name("connect-animation-success")
+        self.load_circle_3.set_name("connect-animation-success")
         
         GLib.timeout_add(400, self.exit)
         return False
@@ -216,10 +220,10 @@ class OptionWindow(Gtk.Dialog):
     def on_escape_press(self, widget, event):
         keyval = event.keyval
         if keyval == Gdk.KEY_Escape:
-            self.on_focus_out(widget, event)
+            self.on_focus_out(widget, event, True)
     
-    def on_focus_out(self, widget, event):
-        if not self.ignore_focus_lost:
+    def on_focus_out(self, widget, event, escape_pressed=False):
+        if not self.ignore_focus_lost or escape_pressed:
             self.exit()
 
     def exit(self):
@@ -231,9 +235,9 @@ class OptionWindow(Gtk.Dialog):
         self.main_window.ignore_focus_lost = False
         
         if self.device["CONNECTED"]:
-            self.active_widget.get_parent().get_parent().set_name("list-obj-box-active")
+            self.active_widget.get_parent().get_parent().set_name("list-name-box-active")
         else: 
-            self.active_widget.get_parent().get_parent().set_name("list-obj-box-inactive")
+            self.active_widget.get_parent().get_parent().set_name("list-name-box-inactive")
 
         self.main_window.update_ui_with_devices()
         self.destroy()
@@ -271,8 +275,8 @@ class BluetoothMenu(Gtk.Dialog):
         self.known_shown = False
 
         self.content_area = self.get_content_area()
-        self.content_area.set_name("content-area")
-        self.set_name("root")
+        self.content_area.get_style_context().add_class('content-area')
+        self.get_style_context().add_class('root')
 
         self.main_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=8)
         
@@ -304,47 +308,50 @@ class BluetoothMenu(Gtk.Dialog):
 
     def title(self):
         self.title_main_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
-        self.title_main_box.set_name("toggle-box")
 
         title_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=0)
+        title_box.get_style_context().add_class("toggle-title-box")
 
         self.desc_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
-        self.desc_box.set_name("toggle-desc-box")
-        
+        self.desc_box.get_style_context().add_class('toggle-desc-box')
+
         title = Gtk.Label() 
+        title.get_style_context().add_class('toggle-title')
         title.set_text("Devices")
-        title.set_name("toggle-title")
         title.set_halign(Gtk.Align.START)
 
         self.desc = Gtk.Label()
+        self.desc.get_style_context().add_class('toggle-desc')
+        self.desc.set_halign(Gtk.Align.START)
         if not self.bluetooth_on:
             self.desc.set_text("Off")
-        self.desc.set_name("toggle-desc")
-        self.desc.set_halign(Gtk.Align.START)
 
         left_box = Gtk.EventBox()
         left_box.set_name("toggle-left-box")
 
-        self.icon_background_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=0)
+        self.icon_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=0)
+        self.icon_box.get_style_context().add_class('toggle-icon-box')
 
         self.icon = Gtk.Label()
+        self.icon.get_style_context().add_class('toggle-icon')
         self.icon.set_text("")
         self.icon.set_halign(Gtk.Align.START)
 
         if self.bluetooth_on:
-            self.icon_background_box.set_name("toggle-icon-background-enabled")
+            self.icon_box.set_name("toggle-icon-box-enabled")
             self.icon.set_name("toggle-icon-enabled")
         else:
-            self.icon_background_box.set_name("toggle-icon-background-disabled")
+            self.icon_box.set_name("toggle-icon-box-disabled")
             self.icon.set_name("toggle-icon-disabled")
 
         self.status_dot = Gtk.Label()
+        self.status_dot.get_style_context().add_class('status-dot')
         self.status_dot.set_text("")
         self.status_dot.set_name("status-dot-inactive")
         self.status_dot.set_halign(Gtk.Align.END)
         
-        self.icon_background_box.pack_start(self.icon, False, False, 0)
-        left_box.add(self.icon_background_box)
+        self.icon_box.pack_start(self.icon, False, False, 0)
+        left_box.add(self.icon_box)
         self.desc_box.pack_start(title, False, False, 0)
         self.desc_box.pack_start(self.desc, False, False, 0)
         title_box.pack_start(left_box, False, False, 0)
@@ -359,11 +366,11 @@ class BluetoothMenu(Gtk.Dialog):
         self.list_main_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=16)
         
         self.list_box = Gtk.ListBox()
-        self.list_box.set_name("list")
+        self.list_box.get_style_context().add_class('list')
         self.list_box.set_selection_mode(Gtk.SelectionMode.NONE)
         
         scrolled_window = Gtk.ScrolledWindow()
-        scrolled_window.set_name("list-box")
+        scrolled_window.get_style_context().add_class("list-box")
         scrolled_window.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC) 
         scrolled_window.add(self.list_box)  
 
@@ -374,16 +381,20 @@ class BluetoothMenu(Gtk.Dialog):
     def list_options(self):
         self.list_options_main_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=8)
         self.scan_box = Gtk.EventBox()
+        self.scan_box.get_style_context().add_class("toggle-box-list-options")
         self.scan_box.set_name("toggle-box-list-options-active")
         self.scan_title = Gtk.Label()
-        self.scan_title.set_text("")
+        self.scan_title.get_style_context().add_class("list-options-title")
         self.scan_title.set_name("list-opitons-title-active")
+        self.scan_title.set_text("")
 
         self.config_box = Gtk.EventBox()
+        self.config_box.get_style_context().add_class("toggle-box-list-options")
         self.config_box.set_name("toggle-box-list-options-inactive")
         self.config_title = Gtk.Label()
-        self.config_title.set_text("")
+        self.config_title.get_style_context().add_class("list-options-title")
         self.config_title.set_name("list-opitons-title-inactive")
+        self.config_title.set_text("")
 
         self.scan_box.add(self.scan_title)
         self.config_box.add(self.config_title)
@@ -396,74 +407,91 @@ class BluetoothMenu(Gtk.Dialog):
 
     def initialize_loading_screen(self):
         self.load_bar_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=0)
-        self.load_bar_box.set_name("load-box")
+        self.load_bar_box.get_style_context().add_class('load-box')
 
         self.load_bar_1 = Gtk.Label() 
-        self.load_bar_1.set_name("load-circle-inactive")
+        self.load_bar_1.get_style_context().add_class('load-bar')
+        self.load_bar_1.set_name("load-bar-inactive")
         self.load_bar_1.set_text(self.load_icon)
 
         self.load_bar_2 = Gtk.Label() 
-        self.load_bar_2.set_name("load-circle-inactive")
+        self.load_bar_2.get_style_context().add_class('load-bar')
+        self.load_bar_2.set_name("load-bar-inactive")
         self.load_bar_2.set_text(self.load_icon)
         
         self.load_bar_3 = Gtk.Label() 
-        self.load_bar_3.set_name("load-circle-inactive")
+        self.load_bar_3.get_style_context().add_class('load-bar')
+        self.load_bar_3.set_name("load-bar-inactive")
         self.load_bar_3.set_text(self.load_icon)
         
         self.load_bar_4 = Gtk.Label() 
-        self.load_bar_4.set_name("load-circle-inactive")
+        self.load_bar_4.get_style_context().add_class('load-bar')
+        self.load_bar_4.set_name("load-bar-inactive")
         self.load_bar_4.set_text(self.load_icon)
 
         self.load_bar_5 = Gtk.Label() 
-        self.load_bar_5.set_name("load-circle-inactive")
+        self.load_bar_5.get_style_context().add_class('load-bar')
+        self.load_bar_5.set_name("load-bar-inactive")
         self.load_bar_5.set_text(self.load_icon)
 
         self.load_bar_6 = Gtk.Label() 
-        self.load_bar_6.set_name("load-circle-inactive")
+        self.load_bar_6.get_style_context().add_class('load-bar')
+        self.load_bar_6.set_name("load-bar-inactive")
         self.load_bar_6.set_text(self.load_icon)
         
         self.load_bar_7 = Gtk.Label() 
-        self.load_bar_7.set_name("load-circle-inactive")
+        self.load_bar_7.get_style_context().add_class('load-bar')
+        self.load_bar_7.set_name("load-bar-inactive")
         self.load_bar_7.set_text(self.load_icon)
         
         self.load_bar_8 = Gtk.Label() 
-        self.load_bar_8.set_name("load-circle-inactive")
+        self.load_bar_8.get_style_context().add_class('load-bar')
+        self.load_bar_8.set_name("load-bar-inactive")
         self.load_bar_8.set_text(self.load_icon)
 
         self.load_bar_9 = Gtk.Label() 
-        self.load_bar_9.set_name("load-circle-inactive")
+        self.load_bar_9.get_style_context().add_class('load-bar')
+        self.load_bar_9.set_name("load-bar-inactive")
         self.load_bar_9.set_text(self.load_icon)
 
         self.load_bar_10 = Gtk.Label() 
-        self.load_bar_10.set_name("load-circle-inactive")
+        self.load_bar_10.get_style_context().add_class('load-bar')
+        self.load_bar_10.set_name("load-bar-inactive")
         self.load_bar_10.set_text(self.load_icon)
         
         self.load_bar_11 = Gtk.Label() 
-        self.load_bar_11.set_name("load-circle-inactive")
+        self.load_bar_11.get_style_context().add_class('load-bar')
+        self.load_bar_11.set_name("load-bar-inactive")
         self.load_bar_11.set_text(self.load_icon)
         
         self.load_bar_12 = Gtk.Label() 
-        self.load_bar_12.set_name("load-circle-inactive")
+        self.load_bar_12.get_style_context().add_class('load-bar')
+        self.load_bar_12.set_name("load-bar-inactive")
         self.load_bar_12.set_text(self.load_icon)
 
         self.load_bar_13 = Gtk.Label() 
-        self.load_bar_13.set_name("load-circle-inactive")
+        self.load_bar_13.get_style_context().add_class('load-bar')
+        self.load_bar_13.set_name("load-bar-inactive")
         self.load_bar_13.set_text(self.load_icon)
 
         self.load_bar_14 = Gtk.Label() 
-        self.load_bar_14.set_name("load-circle-inactive")
+        self.load_bar_14.get_style_context().add_class('load-bar')
+        self.load_bar_14.set_name("load-bar-inactive")
         self.load_bar_14.set_text(self.load_icon)
         
         self.load_bar_15 = Gtk.Label() 
-        self.load_bar_15.set_name("load-circle-inactive")
+        self.load_bar_15.get_style_context().add_class('load-bar')
+        self.load_bar_15.set_name("load-bar-inactive")
         self.load_bar_15.set_text(self.load_icon)
         
         self.load_bar_16 = Gtk.Label() 
-        self.load_bar_16.set_name("load-circle-inactive")
+        self.load_bar_16.get_style_context().add_class('load-bar')
+        self.load_bar_16.set_name("load-bar-inactive")
         self.load_bar_16.set_text(self.load_icon)
 
         self.load_bar_17 = Gtk.Label() 
-        self.load_bar_17.set_name("load-circle-inactive")
+        self.load_bar_17.get_style_context().add_class('load-bar')
+        self.load_bar_17.set_name("load-bar-inactive")
         self.load_bar_17.set_text(self.load_icon)
         
         self.load_bar_box.pack_start(self.load_bar_1, False, False, 0)
@@ -502,142 +530,142 @@ class BluetoothMenu(Gtk.Dialog):
     
     def activate_load_bars(self, loop_times):
         if self.load_bars_active:
-            self.load_bar_1.set_name("load-circle-active")
+            self.load_bar_1.set_name("load-bar-active")
             GLib.timeout_add(self.load_speed, self.activate_load_bar_2, loop_times)
         else:
             return False
         
     def activate_load_bar_2(self, loop_times):
         if self.load_bars_active:
-            self.load_bar_1.set_name("load-circle-inactive")
-            self.load_bar_2.set_name("load-circle-active")
+            self.load_bar_1.set_name("load-bar-inactive")
+            self.load_bar_2.set_name("load-bar-active")
             GLib.timeout_add(self.load_speed, self.activate_load_bar_3, loop_times)
         else:
             return False
         
     def activate_load_bar_3(self, loop_times):
         if self.load_bars_active:
-            self.load_bar_2.set_name("load-circle-inactive")
-            self.load_bar_3.set_name("load-circle-active")
+            self.load_bar_2.set_name("load-bar-inactive")
+            self.load_bar_3.set_name("load-bar-active")
             GLib.timeout_add(self.load_speed, self.activate_load_bar_4, loop_times)
         else:
             return False
         
     def activate_load_bar_4(self, loop_times):
         if self.load_bars_active:
-            self.load_bar_3.set_name("load-circle-inactive")
-            self.load_bar_4.set_name("load-circle-active")
+            self.load_bar_3.set_name("load-bar-inactive")
+            self.load_bar_4.set_name("load-bar-active")
             GLib.timeout_add(self.load_speed, self.activate_load_bar_5, loop_times)
         else:
             return False
         
     def activate_load_bar_5(self, loop_times):
         if self.load_bars_active:
-            self.load_bar_4.set_name("load-circle-inactive")
-            self.load_bar_5.set_name("load-circle-active")
+            self.load_bar_4.set_name("load-bar-inactive")
+            self.load_bar_5.set_name("load-bar-active")
             GLib.timeout_add(self.load_speed, self.activate_load_bar_6, loop_times)
         else:
             return False
         
     def activate_load_bar_6(self, loop_times):
         if self.load_bars_active:
-            self.load_bar_5.set_name("load-circle-inactive")
-            self.load_bar_6.set_name("load-circle-active")
+            self.load_bar_5.set_name("load-bar-inactive")
+            self.load_bar_6.set_name("load-bar-active")
             GLib.timeout_add(self.load_speed, self.activate_load_bar_7, loop_times)
         else:
             return False
         
     def activate_load_bar_7(self, loop_times):
         if self.load_bars_active:
-            self.load_bar_6.set_name("load-circle-inactive")
-            self.load_bar_7.set_name("load-circle-active")
+            self.load_bar_6.set_name("load-bar-inactive")
+            self.load_bar_7.set_name("load-bar-active")
             GLib.timeout_add(self.load_speed, self.activate_load_bar_8, loop_times)
         else:
             return False
         
     def activate_load_bar_8(self, loop_times):
         if self.load_bars_active:
-            self.load_bar_7.set_name("load-circle-inactive")
-            self.load_bar_8.set_name("load-circle-active")
+            self.load_bar_7.set_name("load-bar-inactive")
+            self.load_bar_8.set_name("load-bar-active")
             GLib.timeout_add(self.load_speed, self.activate_load_bar_9, loop_times)
         else:
             return False
         
     def activate_load_bar_9(self, loop_times):
         if self.load_bars_active:
-            self.load_bar_8.set_name("load-circle-inactive")
-            self.load_bar_9.set_name("load-circle-active")
+            self.load_bar_8.set_name("load-bar-inactive")
+            self.load_bar_9.set_name("load-bar-active")
             GLib.timeout_add(self.load_speed, self.activate_load_bar_10, loop_times)
         else:
             return False
 
     def activate_load_bar_10(self, loop_times):
         if self.load_bars_active:
-            self.load_bar_9.set_name("load-circle-inactive")
-            self.load_bar_10.set_name("load-circle-active")
+            self.load_bar_9.set_name("load-bar-inactive")
+            self.load_bar_10.set_name("load-bar-active")
             GLib.timeout_add(self.load_speed, self.activate_load_bar_11, loop_times)
         else:
             return False
 
     def activate_load_bar_11(self, loop_times):
         if self.load_bars_active:
-            self.load_bar_10.set_name("load-circle-inactive")
-            self.load_bar_11.set_name("load-circle-active")
+            self.load_bar_10.set_name("load-bar-inactive")
+            self.load_bar_11.set_name("load-bar-active")
             GLib.timeout_add(self.load_speed, self.activate_load_bar_12, loop_times)
         else:
             return False
         
     def activate_load_bar_12(self, loop_times):
         if self.load_bars_active:
-            self.load_bar_11.set_name("load-circle-inactive")
-            self.load_bar_12.set_name("load-circle-active")
+            self.load_bar_11.set_name("load-bar-inactive")
+            self.load_bar_12.set_name("load-bar-active")
             GLib.timeout_add(self.load_speed, self.activate_load_bar_13, loop_times)
         else:
             return False
     
     def activate_load_bar_13(self, loop_times):
         if self.load_bars_active:
-            self.load_bar_12.set_name("load-circle-inactive")
-            self.load_bar_13.set_name("load-circle-active")
+            self.load_bar_12.set_name("load-bar-inactive")
+            self.load_bar_13.set_name("load-bar-active")
             GLib.timeout_add(self.load_speed, self.activate_load_bar_14, loop_times)
         else:
             return False
 
     def activate_load_bar_14(self, loop_times):
         if self.load_bars_active:
-            self.load_bar_13.set_name("load-circle-inactive")
-            self.load_bar_14.set_name("load-circle-active")
+            self.load_bar_13.set_name("load-bar-inactive")
+            self.load_bar_14.set_name("load-bar-active")
             GLib.timeout_add(self.load_speed, self.activate_load_bar_15, loop_times)
         else:
             return False
 
     def activate_load_bar_15(self, loop_times):
         if self.load_bars_active:
-            self.load_bar_14.set_name("load-circle-inactive")
-            self.load_bar_15.set_name("load-circle-active")
+            self.load_bar_14.set_name("load-bar-inactive")
+            self.load_bar_15.set_name("load-bar-active")
             GLib.timeout_add(self.load_speed, self.activate_load_bar_16, loop_times)
         else:
             return False
         
     def activate_load_bar_16(self, loop_times):
         if self.load_bars_active:
-            self.load_bar_15.set_name("load-circle-inactive")
-            self.load_bar_16.set_name("load-circle-active")
+            self.load_bar_15.set_name("load-bar-inactive")
+            self.load_bar_16.set_name("load-bar-active")
             GLib.timeout_add(self.load_speed, self.activate_load_bar_17, loop_times)
         else:
             return False
 
     def activate_load_bar_17(self, loop_times):
         if self.load_bars_active:
-            self.load_bar_16.set_name("load-circle-inactive")
-            self.load_bar_17.set_name("load-circle-active")
+            self.load_bar_16.set_name("load-bar-inactive")
+            self.load_bar_17.set_name("load-bar-active")
             GLib.timeout_add(self.load_speed, self.deactivate_load_bars, loop_times)
         else:
             return False
     
     def deactivate_load_bars(self, loop_times):
         if self.load_bars_active:
-            self.load_bar_17.set_name("load-circle-inactive")
+            self.load_bar_17.set_name("load-bar-inactive")
             if loop_times == 0:
                 self.load_bars_active = False
                 return False
@@ -660,7 +688,7 @@ class BluetoothMenu(Gtk.Dialog):
                 self.status_dot.set_name("status-dot-off")
                 self.load_bars_active = False
                 
-                self.icon_background_box.set_name("toggle-icon-background-disabled")
+                self.icon_box.set_name("toggle-icon-box-disabled")
                 self.icon.set_name("toggle-icon-disabled")
                 
                 self.main_box.show_all()
@@ -672,12 +700,9 @@ class BluetoothMenu(Gtk.Dialog):
             if on_result == 0:
                 self.bluetooth_on = True
                 
-                # self.resize(self.window_width, self.window_height)
-                # self.set_size_request(self.window_width, self.window_height)
-
                 self.status_dot.set_name("status-dot-inactive")
                 
-                self.icon_background_box.set_name("toggle-icon-background-enabled")
+                self.icon_box.set_name("toggle-icon-box-enabled")
                 self.icon.set_name("toggle-icon-enabled")
                 
                 self.main_box.show_all()
@@ -720,13 +745,10 @@ class BluetoothMenu(Gtk.Dialog):
         except subprocess.CalledProcessError as e:
             return False
 
-    def on_device_clicked(self, widget, event, device):
+    def on_device_clicked(self, widget, event=False, device=False):
         self.ignore_focus_lost = True
         self.active_widget = widget
-        if device["CONNECTED"]:
-            widget.get_parent().get_parent().set_name("list-obj-box-active-clicked")
-        else:
-            widget.get_parent().get_parent().set_name("list-obj-box-inactive-clicked")
+        widget.get_parent().get_parent().set_name("list-name-box-clicked")
         dialog = OptionWindow(self, self, device, widget)
         dialog.run()
 
@@ -834,7 +856,6 @@ class BluetoothMenu(Gtk.Dialog):
             complete_devices = []
             if not get_known:
                 devices = self.get_bluetooth_devices()
-                print(devices)
                 for device in devices:
                     icon = None
                     battery = None
@@ -955,14 +976,21 @@ class BluetoothMenu(Gtk.Dialog):
 
             for i, device in enumerate(devices):
                 row = Gtk.ListBoxRow()
-                row.set_name("row")
-                label = Gtk.Label()
-
+                row.get_style_context().add_class('row')
+                name = Gtk.Label()
+                name.get_style_context().add_class('list-name')
+                name.set_text(device["DEVICE"][:20])
+                name.set_halign(Gtk.Align.START)
+        
                 list_content_main_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
+                list_content_main_box.get_style_context().add_class('list-name-box')
 
                 list_content_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=0)
+                
                 list_obj_icon_box = Gtk.EventBox()
+                list_obj_icon_box.get_style_context().add_class('list-icon-box')
                 icon = Gtk.Label()
+                icon.get_style_context().add_class('list-icon')
                 
                 device_type = device["DEVICE-TYPE"] 
                 if device_type == "audio-headphones-bluetooth":
@@ -979,13 +1007,13 @@ class BluetoothMenu(Gtk.Dialog):
                     icon.set_text("?")
 
                 list_obj_battery_box = Gtk.EventBox()
-                list_obj_battery_box.set_name("list-battery-box")
+                list_obj_battery_box.get_style_context().add_class("list-battery-box")
                 battery = Gtk.Label()
+                battery.get_style_context().add_class("list-battery")
 
                 battery_percentage = device["BATTERY"]
                 if battery_percentage:
                     battery.set_text(battery_percentage + "%")
-                    list_obj_icon_box.set_name("list-icon-box-if-battery")
                     if int(battery_percentage) <= 20:
                         battery.set_name("list-battery-under-20")
                     else:
@@ -997,20 +1025,16 @@ class BluetoothMenu(Gtk.Dialog):
                 list_obj_clickable_box.connect("button-press-event", self.on_device_clicked, device)
 
                 if device["CONNECTED"]:
-                    label.set_name("list-obj")
-                    list_content_main_box.set_name("list-obj-box-active")
+                    list_content_main_box.set_name("list-name-box-active")
                 else:
-                    list_content_main_box.set_name("list-obj-box-inactive")
-                    label.set_name("list-obj")
-
-                label.set_text(device["DEVICE"][:20])
-                label.set_halign(Gtk.Align.START)
+                    list_content_main_box.set_name("list-name-box-inactive")
                 
                 list_obj_icon_box.add(icon)
-                list_obj_clickable_box.add(label)
+                list_obj_clickable_box.add(name)
 
                 list_content_box.pack_start(list_obj_icon_box, False, False, 0)
                 if battery_percentage:
+                    list_obj_icon_box.set_name('list-icon-box-with-battery')
                     list_obj_battery_box.add(battery)
                     list_content_box.pack_start(list_obj_battery_box, False, False, 0)
                 list_content_box.pack_start(list_obj_clickable_box, False, False, 0)
@@ -1019,10 +1043,6 @@ class BluetoothMenu(Gtk.Dialog):
                 
                 row.add(list_content_main_box)
                 row.connect("activate", self.on_device_clicked, list_obj_clickable_box, device)
-                
-                if i == 0:
-                    self.list_box.grab_focus()
-
                 self.list_box.add(row)
 
             self.list_box.show_all()  

@@ -1,14 +1,9 @@
-* {
-    -gtk-icon-effect: none;
-}   
-
-#root {
+.root {
     border-width: 5px;
     border-color: #4f586e;
     background: rgba(46, 52, 64, 0.90);
 }
-
-#content-area {
+.content-area {
     margin-top: 5px;    
     margin-right: 5px;  
     margin-bottom: 5px;
@@ -16,104 +11,43 @@
     background: rgba(46, 52, 64, 0);
 }
 
-#option-window-content-area {
-    background: rgba(46, 52, 64, 0);
+/* TITLE */
+.status-dot {
+    margin-top: 10px;    
+    margin-right: 20px;  
+    margin-bottom: 10px;
+    margin-left: 10px;
+    font-size: 12px;
+    font-family: 'Font Awesome 6 Free Solid';
 }
-
 #status-dot-inactive {
-    margin-top: 10px;    
-    margin-right: 20px;  
-    margin-bottom: 10px;
-    margin-left: 10px;
     color: rgba(46, 52, 64, 0.9);
-    font-size: 12px;
-    font-family: 'Font Awesome 6 Free Solid';
 }
-
 #status-dot-list-update {
-    margin-top: 10px;    
-    margin-right: 20px;  
-    margin-bottom: 10px;
-    margin-left: 10px;
     color: #9B98B7;
-    font-size: 12px;
-    font-family: 'Font Awesome 6 Free Solid';
 }
-
 #status-dot-off {
-    margin-top: 10px;    
-    margin-right: 20px;  
-    margin-bottom: 10px;
-    margin-left: 10px;
     color: #c1656e;
-    font-size: 12px;
-    font-family: 'Font Awesome 6 Free Solid';
 }
-
-#load-box {
+.load-box {
     margin-left: 2px;
     margin-bottom: 2px;
-    margin-top: 0px;
 }
-
-#load-circle-active {
+.load-bar {
+    font-size: 5px;
+    font-family: 'Font Awesome 6 Free Solid';
+}
+#load-bar-active {
     color: #9B98B7;
-    font-size: 5px;
-    font-family: 'Font Awesome 6 Free Solid';
 }
-
-#load-circle-inactive {
+#load-bar-inactive {
     color: rgba(46, 52, 64, 0.9);
-    font-size: 5px;
-    font-family: 'Font Awesome 6 Free Solid';
 }
-
-#toggle-box-list-options-inactive {
-    border-radius: 3px;
-    background: #4f586e;
-}
-
-#toggle-box-list-options-active {
-    border-radius: 3px;
-    background: #9B98B7;
-}
-
-#list-opitons-title-active {
-    margin-top: 10px;    
-    margin-right: 8px;  
-    margin-bottom: 8px;
-    margin-left: 8px;
-    color: black;
-    font-size: 20px;
-    font-family: 'Font Awesome 6 Free Solid';
-    font-weight: bold;
-}
-
-#list-opitons-title-inactive {
-    margin-top: 10px;    
-    margin-right: 8px;  
-    margin-bottom: 8px;
-    margin-left: 8px;
-    color: white;
-    font-size: 20px;
-    font-family: 'Font Awesome 6 Free Solid';
-    font-weight: bold;
-}
-
-#toggle-box {
-    /* margin-bottom: 8px; */
+.toggle-title-box {
     border-radius: 5px;
     background: #4f586e;
 }
-
-#toggle-desc-box {
-    margin-top: 0px;    
-    margin-right: 10px;  
-    margin-bottom: 0px;
-    margin-left: 2px;
-}
-
-#toggle-title {
+.toggle-title {
     margin-top: 9px;    
     margin-right: 10px;  
     margin-bottom: 0px;
@@ -123,8 +57,11 @@
     font-family: FiraCode Nerd Font;
     font-weight: bold;
 }
-
-#toggle-desc {
+.toggle-desc-box {
+    margin-right: 10px;  
+    margin-left: 2px;
+}
+.toggle-desc {
     margin-top: 2px;    
     margin-right: 10px;  
     margin-bottom: 0px;
@@ -133,58 +70,66 @@
     font-size: 14px;
     font-family: FiraCode Nerd Font;
 }
-
-#toggle-left-box {
-    border-radius: 5px;
-}
-
-#toggle-icon-background-enabled {
+.toggle-icon-box {
     margin-top: 10px;    
     margin-right: 10px;  
     margin-bottom: 10px;
     margin-left: 10px;
     border-radius: 5px;
+}
+#toggle-icon-box-enabled {
     background: #9B98B7;
 }
-
-#toggle-icon-background-disabled {
-    margin-top: 10px;    
-    margin-right: 10px;  
-    margin-bottom: 10px;
-    margin-left: 10px;
-    border-radius: 5px;
+#toggle-icon-box-disabled {
     background: #2e3440;
 }
+.toggle-icon {
+    margin-top: 6px;    
+    margin-right: 15px;  
+    margin-bottom: 6px;
+    margin-left: 15px;
+    border-radius: 5px;
+    font-size: 26px;
+    font-family: 'Font Awesome 6 Free Solid';
 
+}
 #toggle-icon-enabled {
-    margin-top: 6px;    
-    margin-right: 15px;  
-    margin-bottom: 6px;
-    margin-left: 15px;
-    border-radius: 5px;
     color: black;
-    font-size: 26px;
-    font-family: 'Font Awesome 6 Free Solid';
     background: #9B98B7;
 }
-
 #toggle-icon-disabled {
-    margin-top: 6px;    
-    margin-right: 15px;  
-    margin-bottom: 6px;
-    margin-left: 15px;
-    border-radius: 5px;
     color: white;
-    font-size: 26px;
-    font-family: 'Font Awesome 6 Free Solid';
     background: #2e3440;
 }
 
-#list-box {
+/* LIST */
+.list-box {
     border-radius: 5px;
     background: #4f586e;
 }
+.list {
+    margin-top: 10px;    
+    margin-bottom: 10px;
+    border-radius: 5px;
+    background: #4f586e;
+}
+.row {
+    margin-left: 5px;
+    margin-right: 5px;
+    border-radius: 5px;
+}
+.list-icon-box {
+    border-radius: 5px;
+    background: #2e3440;
+}
+#list-icon-box-with-battery {
+    border-radius: 5px 0px 0px 5px;
+}
 
+.list-icon {
+    font-family: 'Font Awesome 6 Free Solid';
+    font-weight: bold;   
+}
 #list-icon-headphone {
     margin-top: 12px;    
     margin-right: 10px;  
@@ -192,10 +137,7 @@
     margin-left: 2px;
     color: white;
     font-size: 18px;
-    font-family: 'Font Awesome 6 Free Solid';
-    font-weight: bold;   
 }
-
 #list-icon-speaker {
     margin-top: 12px;    
     margin-right: 9px;  
@@ -203,10 +145,7 @@
     margin-left: 1px;
     color: white;
     font-size: 16px;
-    font-family: 'Font Awesome 6 Free Solid';
-    font-weight: bold;   
 }
-
 #list-icon-unknown {
     margin-top: 12px;    
     margin-right: 14px;  
@@ -214,168 +153,108 @@
     margin-left: 6px;
     color: white;
     font-size: 16px;
-    font-family: 'Font Awesome 6 Free Solid';
-    font-weight: bold;   
 }
-
-#list-battery-over-20 {
-    margin-top: 1px;    
-    margin-right: 10px;  
-    margin-left: -5px;
-    color: #a3be8c;
-    font-size: 16px;
-    font-family: "FiraCode Nerd Font";
-    font-weight: bold;   
-}
-
-#list-battery-under-20 {
-    margin-top: 1px;    
-    margin-right: 10px;  
-    margin-left: -5px;
-    color: #bf616a;
-    font-size: 16px;
-    font-family: "FiraCode Nerd Font";
-    font-weight: bold;   
-}
-
-#list-battery-box {
+.list-battery-box {
     border-radius: 0px 0px 0px 0px;
     background: #2e3440;
 }
-
-#list-icon-box-if-battery {
-    border-radius: 5px 0px 0px 5px;
-    background: #2e3440;
+.list-battery {
+    margin-top: 1px;    
+    margin-right: 10px;  
+    margin-left: -5px;
+    font-size: 16px;
+    font-family: "FiraCode Nerd Font";
+    font-weight: bold;
 }
-
-#list-icon-box {
-    border-radius: 5px;
-    /* border-radius: 5px 0px 0px 5px; */
-    background: #2e3440;
+#list-battery-over-20 {
+    color: #a3be8c;
 }
-
-#list-obj-box-inactive {
-    margin-top: 5px;    
-    margin-bottom: 5px;  
+#list-battery-under-20 {
+    color: #bf616a;
+}
+.list-name-box {
+    margin-top: 4px;    
+    margin-bottom: 4px;  
     border-radius: 5px;
+    font-size: 18px;
+}
+#list-name-box-inactive {
     background: #434b5d;  
     color: white;
-    font-size: 18px;
-    font-family: FiraCode Nerd Font;
 }
-
-#list-obj-box-active {
-    margin-top: 5px;    
-    margin-bottom: 5px;  
-    border-radius: 5px;
+#list-name-box-active {
     background: #9B98B7;
     color: black;
-    font-size: 18px;
-    font-family: FiraCode Nerd Font;
 }
-
-#list-obj-box-active-clicked {
-    margin-top: 5px;    
-    margin-bottom: 5px;  
-    border-radius: 5px;
+#list-name-box-clicked {
     background: rgba(46, 52, 64, 0.90);
-    font-size: 18px;
 }
-
-#list-obj-box-inactive-clicked {
-    margin-top: 5px;    
-    margin-bottom: 5px;  
-    border-radius: 5px;
-    background: rgba(46, 52, 64, 0.90);
-    font-size: 18px;
-}
-
-#list-obj {
-    border-radius: 5px;
-    font-size: 18px;
-    font-family: FiraCode Nerd Font;
-}
-
-#row {
-    margin-left: 5px;
-    margin-right: 5px;
-    border-radius: 5px;
-}
-
-#list {
+.list-name {
+    margin-bottom: 10px;  
     margin-top: 10px;    
-    margin-bottom: 10px;
     border-radius: 5px;
-    background: #4f586e;
     font-size: 18px;
     font-family: FiraCode Nerd Font;
 }
-
-#list-content-box-active {
-    border-radius: 5px;
-    background: rgba(46, 52, 64, 0.90);
-}
-
-#list-content-box-inactive {
-    background: #4f586e;
-}
-
-#buttons {
+.buttons {
     font-size: 18px;
     border-radius: 5px;
     font-family: "FiraCode Nerd Font";
     font-weight: lighter;
 }
 
-#connect-animation-box { 
+/* CONNECT ANIMATION */
+.connect-animation-box { 
     margin-top: 17px;    
     margin-bottom: 17px;
     margin-right: 15px;  
     margin-left: 15px;
 }
-
-#connect-animation-icon-success {
+.connect-animation-icon,
+.connect-animation-circle {
+    font-family: 'Font Awesome 6 Free Solid';
+    font-weight: bold;   
+}
+.connect-animation-icon {
     margin-bottom: 4px;
+    font-size: 22px;
+}
+.connect-animation-circle {
+    margin-bottom: 4px;
+    font-size: 7px;
+}
+#connect-animation-success {
     color: #a3be8c;
-    font-size: 22px;
-    font-family: 'Font Awesome 6 Free Solid';
-    font-weight: bold;   
 }
-
-#connect-animation-icon-active {
-    margin-bottom: 4px;
-    color: #81a1c1;
-    font-size: 22px;
-    font-family: 'Font Awesome 6 Free Solid';
-    font-weight: bold;   
+#connect-animation-active {
+    color: #9B98B7;
 }
-
-#connect-animation-icon-inactive {
+#connect-animation-inactive {
     color: #4f586e;
-    font-size: 22px;
-    font-family: 'Font Awesome 6 Free Solid';
-    font-weight: bold;   
 }
 
-#connect-animation-circle-success {
-    margin-bottom: 4px;
-    color: #a3be8c;
-    font-size: 7px;
-    font-family: 'Font Awesome 6 Free Solid';
-    font-weight: bold;   
+/* OPTIONS */
+.toggle-box-list-options {
+    border-radius: 3px;
 }
-
-#connect-animation-circle-active {
-    margin-bottom: 4px;
-    color: #81a1c1;
-    font-size: 7px;
-    font-family: 'Font Awesome 6 Free Solid';
-    font-weight: bold;   
+#toggle-box-list-options-inactive {
+    background: #4f586e;
 }
-
-#connect-animation-circle-inactive {
-    color: #4f586e;
-    font-size: 7px;
+#toggle-box-list-options-active {
+    background: #9B98B7;
+}
+.list-options-title {
+    margin-top: 10px;    
+    margin-right: 8px;  
+    margin-bottom: 8px;
+    margin-left: 8px;
+    font-size: 20px;
     font-family: 'Font Awesome 6 Free Solid';
-    font-weight: bold;   
+    font-weight: bold;
+}
+#list-opitons-title-active {
+    color: black;
+}
+#list-opitons-title-inactive {
+    color: white;
 }

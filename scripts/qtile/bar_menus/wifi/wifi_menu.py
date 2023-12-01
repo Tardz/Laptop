@@ -2,7 +2,7 @@ import gi
 gi.require_version('Gtk', '3.0')
 import subprocess
 import os
-from gi.repository import Gtk, Gdk, GLib, Pango
+from gi.repository import Gtk, Gdk, GLib
 import time
 import json
 from Xlib import display 
@@ -35,21 +35,21 @@ class OptionWindow(Gtk.Dialog):
         self.connect("focus-out-event", self.on_focus_out)
         self.connect("key-press-event", self.on_escape_press)
 
-        self.set_name("root")
         self.content_area = self.get_content_area()
-        self.content_area.set_name("option-window-content-area")
+        self.content_area.get_style_context().add_class('root')
 
         connection_button = Gtk.Button()
-        connection_button.set_name("buttons")
+        connection_button.get_style_context().add_class('buttons')
+
         if not self.main_window.history_shown:
             self.content_area.pack_start(connection_button, True, True, 0)
         
         password_entry = Gtk.Entry()
-        password_entry.set_name("buttons")
+        password_entry.get_style_context().add_class('buttons')
 
         if self.network["KNOWN"]:
             remove_button = Gtk.Button(label = "Remove")
-            remove_button.set_name("buttons")
+            remove_button.get_style_context().add_class('buttons')
             remove_button.connect("button-press-event", self.on_remove_clicked)
             remove_button.connect("activate", self.on_remove_clicked)
 
@@ -100,46 +100,55 @@ class OptionWindow(Gtk.Dialog):
         self.move(animation_window_x, animation_window_y)
 
         connect_animation_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=12)
-        connect_animation_box.set_name("connect-animation-box")
+        connect_animation_box.get_style_context().add_class('connect-animation-box')
 
         self.laptop_icon = Gtk.Label()
         self.laptop_icon.set_text("")
-        self.laptop_icon.set_name("connect-animation-icon-active")
+        self.laptop_icon.get_style_context().add_class('connect-animation-icon')
+        self.laptop_icon.set_name("connect-animation-active")
 
         self.load_circle_1 = Gtk.Label()
         self.load_circle_1.set_text("")
-        self.load_circle_1.set_name("connect-animation-circle-inactive")
+        self.load_circle_1.get_style_context().add_class('connect-animation-circle')
+        self.load_circle_1.set_name("connect-animation-inactive")
 
         self.load_circle_2 = Gtk.Label()
         self.load_circle_2.set_text("")
-        self.load_circle_2.set_name("connect-animation-circle-inactive")
+        self.load_circle_2.get_style_context().add_class('connect-animation-circle')
+        self.load_circle_2.set_name("connect-animation-inactive")
 
         self.load_circle_3 = Gtk.Label()
         self.load_circle_3.set_text("")
-        self.load_circle_3.set_name("connect-animation-circle-inactive")
+        self.load_circle_3.get_style_context().add_class('connect-animation-circle')
+        self.load_circle_3.set_name("connect-animation-inactive")
 
         self.network_icon = Gtk.Label()
         if "phone" in self.network["SSID"]:
             self.network_icon.set_text("")
         else:
             self.network_icon.set_text("")
-        self.network_icon.set_name("connect-animation-icon-inactive")
+        self.network_icon.get_style_context().add_class('connect-animation-icon')
+        self.network_icon.set_name("connect-animation-inactive")
 
         self.load_circle_4 = Gtk.Label()
         self.load_circle_4.set_text("")
-        self.load_circle_4.set_name("connect-animation-circle-inactive")
+        self.load_circle_4.get_style_context().add_class('connect-animation-circle')
+        self.load_circle_4.set_name("connect-animation-inactive")
 
         self.load_circle_5 = Gtk.Label()
         self.load_circle_5.set_text("")
-        self.load_circle_5.set_name("connect-animation-circle-inactive")
+        self.load_circle_5.get_style_context().add_class('connect-animation-circle')
+        self.load_circle_5.set_name("connect-animation-inactive")
 
         self.load_circle_6 = Gtk.Label()
         self.load_circle_6.set_text("")
-        self.load_circle_6.set_name("connect-animation-circle-inactive")
+        self.load_circle_6.get_style_context().add_class('connect-animation-circle')
+        self.load_circle_6.set_name("connect-animation-inactive")
 
         self.internet_icon = Gtk.Label()
         self.internet_icon.set_text("")
-        self.internet_icon.set_name("connect-animation-icon-inactive")
+        self.network_icon.get_style_context().add_class('connect-icon')
+        self.internet_icon.set_name("connect-animation-inactive")
 
         connect_animation_box.pack_start(self.laptop_icon,   True, False, 0)
         connect_animation_box.pack_start(self.load_circle_1, True, False, 0)
@@ -176,17 +185,17 @@ class OptionWindow(Gtk.Dialog):
             self.connect_process_start(password)
 
     def activate_load_circle_stage_1(self):
-        self.load_circle_1.set_name("connect-animation-circle-active")
+        self.load_circle_1.set_name("connect-animation-active")
         GLib.timeout_add(self.load_speed, self.activate_load_circle_2)
         return False
 
     def activate_load_circle_2(self):
-        self.load_circle_2.set_name("connect-animation-circle-active")
+        self.load_circle_2.set_name("connect-animation-active")
         GLib.timeout_add(self.load_speed, self.activate_load_circle_3)
         return False
     
     def activate_load_circle_3(self):
-        self.load_circle_3.set_name("connect-animation-circle-active")
+        self.load_circle_3.set_name("connect-animation-active")
         GLib.timeout_add(self.load_speed, self.deactivate_load_circle_stage_1)
         return False
     
@@ -202,14 +211,14 @@ class OptionWindow(Gtk.Dialog):
         with self.connect_process_successful.get_lock():
             if self.connect_process_successful.value:
                 self.terminate_connect_process()
-                self.network_icon.set_name("connect-animation-icon-active")
+                self.network_icon.set_name("connect-animation-active")
                 self.ping_process = Process(target=self.ping_process_start)
                 self.ping_process.start()
                 GLib.timeout_add(self.load_speed, self.activate_load_circle_stage_2)
             else:
-                self.load_circle_1.set_name("connect-animation-circle-inactive")
-                self.load_circle_2.set_name("connect-animation-circle-inactive")
-                self.load_circle_3.set_name("connect-animation-circle-inactive")
+                self.load_circle_1.set_name("connect-animation-inactive")
+                self.load_circle_2.set_name("connect-animation-inactive")
+                self.load_circle_3.set_name("connect-animation-inactive")
                 GLib.timeout_add(self.load_speed, self.activate_load_circle_stage_1)
         return False
     
@@ -230,17 +239,17 @@ class OptionWindow(Gtk.Dialog):
             self.ping_process_start()
     
     def activate_load_circle_stage_2(self):
-        self.load_circle_4.set_name("connect-animation-circle-active")
+        self.load_circle_4.set_name("connect-animation-active")
         GLib.timeout_add(self.load_speed, self.activate_load_circle_4)
         return False
 
     def activate_load_circle_4(self):
-        self.load_circle_5.set_name("connect-animation-circle-active")
+        self.load_circle_5.set_name("connect-animation-active")
         GLib.timeout_add(self.load_speed, self.activate_load_circle_5)
         return False
     
     def activate_load_circle_5(self):
-        self.load_circle_6.set_name("connect-animation-circle-active")
+        self.load_circle_6.set_name("connect-animation-active")
         GLib.timeout_add(self.load_speed, self.deactivate_load_circle_stage_2)
         return False
 
@@ -251,26 +260,26 @@ class OptionWindow(Gtk.Dialog):
                 self.ping_process.terminate()
                 self.ping_process.join()
                 self.ping_process = None
-                self.internet_icon.set_name("connect-animation-icon-active")
+                self.internet_icon.set_name("connect-animation-active")
                 self.ignore_focus_lost = False
                 GLib.timeout_add(self.load_speed, self.connection_successful_animation)
             else:
-                self.load_circle_4.set_name("connect-animation-circle-inactive")
-                self.load_circle_5.set_name("connect-animation-circle-inactive")
-                self.load_circle_6.set_name("connect-animation-circle-inactive")
+                self.load_circle_4.set_name("connect-animation-inactive")
+                self.load_circle_5.set_name("connect-animation-inactive")
+                self.load_circle_6.set_name("connect-animation-inactive")
                 GLib.timeout_add(self.load_speed, self.activate_load_circle_stage_2)
         return False
     
     def connection_successful_animation(self):
-        self.laptop_icon.set_name("connect-animation-icon-success")
-        self.network_icon.set_name("connect-animation-icon-success")
-        self.internet_icon.set_name("connect-animation-icon-success")
-        self.load_circle_1.set_name("connect-animation-circle-success")
-        self.load_circle_2.set_name("connect-animation-circle-success")
-        self.load_circle_3.set_name("connect-animation-circle-success")
-        self.load_circle_4.set_name("connect-animation-circle-success")
-        self.load_circle_5.set_name("connect-animation-circle-success")
-        self.load_circle_6.set_name("connect-animation-circle-success")
+        self.laptop_icon.set_name("connect-animation-success")
+        self.network_icon.set_name("connect-animation-success")
+        self.internet_icon.set_name("connect-animation-success")
+        self.load_circle_1.set_name("connect-animation-success")
+        self.load_circle_2.set_name("connect-animation-success")
+        self.load_circle_3.set_name("connect-animation-success")
+        self.load_circle_4.set_name("connect-animation-success")
+        self.load_circle_5.set_name("connect-animation-success")
+        self.load_circle_6.set_name("connect-animation-success")
         
         GLib.timeout_add(400, self.exit)
         return False
@@ -300,10 +309,10 @@ class OptionWindow(Gtk.Dialog):
     def on_escape_press(self, widget, event):
         keyval = event.keyval
         if keyval == Gdk.KEY_Escape:
-            self.on_focus_out(widget, event)
+            self.on_focus_out(widget, event, True)
 
-    def on_focus_out(self, widget, event):
-        if not self.ignore_focus_lost:
+    def on_focus_out(self, widget, event, escape_pressed=False):
+        if not self.ignore_focus_lost or escape_pressed:
             self.exit()
 
     def exit(self):
@@ -316,10 +325,12 @@ class OptionWindow(Gtk.Dialog):
             
         self.main_window.active_widget = None
         self.main_window.ignore_focus_lost = False
+        
         if self.network["CONNECTED"]:
-            self.active_widget.get_parent().get_parent().set_name("list-obj-box-active")
+            self.active_widget.get_parent().get_parent().set_name("list-name-box-active")
         else: 
-            self.active_widget.get_parent().get_parent().set_name("list-obj-box-inactive")
+            self.active_widget.get_parent().get_parent().set_name("list-name-box-inactive")
+
         self.main_window.update_list_with_networks(scan_offline=True)
         self.destroy()
 
@@ -355,8 +366,9 @@ class WifiMenu(Gtk.Dialog):
         self.skip_update = False
 
         self.content_area = self.get_content_area()
-        self.content_area.set_name("content-area")
-        self.set_name("root")
+
+        self.content_area.get_style_context().add_class('content-area')
+        self.get_style_context().add_class('root')
 
         self.css()
         self.title()
@@ -383,39 +395,40 @@ class WifiMenu(Gtk.Dialog):
 
     def title(self):
         self.title_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=0)
-        self.title_box.set_name("toggle-box")
+        self.title_box.get_style_context().add_class('toggle-title-box')
 
         desc_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
-        desc_box.set_name("toggle-desc-box")
 
         title = Gtk.Label()
+        title.get_style_context().add_class('toggle-title')
         title.set_text("Networks")
-        title.set_name("toggle-title")
         title.set_halign(Gtk.Align.START)
 
         self.desc = Gtk.Label()
+        self.desc.get_style_context().add_class('toggle-desc')
+        self.desc.set_halign(Gtk.Align.START)
         if not self.wifi_on:
             self.desc.set_text("Off")
-        self.desc.set_name("toggle-desc")
-        self.desc.set_halign(Gtk.Align.START)
 
         left_box = Gtk.EventBox()
-        left_box.set_name("toggle-left-box")
 
-        self.icon_background_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=0)
+        self.icon_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=0)
+        self.icon_box.get_style_context().add_class('toggle-icon-box')
 
         self.icon = Gtk.Label()
+        self.icon.get_style_context().add_class('toggle-icon')
         self.icon.set_text("")
         self.icon.set_halign(Gtk.Align.START)
 
         if self.wifi_on:
-            self.icon_background_box.set_name("toggle-icon-background-enabled")
+            self.icon_box.set_name("toggle-icon-box-enabled")
             self.icon.set_name("toggle-icon-enabled")
         else:
-            self.icon_background_box.set_name("toggle-icon-background-disabled")
+            self.icon_box.set_name("toggle-icon-box-disabled")
             self.icon.set_name("toggle-icon-disabled")
 
         self.status_dot = Gtk.Label()
+        self.status_dot.get_style_context().add_class('status-dot')
         self.status_dot.set_text("")
         if self.wifi_on:
             self.status_dot.set_name("status-dot-inactive")
@@ -423,8 +436,8 @@ class WifiMenu(Gtk.Dialog):
             self.status_dot.set_name("status-dot-off")
         self.status_dot.set_halign(Gtk.Align.END)
 
-        self.icon_background_box.pack_start(self.icon, False, False, 0)
-        left_box.add(self.icon_background_box)
+        self.icon_box.pack_start(self.icon, False, False, 0)
+        left_box.add(self.icon_box)
         desc_box.pack_start(title, False, False, 0)
         desc_box.pack_start(self.desc, False, False, 0)
         self.title_box.pack_start(left_box, False, False, 0)
@@ -437,11 +450,11 @@ class WifiMenu(Gtk.Dialog):
         self.list_main_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=16)
         
         self.list_box = Gtk.ListBox()
-        self.list_box.set_name("list")
+        self.list_box.get_style_context().add_class('list')
         self.list_box.set_selection_mode(Gtk.SelectionMode.NONE)
         
         scrolled_window = Gtk.ScrolledWindow()
-        scrolled_window.set_name("list-box")
+        scrolled_window.get_style_context().add_class('list-box')
         scrolled_window.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC) 
         scrolled_window.add(self.list_box)  
 
@@ -453,16 +466,20 @@ class WifiMenu(Gtk.Dialog):
     def list_options(self):
         self.list_options_main_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=8)
         self.scan_box = Gtk.EventBox()
+        self.scan_box.get_style_context().add_class("toggle-box-list-options")
         self.scan_box.set_name("toggle-box-list-options-active")
         self.scan_title = Gtk.Label()
-        self.scan_title.set_text("")
+        self.scan_title.get_style_context().add_class("list-options-title")
         self.scan_title.set_name("list-opitons-title-active")
+        self.scan_title.set_text("")
 
         self.history_box = Gtk.EventBox()
+        self.history_box.get_style_context().add_class("toggle-box-list-options")
         self.history_box.set_name("toggle-box-list-options-inactive")
         self.config_title = Gtk.Label()
-        self.config_title.set_text("")
+        self.config_title.get_style_context().add_class("list-options-title")
         self.config_title.set_name("list-opitons-title-inactive")
+        self.config_title.set_text("")
 
         self.scan_box.add(self.scan_title)
         self.history_box.add(self.config_title)
@@ -495,7 +512,7 @@ class WifiMenu(Gtk.Dialog):
             self.desc.set_text("Off")
             self.status_dot.set_name("status-dot-off")
             subprocess.run(["nmcli",  "radio", "wifi", "off"])
-            self.icon_background_box.set_name("toggle-icon-background-disabled")
+            self.icon_box.set_name("toggle-icon-box-disabled")
             self.icon.set_name("toggle-icon-disabled")
             self.list_main_box.hide()
             self.list_options_main_box.hide()
@@ -505,7 +522,7 @@ class WifiMenu(Gtk.Dialog):
             self.set_size_request(self.window_width, self.window_height)
             self.status_dot.set_name("status-dot-inactive")
             subprocess.run(["nmcli",  "radio", "wifi", "on"])
-            self.icon_background_box.set_name("toggle-icon-background-enabled")
+            self.icon_box.set_name("toggle-icon-box-enabled")
             self.icon.set_name("toggle-icon-enabled")
             self.main_box.show_all()
 
@@ -530,10 +547,7 @@ class WifiMenu(Gtk.Dialog):
     def on_network_clicked(self, widget, event=False, network=False):
         self.ignore_focus_lost = True
         self.active_widget = widget
-        if network["CONNECTED"]:
-            widget.get_parent().get_parent().set_name("list-obj-box-active-clicked")
-        else:
-            widget.get_parent().get_parent().set_name("list-obj-box-inactive-clicked")
+        widget.get_parent().get_parent().set_name("list-name-box-clicked")
         dialog = OptionWindow(self, self, network, widget)
         dialog.run()
 
@@ -654,29 +668,29 @@ class WifiMenu(Gtk.Dialog):
 
             for network in networks:
                 row = Gtk.ListBoxRow()
-                row.set_name("row")
-                label = Gtk.Label()
+                row.get_style_context().add_class('row')
+                name = Gtk.Label()
+                name.get_style_context().add_class('list-name')
+                name.set_text(network["SSID"][:15])
+                name.set_halign(Gtk.Align.START)
 
                 list_content_main_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
+                list_content_main_box.get_style_context().add_class('list-name-box')
 
                 list_content_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=0)
 
                 list_obj_icon_box = Gtk.EventBox()
-                list_obj_icon_box.set_name("list-icon-box")
+                list_obj_icon_box.get_style_context().add_class('list-icon-box')
                 icon = Gtk.Label()
+                icon.get_style_context().add_class('list-icon')
 
                 list_obj_clickable_box = Gtk.EventBox()
                 list_obj_clickable_box.connect("button-press-event", self.on_network_clicked, network)
 
                 if network["CONNECTED"]:
-                    label.set_name("list-obj")
-                    list_content_main_box.set_name("list-obj-box-active")
+                    list_content_main_box.set_name("list-name-box-active")
                 else:
-                    list_content_main_box.set_name("list-obj-box-inactive")
-                    label.set_name("list-obj")
-
-                label.set_text(network["SSID"][:15])
-                label.set_halign(Gtk.Align.START)
+                    list_content_main_box.set_name("list-name-box-inactive")
 
                 if not get_known:
                     icon.set_name("list-icon")
@@ -684,16 +698,17 @@ class WifiMenu(Gtk.Dialog):
                     list_obj_icon_box.add(icon)
                     list_content_box.pack_start(list_obj_icon_box, False, False, 0)
                 
-                list_obj_clickable_box.add(label)
+                list_obj_clickable_box.add(name)
                 list_content_box.pack_start(list_obj_clickable_box, False, False, 0)
 
                 if network["KNOWN"] and not get_known:
                     known_icon = Gtk.Label()
                     known_icon.set_halign(Gtk.Align.END)
+                    known_icon.get_style_context().add_class('known-icon')
                     if network["CONNECTED"]:
-                        known_icon.set_name("known-icon-active-obj")
+                        known_icon.set_name("known-icon-active")
                     else:
-                        known_icon.set_name("known-icon-inactive-obj")
+                        known_icon.set_name("known-icon-inactive")
                     known_icon.set_text("")
                     list_content_box.pack_start(known_icon, True, True, 0)
                     
