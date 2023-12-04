@@ -399,7 +399,7 @@ top_bar_1 = Bar([
     widget.TextBox(        
         text        = "<span font='Font Awesome 6 free solid 14' foreground='#000000' size='medium'></span>",
         padding     = widget_default_font_size - 12,
-        mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("python3 /home/jonalm/scripts/qtile/bar_menus/ticktick/ticktick_menu.py")},
+        mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("python3 /home/jonalm/scripts/qtile/bar_menus/ticktick/launch.py")},
         decorations = left_decor(round = True, color = "#b48ead"),
     ),
 

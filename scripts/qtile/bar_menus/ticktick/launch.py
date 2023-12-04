@@ -3,8 +3,15 @@ import signal
 import os
 
 def activate_virtualenv():
-    activate_command = "source /home/jonalm/scripts/qtile/bar_menus/ticktick/bin/activate"
-    subprocess.Popen(activate_command, shell=True)
+    virtualenv_path = "bin/activate"
+
+    activate_command = f"source {virtualenv_path} && env"
+    env_output = subprocess.check_output(activate_command, shell=True, executable="/bin/bash")
+
+    env_lines = env_output.decode("utf-8").splitlines()
+    for line in env_lines:
+        key, value = line.split("=", 1)
+        os.environ[key] = value
 
 def start_server():
     server_command = "python3 server.py"
@@ -16,6 +23,7 @@ def start_gtk_app():
 
 def stop_server(server_process):
     os.killpg(os.getpgid(server_process.pid), signal.SIGTERM)
+    print("Server stopped!")
 
 if __name__ == "__main__":
     try:

@@ -243,8 +243,7 @@ class OptionWindow(Gtk.Dialog):
         self.destroy()
 
 class BluetoothMenu(Gtk.Dialog):
-    def __init__(self, bluetooth_process):
-        self.pid_file = "/home/jonalm/scripts/qtile/bar_menus/bluetooth/bluetooth_menu_pid_file.pid"
+    def __init__(self, pid_file_path, bluetooth_process):
         Gtk.Dialog.__init__(self, "Bluetooth menu", None, 0)
 
         self.bluetooth_process = bluetooth_process
@@ -263,6 +262,7 @@ class BluetoothMenu(Gtk.Dialog):
         else:
             self.set_size_request(self.window_width, 20)
 
+        self.pid_file_path = pid_file_path
         self.ignore_focus_lost = False
         self.previous_css_class = None
         self.active_widget = None
@@ -1078,10 +1078,10 @@ class BluetoothMenu(Gtk.Dialog):
             if self.bluetooth_process.is_alive():
                 self.bluetooth_process.terminate()
                 self.bluetooth_process.join() 
-            with open(self.pid_file, "r") as file:
+            with open(self.pid_file_path, "r") as file:
                 pid = int(file.read().strip())
             try:
-                os.remove(self.pid_file)
+                os.remove(self.pid_file_path)
                 os.kill(pid, 15)
             except ProcessLookupError:
                 pass
@@ -1125,26 +1125,26 @@ def bluetooth_process():
                 json.dump(unique_devices, json_file, indent=2)
 
 if __name__ == '__main__':
-    pid_file = "/home/jonalm/scripts/qtile/bar_menus/bluetooth/bluetooth_menu_pid_file.pid"
+    pid_file_path = "/home/jonalm/scripts/qtile/bar_menus/bluetooth/bluetooth_menu_pid_file.pid"
     dialog = None
 
     try:
-        if os.path.isfile(pid_file):
-            with open(pid_file, "r") as file:
+        if os.path.isfile(pid_file_path):
+            with open(pid_file_path, "r") as file:
                 pid = int(file.read().strip())
             try:
-                os.remove(pid_file)
+                os.remove(pid_file_path)
                 os.kill(pid, 15)            
             except ProcessLookupError:
                 pass
         else:
-            with open(pid_file, "w") as file:
+            with open(pid_file_path, "w") as file:
                 file.write(str(os.getpid()))
 
             process = Process(target=bluetooth_process)
             process.start()
             
-            dialog = BluetoothMenu(process)
+            dialog = BluetoothMenu(pid_file_path, process)
             Gtk.main()
                     
     except Exception as e:
