@@ -3,7 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_caching import Cache
 from requests_oauthlib import OAuth2Session
 from requests.exceptions import HTTPError
-from sqlalchemy import BigInteger
+from sqlalchemy import JSON
 from flask_migrate import Migrate
 
 import time
@@ -33,25 +33,25 @@ class Token(db.Model):
     expires_at = db.Column(db.Float, nullable=False)
     expires_in = db.Column(db.Float, nullable=False)
 
-class Project(db.Model):
+class Task(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    column_id = db.Column(db.Float, nullable=True)
+    task_id = db.Column(db.String(255), nullable=True)
+    project_id = db.Column(db.String(255), nullable=True)
+    # sort_order = db.Column(db.Float, nullable=False)
+    title = db.Column(db.String(255), nullable=True)
     content = db.Column(db.String(255), nullable=True)
     desc = db.Column(db.String(255), nullable=True)
-    due_date = db.Column(db.String(255), nullable=True)
-    task_id = db.Column(db.String(255), nullable=False)
-    is_all_day = db.Column(db.String(255), nullable=False)
-    priority = db.Column(db.Float, nullable=False)
-    project_id = db.Column(db.Float, nullable=False)
-    repeat_flag = db.Column(db.String(255), nullable=True)
-    sort_order = db.Column(db.Float, nullable=False)
     start_date = db.Column(db.String(255), nullable=True)
-    status = db.Column(db.Float, nullable=False)
-    time_zone = db.Column(db.String(255), nullable=True)
-    title = db.Column(db.String(255), nullable=False)
-    # linked_to_project = db.relationship('Projects', backref='project', lazy=True)
+    due_date = db.Column(db.String(255), nullable=True)
+    is_all_day = db.Column(db.Boolean, nullable=True)
+    priority = db.Column(db.Integer, nullable=True)
+    repeat_flag = db.Column(db.String(255), nullable=True)
+    status = db.Column(db.Integer, nullable=True)
+    column_id = db.Column(db.String(255), nullable=True)
+    parent_id = db.Column(db.String(255), nullable=True)
+    child_ids = db.Column(JSON, nullable=True)
 
-class Projects(db.Model):
+class Project(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(255), nullable=True)
     kind = db.Column(db.String(20), nullable=True)
@@ -59,7 +59,6 @@ class Projects(db.Model):
     group_id = db.Column(db.String(255), nullable=True)
     sort_order = db.Column(db.Integer, nullable=True)
     color = db.Column(db.String(20), nullable=True)
-    # link_project_id = db.Column(db.String(255), db.ForeignKey('project.id'))
 
 @app.route('/login')
 def login():
@@ -99,8 +98,8 @@ def callback():
 
 @app.route('/projects')
 def get_stored_projects():
-    projects = Projects.query.order_by(Projects.group_id).all()
-
+    projects = Project.query.order_by(Project.group_id).all()
+    print("getting stored")
     projects_json = [{
             'name': project.name, 
             'kind': project.kind,
@@ -133,10 +132,10 @@ def get_updated_projects():
         projects = response.json()
 
         for project in projects:
-            already_exists = Projects.query.filter_by(project_id=project.get("id")).first()
+            already_exists = Project.query.filter_by(project_id=project.get("id")).first()
 
             if not already_exists:
-                project_to_store = Projects(
+                project_to_store = Project(
                     name = project.get("name"),
                     kind = project.get("kind"),
                     project_id = project.get("id"),
@@ -148,13 +147,61 @@ def get_updated_projects():
                 
         db.session.commit()
 
-        return jsonify(projects)
+        return redirect(url_for('get_stored_projects'))
     
     except HTTPError as e:
         return f'Error accessing TickTick API: {e.response.text}', 500
     
-@app.route('/project')
-def get_stored_project():
+@app.route('/tasks')
+def get_stored_tasks():
+    project_id = request.args.get("project_id")
+
+    tasks = Task.query.filter_by(project_id=project_id).all()
+
+    def get_all_subtasks(parent_task, task_dict):
+        """
+        Recursively get all subtasks for a given parent task.
+        """
+        subtasks = []
+        child_ids = parent_task.child_ids or []
+
+        for child_id in child_ids:
+            child_task = task_dict.get(child_id)
+            if child_task:
+                subtasks.append(child_task)
+                subtasks.extend(get_all_subtasks(child_task, task_dict))
+
+        return subtasks
+
+    task_dict = {task.task_id: task for task in tasks}
+    ordered_tasks = []
+
+    for task in tasks:
+        if not task.parent_id:
+            ordered_tasks.append(task)
+            subtasks = get_all_subtasks(task, task_dict)
+            ordered_tasks.extend(subtasks)
+
+    tasks_json = [{
+            'task_id': task.task_id, 
+            'project_id': task.project_id,
+            'title': task.title,
+            'content': task.content,
+            'desc': task.desc, 
+            'start_date': task.start_date,
+            'due_date': task.due_date,
+            'is_all_day': task.is_all_day,
+            'priority': task.priority,
+            'repeat_flag': task.repeat_flag,
+            'status': task.status,
+            'column_id': task.column_id,
+            'parent_id': task.parent_id,
+            'child_ids': task.child_ids 
+            } for task in ordered_tasks]
+    return jsonify(tasks_json)
+    
+@app.route('/updated_tasks')
+def get_updated_tasks():
     token = Token.query.first()
 
     if not token or token.expires_at < time.time():
@@ -173,32 +220,37 @@ def get_stored_project():
         response = ticktick.get(f'{base_url}project/{project_id}/data')
         response.raise_for_status()
         tasks = response.json()
-        return jsonify(tasks)
-    
-    except HTTPError as e:
-        return f'Error accessing TickTick API: {e.response.text}', 500
-    
-@app.route('/updated_project')
-def get_updated_project():
-    token = Token.query.first()
 
-    if not token or token.expires_at < time.time():
-        return redirect(url_for('login'))
-    
-    token_dict = {
-        'access_token': token.access_token,
-        'expires_at': token.expires_at,
-        'expires_in': token.expires_in
-    }
-    
-    ticktick = OAuth2Session(client_id, token=token_dict)
-    
-    try:
-        project_id = request.args.get("project_id")
-        response = ticktick.get(f'{base_url}project/{project_id}/data')
-        response.raise_for_status()
-        tasks = response.json()
-        return jsonify(tasks)
+        for task in tasks["tasks"]:
+            print(task, "\n\n")
+            already_exists = Task.query.filter_by(task_id=task.get("id")).first()
+            if not already_exists and task.get("id") != None:
+                child_ids = None
+                if task.get("childIds"):
+                    child_ids = []
+                    for child in task.get("childIds"):
+                        child_ids.append(child)
+
+                task_to_store = Task(
+                    task_id = task.get("id"),
+                    project_id = task.get("projectId"),
+                    title = task.get("title"),
+                    content = task.get("content"),
+                    desc = task.get("desc"),
+                    start_date = task.get("startDate"),
+                    due_date = task.get("dueDate"),
+                    is_all_day = task.get("isAllDay"),
+                    priority = task.get("priority"),
+                    repeat_flag = task.get("repeatFlag"),
+                    status = task.get("status"),
+                    column_id = task.get("columnId"),
+                    parent_id = task.get("parentId"),
+                    child_ids = child_ids
+                )
+                db.session.add(task_to_store)
+                
+        db.session.commit()
+        return redirect(url_for('get_stored_tasks', project_id=project_id))
     
     except HTTPError as e:
         return f'Error accessing TickTick API: {e.response.text}', 500
