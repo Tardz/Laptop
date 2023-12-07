@@ -276,6 +276,9 @@
     font-family: 'Font Awesome 6 Free Regular';
     font-size: 24px;
 }
+.main-today-list-icon-content {
+    font-family: 'Font Awesome 6 Free Thin';
+}
 #main-today-list-icon-0 {
     color: white;
 }

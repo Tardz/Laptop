@@ -1,13 +1,13 @@
 [
   {
     "SSID": "BOXER_E748",
-    "STRENGTH": "\u2582\u2584\u2582\u2582",
+    "STRENGTH": "\u2582\u2584\u2586\u2588",
     "CONNECTED": true,
     "KNOWN": true
   },
   {
     "SSID": "BOXER_E748",
-    "STRENGTH": "\u2582\u2584\u2586\u2582",
+    "STRENGTH": "\u2582\u2584\u2586\u2588",
     "CONNECTED": false,
     "KNOWN": true
   },
@@ -18,13 +18,7 @@
     "KNOWN": false
   },
   {
-    "SSID": "dlink-5E2D",
-    "STRENGTH": "\u2582\u2584\u2586\u2582",
-    "CONNECTED": false,
-    "KNOWN": false
-  },
-  {
-    "SSID": "eduroam",
+    "SSID": "LukasLager",
     "STRENGTH": "\u2582\u2584\u2586\u2582",
     "CONNECTED": false,
     "KNOWN": false
@@ -36,31 +30,31 @@
     "KNOWN": false
   },
   {
+    "SSID": "eduroam",
+    "STRENGTH": "\u2582\u2584\u2586\u2582",
+    "CONNECTED": false,
+    "KNOWN": false
+  },
+  {
+    "SSID": "dlink-5E2D",
+    "STRENGTH": "\u2582\u2584\u2586\u2582",
+    "CONNECTED": false,
+    "KNOWN": false
+  },
+  {
     "SSID": "Blau",
     "STRENGTH": "\u2582\u2584\u2586\u2582",
     "CONNECTED": false,
     "KNOWN": false
   },
   {
-    "SSID": "TP-Link_A37D",
-    "STRENGTH": "\u2582\u2584\u2586\u2582",
-    "CONNECTED": false,
-    "KNOWN": false
-  },
-  {
-    "SSID": "LukasLager",
-    "STRENGTH": "\u2582\u2584\u2586\u2582",
-    "CONNECTED": false,
-    "KNOWN": false
-  },
-  {
-    "SSID": "mbp",
+    "SSID": "TP-LINK_28DB",
     "STRENGTH": "\u2582\u2584\u2582\u2582",
     "CONNECTED": false,
     "KNOWN": false
   },
   {
-    "SSID": "TP-LINK_28DB",
+    "SSID": "TP-Link_A37D",
     "STRENGTH": "\u2582\u2584\u2582\u2582",
     "CONNECTED": false,
     "KNOWN": false
@@ -72,13 +66,13 @@
     "KNOWN": false
   },
   {
-    "SSID": "ASUS",
+    "SSID": "gretchensvibrationer",
     "STRENGTH": "\u2582\u2584\u2582\u2582",
     "CONNECTED": false,
     "KNOWN": false
   },
   {
-    "SSID": "dlink-5E2D-5GHz",
+    "SSID": "ASUS",
     "STRENGTH": "\u2582\u2584\u2582\u2582",
     "CONNECTED": false,
     "KNOWN": false
@@ -90,25 +84,31 @@
     "KNOWN": false
   },
   {
-    "SSID": "dlink-BC62",
-    "STRENGTH": "\u2582\u2582\u2582\u2582",
+    "SSID": "dlink-5E2D-5GHz",
+    "STRENGTH": "\u2582\u2584\u2582\u2582",
     "CONNECTED": false,
     "KNOWN": false
   },
   {
-    "SSID": "gretchensvibrationer",
-    "STRENGTH": "\u2582\u2582\u2582\u2582",
+    "SSID": "TP-Link_D69E",
+    "STRENGTH": "\u2582\u2584\u2582\u2582",
     "CONNECTED": false,
     "KNOWN": false
   },
   {
-    "SSID": "Morell23",
-    "STRENGTH": "\u2582\u2582\u2582\u2582",
+    "SSID": "kuku.n040",
+    "STRENGTH": "\u2582\u2584\u2582\u2582",
     "CONNECTED": false,
     "KNOWN": false
   },
   {
     "SSID": "ASUS_68",
+    "STRENGTH": "\u2582\u2582\u2582\u2582",
+    "CONNECTED": false,
+    "KNOWN": false
+  },
+  {
+    "SSID": "dlink-BC62",
     "STRENGTH": "\u2582\u2582\u2582\u2582",
     "CONNECTED": false,
     "KNOWN": false
@@ -120,13 +120,19 @@
     "KNOWN": false
   },
   {
-    "SSID": "mycloud",
+    "SSID": "gretchensvibrationer-5G",
     "STRENGTH": "\u2582\u2582\u2582\u2582",
     "CONNECTED": false,
     "KNOWN": false
   },
   {
-    "SSID": "_Linkoping_WiFi",
+    "SSID": "TP-Link_D69E_5G",
+    "STRENGTH": "\u2582\u2582\u2582\u2582",
+    "CONNECTED": false,
+    "KNOWN": false
+  },
+  {
+    "SSID": "Morell23",
     "STRENGTH": "\u2582\u2582\u2582\u2582",
     "CONNECTED": false,
     "KNOWN": false

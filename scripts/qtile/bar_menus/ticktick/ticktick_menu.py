@@ -109,7 +109,9 @@ class TicktickMenu(Gtk.Dialog):
 
         self.show_all()
         self.task_list_main_box.hide()
-        self.set_size_request(400, 500)
+        # self.set_size_request(400, 500)
+        self.set_default_size(400, 300)
+
 
         GLib.timeout_add(3, self.update_project_list)
 
@@ -172,6 +174,22 @@ class TicktickMenu(Gtk.Dialog):
         today_title.set_name("list-opitons-title-inactive")
         today_title.set_text("")
 
+        habit_box = Gtk.EventBox()
+        habit_box.get_style_context().add_class("toggle-box-list-options")
+        habit_box.set_name("toggle-box-list-options-inactive")
+        habit_title = Gtk.Label()
+        habit_title.get_style_context().add_class("list-options-title")
+        habit_title.set_name("list-opitons-title-inactive")
+        habit_title.set_text("")
+
+        cal_box = Gtk.EventBox()
+        cal_box.get_style_context().add_class("toggle-box-list-options")
+        cal_box.set_name("toggle-box-list-options-inactive")
+        cal_title = Gtk.Label()
+        cal_title.get_style_context().add_class("list-options-title")
+        cal_title.set_name("list-opitons-title-inactive")
+        cal_title.set_text("")
+
         projects_box = Gtk.EventBox()
         projects_box.get_style_context().add_class("toggle-box-list-options")
         projects_box.set_name("toggle-box-list-options-active")
@@ -181,9 +199,13 @@ class TicktickMenu(Gtk.Dialog):
         projects_title.set_text("")
 
         today_box.add(today_title)
+        habit_box.add(habit_title)
+        cal_box.add(cal_title)
         projects_box.add(projects_title)
 
         self.list_options_main_box.pack_start(today_box, True, True, 0)
+        self.list_options_main_box.pack_start(habit_box, True, True, 0)
+        self.list_options_main_box.pack_start(cal_box, True, True, 0)
         self.list_options_main_box.pack_start(projects_box, True, True, 0)
 
         self.project_list_main_box.pack_start(scrolled_window, True, True, 0)
@@ -237,6 +259,7 @@ class TicktickMenu(Gtk.Dialog):
 
         self.task_list_main_box.pack_start(task_list_title_main_box, False, True, 0)
         self.task_list_main_box.pack_start(scrolled_window, True, True, 0)
+        self.task_list_main_box.set_size_request(300, 400)
 
     def css(self):
         screen = Gdk.Screen.get_default()
@@ -460,6 +483,8 @@ class TicktickMenu(Gtk.Dialog):
                 icon = Gtk.Label()
                 icon.get_style_context().add_class("main-today-list-icon")
                 icon.set_text("")
+                if task["content"] != '':
+                    icon.get_style_context().add_class("main-today-list-icon-content")
 
                 indentation_level = indentation_levels.get(task["parent_id"], 0)
                 list_content_main_box.set_margin_left(indentation_level * 40)
