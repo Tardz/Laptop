@@ -47,7 +47,6 @@ linux-firmware
 linux-g14
 linux-g14-headers
 linux-headers
-linux-lts-headers
 lsd
 lxappearance
 lxmenu-data
@@ -193,6 +192,9 @@ xorg-xkbevd
 xorg-xkbutils
 xorg-xkill
 xorg-xlsatoms
+xorg-xlsclients
+xorg-xmodmap
+xorg-xpr
 xorg-xlsclients
 xorg-xmodmap
 xorg-xpr

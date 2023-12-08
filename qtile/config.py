@@ -674,6 +674,7 @@ floating_layout = Floating(
     float_rules   = [
         *Floating.default_float_rules,
         Match(wm_class = "nitrogen"),
+        Match(wm_class = "VirtualBox"),
         Match(wm_class = "gnuplot"),
         Match(wm_class = "yad"),
         Match(wm_class = "TSP"),
