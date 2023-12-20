@@ -5,6 +5,18 @@ myBrowser      = "brave"
 myTerm         = "alacritty"
 alttab_spawned = False
 single_monitor = True
+
+one = ["g", "c", "n"]
+two = ["v"]
+
+check_dict = {
+    "c": ["brave", "1"],
+    "d": ["discord", "4"],
+    "v": [],
+    "n": ["ranger", "3", "alacritty --title Ranger -e"],
+    9: []
+}
+
 ### COLORS ###
 colors = [
     #-Bar

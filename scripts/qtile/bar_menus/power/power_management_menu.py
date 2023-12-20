@@ -301,12 +301,12 @@ class Power_managment_menu(Gtk.Dialog):
         return True
         
     def get_charge_limit(self):
-        charge_limit_line = subprocess.check_output("cat /etc/asusd/asusd.ron | grep bat_charge_limit", shell=True, stderr=subprocess.PIPE, text=True).strip()
-        start_index = charge_limit_line.find("bat_charge_limit: ")
+        charge_limit_line = subprocess.check_output("cat /etc/asusd/asusd.ron | grep charge_control_end_threshold", shell=True, stderr=subprocess.PIPE, text=True).strip()
+        start_index = charge_limit_line.find("charge_control_end_threshold: ")
         charge_limit = None
 
         if start_index != -1:
-            charge_limit_str = charge_limit_line[start_index + len("bat_charge_limit: "):].strip()
+            charge_limit_str = charge_limit_line[start_index + len("charge_control_end_threshold: "):].strip()
             charge_limit = int(charge_limit_str.rstrip(','))
 
         return charge_limit

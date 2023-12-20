@@ -1,1 +1,18 @@
-[]
+[
+  {
+    "DEVICE": "OnePlus 8T",
+    "MAC-ADDR": "D0:49:7C:B6:88:C8"
+  },
+  {
+    "DEVICE": "Arch",
+    "MAC-ADDR": "6C:6A:77:E2:B3:27"
+  },
+  {
+    "DEVICE": "OnePlus Nord",
+    "MAC-ADDR": "AC:5F:EA:83:31:C2"
+  },
+  {
+    "DEVICE": "Jonathans Pods - Find My",
+    "MAC-ADDR": "FC:1D:43:D3:41:49"
+  }
+]

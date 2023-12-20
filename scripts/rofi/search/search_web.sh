@@ -26,7 +26,7 @@ for option in "${options[@]}"; do
             while [ -z "$query" ]; do
                 query=$(rofi -config ~/.config/rofi/files/config.rasi \-theme "$HOME/.config/rofi/files/launchers/type-1"/'style-7-search'.rasi -dmenu -i -l 2 -p '') || exit
             done
-            qtile cmd-obj -o group 1 -f toscreen
+            qtile cmd-obj -o group c -f toscreen
             $BROWSER "$url""$query"
             notify-send -u low -t 2400 '-h' "int:transient:1" "Search finished" "Website: <span foreground='#81a1c1' size='medium'>$displayname</span>"
             exit 1
@@ -34,7 +34,7 @@ for option in "${options[@]}"; do
     fi
 done
 
-qtile cmd-obj -o group 1 -f toscreen
+qtile cmd-obj -o group c -f toscreen
 notify-send -u low -t 2400 '-h' "int:transient:1" "Search finished" "Website: <span foreground='#81a1c1' size='medium'>$displayname</span>"
 
 $BROWSER "$url"
