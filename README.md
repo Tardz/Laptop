@@ -1,6 +1,6 @@
 <a name="readme-top"></a>
 <!-- ABOUT THE PROJECT -->
-## Qtile and integrated menus
+## Qtile and integrated menus(Do not follow readme, not complete)
 <!-- TABLE OF CONTENTS -->
 <details>
   <summary>Table of Contents</summary>
