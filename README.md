@@ -1,6 +1,6 @@
 <a name="readme-top"></a>
 <!-- ABOUT THE PROJECT -->
-## Qtile and integrated menus(Do not follow readme, not complete)
+# Qtile and integrated menus(Do not follow readme, not complete)
 <!-- TABLE OF CONTENTS -->
 <details>
   <summary>Table of Contents</summary>
@@ -31,7 +31,7 @@
 
 ## About
 
-### Qtile conf
+#### Qtile conf
 
 #### Scripts
 
@@ -43,14 +43,14 @@ Os: Arch
 
 ## Setup
 
-### Prerequisites
+#### Prerequisites
 * qtile-extras
 
    ```sh
    sudo pacman -S qtile-extras
    ```
 
-### Installation 
+#### Installation 
 1. Clone the repo
 
    ```sh
@@ -82,7 +82,6 @@ Os: Arch
     - [ ] Theme selector
     - [ ] Qtile settings
     - [ ] General settings
-    - [ ] 
 
 - [ ] Improved bar design
     - [ ] Bar selector
