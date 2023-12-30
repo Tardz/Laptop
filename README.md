@@ -1,4 +1,10 @@
 # Qtile On Laptop **(Under progress, do not install)**
+<p align="center">
+  <img src="https://github.com/Tardz/Laptop/blob/main/image1.jpg" alt="Image 1" width="100" />
+  <img src="https://github.com/Tardz/Laptop/blob/main/image2.jpg" alt="Image 2" width="100" />
+  <img src="https://github.com/Tardz/Laptop/blob/main/image3.jpg" alt="Image 3" width="100" />
+</p>
+
 ![Woop](https://github.com/Tardz/Laptop/blob/main/settings_menu_screenshot.png)
 
 ## About
