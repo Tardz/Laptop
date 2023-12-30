@@ -8,13 +8,13 @@
     <li>
       <a href="#About">Getting Started</a>
       <ul>
-        <li><a href="#Qtile conf">Prerequisites</a></li>
-        <li><a href="#Scripts">Installation</a></li>
-        <li><a href="#Integrated Qtile menus">Installation</a></li>
+        <li><a href="#QtileConf">Qtile conf</a></li>
+        <li><a href="#Scripts">Scripts</a></li>
+        <li><a href="#Menus">Integrated Qtile menus</a></li>
       </ul>
     </li>
     <li>
-      <a href="#getting-started">Getting Started</a>
+      <a href="#getting-started">Setup</a>
       <ul>
         <li><a href="#prerequisites">Prerequisites</a></li>
         <li><a href="#installation">Installation</a></li>
