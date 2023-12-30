@@ -73,40 +73,6 @@ A brief overview of what software and hardwareI am using.
 |![Static Badge](https://img.shields.io/badge/File%20manager-none?style=for-the-badge&logo=files&logoColor=%2381A1C1&color=%23353b4a)|Ranger|
 |![Static Badge](https://img.shields.io/badge/Browser-none?style=for-the-badge&logo=firefox%20browser&logoColor=%239B98B7&color=%23353b4a)|Firefox|
 
-
-<div style="display: flex; justify-content: space-between;">
-
-  <div style="flex: 1; margin-right: 10px;">
-
-    ## Software Stack - Table 1
-
-    | Category           | Software                    |
-    |--------------------|-----------------------------|
-    | Window Manager     | Qtile                       |
-    | Terminal Emulator  | Alacritty                   |
-    | Code Editor        | Visual Studio Code          |
-    | Shell              | Zsh                         |
-    | Version Control    | Git                         |
-
-  </div>
-
-  <div style="flex: 1; margin-left: 10px;">
-
-    ## Software Stack - Table 2
-
-    | Category           | Software                    |
-    |--------------------|-----------------------------|
-    | Web Browser        | Firefox                     |
-    | File Manager       | Ranger                      |
-    | Music Player       | Spotify                     |
-    | Image Viewer       | feh                         |
-    | PDF Viewer         | Zathura                     |
-
-  </div>
-
-</div>
-
-
 ## Setup
 
 ### Prerequisites
