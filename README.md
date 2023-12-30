@@ -5,6 +5,12 @@
 <details>
   <summary>Table of Contents</summary>
   <ol>
+    <li>
+      <a href="#About">Getting Started</a>
+      <ul>
+        <li><a href="#Qtile conf">Prerequisites</a></li>
+        <li><a href="#Scripts">Installation</a></li>
+        <li><a href="#Integrated Qtile menus">Installation</a></li>
       </ul>
     </li>
     <li>
@@ -16,7 +22,6 @@
     </li>
     <li><a href="#usage">Usage</a></li>
     <li><a href="#roadmap">Roadmap</a></li>
-    <li><a href="#contributing">Contributing</a></li>
     <li><a href="#license">License</a></li>
     <li><a href="#contact">Contact</a></li>
     <li><a href="#acknowledgments">Acknowledgments</a></li>
@@ -31,7 +36,6 @@
   ```
 
 ### Installation 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
 1. Clone the repo
 
    ```sh
@@ -55,8 +59,6 @@
 <!-- USAGE EXAMPLES -->
 ## Workflow
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
 <!-- ROADMAP -->
 ## Roadmap
 
@@ -70,21 +72,14 @@
 - [ ] Improved bar design
     - [ ] Bar selector
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
 <!-- CONTACT -->
 ## Contact
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
 <!-- ACKNOWLEDGMENTS -->
 ## Acknowledgments
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- LICENSE -->
 ## License
 
 Distributed under the MIT License. See `LICENSE.txt` for more information.
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
