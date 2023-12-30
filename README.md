@@ -41,7 +41,7 @@
 Device: Asus rog g14 GA401QE 2021
 Os: Arch
 
-### Setup
+## Setup
 
 ### Prerequisites
 * qtile-extras
