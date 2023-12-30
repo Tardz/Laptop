@@ -1,18 +1,10 @@
-QTILE
-
-INSTALLATION
-
-ACKNOWLEDGMENTS
-
-ISSUES ON THE ASUS G14 LAPTOP
-
 <a name="readme-top"></a>
 <!-- TABLE OF CONTENTS -->
 <details>
   <summary>Table of Contents</summary>
   <ol>
     <li>
-      <a href="#about-the-project">About The Project</a>
+      <a href="#Overview">About The Project</a>
       <ul>
         <li><a href="#built-with">Built With</a></li>
       </ul>
@@ -33,15 +25,8 @@ ISSUES ON THE ASUS G14 LAPTOP
   </ol>
 </details>
 
-
 <!-- ABOUT THE PROJECT -->
-## About The Project
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-### Built With
-
-* [![Next][Next.js]][Next-url]
+## Overview
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -72,22 +57,32 @@ This is an example of how to list things you need to use the software and how to
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- USAGE EXAMPLES -->
-## Usage
+## Workflow
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- ROADMAP -->
 ## Roadmap
 
-- [x] Add Changelog
-- [x] Add back to top links
-- [ ] Add Additional Templates w/ Examples
-- [ ] Add "components" document to easily copy & paste sections of the readme
-- [ ] Multi-language Support
-    - [ ] Chinese
-    - [ ] Spanish
+- [ ] Settings menu
+    - [ ] Basic ui
+    - [ ] Theme selector
+    - [ ] Qtile settings
+    - [ ] General settings
+    - [ ] 
 
-See the [open issues](https://github.com/othneildrew/Best-README-Template/issues) for a full list of proposed features (and known issues).
+- [ ] Improved bar design
+    - [ ] Bar selector
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+<!-- CONTACT -->
+## Contact
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+<!-- ACKNOWLEDGMENTS -->
+## Acknowledgments
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -95,18 +90,5 @@ See the [open issues](https://github.com/othneildrew/Best-README-Template/issues
 ## License
 
 Distributed under the MIT License. See `LICENSE.txt` for more information.
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
-<!-- CONTACT -->
-## Contact
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
-
-<!-- ACKNOWLEDGMENTS -->
-## Acknowledgments
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
