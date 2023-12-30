@@ -20,7 +20,8 @@ window:
   dynamic_padding: false
 
   #BACKGROUND OPACITY
-  opacity: 0.9
+  #opacity: 0.9
+  opacity: 0.95
 
   #WINDOW DECORATIONS
   #decorations: full
@@ -308,7 +309,8 @@ schemes:
   Nord: &Nord
     # Default colors
     primary:
-      background: '#2E3440'
+      background: '#1e2227'
+        #background: '#2E3440'
       foreground: '#D8DEE9'
 
     # Normal colors

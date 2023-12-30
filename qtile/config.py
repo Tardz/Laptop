@@ -4,21 +4,19 @@ from libqtile import hook, bar
 from libqtile.lazy import lazy
 import subprocess
 import os
+import re
 
 ### KEYBINDING AND GROUPS IMPORTS ###
 from libqtile.config import Match, Key, KeyChord, Click, Drag, ScratchPad, Group, DropDown
-from libqtile.extension.dmenu import DmenuRun
 from libqtile import qtile as Qtile
 
 ### BAR IMPORTS ###
 from qtile_extras.widget.decorations import BorderDecoration, RectDecoration
 from libqtile.widget.sep import Sep
-from libqtile.command.base import expose_command
 from libqtile.widget import base
 from qtile_extras import widget
 from libqtile.bar import Bar
 from libqtile import bar
-
 
 ### LAYOUT IMPORTS ###
 from libqtile.layout.floating import Floating
@@ -28,16 +26,13 @@ from libqtile.layout.stack import Stack
 ### SETTINGS ###
 from settings import *
 
+### LOGGING ###
 import logging
-
-# Set up logging
 log = logging.getLogger("qtile")
 
-# Clear log file before each run
 clear_handler = logging.FileHandler("/home/jonalm/.config/qtile/logfile.log", mode="w")
 log.addHandler(clear_handler)
 
-# Log messages to a file
 handler = logging.FileHandler("/home/jonalm/.config/qtile/logfile.log")
 handler.setFormatter(logging.Formatter('%(asctime)s [%(levelname)s] %(message)s'))
 log.addHandler(handler)
@@ -45,13 +40,15 @@ log.setLevel(logging.DEBUG)
 
 ### LAZY FUNCTIONS FOR SHORTCUTS ###
 @lazy.function
-def move_focus_and_mouse(qtile, monitor = False):
-    if not single_monitor:
+def move_focus_and_mouse(qtile, group):
+    global amt_screens
+    if amt_screens == 2:
+        monitor = check_dict[group][2]
         qtile.cmd_to_screen(monitor)
-        if not monitor:
-            qtile.cmd_spawn("xdotool mousemove 950 500")
-        elif monitor:
-            qtile.cmd_spawn("xdotool mousemove 2900 500")
+        if monitor == 0:
+            qtile.cmd_spawn("xdotool mousemove 4300 900")
+        elif monitor == 1:
+            qtile.cmd_spawn("xdotool mousemove 1500 800")
 
 @lazy.function
 def spawn_alttab_once(qtile):
@@ -62,15 +59,15 @@ def spawn_alttab_once(qtile):
 def check(qtile, group_name=None, from_key_press=None):
     if from_key_press:
         qtile.cmd_spawn(["/home/jonalm/scripts/qtile/check_and_launch_app.py", from_key_press[0], from_key_press[1], from_key_press[2]])
-    else:
+    elif group_name and check_dict[group_name][0]:
         info = check_dict[group_name]
         if info != []:
             try:
                 command = ""
-                if len(info) > 2:
-                    command = info[2]
+                if info[1]:
+                    command = info[1]
 
-                qtile.cmd_spawn(["/home/jonalm/scripts/qtile/check_and_launch_app.py", info[0], info[1], command])
+                qtile.cmd_spawn(["/home/jonalm/scripts/qtile/check_and_launch_app.py", info[0], group_name, command])
             except Exception as e:
                 log.exception(f"Error in check function: {e}")
                 log.debug("END OF ERROR\n")
@@ -92,9 +89,63 @@ def close_all_windows(qtile):
             window.kill()
 
 @lazy.function
+def get_next_screen_group(qtile):
+    ## NOT WORKING
+    qtile.cmd_spawn(["qtile", "cmd-obj", "-o", "cmd", "-f", "next_screen"])
+    data = subprocess.check_output(["qtile", "cmd-obj", "-o", "group", "-f", "info"]).decode().strip()
+
+    matches = re.findall(r"'name': '([^']+)'", data)
+
+    if len(matches) >= 2:
+        group_name = matches[1]
+        return group_name
+    else:
+        log.error("Group not found.")
+
+@lazy.function
 def mute_or_unmute(qtile):
     qtile.cmd_spawn("/home/jonalm/scripts/qtile/mute_or_unmute.sh")
 
+@lazy.function
+def show_or_hide_tabs(screen=None, offset=0):
+    if screen is None:
+        screen = Qtile.current_screen   
+
+    bar = screen.bottom
+    if not bar:
+        return
+
+    nwindows = len(screen.group.windows) + offset
+    if nwindows > 1:
+        bar.show()
+    else:
+        if bar.window:
+            bar.show(False)
+
+@lazy.function
+def hide_bottom_bar(screen=None, offset=0):
+    if screen is None:
+        screen = Qtile.current_screen
+
+    bar = screen.bottom
+
+    if bar.window:
+        bar.show(False)
+    else:
+        bar.show()
+
+@lazy.function
+def minimize_windows(qtile):
+    for win in qtile.current_group.windows:
+        if hasattr(win, "toggle_minimize"):
+            win.toggle_minimize()
+
+@lazy.function
+def swap_screens(qtile):
+    qtile.cmd_spawn("/home/jonalm/scripts/qtile/get_next_screen_group.py")
+    screen = Qtile.current_screen
+    qtile.current_group.toscreen()
+    
 ### KEYBINDINGS ###
 #- KEYS_START
 keys = [
@@ -105,13 +156,6 @@ keys = [
         Key([mod, "shift"], "q", lazy.shutdown(), desc='Shutdown Qtile'),
         Key([mod, "control"], "q", close_all_windows, desc='close all windows'),
         Key([mod], "x", lazy.spawn("python3 /home/jonalm/scripts/qtile/bar_menus/system/system_menu.py"), desc='System menu'),
-
-        # KeyChord([mod], "x", [
-        #     Key([], "u", lazy.spawn("systemctl poweroff")),
-        #     Key([], "s", lazy.spawn("systemctl suspend")),
-        #     Key([], "r", lazy.spawn("systemctl reboot")),
-        #     Key([], "h", lazy.spawn("systemctl hibernate")),
-        # ]),
 
         #--[ASUSCTL]--#
         Key([], "XF86Launch1", lazy.spawn("sudo tlpui"), desc='Aurora key'),
@@ -129,12 +173,14 @@ keys = [
 
         #--[SWITCH MONITOR FOCUS AND GROUPS]--#
         Key(["control"], "Tab", spawn_alttab_once, desc='alttab'),
-        Key([mod], "Right", lazy.screen.next_group(), desc='Next group right'),
-        Key([mod], "Left", lazy.screen.prev_group(), desc='Next group left'),
+        Key([mod], "Up", lazy.screen.next_group(), desc='Next group right'),
+        Key([mod], "Down", lazy.screen.prev_group(), desc='Next group left'),
 
         #--[WINDWOW CONTROLS]--#
-        Key([mod], "Down", lazy.layout.down(), desc='Move focus down in current stack pane'),
-        Key([mod], "Up", lazy.layout.up(), desc='Move focus up in current stack pane'),
+        # Key(["mod1", "shift"], "d", hide_bottom_bar(), desc='Hide bottom bar'),
+        Key([mod, "shift"], "h", minimize_windows(), desc="minimize/unminimize windows"),
+        Key([mod], "Left", lazy.layout.down(), desc='Move focus down in current stack pane'),
+        Key([mod], "Right", lazy.layout.up(), desc='Move focus up in current stack pane'),
         Key([mod, "shift"], "Down", lazy.layout.shuffle_down(), lazy.layout.section_down(), desc='Move windows down in current stack'),
         Key([mod, "shift"], "Up", lazy.layout.shuffle_up(), lazy.layout.section_up(), desc='Move windows up in current stack'),
         Key([mod, "control"], "Left", lazy.layout.shrink(), lazy.layout.decrease_nmaster(), desc='Shrink window'),
@@ -146,22 +192,17 @@ keys = [
         Key([mod], "z", lazy.window.toggle_minimize(), lazy.group.next_window(), desc="Minimize window"),
 
         #--[APPS]--#
-        # Key([mod], "c", move_focus_and_mouse(True), lazy.group["1"].toscreen(), check("brave", "1"), desc='Browser'),
-        # Key([mod], "n", move_focus_and_mouse(True), lazy.group["3"].toscreen(), check("ranger", "3", "alacritty --title Ranger -e"), desc='Filemanager'),
-        # Key([mod], "d", move_focus_and_mouse(True), lazy.group["4"].toscreen(), check("discord", "4"), desc='Discord'),
-        # Key([mod], "v", move_focus_and_mouse(False), lazy.group["2"].toscreen(), desc='VScode'),
-        # Key([mod], "m", move_focus_and_mouse(True), lazy.group["3"].toscreen(), check("thunderbird", "3"), desc='Mail'),
 
         #--[MENUS]--#
-        Key([mod], "comma", lazy.spawn("xdotool mousemove 1630 140"), lazy.spawn("python3 /home/jonalm/scripts/qtile/bar_menus/volume/volume_menu.py"), desc='Volume'),
-        Key([mod], "period", lazy.spawn("xdotool mousemove 1700 140"), lazy.spawn("python3 /home/jonalm/scripts/qtile/bar_menus/bluetooth/bluetooth_menu.py"), desc='bluetooth'),
-        Key([mod], "minus", lazy.spawn("xdotool mousemove 1750 140"), lazy.spawn("python3 /home/jonalm/scripts/qtile/bar_menus/wifi/wifi_menu.py"), desc='wifi'),
+        Key([mod], "comma", lazy.spawn("python3 /home/jonalm/scripts/qtile/bar_menus/volume/volume_menu.py"), desc='Volume'),
+        Key([mod], "period", lazy.spawn("python3 /home/jonalm/scripts/qtile/bar_menus/bluetooth/bluetooth_menu.py"), desc='bluetooth'),
+        Key([mod], "minus", lazy.spawn("python3 /home/jonalm/scripts/qtile/bar_menus/wifi/wifi_menu.py"), desc='wifi'),
 
         #--[URLS]--#
-        Key([mod], "y", move_focus_and_mouse(True), lazy.group["c"].toscreen(), lazy.spawn("brave youtube.com"), desc='Youtube'),
+        Key([mod], "y", move_focus_and_mouse("c"), lazy.group["c"].toscreen(), lazy.spawn("firefox youtube.com"), desc='Youtube'),
 
         #--[TERM]--#
-        Key([mod], "h", move_focus_and_mouse(False), lazy.group["n"].toscreen(), check(from_key_press=["htop", "3", "alacritty --title Htop -e"]), desc='Htop'),
+        Key([mod], "h", move_focus_and_mouse("n"), lazy.group["n"].toscreen(), check(from_key_press=["htop", "3", "alacritty --title Htop -e"]), desc='Htop'),
         Key([mod], "plus", lazy.spawn("/home/jonalm/scripts/term/show_keys.sh"), desc='Keybindings'),
 
         #--[ROFI]--#
@@ -176,6 +217,7 @@ keys = [
 ### GROUP SETTINGS ###
 groups = [
         Group('c', label = "", matches=[ #Browser
+            Match(wm_class = ["Navigator"]),
             Match(wm_class = ["chromium"]),
             Match(wm_class = ["brave-browser"]),
                 ]),
@@ -195,41 +237,7 @@ groups = [
             Match(wm_class = ["discord"]),
             ]),
         Group('9', label = ""), #Scratchpad
-
 ]
-
-# groups = [
-#         Group('1', label = "", matches=[ #Other
-#             ]), 
-#         Group('2', label = "", matches=[ #Browser
-#             Match(wm_class = ["chromium"]),
-#             Match(wm_class = ["brave-browser"]),
-#                 ]), 
-#         Group('3', label = "", matches=[ #Code
-#             Match(wm_class = ["code"]),
-#             Match(wm_class = ["jetbrains-clion"]),
-#             Match(wm_class = ["jetbrains-studio"]),
-#             Match(wm_class = ["jetbrains-idea"]),
-#             ]), 
-#         Group('4', label = "", matches=[ #Files
-#             Match(wm_class = ["pcmanfm"]),
-#             ]), 
-#         Group('5', label = "", matches=[ #Mail
-#             Match(wm_class = ["thunderbird"]),
-#             ]), 
-#         Group('6', label = "", matches=[ #Docs
-#             Match(wm_class = ["libreoffice"]),
-#             ]), 
-#         Group('7', label = "", matches=[ #Social
-#             Match(wm_class = ["discord"]),
-#             ]), 
-#         Group('8', label = "", matches=[ #Settings
-#             Match(wm_class = ["lxappearance"]),
-#             Match(wm_class = ["tlpui"]),
-#             ]), 
-#         Group('9', label = ""), #Scratchpad
-
-# ]
 
 ### SCRATCHPAD ###
 groups.append(ScratchPad('9', [
@@ -246,7 +254,7 @@ for i in groups:
 
         #--[WINDOWS]--#
         Key([mod, "shift"], i.name, lazy.window.togroup(i.name), lazy.group[i.name].toscreen(), notify(i.name), desc="move focused window to group {}".format(i.name)),
-        Key([mod], i.name, move_focus_and_mouse(i.name in one), lazy.group[i.name].toscreen(), check(i.name), desc="Switch to group {}".format(i.name)),
+        Key([mod], i.name, move_focus_and_mouse(i.name), lazy.group[i.name].toscreen(), check(i.name), desc="Switch to group {}".format(i.name)),
         #--[SCRATCHPAD]--#
         Key([mod], "Return", lazy.group['9'].dropdown_toggle('terminal'), desc='Terminal'),
         Key([mod], "s", lazy.group['9'].dropdown_toggle('music'), desc='Spotify'),
@@ -256,79 +264,216 @@ for i in groups:
 
 ### DRAG FLOATING LAYOUTS ###
 mouse = [
-    Drag([mod], "Button1", lazy.window.set_position_floating(), start=lazy.window.get_position() ),
+    Drag([mod], "Button1", lazy.window.set_position(), start=lazy.window.get_position()),
     Drag([mod], "Button3", lazy.window.set_size_floating(), start=lazy.window.get_size()),
-    Click([mod], "Button2", lazy.window.bring_to_front())
+    Click([mod], "Button1", lazy.window.bring_to_front())
 ]
 
 ### CUSTOM WIDGETS ###
-def seperator(custom_padding = seperator_padding):
+def seperator(custom_padding=seperator_padding, background=None):
     return Sep(
-        linewidth    = seperator_line_width,
-        foreground   = bar_background_color,
-        padding      = custom_padding,
+        background = background,
+        linewidth = seperator_line_width,
+        foreground = bar_background_color,
+        padding = custom_padding,
         size_percent = 0,
     )
 
-def left_decor(color: str, padding_x=None, padding_y=9, round=False):
-    radius = 4 if round else [4, 0, 0, 4]
+# Default padding_y = 9, Default padding_x = None
+def left_decor(color, round=True, padding_x=None, padding_y=9):
+    radius = 6 if round else [4, 0, 0, 4]
     return [
         RectDecoration(
-            colour=color,
-            radius=radius,
-            filled=True,
-            padding_x=padding_x,
-            padding_y=padding_y,
+            colour = color,
+            radius = radius,
+            filled = True,
+            padding_x = padding_x,
+            padding_y = padding_y,
         )
     ]
 
-def right_decor(round=False, color=bar_border_color, padding_x=0, padding_y=9):
-    radius = 4 if round else [0, 4, 4, 0]
+def right_decor(color=right_decor_background, round=True, padding_x=0, padding_y=9):
+    radius = 6 if round else [0, 4, 4, 0]
     return [
         RectDecoration(
-            colour=color,
-            radius=radius,
-            filled=True,
-            padding_y=padding_y,
-            padding_x=padding_x,
+            colour = color,
+            radius = radius,
+            filled = True,
+            padding_x = padding_x,
+            padding_y = padding_y,
         )
     ]
 
-class WifiSsidWidget(widget.TextBox, base.InLoopPollText):
+def task_list_decor(color=bar_background_color, radius=8, padding_x=0, padding_y=0):
+    return RectDecoration(
+        line_width = 3,
+        line_colour = bar_border_color,
+        colour = color,
+        radius = radius,
+        filled = True,
+        padding_y = padding_y,
+        padding_x = padding_x,
+    )
+
+def icon_decor(color=bar_background_color, border_width=[3, 0, 3, 0]):
+    return BorderDecoration(
+        border_width = border_width,
+        colour = color,
+    )
+
+notification_shown = False
+
+class NotificationWidget(widget.TextBox, base.InLoopPollText):
     def __init__(self):
         base.InLoopPollText.__init__(
             self,
             update_interval = wifi_update_interval,
-            font            = bold_font,
-            padding         = widget_default_padding,
-            decorations     = right_decor(True)
+            font = bold_font,
+            padding = widget_default_padding,
+            max_chars = 6,
+            decorations = right_decor()
         )
+
+        self.shown = False
+        self.notification_message = None
+        self.seen_notification_message = None
 
     def poll(self):
-        wifi_state = subprocess.check_output(["nmcli",  "radio", "wifi"]).strip().decode("utf-8")
-        if wifi_state == "disabled":
-            return "Off"
-
-        connection_output = subprocess.check_output(['nmcli', '-t', '-f', 'NAME', 'connection', 'show', '--active'], text=True)
-        connection_names = connection_output.strip().split('\n')
-
-        if connection_names:
-            ssid = connection_names[0]
-            if ssid == "lo":
-                return "Disconnected"
-            else:
-                return ssid
+        global notification_shown
+        self.notification_message = subprocess.check_output(['/home/jonalm/scripts/other/get_recent_urgent_notification.py'], text=True).strip()
+        if self.notification_message and self.notification_message != self.seen_notification_message:
+            notification_shown = True
+            return self.notification_message
         else:
-            return "Error"
+            notification_shown = False
+            return ""
 
-class BluetoothDeviceWidget(widget.TextBox, base.InLoopPollText):
+    def mouse_enter(self, *args, **kwargs):
+        Qtile.cmd_spawn("/home/jonalm/scripts/other/get_notifications.py")
+
+    def mouse_leave(self, *args, **kwargs):
+        self.seen_notification_message = self.notification_message
+        if self.notification_message:
+            self.notification_message = None
+        
+        Qtile.cmd_spawn("/home/jonalm/scripts/other/get_notifications.py")
+        self.poll()
+
+class NotificationIcon(widget.TextBox):
+    def __init__(self):
+        widget.TextBox.__init__(
+            self,
+            text = f"<span font='Font Awesome 6 free solid 14' foreground='{icon_foreground_6}' size='medium'></span>",
+            padding = widget_default_font_size - 12,
+            decorations = left_decor(icon_background_6),
+        )
+
+    def mouse_enter(self, *args, **kwargs):
+        if not notification_shown:
+            Qtile.cmd_spawn("/home/jonalm/scripts/other/get_notifications.py")
+
+    def mouse_leave(self, *args, **kwargs):
+        if not notification_shown:
+            Qtile.cmd_spawn("/home/jonalm/scripts/other/get_notifications.py")
+
+class MouseOverClock(widget.Clock):
+    def __init__(self, **config):
+        widget.Clock.__init__(
+            self,
+            long_format = "%A %d %B %Y %H:%M",
+            decorations = right_decor(),
+            **config
+        )
+        self.short_format = self.format
+
+    def mouse_enter(self, *args, **kwargs):
+        self.format = self.long_format
+        self.bar.draw()
+
+    def mouse_leave(self, *args, **kwargs):
+        self.format = self.short_format
+        self.bar.draw()
+
+def modify_window_name(text):
+    parts = text.split('-')
+
+    cleaned_parts = [part.strip() for part in parts]
+
+    if len(cleaned_parts) >= 2:
+        if cleaned_parts[-1] == "Visual Studio Code":
+            return f"Code - {cleaned_parts[0]}"
+        return f"{cleaned_parts[-1]} - {cleaned_parts[0]}"
+    elif len(cleaned_parts) == 1:
+        return cleaned_parts[0]
+    else:
+        return ''
+
+class PowerButton(widget.TextBox):
+    def __init__(self):
+        widget.TextBox.__init__(
+            self,
+            text = f"<span font='Font Awesome 6 free solid 14' foreground='{icon_foreground_4}' size='medium'></span>",
+            padding = widget_default_font_size - 12,
+            mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("python3 /home/jonalm/scripts/qtile/bar_menus/system/system_menu.py")},
+            decorations = left_decor(icon_background_4),
+        )
+
+class LayoutIcon(widget.CurrentLayoutIcon):
+    def __init__(self):
+        widget.CurrentLayoutIcon.__init__(
+            self,
+            custom_icon_paths = [os.path.expanduser("~/.config/qtile/icons")],
+            scale             = layouticon_scale,
+            decorations       = left_decor(icon_background_3),
+        )
+
+class TickTickMenu(widget.TextBox):
+    def __init__(self):
+        widget.TextBox.__init__(
+            self,
+            text        = f"<span font='Font Awesome 6 free solid 14' foreground='{icon_foreground_1}' size='medium'></span>",
+            padding     = widget_default_font_size - 12,
+            mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("python3 /home/jonalm/scripts/qtile/bar_menus/ticktick/launch.py")},
+            decorations = left_decor(icon_background_1),
+        )
+
+class VolumeIcon(widget.TextBox):
+    def __init__(self):
+        widget.TextBox.__init__(
+            self,
+            text            = f"<span font='Font Awesome 6 free solid 14' foreground='{icon_foreground_1}' size='medium'></span>",
+            padding         = widget_default_font_size - 12,
+            foreground      = text_color,
+            mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("python3 /home/jonalm/scripts/qtile/bar_menus/volume/volume_menu.py")},
+            decorations     = left_decor(icon_background_1),
+        )
+
+class VolumeWidget(widget.PulseVolume):
+    def __init__(self):
+        widget.PulseVolume.__init__(
+            self,
+            decorations     = right_decor(),
+        )
+
+class BluetoothIcon(widget.TextBox):
+    def __init__(self):
+        widget.TextBox.__init__(
+            self,
+            text            = f"<span font='Font Awesome 6 free solid 16' foreground='{icon_foreground_2}' size='medium'></span>",
+            padding         = widget_default_font_size - 8,
+            foreground      = text_color,
+            mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("python3 /home/jonalm/scripts/qtile/bar_menus/bluetooth/bluetooth_menu.py")},
+            decorations     = left_decor(icon_background_2),
+        )
+
+class BluetoothWidget(widget.TextBox, base.InLoopPollText):
     def __init__(self):
         base.InLoopPollText.__init__(
             self,
             update_interval = wifi_update_interval,
             font            = bold_font,
             padding         = widget_default_padding,
-            decorations     = right_decor(True)
+            decorations     = right_decor()
         )
 
     def poll(self):
@@ -361,80 +506,149 @@ class BluetoothDeviceWidget(widget.TextBox, base.InLoopPollText):
         except subprocess.CalledProcessError as e:
             return "Off"
 
-notification_shown = False
+class WifiIcon(widget.TextBox):
+    def __init__(self):
+        widget.TextBox.__init__(
+            self,
+            text            = f"<span font='Font Awesome 6 free solid 14' foreground='{icon_foreground_3}' size='medium'></span>",
+            padding         = widget_default_font_size - 12,
+            foreground      = text_color,
+            mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("python3 /home/jonalm/scripts/qtile/bar_menus/wifi/wifi_menu.py")},
+            decorations     = left_decor(icon_background_3),
+        )
 
-class NotificationWidget(widget.TextBox, base.InLoopPollText):
+class WifiWidget(widget.TextBox, base.InLoopPollText):
     def __init__(self):
         base.InLoopPollText.__init__(
             self,
             update_interval = wifi_update_interval,
             font            = bold_font,
             padding         = widget_default_padding,
-            # mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("/home/jonalm/scripts/other/get_notifications.py")},
-            max_chars       = 6,
-            decorations     = right_decor(True)
+            decorations     = right_decor()
         )
 
-        self.notification_message = None
-        self.seen_notification_message = None
-
     def poll(self):
-        global notification_shown
-        self.notification_message = subprocess.check_output(['/home/jonalm/scripts/other/get_recent_urgent_notification.py'], text=True).strip()
-        if self.notification_message and self.notification_message != self.seen_notification_message:
-            notification_shown = True
-            return self.notification_message
+        wifi_state = subprocess.check_output(["nmcli",  "radio", "wifi"]).strip().decode("utf-8")
+        if wifi_state == "disabled":
+            return "Off"
+
+        connection_output = subprocess.check_output(['nmcli', '-t', '-f', 'NAME', 'connection', 'show', '--active'], text=True)
+        connection_names = connection_output.strip().split('\n')
+
+        if connection_names:
+            ssid = connection_names[0]
+            if ssid == "lo":
+                return "Disconnected"
+            else:
+                return ssid
         else:
-            return ""
-
-    def mouse_enter(self, *args, **kwargs):
-        global notification_shown
-        Qtile.cmd_spawn("/home/jonalm/scripts/other/get_notifications.py")
-        self.seen_notification_message = self.notification_message
-        if self.notification_message:
-            notification_shown = False
-            self.notification_message = None
-        self.poll()
-
-    def mouse_leave(self, *args, **kwargs):
-        Qtile.cmd_spawn("/home/jonalm/scripts/other/get_notifications.py")
-
-class NotificationIcon(widget.TextBox):
+            return "Error"
+        
+class CpuTempIcon(widget.TextBox):
     def __init__(self):
         widget.TextBox.__init__(
             self,
-            text        = "<span font='Font Awesome 6 free solid 14' foreground='#000000' size='medium'></span>",
-            padding     = widget_default_font_size - 12,
-            # mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("/home/jonalm/scripts/other/get_notifications.py")},
-            decorations = left_decor(notification_icon_color, round = True),
+            text = f"<span font='Font Awesome 6 free solid 15' foreground='{icon_foreground_4}'size='medium'></span>",
+            padding = widget_default_font_size - 12,
+            mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("python3 /home/jonalm/scripts/qtile/bar_menus/cpu/cpu_stats_menu.py")},
+            decorations = left_decor(icon_background_4),
         )
 
-    def mouse_enter(self, *args, **kwargs):
-        if not notification_shown:
-            Qtile.cmd_spawn("/home/jonalm/scripts/other/get_notifications.py")
+class CpuTempWidget(widget.ThermalSensor):
+    def __init__(self):
+        widget.ThermalSensor.__init__(
+            self,
+            format = "{temp:.0f}{unit}",
+            threshold = 80.0,
+            foreground_alert = "#bf616a",
+            markup = True,
+            update_interval = cpu_update_interval,
+            decorations = right_decor(),
+        )
 
-    def mouse_leave(self, *args, **kwargs):
-        if not notification_shown:
-            Qtile.cmd_spawn("/home/jonalm/scripts/other/get_notifications.py")
+class CpuLoadIcon(widget.TextBox):
+    def __init__(self):
+        widget.TextBox.__init__(
+            self,
+            text = f"<span font='Font Awesome 6 free solid 15' foreground='{icon_foreground_4}'size='medium'></span>",
+            padding = widget_default_font_size - 12,
+            mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("python3 /home/jonalm/scripts/qtile/bar_menus/cpu/cpu_stats_menu.py")},
+            decorations = left_decor(icon_background_4),
+        )
 
-class MouseOverClock(widget.Clock):
-    defaults = [
-        ("long_format", "%A %d %B %Y %H:%M", "Format to show when mouse is over widget."),
-        ("decorations", right_decor(True), "Decoration to show when mouse is over widget")
-    ]
+class CpuLoadWidget(widget.CPU):
+    def __init__(self):
+        widget.CPU.__init__(
+            self,
+            format = "{load_percent}%",
+            markup = True,
+            update_interval = cpu_update_interval,
+            mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("alacritty -e sudo auto-cpufreq --stats")},
+            decorations = right_decor(),
+        )
 
-    def __init__(self, **config):
-        widget.Clock.__init__(self, **config)
-        self.add_defaults(MouseOverClock.defaults)
-        self.short_format = self.format
+class BatteryIcon(widget.TextBox):
+    def __init__(self):
+        widget.TextBox.__init__(
+            self,
+            text = f"<span font='Font Awesome 6 free solid 14' foreground='{icon_foreground_5}'size='medium'></span>",
+            padding = widget_default_font_size - 10,
+            mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("python3 /home/jonalm/scripts/qtile/bar_menus/power/power_management_menu.py")},
+            decorations = left_decor(icon_background_5),
+        )
 
-    def mouse_enter(self, *args, **kwargs):
-        self.format = self.long_format
-        self.bar.draw()
+class BatteryWidget(widget.Battery):
+    def __init__(self):
+        widget.Battery.__init__(
+            self,
+            format = "{percent:2.0%}",
+            markup = True,
+            update_interval = battery_update_interval,
+            mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("alacritty -e sudo powertop")},
+            decorations = right_decor(),
+        )
 
-    def mouse_leave(self, *args, **kwargs):
-        self.format = self.short_format
-        self.bar.draw()
+class WattageIcon(widget.TextBox):
+    def __init__(self):
+        widget.TextBox.__init__(
+            self,
+            text = f"<span font='Font Awesome 6 free solid 14' foreground='{icon_foreground_5}'size='medium'></span>",
+            padding = widget_default_font_size - 10,
+            mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("python3 /home/jonalm/scripts/qtile/bar_menus/power/power_management_menu.py")},
+            decorations=left_decor(icon_background_5),
+        )
+
+class WattageWidget(widget.Battery):
+    def __init__(self):
+        widget.Battery.__init__(
+            self,
+            format = "{watt:.2f}",
+            markup = True,
+            update_interval = battery_update_interval,
+            mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("alacritty -e sudo powertop")},
+            decorations = right_decor(),
+        )
+
+class BacklightIcon(widget.TextBox):
+    def __init__(self):
+        widget.TextBox.__init__(
+            self,
+            text        = f"<span font='Font Awesome 6 free solid 14' foreground='{icon_foreground_7}'size='medium'></span>",
+            padding     = widget_default_font_size - 12,
+            decorations = left_decor(icon_background_7),
+        )
+
+class BacklightWidget(widget.Backlight):
+    def __init__(self):
+        widget.Backlight.__init__(
+            self,
+            format = "{percent:2.0%}",
+            markup = True,
+            backlight_name = "amdgpu_bl1",
+            brightness_file = "/sys/class/backlight/amdgpu_bl1/actual_brightness",
+            update_interval = backlight_update_interval,
+            decorations = right_decor(),
+        )
 
 ### WIDGET SETTINGS ###
 widget_defaults = dict(
@@ -444,325 +658,249 @@ widget_defaults = dict(
     foreground  = widget_default_foreground_color,
 )
 
-group_box_settings = {
-        "margin"                      : groupbox_margin,
-        "font"                        : icon_font,
-        "highlight_method"            : "block",
-        "borderwidth"                 : 6,
-        "rounded"                     : True,
-        "disable_drag"                : True,
-        "active"                      : bar_border_color,
-        "inactive"                    : bar_background_color,
-        "block_highlight_text_color"  : "#000000",
-        "highlight_color"             : "#000000",
-        "this_current_screen_border"  : "#9B98B7",
-        "hide_unused"                 : True,
-        "other_current_screen_border" : group_box_other_border_color,
-        "this_screen_border"          : group_box_this_border_color,
-        "other_screen_border"         : group_box_other_border_color,
-        "foreground"                  : group_box_foreground_color,
-        # "background"                  : group_box_background_color,
-        "urgent_border"               : group_box_urgentborder_color,
-}
+task_list_settings = dict(
+    font                = "FiraCode Nerd Font Bold",
+    fontsize            = widget_default_font_size + 1,
+    padding_y           = widget_default_padding + 1,
+    margin              = 7,
+    borderwidth         = 4,
+    spacing             = 2,
+    icon_size           = 0,
+    markup_floating     = "<span font='Font Awesome 6 free solid 15' foreground='#A7BEAE' size='medium'> 缾 </span>{}",
+    markup_minimized    = "<span font='Font Awesome 6 free solid 15' foreground='#b16286' size='medium'> 絛 </span>{}",
+    markup_maximized    = "<span font='Font Awesome 6 free solid 15' foreground='#b16286' size='medium'> 类 </span>{}",
+    title_width_method  = "uniform",
+    urgent_alert_method = "border",
+    highlight_method    = 'block',
+    rounded             = True,
+    parse_text          = modify_window_name,
+    border              = bar_border_color,
+    background          = transparent,
+    foreground          = "#d8dee9",
+    unfocused_border    = "#383b41",
+    theme_mode          = "preferred",
+    theme_path          = "/usr/share/icons/Adwaita",
+    decorations         = [task_list_decor()],
+)
 
-### BAR ###
-top_bar_1 = Bar([
-    seperator(icon_seperator_padding - 2),
-    widget.TextBox(
-        text        = "<span font='Font Awesome 6 free solid 14' foreground='#000000' size='medium'></span>",
-        # text        = "<span font='Font Awesome 6 free solid 14' foreground='#000000' size='medium'></span>",
-        padding     = widget_default_font_size - 12,
-        mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("python3 /home/jonalm/scripts/qtile/bar_menus/system/system_menu.py")},
-        # mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("python3 /home/jonalm/scripts/qtile/bar_menus/main/main_menu.py")},
-        decorations = left_decor(round=True, color=cpu_icon_color),
-    ),
+group_box_settings = dict(
+    # margin                      = groupbox_margin,
+    padding_x                   = 15,
+    margin_x                    = 10,
+    borderwidth                 = 2,
+    rounded                     = True,
+    disable_drag                = True,
+    hide_unused                 = True,
+    font                        = icon_font,
+    highlight_method            = "block",
+    active                      = bar_border_color,
+    inactive                    = bar_background_color,
+    block_highlight_text_color  = "#000000",
+    highlight_color             = "#000000",
+    this_current_screen_border  = "#bf616a",
+    this_screen_border          = bar_border_color,
+    other_current_screen_border = group_box_other_border_color,
+    other_screen_border         = group_box_other_border_color,
+    foreground                  = group_box_foreground_color,
+    urgent_border               = group_box_urgentborder_color,
+)
 
-    seperator(icon_seperator_padding),
-    widget.CurrentLayoutIcon(
-        custom_icon_paths = [os.path.expanduser("~/.config/qtile/icons")],
-        scale             = layouticon_scale,
-        decorations       = left_decor(round=True, color=wifi_icon_color),
-    ),
+class GroupBoxWidget(widget.GroupBox):
+    def __init__(self):
+        widget.GroupBox.__init__(
+            self,
+            **group_box_settings, 
+            background = transparent, 
+            decorations = [task_list_decor()]
+        )
 
-    # GROUPBOX #
-    seperator(icon_seperator_padding),
-    widget.GroupBox(
-        **group_box_settings,
-        decorations = left_decor(round = True, color = "#9B98B7"),
-    ),
+class WindowCountWidget(widget.WindowCount):
+    def __init__(self):
+        widget.WindowCount.__init__(
+            self,
+            padding = 20, 
+            background = transparent, 
+            show_zero = True, 
+            decorations = [task_list_decor()]
+        )
+
+### BARS ###
+single_top_bar = Bar([
+    # POWERBUTTON # 
+    seperator(-3),
+    PowerButton(),
+
+    # LAYOUTICON # 
+    seperator(),
+    LayoutIcon(),
 
     # TICKTICK MENU #
-    # seperator(icon_seperator_padding),
-    # widget.TextBox(
-    #     text        = "<span font='Font Awesome 6 free solid 14' foreground='#000000' size='medium'></span>",
-    #     padding     = widget_default_font_size - 12,
-    #     mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("python3 /home/jonalm/scripts/qtile/bar_menus/ticktick/launch.py")},
-    #     decorations = left_decor(round = True, color = "#b48ead"),
-    # ),
+    seperator(),
+    TickTickMenu(),
 
-    seperator(icon_seperator_padding - 10),
-    widget.TaskList(
-        font                = "FiraCode Nerd Font Bold",
-        fontsize            = widget_default_font_size + 1,
-        padding_y           = widget_default_padding - 2,
-        margin              = 6,
-        borderwidth         = 6,
-        spacing             = 2,
-        txt_floating        = ' 缾 ',
-        txt_maximized       = ' 类 ',
-        txt_minimized       = ' 絛 ',
-        title_width_method  = "uniform",
-        urgent_alert_method = "border",
-        highlight_method    = 'block',
-        border              = bar_border_color,
-        unfocused_border    = "#3c4455",
-    ),
-    seperator(icon_seperator_padding - 10),
+    widget.Spacer(bar.STRETCH),
 
-    widget.TextBox(
-        text            = "<span font='Font Awesome 6 free solid 14' foreground='#000000' size='medium'></span>",
-        padding         = widget_default_font_size - 12,
-        foreground      = notification_history_icon_color,
-        mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("python3 /home/jonalm/scripts/qtile/bar_menus/volume/volume_menu.py")},
-        decorations     = left_decor(round = True, color = "#b48ead"),
-    ),
-    widget.PulseVolume(
-        decorations     = right_decor(True),
-    ),
-    seperator(icon_seperator_padding),
+    VolumeIcon(),
+    VolumeWidget(),
+    seperator(),
 
     # BLUETOOTH #
-    widget.TextBox(
-        text            = "<span font='Font Awesome 6 free solid 16' foreground='#000000' size='medium'></span>",
-        padding         = widget_default_font_size - 8,
-        foreground      = notification_history_icon_color,
-        mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("python3 /home/jonalm/scripts/qtile/bar_menus/bluetooth/bluetooth_menu.py")},
-        decorations     = left_decor(round = True, color = "#9B98B7"),
-    ),
-    BluetoothDeviceWidget(),
-    seperator(icon_seperator_padding),
+    BluetoothIcon(),
+    BluetoothWidget(),
+    seperator(),
 
     #  WIFI #
-    widget.TextBox(
-        text            = "<span font='Font Awesome 6 free solid 14' foreground='#000000' size='medium'></span>",
-        padding         = widget_default_font_size - 12,
-        foreground      = notification_history_icon_color,
-        mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("python3 /home/jonalm/scripts/qtile/bar_menus/wifi/wifi_menu.py")},
-        decorations     = left_decor(wifi_icon_color, round = True),
-    ),
-    WifiSsidWidget(),
+    WifiIcon(),
+    WifiWidget(),
 
-    # CPU #
-    seperator(icon_seperator_padding),
-    widget.TextBox(
-        text        = "<span font='Font Awesome 6 free solid 15' foreground='#000000'size='medium'></span>",
-        padding     = widget_default_font_size - 12,
-        mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("python3 /home/jonalm/scripts/qtile/bar_menus/cpu/cpu_stats_menu.py")},
-        decorations = left_decor(cpu_icon_color, round = True),
-    ),
-    widget.CPU(
-        format          = "{load_percent}%",
-        markup          = True,
-        update_interval = cpu_update_interval,
-        mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("alacritty -e sudo auto-cpufreq --stats")},
-        decorations     = right_decor(True),
-    ),
+    # CPU TEMP #
+    seperator(),
+    CpuTempIcon(),
+    CpuTempWidget(),
+
+    # CPU LOAD #
+    seperator(),
+    CpuLoadIcon(),
+    CpuLoadWidget(),
 
     # BATTERY #
-    seperator(icon_seperator_padding),
-    widget.TextBox(
-        text        = "<span font='Font Awesome 6 free solid 14' foreground='#000000'size='medium'></span>",
-        padding     = widget_default_font_size - 10,
-        mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("python3 /home/jonalm/scripts/qtile/bar_menus/power/power_management_menu.py")},
-        decorations = left_decor(battery_icon_color, round = True),
-    ),
-    widget.Battery(
-        format          = "{percent:2.0%}",
-        markup          = True,
-        update_interval = battery_update_interval,
-        mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("alacritty -e sudo powertop")},
-        decorations     = right_decor(True),
-    ),
+    seperator(),
+    BatteryIcon(),
+    BatteryWidget(),
 
     # WATTAGE #
-    seperator(icon_seperator_padding),
-    widget.TextBox(
-        text="<span font='Font Awesome 6 free solid 14' foreground='#000000'size='medium'></span>",
-        padding=widget_default_font_size - 10,
-        mouse_callbacks={"Button1": lambda: Qtile.cmd_spawn(
-            "python3 /home/jonalm/scripts/qtile/bar_menus/power/power_management_menu.py"
-        )},
-        decorations=left_decor(battery_icon_color, round=True),
-    ),
-    widget.Battery(
-        format="{watt:.2f}",
-        markup=True,
-        update_interval=battery_update_interval,
-        mouse_callbacks={"Button1": lambda: Qtile.cmd_spawn("alacritty -e sudo powertop")},
-        decorations=right_decor(True),
-    ),
+    seperator(),
+    WattageIcon(),
+    WattageWidget(),
 
     # URGENT NOTIFICATION #
-    seperator(icon_seperator_padding),
-    # widget.TextBox(
-    #     text        = "<span font='Font Awesome 6 free solid 14' foreground='#000000' size='medium'></span>",
-    #     padding     = widget_default_font_size - 12,
-    #     decorations = left_decor(notification_icon_color, round = True),
-    # ),
+    seperator(),
     NotificationIcon(),
     NotificationWidget(),
 
     # BACKLIGHT #
-    seperator(icon_seperator_padding),
-    widget.TextBox(
-        text        = "<span font='Font Awesome 6 free solid 14' foreground='#000000'size='medium'></span>",
-        padding     = widget_default_font_size - 12,
-        decorations = left_decor(backlight_icon_color, round = True),
-    ),
-    widget.Backlight(
-        format          = "{percent:2.0%}",
-        markup          = True,
-        backlight_name  = "amdgpu_bl1",
-        brightness_file = "/sys/class/backlight/amdgpu_bl1/actual_brightness",
-        update_interval = backlight_update_interval,
-        decorations     = right_decor(True),
-    ),
-
-    # DATE #
-    # seperator(icon_seperator_padding),
-    # widget.TextBox(
-    #     text        = "<span font='Font Awesome 6 free solid 14' foreground='#000000'size='medium'></span>",
-    #     padding     = widget_default_font_size - 12,
-    #     decorations = left_decor(date_icon_color, round = True),
-    # ),
-    # widget.Clock(
-    #     format      = "%a %b %d",
-    #     markup      = True,
-    #     decorations = right_decor(True),
-    # ),
+    seperator(),
+    BacklightIcon(),
+    BacklightWidget(),
 
     # TIME #
-    seperator(icon_seperator_padding),
+    seperator(),
     MouseOverClock(),
-    # widget.Clock(
-    #     format      = "%R",
-    #     fontsize    = widget_default_font_size + 1,
-    #     decorations = right_decor(True),
-    # ),
-    seperator(icon_seperator_padding - 4),
-], bar_size, margin = bar_margin_top, background = bar_background_color, border_width = bar_width_top, border_color = bar_border_color, opacity=1)
+    seperator(-5),
 
-top_bar_2 = Bar([
+], top_bar_size, margin = bar_margin_top, background = bar_background_color, border_width = bar_width_top, border_color = bar_border_color, opacity=1)
+
+single_bottom_bar = Bar([
     # GROUPBOX #
-    widget.GroupBox(
-        **group_box_settings,
-    ),
+    GroupBoxWidget(),
+    
+    # TASKLIST #
+    seperator(background=transparent),
+    widget.TaskList(**task_list_settings),
 
-    # TIME #
-    widget.Spacer(
-        bar.STRETCH,
-    ),
-    widget.Clock(
-        format   = "%R",
-        fontsize = widget_default_font_size + 2,
-    ),
-    widget.Spacer(
-        bar.STRETCH,
-    ),
+    # WINDOWCOUNT #
+    seperator(background=transparent),
+    WindowCountWidget(),
 
-    # WIFI #
-    WifiSsidWidget(),
+], bottom_bar_size, margin = bar_margin_bottom, background = bar_background_color, border_width = bar_width_bottom, border_color = bar_border_color, opacity=1)
 
-    # VOLUME #
-    seperator(1),
-    widget.Volume(
-        format           = "<span font='Font Awesome 6 free solid 14' foreground='#88c0d0'size='medium'>  </span>{percent:2.0%}",
-        markup           = True,
-        limit_max_volume = "True",
-        decorations      = [
-            BorderDecoration(
-                colour       = volume_icon_color,
-                border_width = decorator_border_width,
-                padding      = decorator_padding,
-            )
-        ],
-    ),
+top_bar_1 = Bar([
+    widget.Spacer(bar.STRETCH),
+    
+    VolumeIcon(),
+    VolumeWidget(),
 
-    # CPU #
-    seperator(1),
-    widget.CPU(
-        format          = "<span font='Font Awesome Bold 13' foreground='#8fbcbb'size='medium'>  </span>{load_percent}%",
-        markup          = True,
-        update_interval = cpu_update_interval,
-        mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("alacritty -e sudo auto-cpufreq --stats")},
-        decorations     = [
-            BorderDecoration(
-                colour       = cpu_icon_color,
-                border_width = decorator_border_width,
-                padding      = decorator_padding,
-            )
-        ],
-    ),
+    # BLUETOOTH #
+    seperator(),
+    BluetoothIcon(),
+    BluetoothWidget(),
+
+    #  WIFI #
+    seperator(),
+    WifiIcon(),
+    WifiWidget(),
+
+    # CPU TEMP #
+    seperator(),
+    CpuTempIcon(),
+    CpuTempWidget(),
+
+    # CPU LOAD #
+    seperator(),
+    CpuLoadIcon(),
+    CpuLoadWidget(),
 
     # BATTERY #
-    seperator(1),
-    widget.Battery(
-        format          = "<span font='Font Awesome 6 free solid 14' foreground='#a3be8c'size='medium'>  </span>{percent:2.0%}",
-        markup          = True,
-        update_interval = battery_update_interval,
-        mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("alacritty -e sudo powertop")},
-        decorations     = [
-            BorderDecoration(
-                colour       = battery_icon_color,
-                border_width = decorator_border_width,
-                padding      = decorator_padding,
-            )
-        ],
-    ),
+    seperator(),
+    BatteryIcon(),
+    BatteryWidget(),
+
+    # WATTAGE #
+    seperator(),
+    WattageIcon(),
+    WattageWidget(),
+
+    # URGENT NOTIFICATION #
+    seperator(),
+    NotificationIcon(),
+    NotificationWidget(),
 
     # BACKLIGHT #
-    seperator(1),
-    widget.Backlight(
-        format          ="<span font='Font Awesome 6 free solid 14' foreground='#d08770'size='medium'>  </span>{percent:2.0%}",
-        markup          =True,
-        backlight_name  = "amdgpu_bl0",
-        brightness_file = "/sys/class/backlight/amdgpu_bl0/actual_brightness",
-        update_interval = backlight_update_interval,
-        decorations     = [
-            BorderDecoration(
-                colour       = backlight_icon_color,
-                border_width = decorator_border_width,
-                padding      = decorator_padding,
-            )
-        ],
-    ),
+    seperator(),
+    BacklightIcon(),
+    BacklightWidget(),
 
     # TIME #
-    seperator(1),
-    widget.Clock(
-        format      = "<span font='Font Awesome 6 free solid 14' foreground='#bf616a'size='medium'>   </span>%a %b %d",
-        markup      = True,
-        decorations = [
-            BorderDecoration(
-                colour       = date_icon_color,
-                border_width = decorator_border_width,
-                padding      = decorator_padding,
-            )
-        ],
-    ),
+    seperator(),
+    MouseOverClock(),
+    seperator(-5),
 
-    # NOTIFICATION HISTORY #
-    seperator(-1),
-    widget.TextBox(
-        text            = "",
-        font            = icon_font,
-        fontsize        = widget_default_font_size + 8,
-        padding         = widget_default_font_size - 12,
-        foreground      = notification_history_icon_color,
-        mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("python3 /home/jonalm/scripts/other/get_notifications.py")},
-    ),
-    seperator(-1),
-], bar_size, margin = bar_margin_top, background = bar_background_color, border_width = bar_width_top, border_color = bar_border_color, opacity=1)
+], top_bar_size, margin = bar_margin_top, background = bar_background_color, border_width = bar_width_top, border_color = bar_border_color, opacity=1)
+
+top_bar_2 = Bar([
+    # POWERBUTTON #
+    seperator(-3),
+    PowerButton(),
+
+    # LAYOUTICON #
+    seperator(),
+    LayoutIcon(),
+
+    # TICKTICK MENU #
+    seperator(),
+    TickTickMenu(),
+
+    widget.Spacer(bar.STRETCH),
+
+], top_bar_size, margin = bar_margin_top, background = bar_background_color, border_width = bar_width_top, border_color = bar_border_color, opacity=1)
+
+bottom_bar_1 = Bar([
+    # WINDOWCOUNT #
+    WindowCountWidget(),
+
+    # TASKLIST #
+    seperator(background=transparent),
+    widget.TaskList(**task_list_settings),
+
+    # GROUPBOX #
+    seperator(background=transparent),
+    GroupBoxWidget(),
+
+], bottom_bar_size, margin = bar_margin_bottom, background = bar_background_color, border_width = bar_width_bottom, border_color = bar_border_color, opacity=1)
+
+bottom_bar_2 = Bar([
+    # GROUPBOX #
+    GroupBoxWidget(),
+
+    # TASKLIST #
+    seperator(background=transparent),
+    widget.TaskList(**task_list_settings),
+
+    # WINDOWCOUNT #
+    seperator(background=transparent),
+    WindowCountWidget(),
+
+], bottom_bar_size, margin = bar_margin_bottom, background = bar_background_color, border_width = bar_width_bottom, border_color = bar_border_color, opacity=1)
 
 ### LAYOUT SETTINGS ###
 layouts = [
@@ -791,6 +929,9 @@ floating_layout = Floating(
     float_rules   = [
         *Floating.default_float_rules,
         Match(wm_class = "nitrogen"),
+        Match(wm_class = "Navigator"),
+        Match(wm_class = "settings_menu.py"),
+        Match(wm_class = "electron"),
         Match(wm_class = "PatternRecognition"),
         Match(wm_class = "patternrecognition"),
         Match(wm_class = "VirtualBox"),
@@ -812,24 +953,62 @@ floating_layout = Floating(
 ### DECLARING WIDGET SETTINGS ###
 extension_defaults = widget_defaults.copy()
 
-screen_output = subprocess.check_output(["xrandr", "-q"]).decode().strip()
-screen_data = subprocess.check_output(['awk', '/HDMI-A-0/ {print $1}'], input=screen_output.encode()).decode().strip()
-if "HDMI-A-0: connected" in screen_data:
-    single_monitor   = False
-    top_bar_1_var    = top_bar_1
-    top_bar_2_var    = top_bar_2
-else:
-    top_bar_1_var    = top_bar_1
-    top_bar_2_var    = None
-
 ### DECLARING PANEL ###
-screens = [
-    Screen(top=top_bar_1_var, bottom=bar.Gap(bar_gap_size), left=bar.Gap(bar_gap_size), right=bar.Gap(bar_gap_size)),
-    Screen(top=top_bar_2_var, bottom=bar.Gap(bar_gap_size), left=bar.Gap(bar_gap_size), right=bar.Gap(bar_gap_size))
+if top_bar_on and bottom_bar_on:
+    single_screen = Screen(top=single_top_bar, bottom=single_bottom_bar, left=bar.Gap(bar_gap_size), right=bar.Gap(bar_gap_size))
+    left_screen   = Screen(top=top_bar_1, bottom=bottom_bar_1, left=bar.Gap(bar_gap_size), right=bar.Gap(bar_gap_size))
+    right_screen  = Screen(top=top_bar_2, bottom=bottom_bar_2, left=bar.Gap(bar_gap_size), right=bar.Gap(bar_gap_size))
+elif top_bar_on and not bottom_bar_on:
+    single_screen = Screen(top=single_top_bar, bottom=bar.Gap(bar_gap_size), left=bar.Gap(bar_gap_size), right=bar.Gap(bar_gap_size))
+    left_screen   = Screen(top=top_bar_1, bottom=bar.Gap(bar_gap_size), left=bar.Gap(bar_gap_size), right=bar.Gap(bar_gap_size))
+    right_screen  = Screen(top=top_bar_2, bottom=bar.Gap(bar_gap_size), left=bar.Gap(bar_gap_size), right=bar.Gap(bar_gap_size))
+elif bottom_bar_on and not top_bar_on:
+    single_screen = Screen(top=bar.Gap(bar_gap_size), bottom=single_bottom_bar, left=bar.Gap(bar_gap_size), right=bar.Gap(bar_gap_size))
+    left_screen   = Screen(top=bar.Gap(bar_gap_size), bottom=bottom_bar_1, left=bar.Gap(bar_gap_size), right=bar.Gap(bar_gap_size))
+    right_screen  = Screen(top=bar.Gap(bar_gap_size), bottom=bottom_bar_2, left=bar.Gap(bar_gap_size), right=bar.Gap(bar_gap_size))
+else:
+    single_screen = Screen(top=bar.Gap(bar_gap_size), bottom=bar.Gap(bar_gap_size), left=bar.Gap(bar_gap_size), right=bar.Gap(bar_gap_size))
+    left_screen   = Screen(top=bar.Gap(bar_gap_size), bottom=bar.Gap(bar_gap_size), left=bar.Gap(bar_gap_size), right=bar.Gap(bar_gap_size))
+    right_screen  = Screen(top=bar.Gap(bar_gap_size), bottom=bar.Gap(bar_gap_size), left=bar.Gap(bar_gap_size), right=bar.Gap(bar_gap_size))
 
-    ]
+amt_screens = 2
+from Xlib import display
+from Xlib.ext import randr
+def configure_screens(startup=False):
+    d = display.Display()
+    s = d.screen()
+    res = randr.get_screen_resources(s.root)
+    global screens, amt_screens
+    count = 0
+    for output in res.outputs:
+        params = randr.get_output_info(s.root, output, res.config_timestamp)
+        data = params._data
+        if data["connection"] == 0:
+            count += 1
+            log.warning(f"Connected is Monitor {data['name']}, screen count set to {count}")
+
+    amt_screens = count
+    if amt_screens == 2:
+        subprocess.run("xrandr --output eDP --mode 2560x1440 --rate 120 --pos 2976x117 --primary --output HDMI-A-0 --scale 1.55x1.55 --rate 60 --pos 0x0 --auto", shell=True)
+        screens = [left_screen, right_screen]
+    else:
+        subprocess.run("xrandr --output eDP --mode 2560x1440 --rate 120 --output HDMI-A-0 --off", shell=True)
+        screens = [single_screen]
+        
+    if not startup:
+        Qtile.reload_config()
+    
+configure_screens(startup=True)
 
 ### HOOKS ###
+@hook.subscribe.screen_change
+def _(notify_event):
+    configure_screens()
+
+@hook.subscribe.restart
+def run_every_restart():
+    log.info("top_bar_on", top_bar_on,"bottom_bar_on", bottom_bar_on)
+        
 @hook.subscribe.startup_once
 def autostart():
     home = os.path.expanduser('~/.config/qtile/autostart.sh')

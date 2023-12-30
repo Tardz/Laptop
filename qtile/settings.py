@@ -1,20 +1,19 @@
+import json
+import os
 ### KEYBINDING VARIABLES ###
 mod1           = "Alt"
 mod            = "mod4"
 myBrowser      = "brave"
 myTerm         = "alacritty"
 alttab_spawned = False
-single_monitor = True
-
-one = ["g", "c", "n"]
-two = ["v"]
 
 check_dict = {
-    "c": ["brave", "1"],
-    "d": ["discord", "4"],
-    "v": [],
-    "n": ["ranger", "3", "alacritty --title Ranger -e"],
-    9: []
+    #[0] - app, [1] - command, [2] - screen
+    "c": ["firefox", None, 0],
+    "d": ["discord", None, 0],
+    "v": [None, None, 1],
+    "n": ["ranger", "alacritty --title Ranger -e", 0],
+    9  : []
 }
 
 ### COLORS ###
@@ -34,7 +33,7 @@ colors = [
     ["#d08770", "#d08770"],     # 11 orange
     ["#8fbcbb", "#8fbcbb"],     # 12 super cyan
     ["#5e81ac", "#5e81ac"],     # 13 super blue
-    ["#242831.85", "#242831.85"],     # 14 super dark background
+    ["#242831.95", "#242831.95"],     # 14 super dark background
     ["#434C5E", "#434C5E"],     # 15 darker grey
     #-Dark mode
     ["#00000000", "#00000000"], # 16 transp1
@@ -87,135 +86,163 @@ colors = [
     ["#000000AA", "#000000AA"], # 63 Transp
 ]
 
-### FONTS ###
-fnt2                            = "ttf-dejavu"
-normal_font                     = "FiraCode Nerd Font"
-icon_font                       = "Font Awesome 6 Free Solid"
-bold_font                       = "FiraCode Nerd Font Bold"
+file_path = os.path.expanduser("~/scripts/qtile/settings_menu/data/qtile_data.json")
+if os.path.isfile(file_path):
+    with open(file_path, "r") as file:
+        qtile_settings = json.load(file)
 
-### BAR VARIABLES ###
-#-Circle
-circle_size                     = 26
-circle_padding                  = 0
+file_path = os.path.expanduser("~/scripts/qtile/settings_menu/data/qtile_colors.json")
+if os.path.isfile(file_path):
+    with open(file_path, "r") as file:
+        qtile_colors = json.load(file)
 
-#-Seperator
-seperator_size                  = 40
-seperator_padding               = 15
-seperator_line_width            = 15
+#*###############################
+#*           BAR               ##
+#*###############################
+#?#############
+#?   COLORS  ##
+#?#############
+#!ALL
+transparent                          = "#000000.0"
+icon_background                      = "#1e2227"
+text_color                           = colors[9]
+widget_default_foreground_color      = colors[9]
 
-#-Widget defaults
-widget_default_foreground_color = colors[9]
-widget_default_background_color = colors[62]
-widget_default_font_size        = 18
-widget_default_padding          = 6     
+group_box_active_color               = colors[60]
+group_box_inactive_color             = colors[10]
+group_box_block_highlight_color      = colors[3]
+group_box_highlight_color            = colors[3]
+group_box_other_border_color         = colors[26]
+group_box_foreground_color           = colors[2]
+group_box_background_color           = colors[3]
+group_box_highlight_text_color       = colors[3]
+group_box_urgentborder_color         = colors[3]
 
-#-Power_button
-powerbutton_size                = 24
-powerbutton_padding             = 16
+icon_background_1                         = "#b48ead"
+icon_background_2                         = "#9B98B7"
+icon_background_3                         = "#81A1C1"
+icon_background_4                         = "#8fbcbb"
+icon_background_5                         = "#a3be8c"
+icon_background_6                         = "#ebcb8b"
+icon_background_7                         = "#d08770"
+icon_background_8                         = "#bf616a"
 
-#-Menu_button
-menu_button_size                = 26
-menu_button_padding             = 7
+icon_foreground_1                         = "#1e2227"
+icon_foreground_2                         = "#1e2227"
+icon_foreground_3                         = "#1e2227"
+icon_foreground_4                         = "#1e2227"
+icon_foreground_5                         = "#1e2227"
+icon_foreground_6                         = "#1e2227"
+icon_foreground_7                         = "#1e2227"
+icon_foreground_8                         = "#1e2227"
 
-#-Decorator
-decorator_padding               = -1
-decorator_border_width          = [4, 0, 4, 0]
+#!NORD
+# bar_background_color               = "#353b4a.9"
+# bar_border_color                   = "#717c99.9"
+# right_decor_background             = "#606b86.9"
 
-#-Layout_icon
-layout_normal_color_stack       = colors[2][0]
-layout_focus_color_stack        = colors[2][0]
-layout_normal_color_monadtall   = colors[2][0]
-layout_focus_color_monadtall    = colors[10][0]
-layout_normal_color_floating    = colors[2][0]
-layout_focus_color_floating     = colors[10][0]
-layouticon_padding              = -2
-layouticon_scale                = 0.48
+#!BLACK
+bar_background_color                = "#1e2227.92"
+bar_border_color                    = "#454951"
+right_decor_background              = bar_border_color
 
-#-Bar
-bar_background_color            = colors[14]
-bar_border_color                = "#4f586e"
-bar_size                        = 46
-# bar_size                        = 41
-bar_gap_size                    = -3
-bar_width_top                   = [0, 0, 3, 0]
-bar_width_bottom                = 0
-bar_margin_top                  = [0, 0, 0 ,0]
-bar_margin_bottom               = 6
-icon_seperator_padding          = -1
+#!OTHER
+# bar_border_color                   = "#4f586e.95"
 
-#-Groupbox
-group_box_active_color          = colors[60]
-group_box_inactive_color        = colors[10]
-group_box_block_highlight_color = colors[3]
-group_box_highlight_color       = colors[3]
-group_box_this_border_color     = widget_default_background_color
-group_box_other_border_color    = colors[0]
-group_box_foreground_color      = colors[2]
-group_box_background_color      = colors[3]
-group_box_highlight_text_color  = colors[3]
-group_box_urgentborder_color    = colors[3]
-groupbox_margin                 = 4
+#?#############
+#?  GENERAL  ##
+#?#############
+top_bar_on                          = qtile_settings.get("top_bar_status", True)
+bottom_bar_on                       = qtile_settings.get("bottom_bar_status", True)
 
-#-Cpu
-cpu_icon_color                  = colors[12]
-cpu_update_interval             = 10
- 
-#-Notification
-notification_icon_color         = colors[5]
+#?#############
+#?   SIZE    ##
+#?#############
+#!BAR
+top_bar_size                        = qtile_settings.get("top_bar_size", 46)
+bottom_bar_size                     = qtile_settings.get("bottom_bar_size", 55)
+bar_width_top                       = qtile_settings.get("bar_width_top", [0, 0, 3, 0])
+bar_margin_top                      = qtile_settings.get("bar_margin_top", [0, -2, 5 ,-2])
+bar_width_bottom                    = qtile_settings.get("bar_width_bottom", [0, 0, 0 ,0])
+bar_margin_bottom                   = qtile_settings.get("bar_margin_bottom", [5, 300, 16, 300])
 
-#-Backlight
-backlight_icon_color            = colors[11]
-backlight_update_interval       = 20
+#!GAP
+bar_gap_size                        = qtile_settings.get("bar_gap_size", 3)
 
-#-Battery
-battery_icon_color              = colors[4]
-battery_update_interval         = 20
+#!SEPERATOR
+seperator_padding                   = qtile_settings.get("seperator_padding", -1)
+seperator_line_width                = qtile_settings.get("seperator_line_width", 15)
 
-#-Wifi
-wifi_icon_color                 = "#81A1C1"
+#!WIDGET DEFAULT
+widget_default_font_size            = 18
+widget_default_padding              = 6     
+
+#!GROUPBOX
+groupbox_margin                     = 4
+
+#!LAYOUT ICON
+layouticon_padding                  = -2
+layouticon_scale                    = 0.48
+
+#*###############################
+#*           FOCUS             ##
+#*###############################
+follow_mouse_focus                  = qtile_settings.get("follow_mouse_focus", True)
+cursor_warp                         = qtile_settings.get("cursor_warp", False)
+scratchpad_focus_value              = qtile_settings.get("scratchpad_focus_value", True)
+focus_on_window_activation          = qtile_settings.get("focus_on_window_activation", "smart")
+
+#*###############################
+#*           WINDOWS           ##
+#*###############################
+auto_fullscreen                     = qtile_settings.get("auto_fullscreen", True)
+auto_minimize                       = qtile_settings.get("auto_minimize", True)
+bring_front_click                   = qtile_settings.get("bring_front_click", True)
+
+#*###############################
+#*           OTHER             ##
+#*###############################
+reconfigure_screens                 = qtile_settings.get("reconfigure_screens", False)
+
+#*###############################
+#*           lAYOUT            ##
+#*###############################
+#?#############
+#?   COLORS  ##
+#?#############
+#!NORMAL
+layout_normal_color_stack           = colors[2][0]
+layout_normal_color_monadtall       = colors[2][0]
+layout_normal_color_floating        = colors[2][0]
+
+#!FOCUS
+layout_focus_color_monadtall        = bar_border_color
+layout_focus_color_stack            = colors[2][0]
+layout_focus_color_floating         = bar_border_color
+
+#?#############
+#?   SIZE    ##
+#?#############
+#!ALL
+layout_margin                       = 10
+layout_border_width                 = 3
+layout_num_stacks                   = 1
+
+#!FLOATING
+floating_border_width               = 3
+
+#*#############################
+#*           FONTS           ##
+#*#############################
+normal_font                         = "FiraCode Nerd Font"
+bold_font                           = "FiraCode Nerd Font Bold"
+icon_font                           = "Font Awesome 6 Free Solid"
+other_font                          = "ttf-dejavu"
+
+#*#############################
+#*          UPDATES          ##
+#*#############################
 wifi_update_interval            = 10
- 
-#-Volume
-volume_icon_color               = colors[8]
-
-#-Date
-date_icon_color                 = colors[3]
-
-#-Notification history
-notification_history_icon_color = colors[13] 
-
-#-Ticktick
-
-#-TIME
-time_decerator_colors           = colors[13]
-
-#-Bottom icons
-bottom_icons_color              = "#58627a"
-bottom_icons_font_size_plus     = 2
-bottom_icons_padding_plus       = 4
-
-#-Bottom seperators
-bottom_seperator_line_width     = 2
-bottom_seperator_size_percent   = 60
-bottom_seperator_padding        = 14
-
-### GROUPS ###
-focus_value                     = True
-
-### LAYOUT VARIABLES ### 
-layout_margin                   = 10
-layout_border_width             = 4
-floating_border_width           = 3
-layout_num_stacks               = 1
-
-### QTILE SETTINGS ###
-dgroups_key_binder              = None
-dgroups_app_rules               = [] 
-follow_mouse_focus              = True
-bring_front_click               = True
-cursor_warp                     = False
-auto_fullscreen                 = True
-focus_on_window_activation      = "smart"
-reconfigure_screens             = True
-auto_minimize                   = True
-scratchpad_focus_value          = True
+cpu_update_interval             = 10
+battery_update_interval         = 20
+backlight_update_interval       = 20
