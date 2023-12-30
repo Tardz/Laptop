@@ -21,7 +21,15 @@
         <li><a href="#installation">Installation</a></li>
       </ul>
     </li>
-    <li><a href="#usage">Usage</a></li>
+    <li>
+      <a href="#workflow">Workflow</a>
+      <ul>
+        <li><a href="#keybindings">Keybindings</a></li>
+        <li><a href="#groups">Groups</a></li>
+        <li><a href="#windowSwitching">Window switching</a></li>
+        <li><a href="#dualMonitor">Dual monitor handling</a></li>
+      </ul>
+    </li>
     <li><a href="#roadmap">Roadmap</a></li>
     <li><a href="#license">License</a></li>
     <li><a href="#contact">Contact</a></li>
@@ -38,6 +46,7 @@
 #### Integrated Qtile menus
 
 ## Hardware and system information
+
 Device: Asus rog g14 GA401QE 2021
 Os: Arch
 
@@ -69,10 +78,9 @@ Os: Arch
    qtile cmd-obj -o cmd -f restart
    ```
 
-
-
 <!-- USAGE EXAMPLES -->
 ## Workflow
+
 #### Keybindings
 #### Groups
 #### Window switching
