@@ -33,9 +33,9 @@
 
 ### Qtile conf
 
-### Scripts
+#### Scripts
 
-### Integrated Qtile menus
+#### Integrated Qtile menus
 
 ## Hardware and system information
 Device: Asus rog g14 GA401QE 2021
