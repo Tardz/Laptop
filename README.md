@@ -1,9 +1,6 @@
 <a name="readme-top"></a>
 <!-- ABOUT THE PROJECT -->
 ## Qtile and integrated menus
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
 <!-- TABLE OF CONTENTS -->
 <details>
   <summary>Table of Contents</summary>
