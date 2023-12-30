@@ -13,6 +13,7 @@
         <li><a href="#Menus">Integrated Qtile menus</a></li>
       </ul>
     </li>
+    <li><a href="#hardware">Hardware and system information</a></li>
     <li>
       <a href="#getting-started">Setup</a>
       <ul>
