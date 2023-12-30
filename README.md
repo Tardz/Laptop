@@ -42,7 +42,7 @@ A brief overview of what software is on my system.
    ```
 
 ### Installation 
-Installation is quite simple but in case someone needs it I created a install script to get up and running. To manually install move the config file from the git repo to your qtile folder with the name "config.py" and be sure to move the scripts folder to your home directory for the qtile menus to function.
+Installation is quite simple but in case someone needs it I created an install script to get up and running. To manually install, move the config file from the git repo to your qtile folder with the name "config.py" and be sure to move the scripts folder to your home directory for the qtile menus to function.
 
 * Clone the repo
 
