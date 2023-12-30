@@ -8,12 +8,12 @@
     <li>
       <a href="#About">About</a>
       <ul>
-        <li><a href="#QtileConf">Qtile conf</a></li>
-        <li><a href="#Scripts">Scripts</a></li>
-        <li><a href="#Menus">Integrated Qtile menus</a></li>
+        <li><a href="#qtile-conf">Qtile conf</a></li>
+        <li><a href="#scripts">Scripts</a></li>
+        <li><a href="#menus">Integrated Qtile menus</a></li>
       </ul>
     </li>
-    <li><a href="#hardware">Hardware and system information</a></li>
+    <li><a href="#Hardware-and-system-information">Hardware and system information</a></li>
     <li>
       <a href="#getting-started">Setup</a>
       <ul>
@@ -26,8 +26,8 @@
       <ul>
         <li><a href="#keybindings">Keybindings</a></li>
         <li><a href="#groups">Groups</a></li>
-        <li><a href="#windowSwitching">Window switching</a></li>
-        <li><a href="#dualMonitor">Dual monitor handling</a></li>
+        <li><a href="#window-switching">Window switching</a></li>
+        <li><a href="#dual-monitor-handling">Dual monitor handling</a></li>
       </ul>
     </li>
     <li><a href="#roadmap">Roadmap</a></li>
