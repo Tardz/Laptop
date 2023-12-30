@@ -70,13 +70,13 @@ A brief overview of what software I am using.
 
 | Category           | Software                    |
 |--------------------|-----------------------------|
-| ![Static Badge](https://img.shields.io/badge/Terminal-none?style=for-the-badge&logo=Gnome%20terminal&color=%23353b4a) | Alacritty                   |
-| Shell              | Fish                        |
-| Fetch              | Neofetch                    |
-| Notifications      | Dunst                       |
-| Code Editor        | Visual Studio Code          |
-| File Manager       | Ranger                      |
-| Web Browser        | Firefox                     |
+|![Static Badge](https://img.shields.io/badge/Terminal-none?style=for-the-badge&logo=windows%20terminal&logoColor=%23bf616a&color=%23353b4a)|Alacritty|
+|![Static Badge](https://img.shields.io/badge/Shell-none?style=for-the-badge&logo=windows%20terminal&logoColor=%23d08770&color=%23353b4a)|Fish|
+|![Static Badge](https://img.shields.io/badge/Fetch-none?style=for-the-badge&logo=windows%20terminal&logoColor=%23ebcb8b&color=%23353b4a)|Neofetch|
+|![Static Badge](https://img.shields.io/badge/Notifications-none?style=for-the-badge&logo=power%20virtual%20agents&logoColor=%23a3be8c&color=%23353b4a)|Dunst|
+|![Static Badge](https://img.shields.io/badge/Code%20Editor-none?style=for-the-badge&logo=visual%20studio%20code&logoColor=%238fbcbb&color=%23353b4a)|Visual Studio Code|
+|![Static Badge](https://img.shields.io/badge/Alacritty-none?style=for-the-badge&logo=files&logoColor=%2381A1C1&color=%23353b4a)|Ranger|
+|![Static Badge](https://img.shields.io/badge/Browser-none?style=for-the-badge&logo=firefox%20browser&logoColor=%239B98B7&color=%23353b4a)|Firefox|
 
 
 ## Setup
