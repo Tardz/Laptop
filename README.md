@@ -129,7 +129,7 @@ A brief overview of what software and hardwareI am using.
    ```
 
 ### Installation 
-Installation is quite simple but in case someone needs it I created a install script to get up and running. To manually install move the config file from the git repo to your qtile folder with the name "config.py" and be sure to move the scripts folder to your home directory for the qtile menus to function.
+Installation is quite simple but in case someone needs it I created an install script to get up and running. To manually install move the config file from the git repo to your qtile folder with the name "config.py" and be sure to move the scripts folder to your home directory for the qtile menus to function.
 
 * Clone the repo
 
@@ -160,7 +160,7 @@ Installation is quite simple but in case someone needs it I created a install sc
    qtile cmd-obj -o cmd -f restart
    ```
 
-**NOTE:** The install script will rename your current qtile config on your system to "config.bak" but will still remain in the same directory. 
+**NOTE:** The install script will rename your current qtile config on your system to "config.bak" but it will still remain in the same directory. 
 
 ### Uninstallation
 To uninstall simply rename your previous config within the qtile directory to "config.py" instead of "config.bak" and then delete the scripts directory located at your home root. Restart qtile to read from your old config.
