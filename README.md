@@ -40,7 +40,11 @@ These scripts automatically get executed when adding to the search menu aswell a
    * Remove floating (sh) - 
    * Add floating (py) - 
    * Add floating (sh) - 
-* **Groups** 
+* **Groups**
+   * Remove group match (py) - 
+   * Remove group match (sh) - 
+   * Update group match (py) - 
+   * Update group match (sh) - 
 * **Check and launch app** - 
 * **Cycle active windows** - 
 * **Get bluetooth on** - 
