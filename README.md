@@ -1,6 +1,6 @@
 <a name="readme-top"></a>
 <!-- ABOUT THE PROJECT -->
-# Qtile and integrated menus(Do not follow readme, not complete)
+# Qtile and integrated menus
 <!-- TABLE OF CONTENTS -->
 <details>
   <summary>Table of Contents</summary>
@@ -73,6 +73,10 @@ Os: Arch
 
 <!-- USAGE EXAMPLES -->
 ## Workflow
+#### Keybindings
+#### Groups
+#### Window switching
+#### Dual monitor handling
 
 <!-- ROADMAP -->
 ## Roadmap
