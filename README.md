@@ -32,11 +32,11 @@
 
 ### Qtile conf
 
-## Scripts
+### Scripts
 
-## Integrated Qtile menus
+### Integrated Qtile menus
 
-## Setup
+### Setup
 
 ### Prerequisites
 
