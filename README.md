@@ -163,7 +163,13 @@ Installation is quite simple but in case someone needs it I created an install s
 **NOTE:** The install script will rename your current qtile config on your system to "config.bak" but it will still remain in the same directory. 
 
 ### Uninstallation
-To uninstall simply rename your previous config within the qtile directory to "config.py" instead of "config.bak" and then delete the scripts directory located at your home root. Restart qtile to read from your old config.
+To uninstall simply delete the current config and rename your previous config within the qtile directory to "config.py" instead of "config.bak", then delete the scripts directory located at your home root. Restart qtile to read from your old config.
+
+* Remove current config
+  
+   ```sh
+   rm config.py
+   ```
 
 * Rename config file
   
