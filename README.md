@@ -49,12 +49,12 @@ A brief overview of what software comprises my system
    ```   
 * Run install script located at Laptop/install.sh
   
-   ```sh
+   ```py
    ./install.sh
    ```
 * Restart Qtile
   
-   ```sh
+   ```py
    qtile cmd-obj -o cmd -f restart
    ```
 
