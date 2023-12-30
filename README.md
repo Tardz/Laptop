@@ -58,7 +58,7 @@ A brief overview of what software comprises my system
    qtile cmd-obj -o cmd -f restart
    ```
 <code style="color : red">Attention</code>
-!**Attention:**
+$${\color{lightgreen}Attention}$$
 The install script will rename your current qtile config on your system to "config.bak" but will still remain in the same directory. 
 
 ## Workflow
