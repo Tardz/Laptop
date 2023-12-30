@@ -32,17 +32,19 @@
 
 ### Installation
 
-   1. Clone the repo
+1. Clone the repo
 
    ```sh
    git clone https://github.com/Tardz/Laptop.git
    ```
-   2. Run install script located at Laptop/install.sh
+   
+2. Run install script located at Laptop/install.sh
    
    ```sh
    ./install.sh
    ```
-   3. Restart Qtile
+   
+3. Restart Qtile
    
    ```sh
    qtile cmd-obj -o cmd -f restart
