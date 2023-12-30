@@ -42,7 +42,7 @@
 * qtile-extras
 
    ```sh
-   Sudo pacman -S qtile-extras
+   sudo pacman -S qtile-extras
    ```
 
 ### Installation 
