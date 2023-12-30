@@ -39,6 +39,10 @@
 ### Setup
 
 ### Prerequisites
+* qtile-extras
+   ```sh
+   Sudo pacman -S qtile-extras
+   ```
 
 ### Installation 
 1. Clone the repo
