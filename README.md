@@ -1,10 +1,46 @@
-# Qtile On Laptop
+# Qtile On Laptop **(Under progress, do not install)**
 
 ## About
 
 ### Qtile conf
 
 ### Scripts
+**The structure of my scripts dir and how things are connected.**
+
+![Static Badge](https://img.shields.io/badge/Drive-none?style=for-the-badge&color=%23bf616a)
+
+These scripts automatically get executed when adding to the search menu and also on startup to keep everything up to date.  
+
+[Scripts used by search menu]
+* **Bisync drive** - Syncs the cloud to match the local directory
+* **Sync drive** - Syncs the local directory to match the cloud
+
+![Static Badge](https://img.shields.io/badge/Other-none?style=for-the-badge&color=%23d08770)
+
+* **Arch install script** - 
+* **Check internet** - 
+* **Get current screen** - 
+* **Get notifications** - 
+* **Get recent urgent notification** - 
+
+![Static Badge](https://img.shields.io/badge/Qtile-none?style=for-the-badge&color=%23ebcb8b)
+
+[Scripts used by Qtile]
+
+* **Arch install script** - 
+* **Check internet** - 
+* **Get current screen** - 
+* **Get notifications** - 
+* **Get recent urgent notification** - 
+
+![Static Badge](https://img.shields.io/badge/Rofi-none?style=for-the-badge&color=%23a3be8c)
+
+![Static Badge](https://img.shields.io/badge/Systemd-none?style=for-the-badge&color=%238fbcbb)
+
+![Static Badge](https://img.shields.io/badge/Term-none?style=for-the-badge&color=%2381A1C1)
+
+![Static Badge](https://img.shields.io/badge/Udev-none?style=for-the-badge&color=%239B98B7)
+
 
 ### Integrated Qtile menus
 
@@ -42,7 +78,7 @@ A brief overview of what software is on my system.
    ```
 
 ### Installation 
-Installation is quite simple but in case someone needs it I created an install script to get up and running. To manually install, move the config file from the git repo to your qtile folder with the name "config.py" and be sure to move the scripts folder to your home directory for the qtile menus to function.
+Installation is quite simple but in case someone needs it I created a install script to get up and running. To manually install move the config file from the git repo to your qtile folder with the name "config.py" and be sure to move the scripts folder to your home directory for the qtile menus to function.
 
 * Clone the repo
 
