@@ -23,7 +23,7 @@
 
 ![Static Badge](https://img.shields.io/badge/Drive-none?style=for-the-badge&color=%23bf616a)
 
-These scripts automatically get executed when adding to the search menu and also on startup to keep everything up to date.  
+These scripts automatically get executed when adding to the search menu aswell as on startup to keep everything up to date.  
 
 **[Scripts used by search menu]**
 
