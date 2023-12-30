@@ -1,11 +1,13 @@
 # Qtile On Laptop **(Under progress, do not install)**
+![](https://github.com/Tardz/Laptop/blob/main/desktop_screenshot.png)
+
 <p align="center">
-  <img src="https://github.com/Tardz/Laptop/blob/main/wifi_menu_screenshot.png" alt="Image 1" width="100" />
-  <img src="https://github.com/Tardz/Laptop/blob/main/bluetooth_menu_screenshot.png" alt="Image 2" width="100" />
-  <img src="https://github.com/Tardz/Laptop/blob/main/volume_menu_screenshot.png" alt="Image 3" width="100" />
+  <img src="https://github.com/Tardz/Laptop/blob/main/wifi_menu_screenshot.png" alt="Image 1" width="350" />
+  <img src="https://github.com/Tardz/Laptop/blob/main/bluetooth_menu_screenshot.png" alt="Image 2" width="350" />
+  <img src="https://github.com/Tardz/Laptop/blob/main/volume_menu_screenshot.png" alt="Image 3" width="350" />
 </p>
 
-![Woop](https://github.com/Tardz/Laptop/blob/main/settings_menu_screenshot.png)
+![](https://github.com/Tardz/Laptop/blob/main/settings_menu_screenshot.png)
 
 ## About
 
