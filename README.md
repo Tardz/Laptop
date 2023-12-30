@@ -11,21 +11,22 @@
 
 These scripts automatically get executed when adding to the search menu and also on startup to keep everything up to date.  
 
-[Scripts used by search menu]
+**[Scripts used by search menu]**
+
 * **Bisync drive** - Syncs the cloud to match the local directory
 * **Sync drive** - Syncs the local directory to match the cloud
 
 ![Static Badge](https://img.shields.io/badge/Other-none?style=for-the-badge&color=%23d08770)
 
-* **Arch install script** - 
-* **Check internet** - 
-* **Get current screen** - 
-* **Get notifications** - 
-* **Get recent urgent notification** - 
+* **Arch install script** - Installs arch with my personal configs **[In progress]**
+* **Check internet** - Checks intetner connection and displays dunst notification
+* **Get current screen** - Prints current focused screen by index
+* **Get notifications** - Displays the most recent notifications
+* **Get recent urgent notification** - Used by bar widget to get the most recent urgent notification to display
 
 ![Static Badge](https://img.shields.io/badge/Qtile-none?style=for-the-badge&color=%23ebcb8b)
 
-[Scripts used by Qtile]
+**[Scripts used by Qtile]**
 
 * **Arch install script** - 
 * **Check internet** - 
