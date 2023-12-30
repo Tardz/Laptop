@@ -57,7 +57,7 @@ A brief overview of what software comprises my system
    ```js
    qtile cmd-obj -o cmd -f restart
    ```
-
+<code style="color : name_color">text</code>
 !**Attention:**
 The install script will rename your current qtile config on your system to "config.bak" but will still remain in the same directory. 
 
