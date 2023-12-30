@@ -19,7 +19,7 @@ These scripts automatically get executed when adding to the search menu and also
 ![Static Badge](https://img.shields.io/badge/Other-none?style=for-the-badge&color=%23d08770)
 
 * **Arch install script** - Installs arch with my personal configs **[In progress]**
-* **Check internet** - Checks intetner connection and displays dunst notification
+* **Check internet** - Checks internet connection and displays dunst notification
 * **Get current screen** - Prints current focused screen by index
 * **Get notifications** - Displays the most recent notifications
 * **Get recent urgent notification** - Used by bar widget to get the most recent urgent notification to display
@@ -28,11 +28,17 @@ These scripts automatically get executed when adding to the search menu and also
 
 **[Scripts used by Qtile]**
 
-* **Arch install script** - 
-* **Check internet** - 
-* **Get current screen** - 
-* **Get notifications** - 
-* **Get recent urgent notification** - 
+* **Floating**
+   * Remove floating (py) - 
+   * Remove floating (sh) - 
+   * Add floating (py) - 
+   * Add floating (sh) - 
+* **Groups** 
+* **Check and launch app** - 
+* **Cycle active windows** - 
+* **Get bluetooth on** - 
+* **Get next screen group** - 
+* **Mute or unmute** - 
 
 ![Static Badge](https://img.shields.io/badge/Rofi-none?style=for-the-badge&color=%23a3be8c)
 
@@ -53,21 +59,25 @@ These scripts automatically get executed when adding to the search menu and also
 
 **Kernel:** linux-g14
 
+**Window Manager:** Qtile
+
+**Display server:** X11
+
+**Boot loader:**  Grub
+
 ## Software
-A brief overview of what software is on my system.
+A brief overview of what software I am using.
 
 | Category           | Software                    |
 |--------------------|-----------------------------|
-| Window Manager     | Qtile                       |
-| Terminal Emulator  | Alacritty                   |
-| Fetch              | Neofetch                    |
-| Code Editor        | Visual Studio Code          |
+| ![Static Badge](https://img.shields.io/badge/Terminal-none?style=for-the-badge&logo=Gnome%20terminal&color=%23353b4a) | Alacritty                   |
 | Shell              | Fish                        |
-| Web Browser        | Firefox                     |
-| File Manager       | Ranger                      |
+| Fetch              | Neofetch                    |
 | Notifications      | Dunst                       |
-| Display server     | X11                         |
-| Boot loader        | Grub                        |
+| Code Editor        | Visual Studio Code          |
+| File Manager       | Ranger                      |
+| Web Browser        | Firefox                     |
+
 
 ## Setup
 
@@ -113,7 +123,7 @@ Installation is quite simple but in case someone needs it I created a install sc
 **NOTE:** The install script will rename your current qtile config on your system to "config.bak" but will still remain in the same directory. 
 
 ### Uninstallation
-To uninstall simply rename your previous config within the qtile directory to "config.py" instead of "config.bak" and then delete the scripts directory located at your home root. Then restart qtile to read from your old config.
+To uninstall simply rename your previous config within the qtile directory to "config.py" instead of "config.bak" and then delete the scripts directory located at your home root. Restart qtile to read from your old config.
 
 * Rename config file
   
