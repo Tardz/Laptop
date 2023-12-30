@@ -7,7 +7,7 @@
   <img src="https://github.com/Tardz/Laptop/blob/main/volume_menu_screenshot_modified.png" alt="Image 3" width="350" />
 </p>
 
-![](https://github.com/Tardz/Laptop/blob/main/settings_menu_screenshot.png)
+![](https://github.com/Tardz/Laptop/blob/main/settings_menu_screenshot_modified.png)
 
 ## About
 
