@@ -37,6 +37,10 @@
 
 ### Integrated Qtile menus
 
+## Hardware and system information
+Device: Asus rog g14 GA401QE 2021
+Os: Arch
+
 ### Setup
 
 ### Prerequisites
