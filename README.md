@@ -56,12 +56,12 @@ A brief overview of what software and hardwareI am using.
 
 | Category           | Info                        |
 |--------------------|-----------------------------|
-|![Static Badge](https://img.shields.io/badge/Device-none?style=for-the-badge&logo=windows%20terminal&logoColor=%23bf616a&color=%23353b4a)|Asus rog g14 GA401QE 2021|
-|![Static Badge](https://img.shields.io/badge/Os-none?style=for-the-badge&logo=windows%20terminal&logoColor=%23d08770&color=%23353b4a)|Arch|
-|![Static Badge](https://img.shields.io/badge/Kernel-none?style=for-the-badge&logo=windows%20terminal&logoColor=%23ebcb8b&color=%23353b4a)|linux-g14|
-|![Static Badge](https://img.shields.io/badge/Window%20manager-none?style=for-the-badge&logo=power%20virtual%20agents&logoColor=%23a3be8c&color=%23353b4a)|Qtile|
-|![Static Badge](https://img.shields.io/badge/Display%20server-none?style=for-the-badge&logo=visual%20studio%20code&logoColor=%238fbcbb&color=%23353b4a)|X11|
-|![Static Badge](https://img.shields.io/badge/Boot%20loader-none?style=for-the-badge&logo=files&logoColor=%2381A1C1&color=%23353b4a)|Grub|
+|![Static Badge](https://img.shields.io/badge/Device-none?style=for-the-badge&logo=open%20source%20hardware&logoColor=%23bf616a&color=%23353b4a)|Asus rog g14 GA401QE 2021|
+|![Static Badge](https://img.shields.io/badge/OS-none?style=for-the-badge&logo=arch%20linux&logoColor=%23d08770&color=%23353b4a)|Arch|
+|![Static Badge](https://img.shields.io/badge/Kernel-none?style=for-the-badge&logo=matternet&logoColor=%23ebcb8b&color=%23353b4a)|linux-g14|
+|![Static Badge](https://img.shields.io/badge/Window%20manager-none?style=for-the-badge&logo=tmux&logoColor=%23a3be8c&color=%23353b4a)|Qtile|
+|![Static Badge](https://img.shields.io/badge/Display%20server-none?style=for-the-badge&logo=serverfault&logoColor=%238fbcbb&color=%23353b4a)|X11|
+|![Static Badge](https://img.shields.io/badge/Boot%20loader-none?style=for-the-badge&logo=spring%20boot&logoColor=%2381A1C1&color=%23353b4a)|Grub|
 
 | Category           | Software                    |
 |--------------------|-----------------------------|
