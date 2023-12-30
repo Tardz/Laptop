@@ -6,7 +6,7 @@
   <summary>Table of Contents</summary>
   <ol>
     <li>
-      <a href="#About">Getting Started</a>
+      <a href="#About">About</a>
       <ul>
         <li><a href="#QtileConf">Qtile conf</a></li>
         <li><a href="#Scripts">Scripts</a></li>
