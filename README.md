@@ -1,12 +1,12 @@
-# Qtile and integrated menus
+# Qtile On Laptop
 
 ## About
 
-#### Qtile conf
+### Qtile conf
 
-#### Scripts
+### Scripts
 
-#### Integrated Qtile menus
+### Integrated Qtile menus
 
 ## Hardware and system information
 
@@ -17,7 +17,7 @@
 **Kernel:** linux-g14
 
 ## Software
-A brief overview of what software comprises my system
+A brief overview of what software is on my system.
 
 | Category           | Software                    |
 |--------------------|-----------------------------|
@@ -30,43 +30,79 @@ A brief overview of what software comprises my system
 | File Manager       | Ranger                      |
 | Notifications      | Dunst                       |
 | Display server     | X11                         |
+| Boot loader        | Grub                        |
 
 ## Setup
 
-#### Prerequisites
+### Prerequisites
 * qtile-extras
 
    ```sh
    sudo pacman -S qtile-extras
    ```
 
-#### Installation 
+### Installation 
+Installation is quite simple but in case someone needs it I created a install script to get up and running. To manually install move the config file from the git repo to your qtile folder with the name "config.py" and be sure to move the scripts folder to your home directory for the qtile menus to function.
 
 * Clone the repo
 
    ```sh
    git clone https://github.com/Tardz/Laptop.git
    ```   
+* Move into the Laptop directory
+  
+   ```sh
+   cd Laptop/
+   ```
 * Run install script located at Laptop/install.sh
   
-   ```js
+   ```sh
    ./install.sh
    ```
+
+* Remove the git repo **(optional)**
+  
+   ```sh
+   cd ..
+   rm -r Laptop/
+   ```
+
 * Restart Qtile
   
-   ```js
+   ```sh
    qtile cmd-obj -o cmd -f restart
    ```
-<code style="color : red">Attention</code>
-${\color{lightgreen}Attention}$
-The install script will rename your current qtile config on your system to "config.bak" but will still remain in the same directory. 
+
+**NOTE:** The install script will rename your current qtile config on your system to "config.bak" but will still remain in the same directory. 
+
+### Uninstallation
+To uninstall simply rename your previous config within the qtile directory to "config.py" instead of "config.bak" and then delete the scripts directory located at your home root. Then restart qtile to read from your old config.
+
+* Rename config file
+  
+   ```sh
+   mv config.bak config.py
+   ```
+
+* Remove scripts directory
+  
+   ```sh
+   rm -r scripts/
+   ```
+
+* Restart Qtile
+  
+   ```sh
+   qtile cmd-obj -o cmd -f restart
+   ```
+
 
 ## Workflow
 
-#### Keybindings
-#### Groups
-#### Window switching
-#### Dual monitor handling
+### Keybindings
+### Groups
+### Window switching
+### Dual monitor handling
 
 ## Contact
 
@@ -75,4 +111,3 @@ The install script will rename your current qtile config on your system to "conf
 ## License
 
 Distributed under the MIT License. See `LICENSE.txt` for more information.
-
