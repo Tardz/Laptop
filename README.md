@@ -28,12 +28,17 @@
   </ol>
 </details>
 
-### Prerequisites
+## About
 
-* npm
-  ```sh
-  npm install npm@latest -g
-  ```
+### Qtile conf
+
+## Scripts
+
+## Integrated Qtile menus
+
+## Setup
+
+### Prerequisites
 
 ### Installation 
 1. Clone the repo
