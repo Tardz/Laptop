@@ -1,5 +1,5 @@
 # Qtile On Laptop **(Under progress, do not install)**
-![](https://github.com/Tardz/Laptop/blob/main/desktop_screenshot.png)
+![](https://github.com/Tardz/Laptop/blob/main/desktop_screenshot_modified.png)
 
 <p align="center">
   <img src="https://github.com/Tardz/Laptop/blob/main/wifi_menu_screenshot.png" alt="Image 1" width="350" />
