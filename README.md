@@ -1,4 +1,5 @@
-# Qtile On Laptop **(Under progress, do not install)**
+# Qtile On Laptop 
+**(Under progress, do not install)**
 ## Preview
 <p align="center">
   <img src="https://github.com/Tardz/Laptop/blob/main/desktop_screenshot_modified.png" alt="Image 1" width="850" />
