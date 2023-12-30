@@ -30,8 +30,8 @@
   npm install npm@latest -g
   ```
 
-### Installation
-
+### Installation 
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 1. Clone the repo
 
    ```sh
@@ -50,7 +50,7 @@
    qtile cmd-obj -o cmd -f restart
    ```
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
 
 <!-- USAGE EXAMPLES -->
 ## Workflow
