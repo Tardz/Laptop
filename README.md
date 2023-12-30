@@ -1,5 +1,5 @@
 # Qtile On Laptop **(Under progress, do not install)**
-![woop][https://github.com/Tardz/Laptop/blob/main/settings_menu_screenshot.png]
+![Woop](https://github.com/Tardz/Laptop/blob/main/settings_menu_screenshot.png)
 
 ## About
 
