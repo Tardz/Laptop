@@ -1,9 +1,9 @@
 #!/bin/bash
   
-source /home/jonalm/scripts/rofi/automation/automation_options.sh 
+source $HOME/scripts/rofi/automation/desktop/automation_options.sh 
 
 while true; do
-    choice=$(printf '%s\n' "${root_options[@]}" | cut -d'|' -f1-1 | rofi -config ~/.config/rofi/files/config.rasi -theme "$HOME/.config/rofi/files/launchers/type-1/style-3-automation.rasi" -dmenu -i -l 5 -p '')
+    choice=$(printf '%s\n' "${root_options[@]}" | cut -d'|' -f1-1 | rofi -config $HOME/.config/rofi/files/config.rasi -theme "$HOME/.config/rofi/files/launchers/type-1/style-3-automation.rasi" -dmenu -i -l 5 -p '')
     
     if [ "$choice" ]; then
         case "$choice" in
@@ -47,7 +47,7 @@ while true; do
                 ;;
         esac
 
-        section_choice=$(printf '%s\n' "${section_options[@]}" | cut -d'|' -f1-1 | rofi -config ~/.config/rofi/files/config.rasi -theme "$HOME/.config/rofi/files/launchers/type-1/$rofi_path" -dmenu -i -l 5 -p $icon)
+        section_choice=$(printf '%s\n' "${section_options[@]}" | cut -d'|' -f1-1 | rofi -config $HOME/.config/rofi/files/config.rasi -theme "$HOME/.config/rofi/files/launchers/type-1/$rofi_path" -dmenu -i -l 5 -p $icon)
 
         if [ "$section_choice" ]; then 
             for option in "${section_options[@]}"; do

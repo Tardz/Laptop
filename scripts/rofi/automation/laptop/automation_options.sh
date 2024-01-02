@@ -1,5 +1,5 @@
-files_last_update=$(jq -r '.date' "/home/jonalm/scripts/rofi/automation/save_files_data.json")
-files_prev_update=$(jq -r '.old_date' "/home/jonalm/scripts/rofi/automation/save_files_data.json")
+files_last_update=$(jq -r '.date' "/home/jonalm/scripts/rofi/automation/laptop/save_files_data.json")
+files_prev_update=$(jq -r '.old_date' "/home/jonalm/scripts/rofi/automation/laptop/save_files_data.json")
 
 declare -a root_options=(
 "  Drive"

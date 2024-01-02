@@ -26,7 +26,7 @@ class OptionWindow(Gtk.Dialog):
         x, y = self.get_mouse_position()
         self.move(x, y)
 
-        self.ignore_focus_lost = False
+        self.ignore_focus_lost = True
         self.load_speed = 300
         
         self.wrong_password = Value('b', False)
