@@ -99,15 +99,40 @@ colors = [
     ["#000000AA", "#000000AA"], # 63 Transp
 ]
 
+qtile_settings = {}
 file_path = os.path.expanduser("~/scripts/qtile/settings_menu/data/qtile_data.json")
 if os.path.isfile(file_path):
     with open(file_path, "r") as file:
         qtile_settings = json.load(file)
 
+qtile_colors = {}
 file_path = os.path.expanduser("~/scripts/qtile/settings_menu/data/qtile_colors.json")
 if os.path.isfile(file_path):
     with open(file_path, "r") as file:
         qtile_colors = json.load(file)
+
+laptop = qtile_settings.get("laptop", False)
+
+if laptop:
+    bar_scaling                     = 1
+    icon_size_scaling               = 1
+    icon_padding_scaling            = 1
+    widget_padding_scaling          = 1
+    widget_size_scaling             = 1
+    seperator_padding_scaling       = 1
+    seperator_line_scaling          = 1
+    general_width_scaling           = 1
+    task_list_scaling               = 1
+else:
+    bar_scaling                     = 0.7
+    icon_size_scaling               = 0.72
+    icon_padding_scaling            = 0.65
+    widget_padding_scaling          = 0.9
+    widget_size_scaling             = 0.74
+    seperator_padding_scaling       = 0.9
+    seperator_line_scaling          = 0.6
+    general_width_scaling           = 0.9
+    task_list_scaling               = 0.9
 
 #*###############################
 #*           BAR               ##
@@ -116,38 +141,57 @@ if os.path.isfile(file_path):
 #?   COLORS  ##
 #?#############
 #!ALL
-transparent                          = "#000000.0"
-icon_background                      = "#1e2227"
-text_color                           = colors[9]
-widget_default_foreground_color      = colors[9]
+transparent                         = "#000000.0"
+icon_background                     = "#1e2227"
+text_color                          = colors[9]
+widget_default_foreground_color     = colors[9]
 
-group_box_active_color               = colors[60]
-group_box_inactive_color             = colors[10]
-group_box_block_highlight_color      = colors[3]
-group_box_highlight_color            = colors[3]
-group_box_other_border_color         = colors[26]
-group_box_foreground_color           = colors[2]
-group_box_background_color           = colors[3]
-group_box_highlight_text_color       = colors[3]
-group_box_urgentborder_color         = colors[3]
+group_box_active_color              = colors[60]
+group_box_inactive_color            = colors[10]
+group_box_block_highlight_color     = colors[3]
+group_box_highlight_color           = colors[3]
+group_box_other_border_color        = colors[26]
+group_box_foreground_color          = colors[2]
+group_box_background_color          = colors[3]
+group_box_highlight_text_color      = colors[3]
+group_box_urgentborder_color        = colors[3]
 
-icon_background_1                         = "#b48ead"
-icon_background_2                         = "#9B98B7"
-icon_background_3                         = "#81A1C1"
-icon_background_4                         = "#8fbcbb"
-icon_background_5                         = "#a3be8c"
-icon_background_6                         = "#ebcb8b"
-icon_background_7                         = "#d08770"
-icon_background_8                         = "#bf616a"
+if laptop:
+    icon_background_1                   = "#b48ead"
+    icon_background_2                   = "#9B98B7"
+    icon_background_3                   = "#81A1C1"
+    icon_background_4                   = "#8fbcbb"
+    icon_background_5                   = "#a3be8c"
+    icon_background_6                   = "#ebcb8b"
+    icon_background_7                   = "#d08770"
+    icon_background_8                   = "#bf616a"
+    icon_background_9                   = "#b48ead"
+    icon_background_10                  = "#9B98B7"
+    icon_background_11                  = "#81A1C1"
+else:
+    icon_background_1                   = "#b48ead"
+    icon_background_2                   = "#9B98B7"
+    icon_background_3                   = "#81A1C1"
+    icon_background_4                   = "#ebcb8b"
+    icon_background_5                   = "#d08770"
+    icon_background_6                   = "#bf616a"
+    icon_background_7                   = "#d08770"
+    icon_background_8                   = "#bf616a"
+    icon_background_9                   = "#b48ead"
+    icon_background_10                  = "#9B98B7"
+    icon_background_11                  = "#81A1C1"
 
-icon_foreground_1                         = "#1e2227"
-icon_foreground_2                         = "#1e2227"
-icon_foreground_3                         = "#1e2227"
-icon_foreground_4                         = "#1e2227"
-icon_foreground_5                         = "#1e2227"
-icon_foreground_6                         = "#1e2227"
-icon_foreground_7                         = "#1e2227"
-icon_foreground_8                         = "#1e2227"
+icon_foreground_1                   = "#1e2227"
+icon_foreground_2                   = "#1e2227"
+icon_foreground_3                   = "#1e2227"
+icon_foreground_4                   = "#1e2227"
+icon_foreground_5                   = "#1e2227"
+icon_foreground_6                   = "#1e2227"
+icon_foreground_7                   = "#1e2227"
+icon_foreground_8                   = "#1e2227"
+icon_foreground_9                   = "#1e2227"
+icon_foreground_10                  = "#1e2227"
+icon_foreground_11                  = "#1e2227"
 
 #!NORD
 # bar_background_color               = "#353b4a.9"
@@ -172,9 +216,14 @@ bottom_bar_on                       = qtile_settings.get("bottom_bar_status", Tr
 #?   SIZE    ##
 #?#############
 #!BAR
-top_bar_size                        = qtile_settings.get("top_bar_size", 46)
-bottom_bar_size                     = qtile_settings.get("bottom_bar_size", 55)
-bar_width_top                       = qtile_settings.get("bar_width_top", [0, 0, 3, 0])
+top_bar_size                        = int(qtile_settings.get("top_bar_size", 46)*bar_scaling)
+bottom_bar_size                     = int(qtile_settings.get("bottom_bar_size", 55)*bar_scaling)
+
+bar_width = [] 
+for num in qtile_settings.get("bar_width_top", [0, 0, 3, 0]):
+    bar_width.append(int(num*general_width_scaling))
+
+bar_width_top                       = bar_width
 bar_margin_top                      = qtile_settings.get("bar_margin_top", [0, -2, 5 ,-2])
 bar_width_bottom                    = qtile_settings.get("bar_width_bottom", [0, 0, 0 ,0])
 bar_margin_bottom                   = qtile_settings.get("bar_margin_bottom", [5, 300, 16, 300])
@@ -183,19 +232,33 @@ bar_margin_bottom                   = qtile_settings.get("bar_margin_bottom", [5
 bar_gap_size                        = qtile_settings.get("bar_gap_size", 3)
 
 #!SEPERATOR
-seperator_padding                   = qtile_settings.get("seperator_padding", -1)
-seperator_line_width                = qtile_settings.get("seperator_line_width", 15)
+seperator_padding                   = int(qtile_settings.get("seperator_padding", -1)*seperator_padding_scaling)
+seperator_line_width                = int(qtile_settings.get("seperator_line_width", 15)*seperator_line_scaling)
 
 #!WIDGET DEFAULT
-widget_default_font_size            = 18
-widget_default_padding              = 6     
+widget_default_font_size            = int(18*widget_size_scaling)
+widget_default_padding              = int(6*widget_padding_scaling)
+bottom_widget_width                 = int(3*general_width_scaling)
 
 #!GROUPBOX
-groupbox_margin                     = 4
+groupbox_margin                     = int(4*widget_padding_scaling)
 
 #!LAYOUT ICON
-layouticon_padding                  = -2
-layouticon_scale                    = 0.48
+layouticon_padding                  = int(-2*widget_padding_scaling)
+layouticon_scale                    = 0.48*widget_padding_scaling
+
+#!ICONS
+icon_size                           = int(14*icon_size_scaling)
+
+#!DECOR
+left_decor_padding                  = int(9*icon_padding_scaling)
+right_decor_padding                 = int(9*icon_padding_scaling)
+
+#!TASKLIST
+task_list_margin                    = int(7*task_list_scaling)
+task_list_border_width              = int(4*general_width_scaling)
+task_list_spacing                   = 2
+task_list_icon_size                 = 0
 
 #*###############################
 #*           FOCUS             ##
@@ -237,12 +300,12 @@ layout_focus_color_floating         = bar_border_color
 #?   SIZE    ##
 #?#############
 #!ALL
-layout_margin                       = 10
-layout_border_width                 = 3
+layout_margin                       = int(10*bar_scaling)
+layout_border_width                 = int(qtile_settings.get("layout_border_with", 3)*general_width_scaling)
 layout_num_stacks                   = 1
 
 #!FLOATING
-floating_border_width               = 3
+floating_border_width               = int(qtile_settings.get("layout_border_with", 3)*general_width_scaling)
 
 #*#############################
 #*           FONTS           ##
