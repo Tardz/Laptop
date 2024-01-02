@@ -1,0 +1,41 @@
+{
+    "top_bar_status": true,
+    "bottom_bar_status": true,
+    "follow_mouse_focus": true,
+    "bring_front_click": true,
+    "cursor_warp": false,
+    "auto_fullscreen": true,
+    "auto_minimize": true,
+    "reconfigure_screens": false,
+    "scratchpad_focus_value": true,
+    "focus_on_window_activation": "smart",
+    "top_bar_size": 46,
+    "bottom_bar_size": 55,
+    "bar_width_top": [
+        0,
+        0,
+        3,
+        0
+    ],
+    "bar_margin_top": [
+        0,
+        -2,
+        5,
+        -2
+    ],
+    "bar_width_bottom": [
+        0,
+        0,
+        0,
+        0
+    ],
+    "bar_margin_bottom": [
+        5,
+        300,
+        16,
+        300
+    ],
+    "bar_gap_size": 3,
+    "seperator_padding": -1,
+    "seperator_line_width": 15
+}

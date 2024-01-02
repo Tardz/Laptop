@@ -1,0 +1,246 @@
+#root {
+    margin-top: 5px;    
+    margin-right: 5px;  
+    margin-bottom: 5px;
+    margin-left: 5px;
+    border-radius: 0px;
+    border-width: 3px;
+    border-color: #4f586e;
+    /* background:rgba(36, 40, 49, 0.85); */
+    background: rgba(46, 52, 64, 0.90);
+}
+
+#content-area {
+    margin-top: 5px;    
+    margin-right: 5px;  
+    margin-bottom: 5px;
+    margin-left: 5px;
+    border-radius: 0px;
+    /* background:rgba(36, 40, 49, 0); */
+    background: rgba(46, 52, 64, 0);
+}
+
+#rofi-box {
+    border-radius: 5px;
+    margin-top: 10px;    
+    margin-right: 10px;  
+    margin-bottom: 10px;
+    margin-left: 10px;
+}
+
+#toggle-boxes {
+    border-radius: 5px;
+    margin-top: 10px;    
+    margin-right: 10px;  
+    margin-bottom: 10px;
+    margin-left: 10px;
+    background: #4f586e;
+}
+
+#toggle-box {
+    margin-top: 16px;    
+    margin-right: 16px;  
+    margin-bottom: 16px;
+    margin-left: 16px;
+}
+
+#toggle-right-box-enabled {
+    border-radius: 5px;
+    background: red;
+}
+
+#toggle-right-box-disabled {
+    border-radius: 5px;
+}
+
+#toggle-left-box-enabled {
+    border-radius: 5px;
+    background: #81a1c1;
+}
+
+#toggle-left-box-disabled {
+    border-radius: 5px;
+    background: #2e3440;
+}
+
+#toggle-icon-enabled {
+    color: black;
+    font-size: 20px;
+    font-family: 'Font Awesome 6 Free Solid';
+}
+
+#toggle-icon-disabled {
+    color: white;
+    font-size: 20px;
+    font-family: 'Font Awesome 6 Free Solid';
+}
+
+#toggle-list-button-disabled {
+    margin-bottom: 10px;
+    font-size: 22px;
+    font-family: 'Font Awesome 6 Free Solid';
+}
+
+#toggle-list-button-enabled {
+    margin-bottom: 2px;
+    font-size: 22px;
+    font-family: 'Font Awesome 6 Free Solid';
+}
+
+#toggle-title {
+    margin-top: 4px;    
+    margin-bottom: 5px;
+    margin-left: 12px;
+    color: white;
+    font-size: 19px;
+    font-family: FiraCode Nerd Font;
+    font-weight: bold;
+}
+
+#toggle-desc {
+    margin-left: 12px;
+    color: white;
+    font-size: 19px;
+    font-family: FiraCode Nerd Font;
+}
+
+#toggle-bluetooth-label {
+    color: white;
+    font-size: 24px;
+    font-family: 'Font Awesome 6 Free Solid';
+    font-weight: bold;
+}
+
+#list-box {
+    border-radius: 5px;
+    margin-top: 10px;    
+    margin-right: 10px;  
+    margin-bottom: 10px;
+    margin-left: 10px;
+    background: #4f586e;
+}
+
+#list-obj-active {
+    border-radius: 5px;
+    margin-top: 5px;    
+    margin-right: 5px;  
+    margin-bottom: 5px;
+    margin-left: 5px;
+    background: #81a1c1;
+    color: black;
+    font-size: 18px;
+    font-family: FiraCode Nerd Font;
+}
+
+#list-obj {
+    border-radius: 5px;
+    margin-top: 5px;    
+    margin-right: 5px;  
+    margin-bottom: 5px;
+    margin-left: 5px;
+    font-size: 18px;
+    font-family: FiraCode Nerd Font;
+}
+
+#list {
+    border-radius: 5px;
+    margin-top: 10px;    
+    margin-right: 10px;  
+    margin-bottom: 10px;
+    margin-left: 10px;
+    background: #4f586e;
+    font-size: 18px;
+    font-family: FiraCode Nerd Font;
+}
+
+.rofi-icon {
+    margin-top: 26px;    
+    margin-right: 38px;  
+    margin-bottom: 26px;
+    margin-left: 39px;
+    font-size: 26px;
+    font-family: 'Font Awesome 6 Free Solid';
+}
+
+#rofi-icon-hover {
+    background: #59637c; /* Hover color */
+    border-radius: 5px;
+}
+
+#rofi-app-launcher-icon {
+    color: #d08770;
+}
+
+#rofi-search-icon {
+    color: #81a1c1;
+}
+
+#rofi-config-icon {
+    color: #a3be8c;
+}
+
+#rofi-power-menu-icon {
+    color: #bf616a;
+}
+
+#rofi-automation-icon {
+    color: #ebcb8b;
+}
+
+#rofi-keyboard-shortcuts-icon {
+    color: #8fbcbb;
+}
+
+#rofi-active-icon {
+    color: #4f586e;
+}
+
+#rofi-icons {
+    border-radius: 5px;
+    background: #4f586e;
+    color: black;
+    font-size: 26px;
+    font-family: 'Font Awesome 6 Free Solid';
+}
+
+#slider-box {
+    border-radius: 5px;
+    margin-top: 10px;    
+    margin-right: 10px;  
+    margin-bottom: 10px;
+    margin-left: 10px;
+    background: #4f586e;
+}
+
+#slider-title {
+    margin-top: 10px;    
+    margin-right: 14px;  
+    margin-bottom: 5px;
+    margin-left: 18px;
+    color: white;
+    font-size: 21px;
+    font-family: FiraCode Nerd Font;
+    font-weight: bold;
+}
+
+scale trough {
+    margin-top: 0px;    
+    margin-right: 10px;  
+    margin-bottom: 10px;
+    margin-left: 10px;
+    border-radius: 7px;                                                                              
+    min-height: 22px;   
+    background: #3b4252  
+}   
+
+scale trough highlight {
+    border-radius: 8px;
+    background: #81a1c1;
+}   
+
+scale trough slider {
+    background: #d9dedf;
+    border-radius: 10px;
+    min-width: 24px;                                                                               
+    min-height: 24px;          
+}   

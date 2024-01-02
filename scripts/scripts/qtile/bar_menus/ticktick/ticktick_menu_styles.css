@@ -1,0 +1,377 @@
+.root {
+    border-width: 5px;
+    border-color: #4f586e;
+    background: rgba(46, 52, 64, 0.90);
+}
+.content-area {
+    margin-top: 5px;    
+    margin-right: 5px;  
+    margin-bottom: 5px;
+    margin-left: 5px;
+    background: rgba(46, 52, 64, 0);
+}
+
+/* TITLE */
+.status-dot {
+    margin-top: 10px;    
+    margin-right: 20px;  
+    margin-bottom: 10px;
+    margin-left: 10px;
+    font-size: 12px;
+    font-family: 'Font Awesome 6 Free Solid';
+}
+#status-dot-inactive {
+    color: rgba(46, 52, 64, 0.9);
+}
+#status-dot-list-update {
+    color: #c1656e;
+}
+#status-dot-off {
+    color: #c1656e;
+}
+.toggle-title-box {
+    border-radius: 5px;
+    background: #4f586e;
+}
+.toggle-title {
+    margin-right: 10px;  
+    margin-left: 2px;
+    color: white;
+    font-size: 22px;
+    font-family: FiraCode Nerd Font;
+    font-weight: bold;
+}
+.toggle-desc {
+    margin-top: 2px;    
+    margin-right: 10px;  
+    margin-bottom: 0px;
+    margin-left: 2px;
+    color: white;
+    font-size: 14px;
+    font-family: FiraCode Nerd Font;
+}
+.toggle-icon-box {
+    margin-top: 10px;    
+    margin-right: 10px;  
+    margin-bottom: 10px;
+    margin-left: 10px;
+    border-radius: 5px;
+}
+#toggle-icon-box-enabled {
+    background: #c1656e;
+}
+#toggle-icon-box-disabled {
+    background: #2e3440;
+}
+.toggle-icon {
+    margin-top: 8px;    
+    margin-right: 10px;  
+    margin-bottom: 8px;
+    margin-left: 10px;
+    border-radius: 5px;
+    /* font-size: 24px; */
+    font-family: 'Font Awesome 6 Free Solid';
+
+}
+#toggle-icon-enabled {
+    color: black;
+    background: #c1656e;
+}
+#toggle-icon-disabled {
+    color: white;
+    background: #2e3440;
+}
+
+/* LIST */
+.list-box {
+    border-radius: 5px;
+    /* border-radius: 5px 0px 0px 5px; */
+    background: #4f586e;
+}
+.task-list-main-box {
+    border-radius: 5px;
+    background: #4f586e;
+}
+.task_list_title_main_box {
+    margin-top: 10px;    
+    margin-bottom: 10px;
+    margin-left: 10px;
+    margin-right: 10px;
+    border-radius: 5px;
+    background: #434b5d;
+}
+.task-list-title-box {
+    margin-top: 5px;    
+    margin-bottom: 5px;
+    margin-left: 5px;
+    margin-right: 5px;
+    border-radius: 5px;
+}
+.task-list-title {
+    margin-right: 20px;
+    margin-left: 10px;
+    font-size: 21px;
+    font-family: FiraCode Nerd Font;
+    font-weight: bold;
+}
+.task-list-icon-box {
+    border-radius: 5px;
+    background: #2e3440;
+}
+.task-list-icon {
+    /* margin-top: 6px;    
+    margin-bottom: 6px; */
+    margin-left: 12px;
+    margin-right: 12px;
+    color: white;
+    font-size: 19px;
+    font-family: 'Font Awesome 6 Free Solid';
+}
+.task-list-box {
+    /* border-radius: 0px 5px 5px 0px; */
+    background: #4f586e;
+    /* border: 4px solid #c1656e; */
+}
+.task-list-plus-box {
+    margin-top: 10px;    
+    margin-right: 12px;  
+    margin-bottom: 10px;
+    margin-left: 10px;
+    border-radius: 5px;   
+    background: #2e3440;
+}
+.task-list-plus-icon {
+    margin-top: 5px;    
+    margin-bottom: 5px;
+    margin-right: 7px;  
+    margin-left: 7px;
+    color: #a3be8c;
+    font-size: 19px;
+    font-family: 'Font Awesome 6 Free Solid';
+}
+.list {
+    margin-top: 10px;    
+    margin-bottom: 10px;
+    border-radius: 5px;
+    background: #4f586e;
+}
+.task-list {
+    margin-top: 10px;    
+    margin-bottom: 10px;
+    border-radius: 5px;
+    background: #4f586e;
+    padding: 10px;
+}
+.main-row {
+    margin-bottom: 5px;
+    margin-left: 5px;
+    margin-right: 5px;
+    border-radius: 5px;
+}
+.sub-row {
+    margin-left: 4px;
+    margin-right: 5px;
+    border-radius: 5px;
+}
+.main-list-icon-box {
+    border-radius: 5px;
+    background: #2e3440;
+}
+.sub-list-icon-box {
+    border-radius: 5px;
+    background: #2e3440;
+}
+.main-list-icon {
+    color: white;
+    font-family: 'Font Awesome 6 Free Solid';
+    font-size: 24px;
+}
+#main-list-icon-shown {
+    /* margin-top: 10px;     */
+    margin-right: 13px;  
+    margin-bottom: 10px;
+    margin-left: 4px;
+}
+#main-list-icon-hidden {
+    margin-top: 10px;    
+    margin-right: 16px;  
+    margin-bottom: 10px;
+    margin-left: 4px;
+}
+
+.sub-list-icon {
+    margin-top: 12px;    
+    margin-right: 10px;  
+    margin-bottom: 12px;
+    margin-left: 2px;
+    color: white;
+    font-size: 18px;
+    font-family: "ttf-apple-emoji";
+
+}
+#sub-list-icon-active {
+    color: #c1656e;
+}
+#sub-list-icon-inactive {
+    color: white;
+}
+.branch-icon {
+    margin-top: 12px;    
+    margin-right: 12px;  
+    margin-bottom: 12px;
+    margin-left: 4px;
+    color: white;
+    font-family: 'Font Awesome 6 Free Solid';
+    font-size: 20px;
+}
+.list-name-box {
+    margin-top: 4px; 
+    margin-bottom: 4px;  
+    border-radius: 5px;
+    font-size: 18px;
+    background: #434b5d;  
+}
+#list-name-box-inactive {
+    background: #434b5d;  
+    color: white;
+}
+#list-name-box-active {
+    /* margin-right: -20px; */
+    background: #c1656e;
+    color: black;
+}
+#list-name-box-clicked {
+    background: rgba(46, 52, 64, 0.90);
+}
+.main-list-name {
+    margin-bottom: 10px;  
+    margin-top: 10px;  
+    margin-right: 10px;  
+    border-radius: 5px;
+    font-size: 20px;
+    font-family: FiraCode Nerd Font;
+    font-weight: bold;
+}
+.sub-list-name {
+    margin-bottom: 10px;  
+    margin-top: 10px;    
+    margin-right: 10px;  
+    border-radius: 5px;
+    font-size: 18px;
+    font-family: FiraCode Nerd Font;
+}
+.task-today-list {
+    border-radius: 5px;
+    background: #4f586e;
+    padding: 10px;
+}
+.main-today-list-icon-box {
+    border-radius: 5px;
+}
+.main-today-list-icon {
+    margin-bottom: 10px;  
+    margin-top: 10px;  
+    margin-right: 10px;  
+    border-radius: 5px;
+    font-family: 'Font Awesome 6 Free Regular';
+    font-size: 24px;
+}
+.main-today-list-icon-content {
+    font-family: 'Font Awesome 6 Free Thin';
+}
+#main-today-list-icon-0 {
+    color: white;
+}
+#main-today-list-icon-1 {
+    color: #5e81ac;
+}
+#main-today-list-icon-2 {
+    color: #d08770;
+}
+#main-today-list-icon-3 {
+    color: #bf616a;
+}
+.main-today-list-name {
+    margin-bottom: 10px;  
+    margin-top: 12px;  
+    margin-right: 10px;  
+    border-radius: 5px;
+    font-size: 18px;
+    font-family: FiraCode Nerd Font;
+}
+/* KNOWN ICON */
+.known-icon {
+    margin-right: 12px;
+    font-size: 12px;
+    font-family: 'Font Awesome 6 Free Solid';
+}
+#known-icon-active {
+    color: rgba(46, 52, 64, 0.9);
+}
+#known-icon-inactive {
+    color: #a3be8c;
+}
+
+.buttons {
+    font-size: 18px;
+    border-radius: 5px;
+    font-family: "FiraCode Nerd Font";
+    font-weight: lighter;
+}
+
+/* CONNECT ANIMATION */
+.connect-animation-box { 
+    margin-top: 17px;    
+    margin-bottom: 17px;
+    margin-right: 15px;  
+    margin-left: 15px;
+}
+.connect-animation-icon,
+.connect-animation-circle {
+    font-family: 'Font Awesome 6 Free Solid';
+    font-weight: bold;   
+}
+.connect-animation-icon {
+    margin-bottom: 4px;
+    font-size: 22px;
+
+}
+.connect-animation-circle {
+    margin-bottom: 4px;
+    font-size: 7px;
+}
+#connect-animation-success {
+    color: #a3be8c;
+}
+#connect-animation-active {
+    color: #c1656e;
+}
+#connect-animation-inactive {
+    color: #4f586e;
+}
+
+/* OPTIONS */
+.toggle-box-list-options {
+    border-radius: 3px;
+}
+#toggle-box-list-options-inactive {
+    background: #4f586e;
+}
+#toggle-box-list-options-active {
+    background: #c1656e;
+}
+.list-options-title {
+    margin-top: 10px;    
+    margin-right: 8px;  
+    margin-bottom: 8px;
+    margin-left: 8px;
+    font-size: 20px;
+    font-family: 'Font Awesome 6 Free Solid';
+    font-weight: bold;
+}
+#list-opitons-title-active {
+    color: black;
+}
+#list-opitons-title-inactive {
+    color: white;
+}

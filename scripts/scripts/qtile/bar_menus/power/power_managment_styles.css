@@ -1,0 +1,153 @@
+#root {
+    margin-top: 5px;    
+    margin-right: 5px;  
+    margin-bottom: 5px;
+    margin-left: 5px;
+    background: rgba(46, 52, 64, 0);
+}
+
+#root-root {
+    margin-top: 5px;    
+    margin-right: 5px;  
+    margin-bottom: 5px;
+    margin-left: 5px;
+    background: rgba(46, 52, 64, 0.9);
+}
+
+
+#charge-main-box {
+    margin-top: 7px;    
+    background: rgba(46, 52, 64, 0);
+}
+
+#charge-box { 
+    border-radius: 5px;
+    background: #4f586e;
+}
+
+#charge-percentage{
+    margin-top: 5px;    
+    margin-right: 15px;  
+    margin-bottom: 5px;
+    margin-left: 15px;    
+    border-radius: 5px;
+    font-size: 20px;
+    font-family: FiraCode Nerd Font;
+    font-weight: bold;
+}
+
+#slider-box {
+    border-radius: 5px;
+    margin-top: 5px;    
+    margin-right: 5px;  
+    margin-bottom: 5px;
+    margin-left: 5px;
+    background: #4f586e;
+}
+
+#slider-title {
+    margin-top: 10px;    
+    margin-right: 10px;  
+    margin-bottom: 10px;
+    margin-left: 10px;
+    color: white;
+    font-size: 18px;
+    font-family: FiraCode Nerd Font;
+    font-weight: bold;
+}
+
+scale trough {
+    margin-top: 6px;    
+    margin-right: 6px;  
+    margin-bottom: 6px;
+    margin-left: 6px;
+    border-radius: 7px;
+    min-width: 6px;                                                                               
+    min-height: 18px;   
+    background: #3b4252  
+}   
+
+scale trough highlight {
+    border-radius: 8;
+    background: #81a1c1;
+}   
+
+scale trough slider {
+    background: #d9dedf;
+    border-radius: 10px;
+    min-width: 20px;                                                                               
+    min-height: 20px;          
+}   
+
+#option-root-box {
+    border-radius: 5px;
+    background: #4f586e;
+}
+
+#option-box {
+    margin-top: 10px;    
+    margin-right: 10px;  
+    margin-bottom: 10px;
+    margin-left: 10px;
+    border-radius: 5px;
+}
+
+#option-box-title {
+    margin-top: 10px;    
+    margin-right: 10px;  
+    margin-bottom: 10px;
+    margin-left: 10px;
+    border-radius: 5px;
+    background: #4f586e;
+    color: white;
+    font-size: 18px;
+    font-family: FiraCode Nerd Font;
+    font-weight: bold;
+}
+
+#option-box-active {
+    margin-top: 10px;    
+    margin-right: 10px;  
+    margin-bottom: 10px;
+    margin-left: 10px;
+    border-radius: 5px;
+    background: #5e81ac;
+}
+
+#option-box-inactive {
+    margin-top: 30px;    
+    margin-right: 30px;  
+    margin-bottom: 30px;
+    margin-left: 30px;
+    border-radius: 5px;
+    background: rgba(46, 52, 64, 0.90);
+}
+
+#option-box-hover {
+    border-radius: 5px;
+    background: #65718d;
+}
+
+#option-button-active {
+    margin-top: 10px;    
+    margin-right: 10px;  
+    margin-bottom: 10px;
+    margin-left: 10px;
+    border-radius: 5px;
+    color: black;
+    font-size: 18px;
+    font-family: FiraCode Nerd Font;
+    font-weight: bold;
+}
+
+#option-button-inactive {
+    margin-top: 10px;    
+    margin-right: 10px;  
+    margin-bottom: 10px;
+    margin-left: 10px;
+    border-radius: 5px;
+    color: white;
+    font-size: 18px;
+    font-family: FiraCode Nerd Font;
+    font-weight: bold;
+}
