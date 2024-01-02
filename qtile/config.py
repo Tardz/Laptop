@@ -750,13 +750,14 @@ single_top_bar = Bar([
 
     widget.Spacer(bar.STRETCH),
 
-    VolumeIcon(),
-    VolumeWidget(),
-    seperator(),
-
     # BLUETOOTH #
     BluetoothIcon(),
     BluetoothWidget(),
+    seperator(),
+
+    # VOLUME #
+    VolumeIcon(),
+    VolumeWidget(),
     seperator(),
 
     #  WIFI #
