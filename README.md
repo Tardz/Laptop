@@ -2,7 +2,7 @@
 **(Under progress, do not install)**
 ## Preview
 <p align="center">
-  <img src="https://github.com/Tardz/Laptop/blob/main/desktop_screenshot_modified.png" alt="Image 1" width="850" />
+  <img src="https://github.com/Tardz/Laptop/blob/main/readme_images/desktop_screenshot_modified.png" alt="Image 1" width="850" />
 </p>
 
 <p align="center">
@@ -12,7 +12,7 @@
 </p>
 
 <p align="center">
-  <img src="https://github.com/Tardz/Laptop/blob/main/settings_menu_screenshot_modified.png" alt="Image 1" width="750" />
+  <img src="https://github.com/Tardz/Laptop/blob/main/readme_images/settings_menu_screenshot_modified.png" alt="Image 1" width="750" />
 </p>
 
 ## About
