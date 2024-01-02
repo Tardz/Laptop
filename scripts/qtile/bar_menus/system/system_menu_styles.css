@@ -1,6 +1,6 @@
 .root {
     border-width: 5px;
-    border-color: #4f586e;
+    border-color: rgba(79, 88, 110, 0.9);
     background: rgba(46, 52, 64, 0.96);
 }
 .content-area {
@@ -16,30 +16,30 @@
 .options-box {
     margin: 5px;
     border-radius: 5px;
-    background: #4f586e;
+    background: rgba(79, 88, 110, 0.8);
 }
 #turn-off-box-active {
-    background: #bf616a;
+    background: rgba(191, 97, 106, 1);
     border: 2px solid black;
 }
 #reboot-box-active {
-    background: #d08770;
+    background: rgba(208, 135, 112, 1);
     border: 2px solid black;
 }
 #sleep-box-active {
-    background: #81a1c1;
+    background: rgba(129, 161, 193, 1);
     border: 2px solid black;
 }
 #hibernate-box-active {
-    background: #b48ead;
+    background: rgba(180, 142, 173, 1);
     border: 2px solid black;
 }
 #logout-box-active {
-    background: #9B98B7;
+    background: rgba(155, 152, 183, 1);
     border: 2px solid black;
 }
 #box-inactive {
-    background: #4f586e;
+    background: rgba(79, 88, 110, 0.8);
 }
 .options-icon {
     margin: 18px;
@@ -50,15 +50,15 @@
     color: black;
 }
 #turn-off-inactive {
-    color: #bf616a;
+    color: rgba(191, 97, 106, 1);
 }
 #reboot-inactive {
-    color: #d08770;
+    color: rgba(208, 135, 112, 1);
 }
 #sleep-inactive {
     margin-right: 22px;
     margin-left: 22px;
-    color: #81a1c1;
+    color: rgba(129, 161, 193, 1);
 }
 #sleep-active {
     margin-right: 22px;
@@ -66,10 +66,10 @@
     color: black;
 }
 #hibernate-inactive {
-    color: #b48ead;
+    color: rgba(180, 142, 173, 1);
 }
 #logout-inactive {
-    color: #9B98B7;
+    color: rgba(155, 152, 183, 1);
 }
 
 /* TITLE */
@@ -82,19 +82,19 @@
     /*border-color: black;*/
 }
 #title-box-turn-off {
-    background: #bf616a;
+    background: rgba(191, 97, 106, 1);
 }
 #title-box-reboot {
-    background: #d08770;
+    background: rgba(208, 135, 112, 1);
 }
 #title-box-sleep {
-    background: #81a1c1;
+    background: rgba(129, 161, 193, 1);
 }
 #title-box-hibernate {
-    background: #b48ead;
+    background: rgba(180, 142, 173, 1);
 }
 #title-box-logout {
-    background: #9B98B7;
+    background: rgba(155, 152, 183, 1);
 }
 .title {
     margin: 10px;
@@ -119,7 +119,7 @@
     font-family: 'Font Awesome 6 Free Solid', serif;
 }
 .uptime-box {
-    background: #4f586e;
+    background: rgba(79, 88, 110, 0.8);
     border-radius: 5px;
     /*border: 2px solid black;*/
 }
@@ -145,7 +145,7 @@
     font-family: 'Font Awesome 6 Free Solid', serif;
 }
 .username-box {
-    background: #4f586e;
+    background: rgba(79, 88, 110, 0.8);
     border-radius: 5px;
 }
 .username {

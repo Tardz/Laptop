@@ -2,8 +2,7 @@ import gi
 gi.require_version('Gtk', '3.0')
 import subprocess
 import os
-from Xlib import display 
-from gi.repository import Gtk, Gdk, GLib, GObject
+from gi.repository import Gtk, Gdk, GObject
 
 class cpu_stats_menu(Gtk.Dialog):
     def __init__(self):
@@ -12,9 +11,7 @@ class cpu_stats_menu(Gtk.Dialog):
         self.set_default_size(200, 60)
 
         x, y = self.get_mouse_position()
-
-        if x and y:
-            self.move(x - 170, 5)
+        self.move(x, y)
 
         self.connect("focus-out-event", self.on_focus_out)
         self.connect("key-press-event", self.on_escape_press)
@@ -140,14 +137,28 @@ class cpu_stats_menu(Gtk.Dialog):
         return True
 
     def get_mouse_position(self):
+        from Xlib import display 
+        from Xlib.ext import randr
         try:
             d = display.Display()
             s = d.screen()
             root = s.root
             root.change_attributes(event_mask=0x10000)
             pointer = root.query_pointer()
-            x, y = pointer.root_x, pointer.root_y
-            return x, y
+            x = pointer.root_x - 160
+
+            res = randr.get_screen_resources(s.root)
+            screen_number = 0
+            for output in res.outputs:
+                params = randr.get_output_info(s.root, output, res.config_timestamp)
+                data = params._data
+                if data["connection"] == 0:
+                    screen_number += 1
+
+            if screen_number > 1:
+                return x, 172
+            else:
+                return x, 5
         except Exception:
             return None, None
 

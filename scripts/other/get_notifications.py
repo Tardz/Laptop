@@ -22,7 +22,10 @@ else:
     # Assuming you have a loop here
     if data['data'] != [[]]: 
         subprocess.run(['notify-send', '-t', '0', '-a', 'notification_center_clear', '-h', "int:transient:1", '-u', 'low', "⠀", "<span size='large'><b>Notification Center</b></span>\n<span foreground='#5a677f' size='large'>━━━━━━━━━━━━━━━━━━━</span>\n<span foreground='#a3be8c' size='medium'><b>" + history_count + "</b></span> <span size='medium'>Available</span> [<span foreground='#81a1c1' size='small'><b>Clear</b></span>]"])
+        counter = 0
         for entry in data['data'][0]:
+            if counter == 12:
+                break
             message = entry['message']['data']
 
             appname = entry['appname']['data']
@@ -74,6 +77,7 @@ else:
             print("body:", body)
 
             subprocess.run(['notify-send', '-t', '0', '-h', "int:transient:1", '-u', urgency, title, body])
+            counter += 1
     else:
         subprocess.run(['notify-send', '-t', '0', '-h', "int:transient:1", '-u', 'low', "⠀", "<span size='large'><b>Notification Center</b></span>\n<span foreground='#5a677f' size='large'>━━━━━━━━━━━━━━━━━━━</span>\n<span foreground='#bf616a' size='medium'><b>" + history_count + "</b></span> <span size='medium'>Available</span>"])
 

@@ -1,6 +1,7 @@
 import gi
 gi.require_version('Gtk', '3.0')
 import os
+import sys
 import signal
 import getpass
 import subprocess
@@ -318,7 +319,7 @@ class SystemMenu(Gtk.Dialog):
             except ProcessLookupError:
                 pass
         finally:
-            exit(0)
+            sys.exit(0)
 
 if __name__ == '__main__':
     pid_file_path = "/home/jonalm/scripts/qtile/bar_menus/system/system_menu_pid_file.pid"
@@ -343,4 +344,4 @@ if __name__ == '__main__':
     except Exception as e:
         print(f"An error occurred: {e}")
     finally:
-        exit(0)
+        sys.exit(0)

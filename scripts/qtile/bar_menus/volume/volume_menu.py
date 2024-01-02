@@ -1,30 +1,48 @@
 import gi
 gi.require_version('Gtk', '3.0')
-import os
+
 from gi.repository import Gtk, Gdk, GLib
 import pulsectl
 import pygame
+import signal
+import sys
+import os
 
 class VolumeMenu(Gtk.Dialog):
-    def __init__(self):
-        self.pid_file = "/home/jonalm/scripts/qtile/bar_menus/volume/volume_menu_pid_file.pid"
+    def __init__(self, pid_file_path):
         Gtk.Dialog.__init__(self, "Sound Control", None, 0)
+        self.pid_file_path = pid_file_path
+        self.initialize_resources()
+        self.setup_ui()
+        GLib.idle_add(self.update_list_with_sound_outputs)
 
-        x, y = self.get_mouse_position()
-
-        if x and y:
-            self.move(x - 100, 5)
-
-        self.window_width = 200
-        self.window_height = 250
-        self.set_size_request(self.window_width, self.window_height)
+    def initialize_resources(self):
+        self.connect("focus-out-event", self.on_focus_out)
+        self.connect("key-press-event", self.on_escape_press)
 
         pygame.mixer.init()
-
         self.pulse = pulsectl.Pulse()
         self.active_sink = self.get_active_sink()
         self.sound_on = self.get_sound_on()
         self.ignore_focus_lost = False
+
+    def css(self):
+        screen = Gdk.Screen.get_default()
+        provider = Gtk.CssProvider()
+        style_context = Gtk.StyleContext()
+        style_context.add_provider_for_screen(screen, provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION)
+        provider.load_from_path("/home/jonalm/scripts/qtile/bar_menus/volume/volume_menu_styles.css")
+        visual = screen.get_rgba_visual()
+        self.content_area.set_visual(visual)
+        self.set_visual(visual)
+
+    def setup_ui(self):
+        x, y = self.get_mouse_position()
+        self.move(x, y)
+
+        self.window_width = 200
+        self.window_height = 250
+        self.set_size_request(self.window_width, self.window_height)
 
         self.content_area = self.get_content_area()
         self.content_area.set_name("content-area")
@@ -34,14 +52,11 @@ class VolumeMenu(Gtk.Dialog):
         self.title()
         self.list()
 
-        self.connect("focus-out-event", self.on_focus_out)
-        self.connect("key-press-event", self.on_escape_press)
-
         self.main_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=8)
         self.main_box.pack_start(self.title_box, False, False, 0)
-        self.main_box.pack_start(self.list_main_box, True, True, 0)        
+        self.main_box.pack_start(self.list_main_box, True, True, 0)
 
-        self.content_area.pack_start(self.main_box, True, True, 0)   
+        self.content_area.pack_start(self.main_box, True, True, 0)
 
         self.show_all()
 
@@ -100,18 +115,7 @@ class VolumeMenu(Gtk.Dialog):
 
         self.list_main_box.pack_start(scrolled_window, True, True, 0)
 
-        self.update_list_with_sound_outputs()
-        GLib.timeout_add(4000, self.update_list_with_sound_outputs)
-
-    def css(self):
-        screen = Gdk.Screen.get_default()
-        provider = Gtk.CssProvider()
-        style_context = Gtk.StyleContext()
-        style_context.add_provider_for_screen(screen, provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION)
-        provider.load_from_path("/home/jonalm/scripts/qtile/bar_menus/volume/volume_menu_styles.css")
-        visual = screen.get_rgba_visual()
-        self.content_area.set_visual(visual)
-        self.set_visual(visual)
+        # GLib.timeout_add(4000, self.update_list_with_sound_outputs)
 
     def volume_clicked(self, widget, event):
         if self.sound_on:
@@ -210,18 +214,31 @@ class VolumeMenu(Gtk.Dialog):
             self.list_box.add(row)
 
         self.list_box.show_all()
-        return True
+        return False
 
     def get_mouse_position(self):
         from Xlib import display 
+        from Xlib.ext import randr
         try:
             d = display.Display()
             s = d.screen()
             root = s.root
             root.change_attributes(event_mask=0x10000)
             pointer = root.query_pointer()
-            x, y = pointer.root_x, pointer.root_y
-            return x, y
+            x = pointer.root_x - 130
+
+            res = randr.get_screen_resources(s.root)
+            screen_number = 0
+            for output in res.outputs:
+                params = randr.get_output_info(s.root, output, res.config_timestamp)
+                data = params._data
+                if data["connection"] == 0:
+                    screen_number += 1
+
+            if screen_number > 1:
+                return x, 172
+            else:
+                return x, 5
         except Exception:
             return None, None
 
@@ -232,45 +249,45 @@ class VolumeMenu(Gtk.Dialog):
     def on_escape_press(self, widget, event):
         keyval = event.keyval
         if keyval == Gdk.KEY_Escape:
-            self.on_focus_out(widget, event)
+            self.exit_remove_pid()
 
     def handle_sigterm(self, signum, frame):
         self.exit_remove_pid() 
 
-    def exit_remove_pid(self):
+    def exit_remove_pid(self):  
         try:
             self.pulse.close()
-            with open(self.pid_file, "r") as file:
+            with open(self.pid_file_path, "r") as file:
                 pid = int(file.read().strip())
             try:
-                os.remove(self.pid_file)
+                os.remove(self.pid_file_path)
                 os.kill(pid, 15)
             except ProcessLookupError:
                 pass
         finally:
-            exit(0)
+            sys.exit(0)
 
 if __name__ == '__main__':
-    pid_file = "/home/jonalm/scripts/qtile/bar_menus/volume/volume_menu_pid_file.pid"
+    pid_file_path = "/home/jonalm/scripts/qtile/bar_menus/volume/volume_menu_pid_file.pid"
     dialog = None
 
     try:
-        if os.path.isfile(pid_file):
-            with open(pid_file, "r") as file:
+        if os.path.isfile(pid_file_path):
+            with open(pid_file_path, "r") as file:
                 pid = int(file.read().strip())
             try:
-                os.remove(pid_file)
-                os.kill(pid, 15)            
-            except ProcessLookupError:
-                pass
+                os.remove(pid_file_path)
+                os.kill(pid, 9)    
+            except Exception as e:
+                print(f"An error occurred: {e}")
         else:
-            with open(pid_file, "w") as file:
+            with open(pid_file_path, "w") as file:
                 file.write(str(os.getpid()))
 
-            dialog = VolumeMenu()
+            dialog = VolumeMenu(pid_file_path)
             Gtk.main()
                     
     except Exception as e:
         print(f"An error occurred: {e}")
     finally:
-        exit(0)
+        sys.exit(0)

@@ -1,8 +1,7 @@
 #!/bin/bash
 
-BROWSER="brave"
+BROWSER="firefox"
 
-# source /home/jonalm/scripts/rofi/search/search_options.sh 
 source /home/jonalm/googleDrive/search_options.sh
 
 while [ -z "$engine" ]; do
@@ -12,6 +11,7 @@ done
 
 /home/jonalm/scripts/other/check_internet.sh
 internet_status=$?
+current_screen=$(/home/jonalm/scripts/other/get_current_screen.py)
 
 if [ $internet_status -eq 1 ]; then
     exit 1
@@ -26,7 +26,6 @@ for option in "${options[@]}"; do
             while [ -z "$query" ]; do
                 query=$(rofi -config ~/.config/rofi/files/config.rasi \-theme "$HOME/.config/rofi/files/launchers/type-1"/'style-7-search'.rasi -dmenu -i -l 2 -p '') || exit
             done
-            qtile cmd-obj -o group c -f toscreen
             $BROWSER "$url""$query"
             notify-send -u low -t 2400 '-h' "int:transient:1" "Search finished" "Website: <span foreground='#81a1c1' size='medium'>$displayname</span>"
             exit 1
@@ -34,7 +33,14 @@ for option in "${options[@]}"; do
     fi
 done
 
-qtile cmd-obj -o group c -f toscreen
+if [ $current_screen -eq 1 ]; then
+    qtile cmd-obj -o cmd -f next_screen
+    qtile cmd-obj -o group c -f toscreen
+    xdotool mousemove 4300 900
+elif [ $current_screen -eq 0 ]; then 
+    qtile cmd-obj -o group c -f toscreen
+fi
+
 notify-send -u low -t 2400 '-h' "int:transient:1" "Search finished" "Website: <span foreground='#81a1c1' size='medium'>$displayname</span>"
 
 $BROWSER "$url"

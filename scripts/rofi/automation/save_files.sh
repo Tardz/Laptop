@@ -1,5 +1,8 @@
 #!/bin/bash
 
+script_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+excludeListPath="$script_dir/exclude-in-scripts.txt"
+
 /home/jonalm/scripts/other/check_internet.sh
 internet_status=$?
 
@@ -22,7 +25,7 @@ else
 fi
 
 sudo rsync -av --delete /home/jonalm/laptopgit/Laptop/ /home/jonalm/laptopgit/LaptopBackup/
-sudo rsync -av --delete /home/jonalm/scripts "$git_path"
+sudo rsync --exclude-from="$excludeListPath" -av --delete /home/jonalm/scripts "$git_path"
 sudo rsync -av --delete /home/jonalm/.config/qtile "$git_path"
 sudo rsync -av --delete /home/jonalm/.config/rofi "$git_path"
 sudo rsync -av --delete /home/jonalm/.config/alacritty "$git_path"

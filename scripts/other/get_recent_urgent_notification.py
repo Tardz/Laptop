@@ -12,7 +12,7 @@ data = json.loads(output)
 last_relevent_notification = ""
 
 ignored_notifications = [
-    "Time:", 
+    "Time:",    
     "spotify"
 ]
 

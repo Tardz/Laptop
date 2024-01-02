@@ -5,7 +5,7 @@ import os
 from gi.repository import Gtk, Gdk, GLib
 import time
 import json
-from Xlib import display 
+from Xlib import display
 from multiprocessing import Process, Value
 
 class OptionWindow(Gtk.Dialog):
@@ -19,7 +19,6 @@ class OptionWindow(Gtk.Dialog):
             self.set_size_request(130, 45)
         else:
             self.set_size_request(130, 90)
-
         x, y = self.get_mouse_position()
         self.move(x, y)
 
@@ -343,9 +342,7 @@ class WifiMenu(Gtk.Dialog):
         signal.signal(signal.SIGTERM, self.handle_sigterm)
 
         x, y = self.get_mouse_position()
-
-        if x and y:
-            self.move(x - 160, 5)
+        self.move(x, y)
 
         self.window_width = 340
         self.window_height = 400
@@ -495,7 +492,7 @@ class WifiMenu(Gtk.Dialog):
         provider = Gtk.CssProvider()
         style_context = Gtk.StyleContext()
         style_context.add_provider_for_screen(screen, provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION)
-        provider.load_from_path("/home/jonalm/scripts/qtile/bar_menus/wifi/wifi_menu_styles.css")
+        provider.load_from_path(os.path.expanduser("~/scripts/qtile/bar_menus/wifi/css/wifi_menu_styles.css"))
         visual = screen.get_rgba_visual()
         self.content_area.set_visual(visual)
         self.set_visual(visual)
@@ -562,7 +559,7 @@ class WifiMenu(Gtk.Dialog):
             return False
         
     def get_networks(self):
-        with open('/home/jonalm/scripts/qtile/bar_menus/wifi/wifi_networks.json', 'r') as json_file:
+        with open(os.path.expanduser('~/scripts/qtile/bar_menus/wifi/data/wifi_networks.json'), 'r') as json_file:
             networks = json.load(json_file)
         return networks
         
@@ -723,14 +720,27 @@ class WifiMenu(Gtk.Dialog):
         return True
 
     def get_mouse_position(self):
+        from Xlib.ext import randr
         try:
             d = display.Display()
             s = d.screen()
             root = s.root
             root.change_attributes(event_mask=0x10000)
             pointer = root.query_pointer()
-            x, y = pointer.root_x, pointer.root_y
-            return x, y
+            x = pointer.root_x - 160
+
+            res = randr.get_screen_resources(s.root)
+            screen_number = 0
+            for output in res.outputs:
+                params = randr.get_output_info(s.root, output, res.config_timestamp)
+                data = params._data
+                if data["connection"] == 0:
+                    screen_number += 1
+
+            if screen_number > 1:
+                return x, 172
+            else:
+                return x, 5
         except Exception:
             return None, None
 
@@ -830,7 +840,7 @@ def wifi_process():
 
                 unique_networks.sort(key=lambda x: (not x["CONNECTED"], not x["KNOWN"]))
 
-            with open('/home/jonalm/scripts/qtile/bar_menus/wifi/wifi_networks.json', 'w') as json_file:
+            with open(os.path.expanduser('~/scripts/qtile/bar_menus/wifi/data/wifi_networks.json'), 'w') as json_file:
                 json.dump(unique_networks, json_file, indent=2)
 
             time.sleep(4)
@@ -838,7 +848,7 @@ def wifi_process():
             time.sleep(4)
 
 if __name__ == '__main__':
-    pid_file_path = "/home/jonalm/scripts/qtile/bar_menus/wifi/wifi_menu_pid_file.pid"
+    pid_file_path = os.path.expanduser("~/scripts/qtile/bar_menus/wifi/wifi_menu_pid_file.pid")
     dialog = None
 
     try:
@@ -847,7 +857,7 @@ if __name__ == '__main__':
                 pid = int(file.read().strip())
             try:
                 os.remove(pid_file_path)
-                os.kill(pid, 15)            
+                os.kill(pid, 15)    
             except ProcessLookupError:
                 pass
         else:

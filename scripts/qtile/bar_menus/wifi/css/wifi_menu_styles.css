@@ -1,0 +1,215 @@
+.root {
+    border-width: 5px;
+    border-color: rgba(79, 88, 110, 0.9);
+    background: rgba(46, 52, 64, 0.9);
+}
+.content-area {
+    margin-top: 5px;    
+    margin-right: 5px;  
+    margin-bottom: 5px;
+    margin-left: 5px;
+    background: rgba(46, 52, 64, 0.9);
+}
+
+/* TITLE */
+.status-dot {
+    margin-top: 10px;    
+    margin-right: 20px;  
+    margin-bottom: 10px;
+    margin-left: 10px;
+    font-size: 12px;
+    font-family: 'Font Awesome 6 Free Solid';
+}
+#status-dot-inactive {
+    color: rgba(46, 52, 64, 0.9);
+}
+#status-dot-list-update {
+    color: #81a1c1;
+}
+#status-dot-off {
+    color: #c1656e;
+}
+.toggle-title-box {
+    border-radius: 5px;
+    background: rgba(79, 88, 110, 0.8);
+}
+.toggle-title {
+    margin-top: 9px;    
+    margin-right: 10px;  
+    margin-bottom: 0px;
+    margin-left: 2px;
+    color: white;
+    font-size: 20px;
+    font-family: FiraCode Nerd Font;
+    font-weight: bold;
+}
+.toggle-desc {
+    margin-top: 2px;    
+    margin-right: 10px;  
+    margin-bottom: 0px;
+    margin-left: 2px;
+    color: white;
+    font-size: 14px;
+    font-family: FiraCode Nerd Font;
+}
+.toggle-icon-box {
+    margin-top: 10px;    
+    margin-right: 10px;  
+    margin-bottom: 10px;
+    margin-left: 10px;
+    border-radius: 5px;
+}
+#toggle-icon-box-enabled {
+    background: #81a1c1;
+}
+#toggle-icon-box-disabled {
+    background: rgba(46, 52, 64, 0.8);
+}
+.toggle-icon {
+    margin-top: 10px;    
+    margin-right: 10px;  
+    margin-bottom: 10px;
+    margin-left: 10px;
+    border-radius: 5px;
+    font-size: 24px;
+    font-family: 'Font Awesome 6 Free Solid';
+
+}
+#toggle-icon-enabled {
+    color: black;
+    background: #81a1c1;
+}
+#toggle-icon-disabled {
+    color: white;
+    background: rgba(46, 52, 64, 0.8);
+}
+
+/* LIST */
+.list-box {
+    border-radius: 5px;
+    background: rgba(79, 88, 110, 0.8);
+}
+.list {
+    margin-top: 10px;    
+    margin-bottom: 10px;
+    border-radius: 5px;
+    background: rgba(79, 88, 110, 0.8);
+}
+.row {
+    margin-left: 5px;
+    margin-right: 5px;
+    border-radius: 5px;
+}
+.list-icon-box {
+    border-radius: 5px;
+    background: #2e3440;
+}
+.list-icon {
+    margin-top: 12px;    
+    margin-right: 10px;  
+    margin-bottom: 12px;
+    margin-left: 2px;
+    color: white;
+    font-size: 13px;
+}
+.list-name-box {
+    margin-top: 4px;    
+    margin-bottom: 4px;  
+    border-radius: 5px;
+    font-size: 18px;
+}
+#list-name-box-inactive {
+    background: #434b5d;  
+    color: white;
+}
+#list-name-box-active {
+    background: #81a1c1;
+    color: black;
+}
+#list-name-box-clicked {
+    background: rgba(46, 52, 64, 0.90);
+}
+.list-name {
+    margin-bottom: 10px;  
+    margin-top: 10px;    
+    border-radius: 5px;
+    font-size: 18px;
+    font-family: FiraCode Nerd Font;
+}
+
+/* KNOWN ICON */
+.known-icon {
+    margin-right: 12px;
+    font-size: 12px;
+    font-family: 'Font Awesome 6 Free Solid';
+}
+#known-icon-active {
+    color: rgba(46, 52, 64, 0.9);
+}
+#known-icon-inactive {
+    color: #a3be8c;
+}
+
+.buttons {
+    font-size: 18px;
+    border-radius: 5px;
+    font-family: "FiraCode Nerd Font";
+    font-weight: lighter;
+}
+
+/* CONNECT ANIMATION */
+.connect-animation-box { 
+    margin-top: 17px;    
+    margin-bottom: 17px;
+    margin-right: 15px;  
+    margin-left: 15px;
+}
+.connect-animation-icon,
+.connect-animation-circle {
+    font-family: 'Font Awesome 6 Free Solid';
+    font-weight: bold;   
+}
+.connect-animation-icon {
+    margin-bottom: 4px;
+    font-size: 22px;
+
+}
+.connect-animation-circle {
+    margin-bottom: 4px;
+    font-size: 7px;
+}
+#connect-animation-success {
+    color: #a3be8c;
+}
+#connect-animation-active {
+    color: #81a1c1;
+}
+#connect-animation-inactive {
+    color: #4f586e;
+}
+
+/* OPTIONS */
+.toggle-box-list-options {
+    border-radius: 3px;
+}
+#toggle-box-list-options-inactive {
+    background: rgba(79, 88, 110, 0.8);
+}
+#toggle-box-list-options-active {
+    background: #81a1c1;
+}
+.list-options-title {
+    margin-top: 10px;    
+    margin-right: 8px;  
+    margin-bottom: 8px;
+    margin-left: 8px;
+    font-size: 20px;
+    font-family: 'Font Awesome 6 Free Solid';
+    font-weight: bold;
+}
+#list-opitons-title-active {
+    color: black;
+}
+#list-opitons-title-inactive {
+    color: white;
+}

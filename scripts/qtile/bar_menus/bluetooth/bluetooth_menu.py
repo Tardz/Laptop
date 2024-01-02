@@ -2,9 +2,10 @@ import gi
 gi.require_version('Gtk', '3.0')
 import subprocess
 import os
-from Xlib import display 
 from gi.repository import Gtk, Gdk, GLib
 from multiprocessing import Process, Value
+from Xlib import display 
+from Xlib.ext import randr
 import time
 import signal
 import json
@@ -251,7 +252,7 @@ class BluetoothMenu(Gtk.Dialog):
 
         x, y = self.get_mouse_position()
 
-        self.move(x - 160, 5)
+        self.move(x, y)
 
         self.window_width = 340
         self.window_height = 300
@@ -263,7 +264,7 @@ class BluetoothMenu(Gtk.Dialog):
             self.set_size_request(self.window_width, 20)
 
         self.pid_file_path = pid_file_path
-        self.ignore_focus_lost = False
+        self.ignore_focus_lost = True
         self.previous_css_class = None
         self.active_widget = None
         self.previouse_widget_in_use = False
@@ -1056,8 +1057,20 @@ class BluetoothMenu(Gtk.Dialog):
             root = s.root
             root.change_attributes(event_mask=0x10000)
             pointer = root.query_pointer()
-            x, y = pointer.root_x, pointer.root_y
-            return x, y
+            x = pointer.root_x - 160
+
+            res = randr.get_screen_resources(s.root)
+            screen_number = 0
+            for output in res.outputs:
+                params = randr.get_output_info(s.root, output, res.config_timestamp)
+                data = params._data
+                if data["connection"] == 0:
+                    screen_number += 1
+
+            if screen_number > 1:
+                return x, 172
+            else:
+                return x, 5
         except Exception:
             return None, None
 

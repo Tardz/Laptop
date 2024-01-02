@@ -1,0 +1,2 @@
+qtile/bar_menus/system/jstest
+.vscode

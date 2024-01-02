@@ -1,7 +1,7 @@
 #root {
-    border-width: 3px;
-    border-color: #4f586e;
-    background: rgba(46, 52, 64, 0.90);
+    border-width: 5px;
+    border-color: rgba(79, 88, 110, 0.9);
+    background: rgba(46, 52, 64, 0.9);
 }
 
 #content-area {
@@ -9,7 +9,7 @@
     margin-right: 5px;  
     margin-bottom: 5px;
     margin-left: 5px;
-    background: rgba(46, 52, 64, 0);
+    background: rgba(46, 52, 64, 0.9);
 }
 
 #status-dot-inactive {
@@ -44,12 +44,12 @@
 
 #toggle-box {
     border-radius: 5px;
-    background: #4f586e;
+    background: rgba(79, 88, 110, 0.8);
 }
 
 #toggle-box-list-options-inactive {
     border-radius: 3px;
-    background: #4f586e;
+    background: rgba(79, 88, 110, 0.8);
 }
 
 #toggle-box-list-options-active {
@@ -97,7 +97,7 @@
     margin-bottom: 10px;
     margin-left: 11px;
     border-radius: 5px;
-    background: #2e3440;
+    background: rgba(46, 52, 64, 0.8);
 }
 
 #toggle-icon-enabled {
@@ -121,12 +121,12 @@
     color: white;
     font-size: 22px;
     font-family: 'Font Awesome 6 Free Solid';
-    background: #2e3440;
+    background: rgba(46, 52, 64, 0.8);
 }
 
 #list-box {
     border-radius: 5px;
-    background: #4f586e;
+    background: rgba(79, 88, 110, 0.8);
 }
 
 #known-icon {
@@ -211,7 +211,7 @@
     margin-top: 10px;    
     margin-bottom: 10px;
     border-radius: 5px;
-    background: #4f586e;
+    background: rgba(79, 88, 110, 0.8);
     font-size: 18px;
     font-family: FiraCode Nerd Font;
 }
@@ -223,5 +223,5 @@
 
 #list-content-box-inactive {
     border-radius: 10px;
-    background: #4f586e;
+    background: rgba(79, 88, 110, 0.8);
 }
