@@ -1,5 +1,5 @@
-files_last_update=$(jq -r '.date' "/home/jonalm/scripts/rofi/automation/laptop/save_files_data.json")
-files_prev_update=$(jq -r '.old_date' "/home/jonalm/scripts/rofi/automation/laptop/save_files_data.json")
+files_last_update=$(jq -r '.date' "$HOME/scripts/rofi/automation/laptop/save_files_data.json")
+files_prev_update=$(jq -r '.old_date' "$HOME/scripts/rofi/automation/laptop/save_files_data.json")
 
 declare -a root_options=(
 "  Drive"
@@ -42,6 +42,7 @@ declare -a push_options=(
 )
 
 declare -a github_files_options=(
-"  Save [$files_last_update] | $HOME/scripts/rofi/automation/save_files.sh"
+"  Sync from Laptop | $HOME/scripts/rofi/automation/laptop/sync_files.sh"
+"  Bisync to Laptop | $HOME/scripts/rofi/automation/laptop/bisync_files.sh"
 "  Revert [$files_prev_update] | $HOME/scripts/rofi/config_file_remove.sh"
 )

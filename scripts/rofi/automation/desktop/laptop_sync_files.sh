@@ -16,7 +16,8 @@ git pull
 
 sudo rsync -av --delete "$git_path" $HOME/laptopgit/LaptopBackup/
 sudo rsync -av --delete scripts $HOME/scripts/
-sudo rsync -av --delete qtile $HOME/.config/qtile/
+sudo rsync -av --delete qtile/settings.py $HOME/.config/qtile/
+sudo rsync -av --delete qtile/config.py $HOME/.config/qtile/
 
 current_time="Time:$(date +'%T')"
 

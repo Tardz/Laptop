@@ -20,6 +20,7 @@ myBrowser      = "brave"
 myTerm         = "alacritty"
 alttab_spawned = False
 home           = os.path.expanduser("~")
+
 check_dict = {
     #[0] - app, [1] - command, [2] - screen
     "c": ["firefox", None, 0],
@@ -111,7 +112,7 @@ if os.path.isfile(file_path):
     with open(file_path, "r") as file:
         qtile_colors = json.load(file)
 
-laptop = qtile_settings.get("laptop", False)
+laptop = qtile_settings.get("laptop", True)
 
 if laptop:
     bar_scaling                     = 1
@@ -133,6 +134,8 @@ else:
     seperator_line_scaling          = 0.6
     general_width_scaling           = 0.9
     task_list_scaling               = 0.9
+
+#AWDJOAWDO
 
 #*###############################
 #*           BAR               ##
