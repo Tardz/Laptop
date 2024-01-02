@@ -6,9 +6,9 @@
 </p>
 
 <p align="center">
-  <img src="https://github.com/Tardz/Laptop/blob/main/wifi_menu_screenshot_modified.png" alt="Image 1" width="350" />
-  <img src="https://github.com/Tardz/Laptop/blob/main/bluetooth_menu_screenshot_modified.png" alt="Image 2" width="350" />
-  <img src="https://github.com/Tardz/Laptop/blob/main/volume_menu_screenshot_modified.png" alt="Image 3" width="350" />
+  <img src="https://github.com/Tardz/Laptop/blob/main/readme_images/wifi_menu_screenshot_modified.png" alt="Image 1" width="350" />
+  <img src="https://github.com/Tardz/Laptop/blob/main/readme_images/bluetooth_menu_screenshot_modified.png" alt="Image 2" width="350" />
+  <img src="https://github.com/Tardz/Laptop/blob/main/readme_images/volume_menu_screenshot_modified.png" alt="Image 3" width="350" />
 </p>
 
 <p align="center">
