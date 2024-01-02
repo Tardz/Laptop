@@ -111,7 +111,7 @@ if os.path.isfile(file_path):
     with open(file_path, "r") as file:
         qtile_colors = json.load(file)
 
-laptop = qtile_settings.get("laptop", False)
+laptop = qtile_settings.get("laptop", True)
 
 if laptop:
     bar_scaling                     = 1
@@ -161,13 +161,14 @@ if laptop:
     icon_background_2                   = "#9B98B7"
     icon_background_3                   = "#81A1C1"
     icon_background_4                   = "#8fbcbb"
-    icon_background_5                   = "#a3be8c"
-    icon_background_6                   = "#ebcb8b"
-    icon_background_7                   = "#d08770"
-    icon_background_8                   = "#bf616a"
-    icon_background_9                   = "#b48ead"
-    icon_background_10                  = "#9B98B7"
-    icon_background_11                  = "#81A1C1"
+    icon_background_5                   = "#8fbcbb"
+    icon_background_6                   = "#a3be8c"
+    icon_background_7                   = "#a3be8c"
+    icon_background_8                   = "#d08770"
+    icon_background_9                   = "#bf616a"
+    icon_background_10                  = "#b48ead"
+    icon_background_11                  = "#9B98B7"
+    icon_background_12                  = "#81A1C1"
 else:
     icon_background_1                   = "#b48ead"
     icon_background_2                   = "#9B98B7"
@@ -180,6 +181,7 @@ else:
     icon_background_9                   = "#b48ead"
     icon_background_10                  = "#9B98B7"
     icon_background_11                  = "#81A1C1"
+    icon_background_12                  = "#81A1C1"
 
 icon_foreground_1                   = "#1e2227"
 icon_foreground_2                   = "#1e2227"
@@ -192,6 +194,7 @@ icon_foreground_8                   = "#1e2227"
 icon_foreground_9                   = "#1e2227"
 icon_foreground_10                  = "#1e2227"
 icon_foreground_11                  = "#1e2227"
+icon_foreground_12                  = "#1e2227"
 
 #!NORD
 # bar_background_color               = "#353b4a.9"

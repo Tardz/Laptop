@@ -332,76 +332,6 @@ def icon_decor(color=bar_background_color, border_width=[3, 0, 3, 0]):
         colour = color,
     )
 
-notification_shown = False
-
-class NotificationWidget(widget.TextBox, base.InLoopPollText):
-    def __init__(self):
-        base.InLoopPollText.__init__(
-            self,
-            update_interval = wifi_update_interval,
-            max_chars = 6,
-            decorations = right_decor()
-        )
-
-        self.shown = False
-        self.notification_message = None
-        self.seen_notification_message = None
-
-    def poll(self):
-        global notification_shown
-        self.notification_message = subprocess.check_output(['/home/jonalm/scripts/other/get_recent_urgent_notification.py'], text=True).strip()
-        if self.notification_message and self.notification_message != self.seen_notification_message:
-            notification_shown = True
-            return self.notification_message
-        else:
-            notification_shown = False
-            return ""
-
-    def mouse_enter(self, *args, **kwargs):
-        Qtile.cmd_spawn("/home/jonalm/scripts/other/get_notifications.py")
-
-    def mouse_leave(self, *args, **kwargs):
-        self.seen_notification_message = self.notification_message
-        if self.notification_message:
-            self.notification_message = None
-        
-        Qtile.cmd_spawn("/home/jonalm/scripts/other/get_notifications.py")
-        self.poll()
-
-class NotificationIcon(widget.TextBox):
-    def __init__(self):
-        widget.TextBox.__init__(
-            self,
-            text = f"<span font='Font Awesome 6 free solid {icon_size}' foreground='{icon_foreground_6}' size='medium'></span>",
-            decorations = left_decor(icon_background_6),
-        )
-
-    def mouse_enter(self, *args, **kwargs):
-        if not notification_shown:
-            Qtile.cmd_spawn("/home/jonalm/scripts/other/get_notifications.py")
-
-    def mouse_leave(self, *args, **kwargs):
-        if not notification_shown:
-            Qtile.cmd_spawn("/home/jonalm/scripts/other/get_notifications.py")
-
-class MouseOverClock(widget.Clock):
-    def __init__(self, **config):
-        widget.Clock.__init__(
-            self,
-            long_format = "%A %d %B %Y %H:%M",
-            decorations = right_decor(),
-            **config
-        )
-        self.short_format = self.format
-
-    def mouse_enter(self, *args, **kwargs):
-        self.format = self.long_format
-        self.bar.draw()
-
-    def mouse_leave(self, *args, **kwargs):
-        self.format = self.short_format
-        self.bar.draw()
-
 def modify_window_name(text):
     parts = text.split('-')
 
@@ -420,9 +350,9 @@ class PowerButton(widget.TextBox):
     def __init__(self):
         widget.TextBox.__init__(
             self,
-            text = f"<span font='Font Awesome 6 free solid {icon_size}' foreground='{icon_foreground_11}' size='medium'></span>",
+            text = f"<span font='Font Awesome 6 free solid {icon_size}' foreground='{icon_foreground_12}' size='medium'></span>",
             mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("python3 /home/jonalm/scripts/qtile/bar_menus/system/system_menu.py")},
-            decorations = left_decor(icon_background_11),
+            decorations = left_decor(icon_background_12),
         )
 
 class LayoutIcon(widget.CurrentLayoutIcon):
@@ -431,16 +361,16 @@ class LayoutIcon(widget.CurrentLayoutIcon):
             self,
             custom_icon_paths = [os.path.expanduser("~/.config/qtile/icons")],
             scale             = layouticon_scale,
-            decorations       = left_decor(icon_background_10),
+            decorations       = left_decor(icon_background_11),
         )
 
 class TickTickMenu(widget.TextBox):
     def __init__(self):
         widget.TextBox.__init__(
             self,
-            text        = f"<span font='Font Awesome 6 free solid {icon_size}' foreground='{icon_foreground_9}' size='medium'></span>",
+            text        = f"<span font='Font Awesome 6 free solid {icon_size}' foreground='{icon_foreground_10}' size='medium'></span>",
             mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("python3 /home/jonalm/scripts/qtile/bar_menus/ticktick/launch.py")},
-            decorations = left_decor(icon_background_9),
+            decorations = left_decor(icon_background_10),
         )
 
 class BluetoothIcon(widget.TextBox):
@@ -632,12 +562,64 @@ class WattageWidget(widget.Battery):
             decorations = right_decor(),
         )
 
+notification_shown = False
+
+class NotificationWidget(widget.TextBox, base.InLoopPollText):
+    def __init__(self):
+        base.InLoopPollText.__init__(
+            self,
+            update_interval = wifi_update_interval,
+            max_chars = 6,
+            decorations = right_decor()
+        )
+
+        self.shown = False
+        self.notification_message = None
+        self.seen_notification_message = None
+
+    def poll(self):
+        global notification_shown
+        self.notification_message = subprocess.check_output(['/home/jonalm/scripts/other/get_recent_urgent_notification.py'], text=True).strip()
+        if self.notification_message and self.notification_message != self.seen_notification_message:
+            notification_shown = True
+            return self.notification_message
+        else:
+            notification_shown = False
+            return ""
+
+    def mouse_enter(self, *args, **kwargs):
+        Qtile.cmd_spawn("/home/jonalm/scripts/other/get_notifications.py")
+
+    def mouse_leave(self, *args, **kwargs):
+        self.seen_notification_message = self.notification_message
+        if self.notification_message:
+            self.notification_message = None
+        
+        Qtile.cmd_spawn("/home/jonalm/scripts/other/get_notifications.py")
+        self.poll()
+
+class NotificationIcon(widget.TextBox):
+    def __init__(self):
+        widget.TextBox.__init__(
+            self,
+            text = f"<span font='Font Awesome 6 free solid {icon_size}' foreground='{icon_foreground_8}' size='medium'></span>",
+            decorations = left_decor(icon_background_8),
+        )
+
+    def mouse_enter(self, *args, **kwargs):
+        if not notification_shown:
+            Qtile.cmd_spawn("/home/jonalm/scripts/other/get_notifications.py")
+
+    def mouse_leave(self, *args, **kwargs):
+        if not notification_shown:
+            Qtile.cmd_spawn("/home/jonalm/scripts/other/get_notifications.py")
+
 class BacklightIcon(widget.TextBox):
     def __init__(self):
         widget.TextBox.__init__(
             self,
-            text        = f"<span font='Font Awesome 6 free solid {icon_size}' foreground='{icon_foreground_8}'size='medium'></span>",
-            decorations = left_decor(icon_background_8),
+            text        = f"<span font='Font Awesome 6 free solid {icon_size}' foreground='{icon_foreground_9}'size='medium'></span>",
+            decorations = left_decor(icon_background_9),
         )
 
 class BacklightWidget(widget.Backlight):
@@ -651,6 +633,24 @@ class BacklightWidget(widget.Backlight):
             update_interval = backlight_update_interval,
             decorations = right_decor(),
         )
+
+class MouseOverClock(widget.Clock):
+    def __init__(self, **config):
+        widget.Clock.__init__(
+            self,
+            long_format = "%A %d %B %Y %H:%M",
+            decorations = right_decor(),
+            **config
+        )
+        self.short_format = self.format
+
+    def mouse_enter(self, *args, **kwargs):
+        self.format = self.long_format
+        self.bar.draw()
+
+    def mouse_leave(self, *args, **kwargs):
+        self.format = self.short_format
+        self.bar.draw()
 
 class NothingWidget(widget.TextBox):
     def __init__(self):
