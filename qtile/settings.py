@@ -19,7 +19,7 @@ mod            = "mod4"
 myBrowser      = "brave"
 myTerm         = "alacritty"
 alttab_spawned = False
-
+home           = os.path.expanduser("~")
 check_dict = {
     #[0] - app, [1] - command, [2] - screen
     "c": ["firefox", None, 0],
@@ -111,7 +111,7 @@ if os.path.isfile(file_path):
     with open(file_path, "r") as file:
         qtile_colors = json.load(file)
 
-laptop = qtile_settings.get("laptop", True)
+laptop = qtile_settings.get("laptop", False)
 
 if laptop:
     bar_scaling                     = 1
@@ -173,14 +173,14 @@ else:
     icon_background_1                   = "#b48ead"
     icon_background_2                   = "#9B98B7"
     icon_background_3                   = "#81A1C1"
-    icon_background_4                   = "#ebcb8b"
-    icon_background_5                   = "#d08770"
-    icon_background_6                   = "#bf616a"
-    icon_background_7                   = "#d08770"
-    icon_background_8                   = "#bf616a"
-    icon_background_9                   = "#b48ead"
-    icon_background_10                  = "#9B98B7"
-    icon_background_11                  = "#81A1C1"
+    icon_background_4                   = "#8fbcbb"
+    icon_background_5                   = "#8fbcbb"
+    icon_background_6                   = "#a3be8c"
+    icon_background_7                   = "#a3be8c"
+    icon_background_8                   = "#d08770"
+    icon_background_9                   = "#bf616a"
+    icon_background_10                  = "#b48ead"
+    icon_background_11                  = "#9B98B7"
     icon_background_12                  = "#81A1C1"
 
 icon_foreground_1                   = "#1e2227"
