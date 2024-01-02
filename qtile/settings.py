@@ -112,7 +112,7 @@ if os.path.isfile(file_path):
     with open(file_path, "r") as file:
         qtile_colors = json.load(file)
 
-laptop = qtile_settings.get("laptop", True)
+laptop = qtile_settings.get("laptop", False)
 
 if laptop:
     bar_scaling                     = 1
