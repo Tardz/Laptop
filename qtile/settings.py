@@ -1,5 +1,18 @@
+"""
+Author: Jonathan Almstedt [Tardz]
+Updated: 2023-12-29
+
+Description: Reads values from json files contained in the settings app
+specifically made for qtile, the app and the json files can be found in 
+"$HOME/scripts/qtile/settings_menu". This settings file will use default 
+values if no json file can be found. To be able to change the way qtile 
+works and looks clone the scripts directory on https://github.com/Tardz/Laptop.git
+and use the settings menu.
+"""
+
 import json
 import os
+
 ### KEYBINDING VARIABLES ###
 mod1           = "Alt"
 mod            = "mod4"
@@ -12,7 +25,7 @@ check_dict = {
     "c": ["firefox", None, 0],
     "d": ["discord", None, 0],
     "v": [None, None, 1],
-    "n": ["ranger", "alacritty --title Ranger -e", 0],
+    "n": ["pcmanfm", None, 0],
     9  : []
 }
 

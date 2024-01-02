@@ -192,6 +192,7 @@ keys = [
         Key([mod], "z", lazy.window.toggle_minimize(), lazy.group.next_window(), desc="Minimize window"),
 
         #--[APPS]--#
+        Key([mod, "shift"], "s", lazy.spawn("flameshot screen"), desc="screenshot screen"),
 
         #--[MENUS]--#
         Key([mod], "comma", lazy.spawn("python3 /home/jonalm/scripts/qtile/bar_menus/volume/volume_menu.py"), desc='Volume'),
@@ -929,7 +930,6 @@ floating_layout = Floating(
     float_rules   = [
         *Floating.default_float_rules,
         Match(wm_class = "nitrogen"),
-        Match(wm_class = "Navigator"),
         Match(wm_class = "settings_menu.py"),
         Match(wm_class = "electron"),
         Match(wm_class = "PatternRecognition"),

@@ -1,0 +1,108 @@
+### COLOR ###
+env:
+  TERM: xterm-256color
+
+### WINDOW SETTINGS ###
+window:
+  padding:
+    x: 16
+    y: 16
+
+  dynamic_padding: false
+  opacity: 0.95
+
+  title: Alacritty
+
+  class:
+    instance: Alacritty
+    general: Alacritty
+
+### SCROLLING ###
+scrolling:
+  history: 5000
+  multiplier: 3
+
+### FONTS ###
+font:
+  normal:
+    family: Source Code Pro
+    style: Regular
+
+  bold:
+    family: Source Code Pro
+    style: Bold
+
+  italic:
+    family: Source Code Pro
+    style: Italic
+
+  bold_italic:
+    family: Source Code Pro
+    style: Bold Italic
+
+  size: 10
+
+  offset:
+    x: 0
+    y: 1
+
+  #use_thin_strokes: true
+draw_bold_text_with_bright_colors: true
+
+#######################################
+##      START OF COLOR SCHEMES       ##
+#######################################
+### Nord ###
+Nord: &Nord
+  # Default colors
+  primary:
+    background: '#2E3440'
+    foreground: '#D8DEE9'
+
+  # Normal colors
+  normal:
+    black:   '#3B4252'
+    red:     '#BF616A'
+    green:   '#A3BE8C'
+    yellow:  '#EBCB8B'
+    blue:    '#81A1C1'
+    magenta: '#B48EAD'
+    cyan:    '#88C0D0'
+    white:   '#E5E9F0'
+
+  # Bright colors
+  bright:
+    black:   '#4C566A'
+    red:     '#BF616A'
+    green:   '#A3BE8C'
+    yellow:  '#EBCB8B'
+    blue:    '#81A1C1'
+    magenta: '#B48EAD'
+    cyan:    '#8FBCBB'
+    white:   '#ECEFF4'
+
+######################################################################
+## SET THEME: Choose ONE color scheme from those in the above list. ##
+######################################################################
+colors: *Nord
+
+#######################################
+##       END OF COLOR SCHEMES        ##
+#######################################
+# Key bindings
+key_bindings:
+  - { key: Insert,    mods: Shift,         action: PasteSelection              }
+  - { key: Key0,      mods: Control,       action: ResetFontSize               }
+  - { key: Equals,    mods: Control,       action: IncreaseFontSize            }
+  - { key: Plus,      mods: Control,       action: IncreaseFontSize            }
+  - { key: Minus,     mods: Control,       action: DecreaseFontSize            }
+  - { key: F11,       mods: None,          action: ToggleFullscreen            }
+  - { key: Paste,     mods: None,          action: Paste                       }
+  - { key: Copy,      mods: None,          action: Copy                        }
+  - { key: L,         mods: Control,       action: ClearLogNotice              }
+  - { key: L,         mods: Control,       chars: "\x0c"                       }
+  - { key: Home,      mods: Shift,         action: ScrollToTop,    mode: ~Alt  }
+  - { key: End,       mods: Shift,         action: ScrollToBottom, mode: ~Alt  }
+  - { key: N,         mods: Control,       action: SpawnNewInstance            }
+
+

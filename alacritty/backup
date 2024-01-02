@@ -16,11 +16,7 @@ window:
     x: 16
     y: 16
 
-  #SPREAD ADDITIONAL PADDING
   dynamic_padding: false
-
-  #BACKGROUND OPACITY
-  #opacity: 0.9
   opacity: 0.95
 
   #WINDOW DECORATIONS
@@ -309,8 +305,8 @@ schemes:
   Nord: &Nord
     # Default colors
     primary:
-      background: '#1e2227'
-        #background: '#2E3440'
+      # background: '#1e2227'
+      background: '#2E3440'
       foreground: '#D8DEE9'
 
     # Normal colors
@@ -585,7 +581,7 @@ schemes:
 # *GruvboxMaterial
 # *RemedyDark
 
-colors: *Nord
+colors: *RemedyDark
 
 #######################################
 ##       END OF COLOR SCHEMES        ##
