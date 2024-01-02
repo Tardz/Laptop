@@ -26,3 +26,4 @@ if [ $? -eq 0 ]; then
   else
     notify-send -a $current_time -u critical -t 3000 "Files upload" "<span foreground='#bf616a' size='medium'>Faild</span>"
 fi
+awdawd

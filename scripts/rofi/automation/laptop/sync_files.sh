@@ -19,8 +19,6 @@ sudo rsync -av --delete scripts $HOME/scripts/
 sudo rsync -av --delete qtile/settings.py $HOME/.config/qtile/
 sudo rsync -av --delete qtile/config.py $HOME/.config/qtile/
 
-akuwhebdfn
-
 current_time="Time:$(date +'%T')"
 
 if [ $? -eq 0 ]; then
