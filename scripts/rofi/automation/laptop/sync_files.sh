@@ -12,17 +12,20 @@ fi
 
 git_path="$HOME/laptopgit/Laptop"
 cd "$git_path"
-git pull
+if ! git pull; then
+    notify-send -a $current_time -u low -t 3000 "Files sync from laptop" "<span foreground='#d08770' size='medium'>Local and remote already synced</span>"
+    exit 1
+fi
 
-sudo rsync -av --delete "$git_path" $HOME/laptopgit/LaptopBackup/
-sudo rsync -av --delete scripts $HOME/scripts/
-sudo rsync -av --delete qtile/settings.py $HOME/.config/qtile/
-sudo rsync -av --delete qtile/config.py $HOME/.config/qtile/
+sudo rsync -av --delete "$git_path/" "$HOME/laptopgit/LaptopBackup/"
+sudo rsync -av --delete "$git_path/scripts/" "$HOME/scripts/"
+sudo rsync -av --delete "$git_path/qtile/settings.py" "$HOME/.config/qtile/"
+sudo rsync -av --delete "$git_path/qtile/config.py" "$HOME/.config/qtile/"
 
 current_time="Time:$(date +'%T')"
 
 if [ $? -eq 0 ]; then
-    notify-send -a $current_time -u low -t 3000 "Files upload" "<span foreground='#a3be8c' size='medium'>Successful</span>"
+    notify-send -a $current_time -u low -t 3000 "Files sync from laptop" "<span foreground='#a3be8c' size='medium'>Successful</span>"
   else
-    notify-send -a $current_time -u critical -t 3000 "Files upload" "<span foreground='#bf616a' size='medium'>Faild</span>"
+    notify-send -a $current_time -u critical -t 3000 "Files sync from laptop" "<span foreground='#bf616a' size='medium'>Faild</span>"
 fi
