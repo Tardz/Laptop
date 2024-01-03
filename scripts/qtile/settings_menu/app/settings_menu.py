@@ -41,17 +41,17 @@ class SettingsMenu(Gtk.Window):
         self.connect("key-press-event", self.event_handler.on_button_press)
 
     def load_qtile_data(self):
-        self.qtile_data_file_path = os.path.expanduser('~/scripts/qtile/settings_menu/data/qtile_data.json')
+        self.qtile_data_file_path = os.path.expanduser('~/settings_data/qtile_data.json')
         self.qtile_data = self.config_manager.load_qtile_data(self.qtile_data_file_path)
         self.qtile_data_copy = copy.deepcopy(self.qtile_data)
 
     def load_qtile_colors(self):
-        self.qtile_colors_file_path = os.path.expanduser('~/scripts/qtile/settings_menu/data/qtile_colors.json')
+        self.qtile_colors_file_path = os.path.expanduser('~/settings_data/qtile_colors.json')
         self.qtile_colors = self.config_manager.load_qtile_colors(self.qtile_colors_file_path)
         self.qtile_colors_copy = copy.deepcopy(self.qtile_colors)
 
     def load_other_data(self):
-        self.other_data_file_path = os.path.expanduser('~/scripts/qtile/settings_menu/data/other_data.json')
+        self.other_data_file_path = os.path.expanduser('~/settings_data/other_data.json')
         self.other_data = self.config_manager.load_other_data(self.other_data_file_path)
         self.other_data_copy = copy.deepcopy(self.other_data)
 

@@ -54,6 +54,9 @@ class EventHandler:
             self.app.content.main_content_scrolled_window.add(self.app.content.active_content_box)
             self.app.content.active_content_box.show_all()
 
+    def on_qtile_version_clicked(self):
+        pass
+
     def on_qtile_switch_state_changed(self, switch, gparam, desc, data_key):
         self.app.required_restart = True
         self.app.qtile_data[data_key] = switch.get_active()

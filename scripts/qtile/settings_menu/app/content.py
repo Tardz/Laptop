@@ -70,13 +70,63 @@ class Content:
         self.qtile_content_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
         self.app.list_elements[3]["box"] = self.qtile_content_box
 
+        self.create_qtile_version()
         self.create_qtile_bar_options()
         self.create_qtile_mouse_settings()
         self.create_qtile_window_settings()
         self.create_qtile_general_settings()
 
         self.qtile_content_box.set_size_request(20, -1)
-        
+    
+    def create_qtile_version(self):
+        box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=0)
+
+        title_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=0)
+        title_box.get_style_context().add_class("sub-content-title-box")
+        title = Gtk.Label()
+        title.get_style_context().add_class("sub-content-title")
+        title.set_text("Qtile version options")
+        title_box.pack_start(title, False, False, 0)
+
+        qtile_version_title = Gtk.Label()
+        qtile_version_title.get_style_context().add_class("focus-title")
+        qtile_version_title.set_halign(Gtk.Align.START)
+        qtile_version_title.set_text("Version")
+
+        desc_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=10)
+        desc_box.get_style_context().add_class("focus-box")
+
+        box_1 = Gtk.EventBox()
+        desc_1 = Gtk.Label()
+        desc_1.get_style_context().add_class("focus")
+        desc_1.set_halign(Gtk.Align.START)
+        desc_1.set_text("Desktop")
+        box_1.add(desc_1)
+
+        box_2 = Gtk.EventBox()
+        desc_2 = Gtk.Label()
+        desc_2.get_style_context().add_class("focus")
+        desc_2.set_halign(Gtk.Align.START)
+        desc_2.set_text("Laptop")
+        box_2.add(desc_2)
+
+        if self.app.qtile_data["laptop_version"] == "desktop":
+            desc_1.set_name("focus-active")
+            self.active_qtile_version_desc = desc_1
+            self.original_qtile_version_desc = desc_1
+        elif self.app.qtile_data["laptop_version"] == "laptop":
+            desc_2.set_name("focus-active")
+            self.active_qtile_version_desc = desc_2
+            self.original_qtile_version_desc = desc_2
+
+        box_1.connect("button-press-event", self.app.event_handler.on_qtile_version_clicked, "desktop")
+        box_2.connect("button-press-event", self.app.event_handler.on_qtile_version_clicked, "laptop")
+
+        self.qtile_content_box.pack_start(title_box, False, False, 0)
+        box.pack_start(box_1, False, False, 0)
+        box.pack_start(box_2, False, False, 0)
+        self.qtile_content_box.pack_start(box, False, False, 0)
+
     def create_qtile_bar_options(self):
         box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=0)
 
@@ -87,7 +137,6 @@ class Content:
         title.set_text("Bar Options")
         title_box.pack_start(title, False, False, 0)
 
-        
         switch_box_1 = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=0)
 
         switch_list = [
@@ -97,7 +146,6 @@ class Content:
 
         for i, switch in enumerate(switch_list):
             new_switch = self.create_new_switch(switch[0], switch[1], switch[2])
-            # if i%2 == 0:
             box.pack_start(new_switch, False, False, 0)
         
         self.qtile_content_box.pack_start(title_box, False, False, 0)
@@ -189,7 +237,6 @@ class Content:
         focus_on_window_activation_desc_3.set_halign(Gtk.Align.START)
         focus_on_window_activation_desc_3.set_text("Never")
         box_3.add(focus_on_window_activation_desc_3)
-
 
         if self.app.qtile_data["focus_on_window_activation"] == "smart":
             focus_on_window_activation_desc_1.set_name("focus-active")

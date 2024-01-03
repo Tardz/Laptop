@@ -27,6 +27,8 @@ class ConfigManager:
                 qtile_data = json.load(file)
         else:
             qtile_data = {
+                "laptop_version": False,
+
                 "top_bar_status": True, 
                 "bottom_bar_status": True,
 
