@@ -3,7 +3,7 @@ gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk, Gdk
 
 from config_manager import ConfigManager
-from event_handler import EventHandler
+from sidebar_events import EventHandler
 from sidebar import Sidebar
 from content import Content
 import copy
@@ -66,6 +66,7 @@ class SettingsMenu(Gtk.Window):
         self.css()
         self.side_bar = Sidebar(self)
         self.content = Content(self)
+        print(self.list_elements)
 
         self.main_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=0)
         self.main_box.pack_start(self.side_bar.side_bar_box, False, True, 1)
@@ -73,7 +74,7 @@ class SettingsMenu(Gtk.Window):
         self.add(self.main_box)
     
         self.show_all()
-        self.content.qtile_content_box.hide()
+        self.content.qtile.qtile_content_box.hide()
         self.event_handler.change_global_options_visability()
         self.side_bar.search_entry.grab_focus()
 

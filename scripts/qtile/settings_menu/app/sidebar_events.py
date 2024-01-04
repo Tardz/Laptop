@@ -93,7 +93,7 @@ class EventHandler:
         icon.set_name(icon_css)
 
     def save_config(self, widget, event):
-        self.app.content.original_focus_desc = self.app.content.active_focus_desc
+        self.app.content.original_focus_desc = self.app.content.qtile.active_focus_desc
         self.app.config_manager.write_config_to_file(self.app.qtile_data_file_path, self.app.qtile_data)
         self.app.load_qtile_data()
         if self.app.required_restart:

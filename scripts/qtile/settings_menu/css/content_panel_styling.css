@@ -1,0 +1,104 @@
+/* GENERAL CONTENT */
+.switch-box {
+    margin-top: 5px;
+    margin-bottom: 15px;
+    margin-left: 60px;
+}
+.switch {
+    border: 3px solid rgba(54, 63, 77, 0.9);
+    /* border: 3px solid rgba(113, 124, 153, 0.9); */
+    padding: 10px;
+    margin: 3px;
+    border-radius: 8px;
+    background: rgba(104, 116, 146, 0.9);
+}
+.switch:checked {
+    background-color: #81a1c1;
+}
+
+.sub-content-title-box {
+    margin-top: 5px;
+    margin-bottom: 15px;
+    margin-left: 15px;
+}
+.sub-content-title {
+    border: 2px solid rgba(54, 63, 77, 0.9);
+    padding: 10px;
+    border-radius: 8px;
+    background: rgba(104, 116, 146, 0.9);
+    font-family: FiraCode Nerd Font;
+    font-weight: bolder;
+    font-size: 20px;
+}
+.sub-content-desc-box {
+    margin-left: 15px;
+}
+.sub-content-desc-title {
+    font-family: FiraCode Nerd Font;
+    font-weight: bolder;
+    font-size: 19px;
+}
+.sub-content-desc {
+    color: #81a1c1;
+    font-family: FiraCode Nerd Font;
+    font-weight: bold;
+    font-size: 17px;
+}
+#sub-content-desc-active {
+    color: #81a1c1;
+}
+#sub-content-desc-inactive {
+    color: #bf616a;
+}
+
+/* SPECIFIC CONTENT */
+/* ABOUT */
+.about-content-box {
+    border: 3px solid rgba(113, 124, 153, 0.9);
+    margin-bottom: 15px;
+    margin-left: 15px;
+    margin-right: 15px;
+    border-radius: 8px;
+    background: rgba(104, 116, 146, 0.9);
+}
+
+/* QTILE */
+.focus-title {
+    border: 2px solid rgba(54, 63, 77, 0.9);
+    margin-top: 5px;
+    margin-bottom: 5px;
+    margin-left: 60px;
+    padding: 10px;
+    border-radius: 8px;
+    background: rgba(104, 116, 146, 0.9);
+    font-family: FiraCode Nerd Font;
+    font-weight: bolder;
+    font-size: 18px;
+}
+.focus-box {
+    margin-bottom: 15px;
+    margin-left: 60px;
+    border-radius: 8px;
+}
+.focus {
+    border: 2px solid rgba(54, 63, 77, 0.9);
+    padding: 10px;
+    border-radius: 8px;
+    background: rgba(104, 116, 146, 0.9);
+    font-family: FiraCode Nerd Font;
+    font-weight: bold;
+    font-size: 17px;
+}
+#focus-active {
+    color: black;
+    background: rgba(163, 190, 160, 0.9);
+}
+#focus-inactive {}
+
+.options-window {
+    border: 2px solid rgba(54, 63, 77, 1);
+    margin-left: 40px;
+    border-radius: 8px;
+    background: rgba(104, 116, 146, 0.9);
+    font-size: 18px;
+}

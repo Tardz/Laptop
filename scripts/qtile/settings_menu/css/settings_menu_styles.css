@@ -268,17 +268,14 @@
     border-radius: 8px;
 }
 #quit-icon-box-active {
-    border: 3px solid rgba(54, 63, 77, 1);
     border-radius: 8px;
     background: rgba(191, 97, 106, 0.9);
 }
 #revert-icon-box-active {
-    border: 2px solid rgba(54, 63, 77, 1);
     border-radius: 8px;
     background: rgba(208, 135, 112, 0.9);
 }
 #save-icon-box-active {
-    border: 2px solid rgba(54, 63, 77, 1);
     border-radius: 8px;
     background: rgba(163, 190, 160, 0.9);
 }
@@ -523,3 +520,11 @@
     background: rgba(163, 190, 160, 0.9);
 }
 #focus-inactive {}
+
+.options-window {
+    border: 2px solid rgba(54, 63, 77, 1);
+    margin-left: 40px;
+    border-radius: 8px;
+    background: rgba(104, 116, 146, 0.9);
+    font-size: 18px;
+}
