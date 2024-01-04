@@ -3,7 +3,7 @@
 source /home/jonalm/scripts/rofi/config/config_options.sh
 
 while [ -z "$engine" ]; do
-    choice=$(printf '%s\n' "${display_options[@]}" | rofi -config ~/.config/rofi/files/config.rasi \-theme "$HOME/.config/rofi/files/launchers/type-1"/'style-3-config-remove'.rasi -dmenu -i -l 5 -p '') || exit
+    choice=$(printf '%s\n' "${display_options[@]}" | rofi -config ~/.config/rofi/files/config.rasi \-theme "$HOME/.config/rofi/files/launchers/config"/'config-remove'.rasi -dmenu -i -l 5 -p '') || exit
     engine=$(echo "$options" | cut -d' ' -f1-1)
 done
 

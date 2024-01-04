@@ -4,7 +4,7 @@ source /home/jonalm/scripts/rofi/config/config_options.sh
 
 DMEDITOR="alacritty -e code -n"
 
-choice=$(printf '%s\n' "${display_options[@]}" | rofi -config ~/.config/rofi/files/config.rasi \-theme "$HOME/.config/rofi/files/launchers/type-1"/'style-3-config'.rasi -dmenu -i -l 5 -p '' )
+choice=$(printf '%s\n' "${display_options[@]}" | rofi -config ~/.config/rofi/files/config.rasi \-theme "$HOME/.config/rofi/files/launchers/config"/'config'.rasi -dmenu -i -l 5 -p '' )
 current_screen=$(/home/jonalm/scripts/other/get_current_screen.py)
 
 if [ "$choice" ]; then 

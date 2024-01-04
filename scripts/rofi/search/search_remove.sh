@@ -10,7 +10,7 @@ fi
 source /home/jonalm/googleDrive/search_options.sh
 
 while [ -z "$engine" ]; do
-    displayname=$(printf '%s\n' "${display_options[@]}" | rofi -config ~/.config/rofi/files/config.rasi \-theme "$HOME/.config/rofi/files/launchers/type-1"/'style-7-search-remove'.rasi -dmenu -i -l 6 -p '') || exit
+    displayname=$(printf '%s\n' "${display_options[@]}" | rofi -config ~/.config/rofi/files/config.rasi \-theme "$HOME/.config/rofi/files/launchers/search"/'search-remove'.rasi -dmenu -i -l 6 -p '') || exit
     engine=$(echo "$options" | cut -d' ' -f1-1)
 done
 

@@ -1,11 +1,11 @@
 #!/bin/bash
 
 while [ -z "$Name" ]; do
-    Name=$(rofi -config ~/.config/rofi/files/config.rasi -theme "$HOME/.config/rofi/files/launchers/type-1/style-7-config-add-name.rasi" -dmenu -i -l 2 -p '') || exit
+    Name=$(rofi -config ~/.config/rofi/files/config.rasi -theme "$HOME/.config/rofi/files/launchers/config/config-add-name.rasi" -dmenu -i -l 2 -p '') || exit
 done
 
 while [ -z "$Filepath" ]; do
-    Filepath=$(rofi -config ~/.config/rofi/files/config.rasi -theme "$HOME/.config/rofi/files/launchers/type-1/style-7-config-add-filepath.rasi" -dmenu -i -l 2 -p '') || exit
+    Filepath=$(rofi -config ~/.config/rofi/files/config.rasi -theme "$HOME/.config/rofi/files/launchers/config/config-add-filepath.rasi" -dmenu -i -l 2 -p '') || exit
 done
 
 option="$Name - $Filepath"

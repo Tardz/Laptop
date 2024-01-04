@@ -5,7 +5,7 @@ BROWSER="firefox"
 source /home/jonalm/googleDrive/search_options.sh
 
 while [ -z "$engine" ]; do
-    displayname=$(printf '%s\n' "${display_options[@]}" | rofi -config ~/.config/rofi/files/config.rasi \-theme "$HOME/.config/rofi/files/launchers/type-1"/'style-7-search'.rasi -dmenu -i -l 5 -p '') || exit
+    displayname=$(printf '%s\n' "${display_options[@]}" | rofi -config ~/.config/rofi/files/config.rasi \-theme "$HOME/.config/rofi/files/launchers/search"/'search'.rasi -dmenu -i -l 5 -p '') || exit
     engine=$(echo "$options" | cut -d' ' -f1-1)
 done
 
@@ -24,7 +24,7 @@ for option in "${options[@]}"; do
         search=$(echo "$option" | cut -d' ' -f2)
         if [[ "$search" == "Search" ]]; then
             while [ -z "$query" ]; do
-                query=$(rofi -config ~/.config/rofi/files/config.rasi \-theme "$HOME/.config/rofi/files/launchers/type-1"/'style-7-search'.rasi -dmenu -i -l 2 -p '') || exit
+                query=$(rofi -config ~/.config/rofi/files/config.rasi \-theme "$HOME/.config/rofi/files/launchers/search"/'search'.rasi -dmenu -i -l 2 -p '') || exit
             done
             $BROWSER "$url""$query"
             notify-send -u low -t 2400 '-h' "int:transient:1" "Search finished" "Website: <span foreground='#81a1c1' size='medium'>$displayname</span>"

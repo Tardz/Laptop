@@ -213,8 +213,7 @@ keys = [
         Key([mod], "plus", lazy.spawn("/home/jonalm/scripts/term/show_keys.sh"), desc='Keybindings'),
 
         #--[ROFI]--#
-        Key([mod], "space", lazy.spawn("/home/jonalm/.config/rofi/files/launchers/type-1/launcher.sh"), desc='Rofi drun'),
-        Key([mod], "Escape", lazy.spawn("/home/jonalm/.config/rofi/files/powermenu/type-2/powermenu.sh"), desc='Rofi powermenu'),
+        Key([mod], "space", lazy.spawn("/home/jonalm/.config/rofi/files/launchers/apps/launcher.sh"), desc='Rofi drun'),
         Key([mod], "w", lazy.spawn("/home/jonalm/scripts/rofi/config/config_files.sh"), desc='Rofi config files'),
         Key([mod], "l", lazy.spawn("/home/jonalm/scripts/rofi/search/search_web.sh"), desc='Rofi web search'),
         Key([mod], "k", lazy.spawn(home + "/scripts/rofi/automation/laptop_version/main/automation.sh") if laptop else lazy.spawn(home + "/scripts/rofi/automation/desktop_version/main/automation.sh"), desc='Rofi automation scripts'),

@@ -1,10 +1,10 @@
 [
   {
-    "DEVICE": "Arch",
-    "MAC-ADDR": "6C:6A:77:E2:B3:27"
-  },
-  {
     "DEVICE": "Argon Octave BOX1",
     "MAC-ADDR": "58:B3:FC:DB:3A:8E"
+  },
+  {
+    "DEVICE": "Arch",
+    "MAC-ADDR": "6C:6A:77:E2:B3:27"
   }
 ]

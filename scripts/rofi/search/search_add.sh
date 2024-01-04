@@ -8,11 +8,11 @@ if [ $internet_status -eq 1 ]; then
 fi
 
 while [ -z "$WebName" ]; do
-    WebName=$(rofi -config ~/.config/rofi/files/config.rasi -theme "$HOME/.config/rofi/files/launchers/type-1/style-7-search-add-name.rasi" -dmenu -i -l 2 -p '') || exit
+    WebName=$(rofi -config ~/.config/rofi/files/config.rasi -theme "$HOME/.config/rofi/files/launchers/search/search-add-name.rasi" -dmenu -i -l 2 -p '') || exit
 done
 
 while [ -z "$Url" ]; do
-    Url=$(rofi -config ~/.config/rofi/files/config.rasi -theme "$HOME/.config/rofi/files/launchers/type-1/style-7-search-add-url.rasi" -dmenu -i -l 2 -p '') || exit
+    Url=$(rofi -config ~/.config/rofi/files/config.rasi -theme "$HOME/.config/rofi/files/launchers/search/search-add-url.rasi" -dmenu -i -l 2 -p '') || exit
 done
 
 option="$WebName - $Url"

@@ -1,3 +1,13 @@
 {
-    "git.ignoreLimitWarning": true
+    "workbench.colorCustomizations": {
+        "minimap.background": "#00000000",
+        "scrollbar.shadow": "#00000000"
+    },
+    "window.commandCenter": true,
+    "workbench.editor.pinnedTabsOnSeparateRow": true,
+    "workbench.editor.tabActionLocation": "right",
+    "workbench.editor.tabActionUnpinVisibility": true,
+    "workbench.editor.untitled.labelFormat": "content",
+    "workbench.startupEditor": "welcomePage",
+    "window.density.editorTabHeight": "default"
 }
