@@ -10,7 +10,7 @@ class Qtile:
         self.qtile_content_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
         self.app.list_elements[3]["box"] = self.qtile_content_box
 
-        self.create_version()
+        # self.create_version()
         self.create_bar_options()
         self.create_mouse_settings()
         self.create_window_settings()
