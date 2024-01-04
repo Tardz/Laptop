@@ -731,7 +731,7 @@ class WindowCountWidget(widget.WindowCount):
     def __init__(self):
         widget.WindowCount.__init__(
             self,
-            padding = widget_default_padding + 8, 
+            padding = widget_default_padding + 16, 
             background = transparent, 
             show_zero = True, 
             decorations = [task_list_decor()]
