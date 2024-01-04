@@ -64,6 +64,7 @@ def spawn_alttab_once(qtile):
 @lazy.function
 def check(qtile, group_name=None, from_key_press=None):
     if from_key_press:
+        log.info("CHECKING!!!")
         qtile.cmd_spawn(["/home/jonalm/scripts/qtile/check_and_launch_app.py", from_key_press[0], from_key_press[1], from_key_press[2]])
     elif group_name and check_dict[group_name][0]:
         info = check_dict[group_name]
@@ -300,6 +301,20 @@ def left_decor(color, round=True, padding_x=None, padding_y=left_decor_padding):
         )
     ]
 
+def left_decor_hover(color, round=True, padding_x=2, padding_y=left_decor_padding + 2):
+    radius = 6 if round else [4, 0, 0, 4]
+    if not laptop:
+        radius = 5
+    return [
+        RectDecoration(
+            colour = color,
+            radius = radius,
+            filled = True,
+            padding_x = padding_x,
+            padding_y = padding_y,
+        )
+    ]
+
 def right_decor(color=right_decor_background, round=True, padding_x=0, padding_y=left_decor_padding):
     radius = 6 if round else [0, 4, 4, 0]
     if not laptop:
@@ -314,7 +329,7 @@ def right_decor(color=right_decor_background, round=True, padding_x=0, padding_y
         )
     ]
 
-def task_list_decor(color=bar_background_color, radius=8 if laptop else 5, padding_x=0, padding_y=0):
+def task_list_decor(color=bar_background_color, radius=8 if laptop else 5, group=False, padding_x=0, padding_y=0):
     return RectDecoration(
         line_width = bottom_widget_width,
         line_colour = bar_border_color,
@@ -323,6 +338,7 @@ def task_list_decor(color=bar_background_color, radius=8 if laptop else 5, paddi
         filled = True,
         padding_y = padding_y,
         padding_x = padding_x,
+        group = group,
     )
 
 def icon_decor(color=bar_background_color, border_width=[3, 0, 3, 0]):
@@ -374,14 +390,26 @@ class TickTickMenu(widget.TextBox):
 
 class BluetoothIcon(widget.TextBox):
     def __init__(self):
+
+        self.normal_decorator = left_decor(icon_background_1)
+        self.hover_decorator = left_decor(bar_border_color)
         widget.TextBox.__init__(
             self,
             text            = f"<span font='Font Awesome 6 free solid {icon_size + 1}' foreground='{icon_foreground_1}' size='medium'></span>",
             foreground      = text_color,
             padding         = widget_default_padding + 2, 
             mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("python3 /home/jonalm/scripts/qtile/bar_menus/bluetooth/bluetooth_menu.py")},
-            decorations     = left_decor(icon_background_1),
+            decorations     = self.hover_decorator,
         )
+
+    def mouse_enter(self, *args, **kwargs):
+        self.decorations = self.hover_decorator
+        self.decorations.draw()
+
+    def mouse_leave(self, *args, **kwargs):
+        self.decorations = self.normal_decorator
+        self.decorations.draw()
+        # self.bar.draw()
 
 class BluetoothWidget(widget.TextBox, base.InLoopPollText):
     def __init__(self):
@@ -655,6 +683,46 @@ class MouseOverClock(widget.Clock):
         self.format = self.short_format
         self.bar.draw()
 
+@lazy.function
+def launch_app_from_bar(qtile, check_command):
+    log.info("made it!!!!!!")
+    group_name = check_command[1]
+    group = qtile.groups_map.get(group_name)
+    if group:
+        group.cmd_toscreen()
+        group.cmd_focus()
+
+    check(from_key_press=check_command)
+
+class appIcon(widget.TextBox):
+    def __init__(self, icon="", foreground=text_color, check_command=None):
+        widget.TextBox.__init__(
+            self,
+            text = f"<span font='Font Awesome 6 free solid' size='medium'>{icon}</span>",
+            background = transparent,
+            fontsize = icon_size + 10,
+            padding = widget_default_padding + 14,
+            foreground = foreground,
+            markup = True,
+            mouse_callbacks = {"Button1": launch_app_from_bar(check_command)} if check_command else None,
+            decorations = [task_list_decor(group=True)],
+        )
+        self.normal_foreground = self.foreground
+        self.hover_foreground = text_color
+
+        self.normal_fontsize = self.padding
+        self.hover_fontsize = widget_default_padding + 16
+
+    def mouse_enter(self, *args, **kwargs):
+        self.foreground = self.hover_foreground
+        self.padding = self.hover_fontsize
+        self.bar.draw()
+
+    def mouse_leave(self, *args, **kwargs):
+        self.foreground = self.normal_foreground
+        self.padding = self.normal_fontsize
+        self.bar.draw()
+
 class NothingWidget(widget.TextBox):
     def __init__(self):
         widget.TextBox.__init__(
@@ -816,6 +884,13 @@ single_bottom_bar = Bar([
     seperator(background=transparent),
     WindowCountWidget(),
 
+    # APPS #
+    seperator(background=transparent),
+    appIcon("", icon_background_3, ["firefox", "c", ""]),
+    appIcon("", icon_background_7, ["code", "v", ""]),
+    appIcon("", icon_background_8, ["pcmanfm", "n", ""]),
+    appIcon(" ", icon_background_9),
+
 ], bottom_bar_size, margin = bar_margin_bottom, background = bar_background_color, border_width = bar_width_bottom, border_color = bar_border_color, opacity=1)
 
 top_bar_1 = Bar([
@@ -890,6 +965,9 @@ top_bar_2 = Bar([
 ], top_bar_size, margin = bar_margin_top, background = bar_background_color, border_width = bar_width_top, border_color = bar_border_color, opacity=1)
 
 bottom_bar_1 = Bar([
+    # APPS #
+    appIcon(""),
+
     # WINDOWCOUNT #
     WindowCountWidget(),
 
@@ -914,6 +992,9 @@ bottom_bar_2 = Bar([
     # WINDOWCOUNT #
     seperator(background=transparent),
     WindowCountWidget(),
+
+    # APPS #
+    appIcon(""),
 
 ], bottom_bar_size, margin = bar_margin_bottom, background = bar_background_color, border_width = bar_width_bottom, border_color = bar_border_color, opacity=1)
 
