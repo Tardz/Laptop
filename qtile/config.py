@@ -390,6 +390,7 @@ class BluetoothWidget(widget.TextBox, base.InLoopPollText):
             update_interval = wifi_update_interval,
             font            = bold_font,
             padding         = widget_default_padding,
+            mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("python3 /home/jonalm/scripts/qtile/bar_menus/bluetooth/bluetooth_menu.py")},
             decorations     = right_decor()
         )
         
@@ -437,6 +438,7 @@ class VolumeWidget(widget.PulseVolume):
     def __init__(self):
         widget.PulseVolume.__init__(
             self,
+            mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("python3 /home/jonalm/scripts/qtile/bar_menus/volume/volume_menu.py")},
             decorations     = right_decor(),
         )
 
@@ -457,6 +459,7 @@ class WifiWidget(widget.TextBox, base.InLoopPollText):
             update_interval = wifi_update_interval,
             font            = bold_font,
             padding         = widget_default_padding,
+            mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("python3 /home/jonalm/scripts/qtile/bar_menus/wifi/wifi_menu.py")},
             decorations     = right_decor()
         )
 
@@ -498,6 +501,7 @@ class CpuTempWidget(widget.ThermalSensor):
             foreground_alert = "#bf616a",
             markup = True,
             update_interval = cpu_update_interval,
+            mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("python3 /home/jonalm/scripts/qtile/bar_menus/cpu/cpu_stats_menu.py")},
             decorations = right_decor(),
         )
 
@@ -517,7 +521,7 @@ class CpuLoadWidget(widget.CPU):
             format = "{load_percent}%",
             markup = True,
             update_interval = cpu_update_interval,
-            mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("alacritty -e sudo auto-cpufreq --stats")},
+            mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("python3 /home/jonalm/scripts/qtile/bar_menus/cpu/cpu_stats_menu.py")},
             decorations = right_decor(),
         )
 
@@ -537,7 +541,7 @@ class BatteryWidget(widget.Battery):
             format = "{percent:2.0%}",
             markup = True,
             update_interval = battery_update_interval,
-            mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("alacritty -e sudo powertop")},
+            mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("python3 /home/jonalm/scripts/qtile/bar_menus/power/power_management_menu.py")},
             decorations = right_decor(),
         )
 
@@ -557,7 +561,7 @@ class WattageWidget(widget.Battery):
             format = "{watt:.2f}",
             markup = True,
             update_interval = battery_update_interval,
-            mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("alacritty -e sudo powertop")},
+            mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("python3 /home/jonalm/scripts/qtile/bar_menus/power/power_management_menu.py")},
             decorations = right_decor(),
         )
 

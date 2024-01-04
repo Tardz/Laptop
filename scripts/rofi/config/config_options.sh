@@ -1,4 +1,5 @@
 declare -a options=(
+'Sddm config - /etc/sddm.conf.d/'
 'Udev rules - /etc/udev/rules.d/'
 'SDDM themes - /usr/share/sddm/themes/'
 "Dunstrc - $HOME/.config/dunst"

@@ -43,7 +43,7 @@ while true; do
                 icon=""
                 ;;
             *)
-                section_options=("${display_options[@]}")  # Default to root options
+                section_options=("${display_options[@]}")
                 ;;
         esac
 
