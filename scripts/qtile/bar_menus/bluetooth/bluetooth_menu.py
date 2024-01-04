@@ -264,7 +264,7 @@ class BluetoothMenu(Gtk.Dialog):
             self.set_size_request(self.window_width, 20)
 
         self.pid_file_path = pid_file_path
-        self.ignore_focus_lost = True
+        self.ignore_focus_lost = False
         self.previous_css_class = None
         self.active_widget = None
         self.previouse_widget_in_use = False
