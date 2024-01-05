@@ -398,17 +398,14 @@ class BluetoothIcon(widget.TextBox):
             foreground      = text_color,
             padding         = widget_default_padding + 2, 
             mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("python3 /home/jonalm/scripts/qtile/bar_menus/bluetooth/bluetooth_menu.py")},
-            decorations     = self.hover_decorator,
+            decorations     = self.normal_decorator,
         )
 
     def mouse_enter(self, *args, **kwargs):
-        self.decorations = self.hover_decorator
-        self.decorations.draw()
+        self.bar.draw()
 
     def mouse_leave(self, *args, **kwargs):
-        self.decorations = self.normal_decorator
-        self.decorations.draw()
-        # self.bar.draw()
+        self.bar.draw()
 
 class BluetoothWidget(widget.TextBox, base.InLoopPollText):
     def __init__(self):
@@ -420,7 +417,7 @@ class BluetoothWidget(widget.TextBox, base.InLoopPollText):
             mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("python3 /home/jonalm/scripts/qtile/bar_menus/bluetooth/bluetooth_menu.py")},
             decorations     = right_decor()
         )
-        
+
     def poll(self):
         try:
             bluetooth_state = subprocess.check_output("systemctl status bluetooth | grep Running", shell=True, stderr=subprocess.PIPE, text=True).strip()
@@ -450,6 +447,14 @@ class BluetoothWidget(widget.TextBox, base.InLoopPollText):
 
         except subprocess.CalledProcessError as e:
             return "Off"
+        
+    def mouse_enter(self, *args, **kwargs):
+        self.decorations = self.hover_decorator
+        self.bar.draw()
+
+    def mouse_leave(self, *args, **kwargs):
+        self.decorations = self.normal_decorator
+        self.bar.draw()
 
 class VolumeIcon(widget.TextBox):
     def __init__(self):
@@ -665,12 +670,11 @@ class BacklightWidget(widget.Backlight):
         )
 
 class MouseOverClock(widget.Clock):
-    def __init__(self, **config):
+    def __init__(self):
         widget.Clock.__init__(
             self,
             long_format = "%A %d %B %Y %H:%M",
             decorations = right_decor(),
-            **config
         )
         self.short_format = self.format
 
@@ -689,7 +693,8 @@ def launch_app_from_bar(qtile, check_command):
     if group:
         group.cmd_toscreen()
         group.cmd_focus()
-    qtile.cmd_spawn(["/home/jonalm/scripts/qtile/check_and_launch_app.py", check_command[0], check_command[1], check_command[2]])
+    Qtile.cmd_run(check_command[0])
+    # qtile.cmd_spawn(["/home/jonalm/scripts/qtile/check_and_launch_app.py", check_command[0], check_command[1], check_command[2]])
 
 class AppIcon(widget.TextBox):
     def __init__(self, icon="", foreground=text_color, check_command=None):
