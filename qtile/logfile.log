@@ -1,2 +1,4 @@
-Connected is Monitor eDP, screen count set to 1
-2024-01-05 15:17:53,200 [WARNING] Connected is Monitor eDP, screen count set to 1
+Connected is Monitor DisplayPort-0, screen count set to 1
+Connected is Monitor DisplayPort-2, screen count set to 2
+playPort-0, screen count set to 1
+2024-01-05 19:37:06,510 [WARNING] Connected is Monitor DisplayPort-2, screen count set to 2
