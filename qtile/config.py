@@ -64,8 +64,7 @@ def spawn_alttab_once(qtile):
 @lazy.function
 def check(qtile, group_name=None, from_key_press=None):
     if from_key_press:
-        log.info("CHECKING!!!")
-        qtile.cmd_spawn(["/home/jonalm/scripts/qtile/check_and_launch_app.py", from_key_press[0], from_key_press[1], from_key_press[2]])
+        qtile.cmd_spawn(["/home/jonalm/scripts/qtile/check_and_launch_app.py", from_key_press[0], from_key_press[1], from_key_press[2], "&"])
     elif group_name and check_dict[group_name][0]:
         info = check_dict[group_name]
         if info != []:
@@ -690,8 +689,7 @@ def launch_app_from_bar(qtile, check_command):
     if group:
         group.cmd_toscreen()
         group.cmd_focus()
-    check(from_key_press=check_command)
-
+    qtile.cmd_spawn(["/home/jonalm/scripts/qtile/check_and_launch_app.py", check_command[0], check_command[1], check_command[2]])
 
 class AppIcon(widget.TextBox):
     def __init__(self, icon="", foreground=text_color, check_command=None):
