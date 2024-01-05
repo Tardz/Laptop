@@ -1,1 +1,86 @@
-[]
+[
+  {
+    "SSID": "BOXER_E748",
+    "STRENGTH": "\u2582\u2584\u2586\u2582",
+    "CONNECTED": true,
+    "KNOWN": true
+  },
+  {
+    "SSID": "BOXER_E748",
+    "STRENGTH": "\u2582\u2584\u2586\u2582",
+    "CONNECTED": false,
+    "KNOWN": true
+  },
+  {
+    "SSID": "eduroam",
+    "STRENGTH": "\u2582\u2584\u2586\u2582",
+    "CONNECTED": false,
+    "KNOWN": false
+  },
+  {
+    "SSID": "TP-Link_A37D",
+    "STRENGTH": "\u2582\u2584\u2586\u2582",
+    "CONNECTED": false,
+    "KNOWN": false
+  },
+  {
+    "SSID": "LukasDoNotUse_5G",
+    "STRENGTH": "\u2582\u2584\u2586\u2582",
+    "CONNECTED": false,
+    "KNOWN": false
+  },
+  {
+    "SSID": "Blau",
+    "STRENGTH": "\u2582\u2584\u2582\u2582",
+    "CONNECTED": false,
+    "KNOWN": false
+  },
+  {
+    "SSID": "TP-LINK_28DB",
+    "STRENGTH": "\u2582\u2584\u2582\u2582",
+    "CONNECTED": false,
+    "KNOWN": false
+  },
+  {
+    "SSID": "TP-Link_A37D_5G",
+    "STRENGTH": "\u2582\u2584\u2582\u2582",
+    "CONNECTED": false,
+    "KNOWN": false
+  },
+  {
+    "SSID": "NETGEAR80",
+    "STRENGTH": "\u2582\u2584\u2582\u2582",
+    "CONNECTED": false,
+    "KNOWN": false
+  },
+  {
+    "SSID": "ASUS",
+    "STRENGTH": "\u2582\u2584\u2582\u2582",
+    "CONNECTED": false,
+    "KNOWN": false
+  },
+  {
+    "SSID": "mbp",
+    "STRENGTH": "\u2582\u2584\u2582\u2582",
+    "CONNECTED": false,
+    "KNOWN": false
+  },
+  {
+    "SSID": "kuku.n040",
+    "STRENGTH": "\u2582\u2584\u2582\u2582",
+    "CONNECTED": false,
+    "KNOWN": false
+  },
+  {
+    "SSID": "gretchensvibrationer",
+    "STRENGTH": "\u2582\u2584\u2582\u2582",
+    "CONNECTED": false,
+    "KNOWN": false
+  },
+  {
+    "SSID": "ASUS_68",
+    "STRENGTH": "\u2582\u2582\u2582\u2582",
+    "CONNECTED": false,
+    "KNOWN": false
+  }
+]
