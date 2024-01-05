@@ -36,6 +36,7 @@ sudo rsync -av --delete $HOME/.config/tmux "$git_path"
 sudo rsync -av --delete $HOME/.config/dunst "$git_path"
 sudo rsync -av --delete $HOME/.config/eww "$git_path"
 sudo rsync -av --delete $HOME/.config/redshift "$git_path"
+sudo rsync -av --delete $HOME/.config/fish "$git_path"
 sudo rsync -av --delete $HOME/.imwheelrc "$git_path"
 sudo rsync -av --delete $HOME/.inputrc "$git_path"
 
