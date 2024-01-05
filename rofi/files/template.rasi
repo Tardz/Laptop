@@ -1,7 +1,22 @@
+/**
+ *
+ * Author : Aditya Shakya (adi1090x)
+ * Github : @adi1090x
+ * 
+ * Rofi Theme File
+ * Rofi Version: 1.7.3
+ **/
+
 /*****----- Configuration -----*****/
 configuration {
 	modi:                       "drun,run";
     show-icons:                 false;
+    display-drun:               "";
+    display-run:                "";
+    display-filebrowser:        "";
+    display-window:             "";
+	drun-display-format:        "{name}";
+	window-format:              "{w} · {c} · {t}";
 }
 
 /*****----- Global Properties -----*****/
@@ -14,7 +29,7 @@ configuration {
     background-colour:           var(background);
     foreground-colour:           var(foreground);
     alternate-background:        var(background);
-    normal-background:           var(transparent);
+    normal-background:           var(background);
     normal-foreground:           var(foreground);
     urgent-background:           var(urgent);
     urgent-foreground:           var(background);
@@ -26,7 +41,7 @@ configuration {
     selected-urgent-foreground:  var(background);
     selected-active-background:  var(urgent);
     selected-active-foreground:  var(foreground);
-    alternate-normal-background: var(transparent);
+    alternate-normal-background: var(background);
     alternate-normal-foreground: var(foreground);
     alternate-urgent-background: var(urgent);
     alternate-urgent-foreground: var(background);
@@ -54,9 +69,16 @@ window {
     border-radius:               8px;
     border-color:                @border-colour;
     cursor:                      "default";
-
     /* Backgroud Colors */
     background-color:            @background-colour;
+    /* Backgroud Image */
+    //background-image:          url("/path/to/image.png", none);
+    /* Simple Linear Gradient */
+    //background-image:          linear-gradient(red, orange, pink, purple);
+    /* Directional Linear Gradient */
+    //background-image:          linear-gradient(to bottom, pink, yellow, magenta);
+    /* Angle Linear Gradient */
+    //background-image:          linear-gradient(45, cyan, purple, indigo);
 }
 
 /*****----- Main Box -----*****/
@@ -69,7 +91,7 @@ mainbox {
     border-radius:               0px 0px 0px 0px;
     border-color:                @border-colour;
     background-color:            transparent;
-    children:                    [ "inputbar", "message", "listview" ];
+    children:                    [ "inputbar", "message", "listview", "mode-switcher" ];
 }
 
 /*****----- Inputbar -----*****/
@@ -106,7 +128,7 @@ entry {
     text-color:                  inherit;
     padding:                     0px 10px;
     cursor:                      text;
-    placeholder:                 "Scripts ➔ Files...";
+    placeholder:                 "Scripts...";
     font:                        "JetBrainsMonoNL Nerd Font Bold 15";
     placeholder-color:           inherit;
 }
@@ -159,7 +181,7 @@ listview {
     cursor:                      "default";
 }
 scrollbar {
-    handle-width:                5px ;
+    handle-width:                1px ;
     handle-color:                @handle-colour;
     border-radius:               8px;
     background-color:            @alternate-background;
@@ -192,7 +214,7 @@ element normal.active {
 }
 element selected.normal {
     background-color:            var(normal-selected);
-    text-color:                  var(active-foreground);
+    text-color:                  var(normal-background);
 }
 element selected.urgent {
     background-color:            var(selected-urgent-background);

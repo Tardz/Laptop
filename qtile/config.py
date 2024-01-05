@@ -701,7 +701,8 @@ class AppIcon(widget.TextBox):
         if check_command:
             mouse_callback = {"Button1": launch_app_from_bar(check_command)} if check_command else {"Button1": lambda: Qtile.cmd_spawn(launch)}
         elif launch:
-            mouse_callback = {"Button1": lambda: Qtile.cmd_spawn("python3 /home/jonalm/scripts/qtile/settings_menu/app/settings_menu.py &")}
+            mouse_callback = {"Button1": lambda: Qtile.cmd_spawn(launch)}
+            # mouse_callback = {"Button1": lambda: Qtile.cmd_spawn("python3 /home/jonalm/scripts/qtile/settings_menu/app/settings_menu.py &")}
         widget.TextBox.__init__(
             self,
             text = f"<span font='Font Awesome 6 free solid' size='medium'>{icon}</span>",
@@ -897,7 +898,7 @@ single_bottom_bar = Bar([
     AppIcon("", icon_background_3, ["code", "v", ""]),
     AppIcon("", icon_background_7, ["pcmanfm", "n", ""]),
     AppIcon("", icon_background_8, launch="spotify"),
-    AppIcon(" ", icon_background_9, launch="~/scripts/qtile/settings_menu/app/settings_menu.py"),
+    AppIcon(" ", icon_background_9, launch="python3 ~/scripts/qtile/settings_menu/app/settings_menu.py"),
 
 ], bottom_bar_size, margin = bar_margin_bottom, background = bar_background_color, border_width = bar_width_bottom, border_color = bar_border_color, opacity=1)
 
@@ -1121,10 +1122,6 @@ configure_screens(startup=True)
 @hook.subscribe.screen_change
 def _(notify_event):
     configure_screens()
-
-@hook.subscribe.restart
-def run_every_restart():
-    log.info("top_bar_on", top_bar_on,"bottom_bar_on", bottom_bar_on)
         
 @hook.subscribe.suspend
 def lock_on_sleep():

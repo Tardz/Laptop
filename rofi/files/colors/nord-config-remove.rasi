@@ -2,8 +2,8 @@
     background:         #2E3440F4;
     background-alt:     #383E4AF4;
     foreground:         #D8DEE9FF;
-    selected:           #81A1C1FF;
-    selected-box:       #81A1C1FF;
+    selected:           #A3BE8CFF;
+    selected-box:       #BF616AFF;
     lighter-background: #434C5E;
     active:             #A3BE8CFF;
     urgent:             #BF616AFF;
