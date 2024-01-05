@@ -685,16 +685,15 @@ class MouseOverClock(widget.Clock):
 
 @lazy.function
 def launch_app_from_bar(qtile, check_command):
-    log.info("made it!!!!!!")
     group_name = check_command[1]
     group = qtile.groups_map.get(group_name)
     if group:
         group.cmd_toscreen()
         group.cmd_focus()
-
     check(from_key_press=check_command)
 
-class appIcon(widget.TextBox):
+
+class AppIcon(widget.TextBox):
     def __init__(self, icon="", foreground=text_color, check_command=None):
         widget.TextBox.__init__(
             self,
@@ -886,10 +885,10 @@ single_bottom_bar = Bar([
 
     # APPS #
     seperator(background=transparent),
-    appIcon("", icon_background_3, ["firefox", "c", ""]),
-    appIcon("", icon_background_7, ["code", "v", ""]),
-    appIcon("", icon_background_8, ["pcmanfm", "n", ""]),
-    appIcon(" ", icon_background_9),
+    AppIcon("", icon_background_3, ["firefox", "c", ""]),
+    AppIcon("", icon_background_7, ["code", "v", ""]),
+    AppIcon("", icon_background_8, ["pcmanfm", "n", ""]),
+    AppIcon(" ", icon_background_9),
 
 ], bottom_bar_size, margin = bar_margin_bottom, background = bar_background_color, border_width = bar_width_bottom, border_color = bar_border_color, opacity=1)
 
@@ -966,9 +965,13 @@ top_bar_2 = Bar([
 
 bottom_bar_1 = Bar([
     # APPS #
-    appIcon(""),
+    AppIcon("", icon_background_3, ["firefox", "c", ""]),
+    AppIcon("", icon_background_7, ["code", "v", ""]),
+    AppIcon("", icon_background_8, ["pcmanfm", "n", ""]),
+    AppIcon(" ", icon_background_9),
 
     # WINDOWCOUNT #
+    seperator(background=transparent),
     WindowCountWidget(),
 
     # TASKLIST #
@@ -994,7 +997,11 @@ bottom_bar_2 = Bar([
     WindowCountWidget(),
 
     # APPS #
-    appIcon(""),
+    seperator(background=transparent),
+    AppIcon("", icon_background_3, ["firefox", "c", ""]),
+    AppIcon("", icon_background_7, ["code", "v", ""]),
+    AppIcon("", icon_background_8, ["pcmanfm", "n", ""]),
+    AppIcon(" ", icon_background_9),
 
 ], bottom_bar_size, margin = bar_margin_bottom, background = bar_background_color, border_width = bar_width_bottom, border_color = bar_border_color, opacity=1)
 
