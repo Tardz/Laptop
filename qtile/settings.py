@@ -158,18 +158,31 @@ group_box_highlight_text_color      = colors[3]
 group_box_urgentborder_color        = colors[3]
 
 if laptop:
-    icon_background_1                   = "#b48ead"
-    icon_background_2                   = "#9B98B7"
-    icon_background_3                   = "#81A1C1"
-    icon_background_4                   = "#8fbcbb"
-    icon_background_5                   = "#8fbcbb"
-    icon_background_6                   = "#a3be8c"
-    icon_background_7                   = "#a3be8c"
-    icon_background_8                   = "#d08770"
-    icon_background_9                   = "#bf616a"
-    icon_background_10                  = "#b48ead"
-    icon_background_11                  = "#9B98B7"
-    icon_background_12                  = "#81A1C1"
+    # icon_background_1                   = "#b48ead"
+    # icon_background_2                   = "#9B98B7"
+    # icon_background_3                   = "#81A1C1"
+    # icon_background_4                   = "#8fbcbb"
+    # icon_background_5                   = "#8fbcbb"
+    # icon_background_6                   = "#a3be8c"
+    # icon_background_7                   = "#a3be8c"
+    # icon_background_8                   = "#d08770"
+    # icon_background_9                   = "#bf616a"
+    # icon_background_10                  = "#b48ead"
+    # icon_background_11                  = "#9B98B7"
+    # icon_background_12                  = "#81A1C1"
+
+    icon_background_1                   = transparent
+    icon_background_2                   = transparent
+    icon_background_3                   = transparent
+    icon_background_4                   = transparent
+    icon_background_5                   = transparent
+    icon_background_6                   = transparent
+    icon_background_7                   = transparent
+    icon_background_8                   = transparent
+    icon_background_9                   = transparent
+    icon_background_10                  = transparent
+    icon_background_11                  = transparent
+    icon_background_12                  = transparent
 else:
     icon_background_1                   = "#b48ead"
     icon_background_2                   = "#9B98B7"
@@ -184,18 +197,31 @@ else:
     icon_background_11                  = "#9B98B7"
     icon_background_12                  = "#81A1C1"
 
-icon_foreground_1                   = "#1e2227"
-icon_foreground_2                   = "#1e2227"
-icon_foreground_3                   = "#1e2227"
-icon_foreground_4                   = "#1e2227"
-icon_foreground_5                   = "#1e2227"
-icon_foreground_6                   = "#1e2227"
-icon_foreground_7                   = "#1e2227"
-icon_foreground_8                   = "#1e2227"
-icon_foreground_9                   = "#1e2227"
-icon_foreground_10                  = "#1e2227"
-icon_foreground_11                  = "#1e2227"
-icon_foreground_12                  = "#1e2227"
+# icon_foreground_1                   = "#1e2227"
+# icon_foreground_2                   = "#1e2227"
+# icon_foreground_3                   = "#1e2227"
+# icon_foreground_4                   = "#1e2227"
+# icon_foreground_5                   = "#1e2227"
+# icon_foreground_6                   = "#1e2227"
+# icon_foreground_7                   = "#1e2227"
+# icon_foreground_8                   = "#1e2227"
+# icon_foreground_9                   = "#1e2227"
+# icon_foreground_10                  = "#1e2227"
+# icon_foreground_11                  = "#1e2227"
+# icon_foreground_12                  = "#1e2227"
+    
+icon_foreground_1                   = "#b48ead"
+icon_foreground_2                   = "#9B98B7"
+icon_foreground_3                   = "#81A1C1"
+icon_foreground_4                   = "#8fbcbb"
+icon_foreground_5                   = "#8fbcbb"
+icon_foreground_6                   = "#a3be8c"
+icon_foreground_7                   = "#a3be8c"
+icon_foreground_8                   = "#d08770"
+icon_foreground_9                   = "#bf616a"
+icon_foreground_10                  = "#b48ead"
+icon_foreground_11                  = "#9B98B7"
+icon_foreground_12                  = "#81A1C1"
 
 #!NORD
 # bar_background_color               = "#353b4a.9"
@@ -203,9 +229,10 @@ icon_foreground_12                  = "#1e2227"
 # right_decor_background             = "#606b86.9"
 
 #!BLACK
-bar_background_color                = "#1e2227.92"
+bar_background_color                = "#1e2227.8"
 bar_border_color                    = "#454951"
-right_decor_background              = bar_border_color
+right_decor_background              = transparent
+# right_decor_background              = "#717c99.5"
 
 #!OTHER
 # bar_border_color                   = "#4f586e.95"
@@ -224,7 +251,7 @@ top_bar_size                        = int(qtile_settings.get("top_bar_size", 46)
 bottom_bar_size                     = int(qtile_settings.get("bottom_bar_size", 55)*bar_scaling)
 
 bar_width = [] 
-for num in qtile_settings.get("bar_width_top", [0, 0, 3, 0]):
+for num in qtile_settings.get("bar_width_top", [0, 0, 2, 0]):
     bar_width.append(int(num*general_width_scaling))
 
 bar_width_top                       = bar_width
@@ -242,7 +269,8 @@ seperator_line_width                = int(qtile_settings.get("seperator_line_wid
 #!WIDGET DEFAULT
 widget_default_font_size            = int(18*widget_size_scaling)
 widget_default_padding              = int(6*widget_padding_scaling)
-bottom_widget_width                 = int(3*general_width_scaling)
+bottom_widget_width                 = int(2*general_width_scaling)
+# bottom_widget_width                 = int(3*general_width_scaling)
 
 #!GROUPBOX
 groupbox_margin                     = int(4*widget_padding_scaling)
@@ -252,7 +280,8 @@ layouticon_padding                  = int(-2*widget_padding_scaling)
 layouticon_scale                    = 0.48*widget_padding_scaling
 
 #!ICONS
-icon_size                           = int(14*icon_size_scaling)
+icon_size                           = int(15*icon_size_scaling)
+# icon_size                           = int(14*icon_size_scaling)
 
 #!DECOR
 left_decor_padding                  = int(9*icon_padding_scaling)
@@ -305,16 +334,20 @@ layout_focus_color_floating         = bar_border_color
 #?#############
 #!ALL
 layout_margin                       = int(10*bar_scaling)
-layout_border_width                 = int(qtile_settings.get("layout_border_with", 3)*general_width_scaling)
+layout_border_width                 = int(qtile_settings.get("layout_border_with", 2)*general_width_scaling)
+# layout_border_width                 = int(qtile_settings.get("layout_border_with", 3)*general_width_scaling)
 layout_num_stacks                   = 1
 
 #!FLOATING
-floating_border_width               = int(qtile_settings.get("layout_border_with", 3)*general_width_scaling)
+floating_border_width               = int(qtile_settings.get("layout_border_with", 2)*general_width_scaling)
+# floating_border_width               = int(qtile_settings.get("layout_border_with", 3)*general_width_scaling)
 
 #*#############################
 #*           FONTS           ##
 #*#############################
 normal_font                         = "FiraCode Nerd Font"
+active_window_buttons_font_normal   = "San Francisco"
+active_window_buttons_font_bold     = "San Francisco bold"
 bold_font                           = "FiraCode Nerd Font Bold"
 icon_font                           = "Font Awesome 6 Free Solid"
 other_font                          = "ttf-dejavu"

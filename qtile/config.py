@@ -323,6 +323,7 @@ def right_decor(color=right_decor_background, round=True, padding_x=0, padding_y
             colour = color,
             radius = radius,
             filled = True,
+            group = True,
             padding_x = padding_x,
             padding_y = padding_y,
         )
@@ -368,6 +369,12 @@ class PowerButton(widget.TextBox):
             mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("python3 /home/jonalm/scripts/qtile/bar_menus/system/system_menu.py")},
             decorations = left_decor(icon_background_12),
         )
+        
+    def mouse_enter(self, *args, **kwargs):
+        self.bar.window.window.set_cursor("hand2")
+
+    def mouse_leave(self, *args, **kwargs):
+        self.bar.window.window.set_cursor("left_ptr")
 
 class LayoutIcon(widget.CurrentLayoutIcon):
     def __init__(self):
@@ -378,6 +385,12 @@ class LayoutIcon(widget.CurrentLayoutIcon):
             decorations       = left_decor(icon_background_11),
         )
 
+    def mouse_enter(self, *args, **kwargs):
+        self.bar.window.window.set_cursor("hand2")
+
+    def mouse_leave(self, *args, **kwargs):
+        self.bar.window.window.set_cursor("left_ptr")
+
 class TickTickMenu(widget.TextBox):
     def __init__(self):
         widget.TextBox.__init__(
@@ -386,6 +399,12 @@ class TickTickMenu(widget.TextBox):
             mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("python3 /home/jonalm/scripts/qtile/bar_menus/ticktick/launch.py")},
             decorations = left_decor(icon_background_10),
         )
+        
+    def mouse_enter(self, *args, **kwargs):
+        self.bar.window.window.set_cursor("hand2")
+
+    def mouse_leave(self, *args, **kwargs):
+        self.bar.window.window.set_cursor("left_ptr")
 
 class BluetoothIcon(widget.TextBox):
     def __init__(self):
@@ -402,9 +421,11 @@ class BluetoothIcon(widget.TextBox):
         )
 
     def mouse_enter(self, *args, **kwargs):
+        self.bar.window.window.set_cursor("hand2")
         self.bar.draw()
 
     def mouse_leave(self, *args, **kwargs):
+        self.bar.window.window.set_cursor("left_ptr")
         self.bar.draw()
 
 class BluetoothWidget(widget.TextBox, base.InLoopPollText):
@@ -447,12 +468,14 @@ class BluetoothWidget(widget.TextBox, base.InLoopPollText):
 
         except subprocess.CalledProcessError as e:
             return "Off"
-        
+
     def mouse_enter(self, *args, **kwargs):
+        self.bar.window.window.set_cursor("hand2")
         self.decorations = self.hover_decorator
         self.bar.draw()
 
     def mouse_leave(self, *args, **kwargs):
+        self.bar.window.window.set_cursor("left_ptr")
         self.decorations = self.normal_decorator
         self.bar.draw()
 
@@ -465,6 +488,12 @@ class VolumeIcon(widget.TextBox):
             mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("python3 /home/jonalm/scripts/qtile/bar_menus/volume/volume_menu.py")},
             decorations     = left_decor(icon_background_2),
         )
+        
+    def mouse_enter(self, *args, **kwargs):
+        self.bar.window.window.set_cursor("hand2")
+
+    def mouse_leave(self, *args, **kwargs):
+        self.bar.window.window.set_cursor("left_ptr")
 
 class VolumeWidget(widget.PulseVolume):
     def __init__(self):
@@ -473,6 +502,12 @@ class VolumeWidget(widget.PulseVolume):
             mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("python3 /home/jonalm/scripts/qtile/bar_menus/volume/volume_menu.py")},
             decorations     = right_decor(),
         )
+        
+    def mouse_enter(self, *args, **kwargs):
+        self.bar.window.window.set_cursor("hand2")
+
+    def mouse_leave(self, *args, **kwargs):
+        self.bar.window.window.set_cursor("left_ptr")
 
 class WifiIcon(widget.TextBox):
     def __init__(self):
@@ -483,6 +518,12 @@ class WifiIcon(widget.TextBox):
             mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("python3 /home/jonalm/scripts/qtile/bar_menus/wifi/wifi_menu.py")},
             decorations     = left_decor(icon_background_3),
         )
+        
+    def mouse_enter(self, *args, **kwargs):
+        self.bar.window.window.set_cursor("hand2")
+
+    def mouse_leave(self, *args, **kwargs):
+        self.bar.window.window.set_cursor("left_ptr")
 
 class WifiWidget(widget.TextBox, base.InLoopPollText):
     def __init__(self):
@@ -492,7 +533,7 @@ class WifiWidget(widget.TextBox, base.InLoopPollText):
             font            = bold_font,
             padding         = widget_default_padding,
             mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("python3 /home/jonalm/scripts/qtile/bar_menus/wifi/wifi_menu.py")},
-            decorations     = right_decor()
+            decorations     = right_decor(),
         )
 
     def poll(self):
@@ -513,6 +554,12 @@ class WifiWidget(widget.TextBox, base.InLoopPollText):
                 return ssid
         else:
             return "Error"
+            
+    def mouse_enter(self, *args, **kwargs):
+        self.bar.window.window.set_cursor("hand2")
+
+    def mouse_leave(self, *args, **kwargs):
+        self.bar.window.window.set_cursor("left_ptr")
         
 class CpuTempIcon(widget.TextBox):
     def __init__(self):
@@ -523,6 +570,12 @@ class CpuTempIcon(widget.TextBox):
             mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("python3 /home/jonalm/scripts/qtile/bar_menus/cpu/cpu_stats_menu.py")},
             decorations = left_decor(icon_background_4),
         )
+        
+    def mouse_enter(self, *args, **kwargs):
+        self.bar.window.window.set_cursor("hand2")
+
+    def mouse_leave(self, *args, **kwargs):
+        self.bar.window.window.set_cursor("left_ptr")
 
 class CpuTempWidget(widget.ThermalSensor):
     def __init__(self):
@@ -536,6 +589,12 @@ class CpuTempWidget(widget.ThermalSensor):
             mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("python3 /home/jonalm/scripts/qtile/bar_menus/cpu/cpu_stats_menu.py")},
             decorations = right_decor(),
         )
+        
+    def mouse_enter(self, *args, **kwargs):
+        self.bar.window.window.set_cursor("hand2")
+
+    def mouse_leave(self, *args, **kwargs):
+        self.bar.window.window.set_cursor("left_ptr")
 
 class CpuLoadIcon(widget.TextBox):
     def __init__(self):
@@ -545,6 +604,12 @@ class CpuLoadIcon(widget.TextBox):
             mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("python3 /home/jonalm/scripts/qtile/bar_menus/cpu/cpu_stats_menu.py")},
             decorations = left_decor(icon_background_5),
         )
+
+    def mouse_enter(self, *args, **kwargs):
+        self.bar.window.window.set_cursor("hand2")
+
+    def mouse_leave(self, *args, **kwargs):
+        self.bar.window.window.set_cursor("left_ptr")
 
 class CpuLoadWidget(widget.CPU):
     def __init__(self):
@@ -556,6 +621,19 @@ class CpuLoadWidget(widget.CPU):
             mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("python3 /home/jonalm/scripts/qtile/bar_menus/cpu/cpu_stats_menu.py")},
             decorations = right_decor(),
         )
+        
+        self.normal_format = self.format
+        self.hover_format = "{load_percent}%{temp:.0f}{unit}"
+
+    def mouse_enter(self, *args, **kwargs):
+        self.format = self.hover_format
+        self.bar.window.window.set_cursor("hand2")
+        self.bar.draw()
+
+    def mouse_leave(self, *args, **kwargs):
+        self.format = self.normal_format
+        self.bar.window.window.set_cursor("left_ptr")
+        self.bar.draw()
 
 class BatteryIcon(widget.TextBox):
     def __init__(self):
@@ -565,6 +643,12 @@ class BatteryIcon(widget.TextBox):
             mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("python3 /home/jonalm/scripts/qtile/bar_menus/power/power_management_menu.py")},
             decorations = left_decor(icon_background_6),
         )
+            
+    def mouse_enter(self, *args, **kwargs):
+        self.bar.window.window.set_cursor("hand2")
+
+    def mouse_leave(self, *args, **kwargs):
+        self.bar.window.window.set_cursor("left_ptr")
 
 class BatteryWidget(widget.Battery):
     def __init__(self):
@@ -576,6 +660,12 @@ class BatteryWidget(widget.Battery):
             mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("python3 /home/jonalm/scripts/qtile/bar_menus/power/power_management_menu.py")},
             decorations = right_decor(),
         )
+            
+    def mouse_enter(self, *args, **kwargs):
+        self.bar.window.window.set_cursor("hand2")
+
+    def mouse_leave(self, *args, **kwargs):
+        self.bar.window.window.set_cursor("left_ptr")
 
 class WattageIcon(widget.TextBox):
     def __init__(self):
@@ -585,6 +675,12 @@ class WattageIcon(widget.TextBox):
             mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("python3 /home/jonalm/scripts/qtile/bar_menus/power/power_management_menu.py")},
             decorations=left_decor(icon_background_7),
         )
+
+    def mouse_enter(self, *args, **kwargs):
+        self.bar.window.window.set_cursor("hand2")
+
+    def mouse_leave(self, *args, **kwargs):
+        self.bar.window.window.set_cursor("left_ptr")
 
 class WattageWidget(widget.Battery):
     def __init__(self):
@@ -596,6 +692,12 @@ class WattageWidget(widget.Battery):
             mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("python3 /home/jonalm/scripts/qtile/bar_menus/power/power_management_menu.py")},
             decorations = right_decor(),
         )
+
+    def mouse_enter(self, *args, **kwargs):
+        self.bar.window.window.set_cursor("hand2")
+
+    def mouse_leave(self, *args, **kwargs):
+        self.bar.window.window.set_cursor("left_ptr")
 
 notification_shown = False
 
@@ -657,6 +759,12 @@ class BacklightIcon(widget.TextBox):
             decorations = left_decor(icon_background_9),
         )
 
+    def mouse_enter(self, *args, **kwargs):
+        self.bar.window.window.set_cursor("hand2")
+
+    def mouse_leave(self, *args, **kwargs):
+        self.bar.window.window.set_cursor("left_ptr")
+
 class BacklightWidget(widget.Backlight):
     def __init__(self):
         widget.Backlight.__init__(
@@ -669,14 +777,22 @@ class BacklightWidget(widget.Backlight):
             decorations = right_decor(),
         )
 
+    def mouse_enter(self, *args, **kwargs):
+        self.bar.window.window.set_cursor("hand2")
+
+    def mouse_leave(self, *args, **kwargs):
+        self.bar.window.window.set_cursor("left_ptr")
+
 class MouseOverClock(widget.Clock):
     def __init__(self):
         widget.Clock.__init__(
             self,
-            long_format = "%A %d %B %Y %H:%M",
+            # font = active_window_buttons_font_bold, 
+            long_format = "%A %d %B %H:%M",
             decorations = right_decor(),
         )
-        self.short_format = self.format
+        self.short_format = "%A %d %B %H:%M"
+        # self.short_format = self.format
 
     def mouse_enter(self, *args, **kwargs):
         self.format = self.long_format
@@ -701,13 +817,13 @@ class AppIcon(widget.TextBox):
         if check_command:
             mouse_callback = {"Button1": launch_app_from_bar(check_command)} if check_command else {"Button1": lambda: Qtile.cmd_spawn(launch)}
         elif launch:
-            mouse_callback = {"Button1": lambda: Qtile.cmd_spawn(launch)}
-            # mouse_callback = {"Button1": lambda: Qtile.cmd_spawn("python3 /home/jonalm/scripts/qtile/settings_menu/app/settings_menu.py &")}
+            # mouse_callback = {"Button1": lambda: Qtile.cmd_run(launch)}
+            mouse_callback = {"Button1": lambda: Qtile.cmd_spawn("python3 /home/jonalm/scripts/qtile/settings_menu/app/settings_menu.py &")}
         widget.TextBox.__init__(
             self,
             text = f"<span font='Font Awesome 6 free solid' size='medium'>{icon}</span>",
             background = transparent,
-            fontsize = icon_size + 10,
+            fontsize = icon_size + 12,
             padding = widget_default_padding + 14,
             foreground = foreground,
             markup = True,
@@ -717,17 +833,58 @@ class AppIcon(widget.TextBox):
         self.normal_foreground = self.foreground
         self.hover_foreground = text_color
 
-        self.normal_fontsize = self.padding
-        self.hover_fontsize = widget_default_padding + 16
+        self.normal_fontsize = self.fontsize
+        self.hover_fontsize = self.fontsize + 50
+
+        self.normal_padding = self.padding
+        self.hover_padding = self.padding - 2
 
     def mouse_enter(self, *args, **kwargs):
+        self.bar.window.window.set_cursor("hand2")
         self.foreground = self.hover_foreground
-        self.padding = self.hover_fontsize
+        # self.padding = self.hover_padding
+        self.fontsize = self.hover_fontsize
         self.bar.draw()
 
     def mouse_leave(self, *args, **kwargs):
+        self.bar.window.window.set_cursor("left_ptr")
         self.foreground = self.normal_foreground
-        self.padding = self.normal_fontsize
+        # self.padding = self.normal_padding
+        self.fontsize = self.normal_fontsize
+        self.bar.draw()
+
+class TextWidget(widget.TextBox):
+    def __init__(self, text="", foreground=text_color, fontsize=widget_default_font_size + 2, font=normal_font):
+        widget.TextBox.__init__(
+            self,
+            text = f"<span font='{font}' size='medium'>{text}</span>",
+            background = bar_background_color,
+            fontsize = fontsize,
+            padding = widget_default_padding + 14,
+            foreground = foreground,
+            markup = True,
+        )
+        self.normal_foreground = self.foreground
+        self.hover_foreground = text_color
+
+        self.normal_fontsize = self.fontsize
+        self.hover_fontsize = self.fontsize + 50
+
+        self.normal_padding = self.padding
+        self.hover_padding = self.padding - 2
+
+    def mouse_enter(self, *args, **kwargs):
+        self.bar.window.window.set_cursor("hand2")
+        self.foreground = self.hover_foreground
+        # self.padding = self.hover_padding
+        self.fontsize = self.hover_fontsize
+        self.bar.draw()
+
+    def mouse_leave(self, *args, **kwargs):
+        self.bar.window.window.set_cursor("left_ptr")
+        self.foreground = self.normal_foreground
+        # self.padding = self.normal_padding
+        self.fontsize = self.normal_fontsize
         self.bar.draw()
 
 class NothingWidget(widget.TextBox):
@@ -815,63 +972,71 @@ class WindowCountWidget(widget.WindowCount):
 
 ### BARS ###
 single_top_bar = Bar([
-    # POWERBUTTON # 
-    seperator(-3),
-    PowerButton(),
+    # # POWERBUTTON # 
+    # seperator(-3),
+    # PowerButton(),
 
-    # LAYOUTICON # 
-    seperator(),
-    LayoutIcon(),
+    # # LAYOUTICON # 
+    # seperator(),
+    # LayoutIcon(),
 
-    # TICKTICK MENU #
-    seperator(),
-    TickTickMenu(),
+    # # TICKTICK MENU #
+    # seperator(),
+    # TickTickMenu(),
+    TextWidget("", fontsize=widget_default_font_size + 10),
+
+    TextWidget("About", font=bold_font),
+    TextWidget("File"),
+    TextWidget("Edit"),
+    TextWidget("View"),
+    TextWidget("Go"),
+    TextWidget("Window"),
 
     widget.Spacer(bar.STRETCH),
 
     # BLUETOOTH #
     BluetoothIcon(),
-    BluetoothWidget(),
+    # BluetoothWidget(),
     seperator(),
 
     # VOLUME #
     VolumeIcon(),
-    VolumeWidget(),
+    # VolumeWidget(),
     seperator(),
 
     #  WIFI #
     WifiIcon(),
-    WifiWidget(),
+    # WifiWidget(),
 
     # CPU TEMP #
     seperator(),
     CpuTempIcon(),
-    CpuTempWidget(),
+    # CpuTempWidget(),
 
     # CPU LOAD #
     seperator(),
     CpuLoadIcon(),
-    CpuLoadWidget(),
+    # CpuLoadWidget(),
 
     # BATTERY #
     seperator(),
     BatteryIcon(),
-    BatteryWidget(),
+    # BatteryWidget(),
 
     # WATTAGE #
     seperator(),
     WattageIcon(),
-    WattageWidget(),
+    # WattageWidget(),
 
     # URGENT NOTIFICATION #
     seperator(),
     NotificationIcon(),
-    NotificationWidget(),
+    # NotificationWidget(),
 
     # BACKLIGHT #
     seperator(),
     BacklightIcon(),
-    BacklightWidget(),
+    # BacklightWidget(),
 
     # TIME #
     seperator(),
