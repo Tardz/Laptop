@@ -1,13 +1,18 @@
 swipe:
   3:
-    left:
-      command: "xdotool key alt+Left" # History forward
+    #left:
+    #  command: "xdotool key alt+Left" # History forward
+    #right:
+    #  command: "xdotool key alt+Right" # History back
+    #up:
+    #  command: "xdotool key super+Up" # Activity
+    #down:
+    #  command: "xdotool key super+Down" # Activity
     right:
-      command: "xdotool key alt+Right" # History back
-    up:
       command: "xdotool key super+Up" # Activity
-    down:
+    left:
       command: "xdotool key super+Down" # Activity
+
   4:
     left:
       command: "/home/jonalm/scripts/other/get_notifications.py"

@@ -20,6 +20,7 @@ myBrowser      = "brave"
 myTerm         = "alacritty"
 alttab_spawned = False
 home           = os.path.expanduser("~")
+active_window_name = ""
 
 check_dict = {
     #[0] - app, [1] - command, [2] - screen
@@ -223,6 +224,12 @@ icon_foreground_10                  = "#b48ead"
 icon_foreground_11                  = "#9B98B7"
 icon_foreground_12                  = "#81A1C1"
 
+app_tray_icon_color_1               = "#81A1C1"
+app_tray_icon_color_2               = "#8fbcbb"
+app_tray_icon_color_3               = "#a3be8c"
+app_tray_icon_color_4               = "#d08770"
+app_tray_icon_color_5               = "#bf616a"
+
 #!NORD
 # bar_background_color               = "#353b4a.9"
 # bar_border_color                   = "#717c99.9"
@@ -248,22 +255,24 @@ bottom_bar_on                       = qtile_settings.get("bottom_bar_status", Tr
 #?#############
 #!BAR
 top_bar_size                        = int(qtile_settings.get("top_bar_size", 46)*bar_scaling)
-bottom_bar_size                     = int(qtile_settings.get("bottom_bar_size", 55)*bar_scaling)
+bottom_bar_size                     = int(qtile_settings.get("bottom_bar_size", 62)*bar_scaling)
+# bottom_bar_size                     = int(qtile_settings.get("bottom_bar_size", 55)*bar_scaling)
 
 bar_width = [] 
-for num in qtile_settings.get("bar_width_top", [0, 0, 2, 0]):
+for num in qtile_settings.get("bar_width_top", [0, 0, 1, 0]):
     bar_width.append(int(num*general_width_scaling))
 
 bar_width_top                       = bar_width
-bar_margin_top                      = qtile_settings.get("bar_margin_top", [0, -2, 5 ,-2])
+bar_margin_top                      = qtile_settings.get("bar_margin_top", [0, -2, 2 ,-2])
 bar_width_bottom                    = qtile_settings.get("bar_width_bottom", [0, 0, 0 ,0])
-bar_margin_bottom                   = qtile_settings.get("bar_margin_bottom", [5, 300, 16, 300])
+bar_margin_bottom                   = qtile_settings.get("bar_margin_bottom", [5, 450, 16, 450])
+# bar_margin_bottom                   = qtile_settings.get("bar_margin_bottom", [5, 300, 16, 300])
 
 #!GAP
-bar_gap_size                        = qtile_settings.get("bar_gap_size", 3)
+bar_gap_size                        = qtile_settings.get("bar_gap_size", 0)
 
 #!SEPERATOR
-seperator_padding                   = int(qtile_settings.get("seperator_padding", -1)*seperator_padding_scaling)
+seperator_padding                   = int(qtile_settings.get("seperator_padding", 15)*seperator_padding_scaling)
 seperator_line_width                = int(qtile_settings.get("seperator_line_width", 15)*seperator_line_scaling)
 
 #!WIDGET DEFAULT
@@ -333,7 +342,7 @@ layout_focus_color_floating         = bar_border_color
 #?   SIZE    ##
 #?#############
 #!ALL
-layout_margin                       = int(10*bar_scaling)
+layout_margin                       = int(8*bar_scaling)
 layout_border_width                 = int(qtile_settings.get("layout_border_with", 2)*general_width_scaling)
 # layout_border_width                 = int(qtile_settings.get("layout_border_with", 3)*general_width_scaling)
 layout_num_stacks                   = 1

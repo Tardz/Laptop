@@ -19,6 +19,7 @@ from libqtile.bar import Bar
 from libqtile import bar
 
 ### LAYOUT IMPORTS ###
+from libqtile.command.base import expose_command
 from libqtile.layout.floating import Floating
 from libqtile.layout.xmonad import MonadTall
 from libqtile.layout.stack import Stack
@@ -329,7 +330,7 @@ def right_decor(color=right_decor_background, round=True, padding_x=0, padding_y
         )
     ]
 
-def task_list_decor(color=bar_background_color, radius=8 if laptop else 5, group=False, padding_x=0, padding_y=0):
+def task_list_decor(color=bar_background_color, radius=12 if laptop else 5, group=False, padding_x=0, padding_y=0):
     return RectDecoration(
         line_width = bottom_widget_width,
         line_colour = bar_border_color,
@@ -667,6 +668,24 @@ class BatteryWidget(widget.Battery):
     def mouse_leave(self, *args, **kwargs):
         self.bar.window.window.set_cursor("left_ptr")
 
+class BatteryIconWidget(widget.BatteryIcon):
+    def __init__(self):
+        widget.BatteryIcon.__init__(
+            self,
+            theme_path = "/home/jonalm/.config/qtile/battery_icons/horizontal/",
+            battery = 0,
+            scale = 2.8,
+            # update_interval = battery_update_interval,
+            # mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("python3 /home/jonalm/scripts/qtile/bar_menus/power/power_management_menu.py")},
+            # decorations = right_decor(),
+        )
+            
+    def mouse_enter(self, *args, **kwargs):
+        self.bar.window.window.set_cursor("hand2")
+
+    def mouse_leave(self, *args, **kwargs):
+        self.bar.window.window.set_cursor("left_ptr")
+
 class WattageIcon(widget.TextBox):
     def __init__(self):
         widget.TextBox.__init__(
@@ -783,24 +802,13 @@ class BacklightWidget(widget.Backlight):
     def mouse_leave(self, *args, **kwargs):
         self.bar.window.window.set_cursor("left_ptr")
 
-class MouseOverClock(widget.Clock):
+class ClockWidget(widget.Clock):
     def __init__(self):
         widget.Clock.__init__(
             self,
-            # font = active_window_buttons_font_bold, 
-            long_format = "%A %d %B %H:%M",
+            format = "%A %d %B %H:%M",
             decorations = right_decor(),
         )
-        self.short_format = "%A %d %B %H:%M"
-        # self.short_format = self.format
-
-    def mouse_enter(self, *args, **kwargs):
-        self.format = self.long_format
-        self.bar.draw()
-
-    def mouse_leave(self, *args, **kwargs):
-        self.format = self.short_format
-        self.bar.draw()
 
 @lazy.function
 def launch_app_from_bar(qtile, check_command):
@@ -812,7 +820,7 @@ def launch_app_from_bar(qtile, check_command):
     qtile.cmd_run(check_command[0])
     # qtile.cmd_spawn(["/home/jonalm/scripts/qtile/check_and_launch_app.py", check_command[0], check_command[1], check_command[2]])
 
-class AppIcon(widget.TextBox):
+class AppTrayIcon(widget.TextBox):
     def __init__(self, icon="", foreground=text_color, check_command=None, launch=None):
         if check_command:
             mouse_callback = {"Button1": launch_app_from_bar(check_command)} if check_command else {"Button1": lambda: Qtile.cmd_spawn(launch)}
@@ -823,7 +831,7 @@ class AppIcon(widget.TextBox):
             self,
             text = f"<span font='Font Awesome 6 free solid' size='medium'>{icon}</span>",
             background = transparent,
-            fontsize = icon_size + 12,
+            fontsize = icon_size + 10,
             padding = widget_default_padding + 14,
             foreground = foreground,
             markup = True,
@@ -854,10 +862,11 @@ class AppIcon(widget.TextBox):
         self.bar.draw()
 
 class TextWidget(widget.TextBox):
-    def __init__(self, text="", foreground=text_color, fontsize=widget_default_font_size + 2, font=normal_font):
+    def __init__(self, text="", foreground=text_color, fontsize=widget_default_font_size + 2):
         widget.TextBox.__init__(
             self,
-            text = f"<span font='{font}' size='medium'>{text}</span>",
+            text = text,
+            font = normal_font,
             background = bar_background_color,
             fontsize = fontsize,
             padding = widget_default_padding + 14,
@@ -872,7 +881,7 @@ class TextWidget(widget.TextBox):
 
         self.normal_padding = self.padding
         self.hover_padding = self.padding - 2
-
+    
     def mouse_enter(self, *args, **kwargs):
         self.bar.window.window.set_cursor("hand2")
         self.foreground = self.hover_foreground
@@ -885,6 +894,47 @@ class TextWidget(widget.TextBox):
         self.foreground = self.normal_foreground
         # self.padding = self.normal_padding
         self.fontsize = self.normal_fontsize
+        self.bar.draw()
+
+class ActiveWindowIcon(widget.TextBox):
+    def __init__(self, foreground=text_color, fontsize=widget_default_font_size + 2):
+        widget.TextBox.__init__(
+            self,
+            text = "",
+            fontsize = icon_size + 10,
+            padding = widget_default_padding + 16,
+            background = bar_background_color,
+        )
+
+class ActiveWindowWidget(widget.WindowName):
+    def __init__(self, foreground=text_color):
+        widget.WindowName.__init__(
+            self,
+            background = bar_background_color,
+            font = bold_font,
+            fontsize = widget_default_font_size + 2,
+            format = "{name}",
+            foreground = foreground,
+            empty_group_string = "Desktop",
+            parse_text = self.modify_text,
+        )
+
+    def modify_text(self, text):
+        if "—" in text:
+            parts = text.split(" — ")
+        else:
+            parts = text.split(" - ")
+        
+        app_name = parts[-1].title()
+
+        return app_name
+
+    def mouse_enter(self, *args, **kwargs):
+        self.bar.window.window.set_cursor("hand2")
+        self.bar.draw()
+
+    def mouse_leave(self, *args, **kwargs):
+        self.bar.window.window.set_cursor("left_ptr")
         self.bar.draw()
 
 class NothingWidget(widget.TextBox):
@@ -906,7 +956,7 @@ widget_defaults = dict(
 task_list_settings = dict(
     font                = "FiraCode Nerd Font Bold",
     fontsize            = widget_default_font_size + 1,
-    padding_y           = widget_default_padding + 1 if laptop else widget_default_padding - 2,
+    padding_y           = widget_default_padding + 4 if laptop else widget_default_padding - 2,
     margin              = task_list_margin,
     borderwidth         = task_list_border_width,
     spacing             = task_list_spacing,
@@ -971,21 +1021,79 @@ class WindowCountWidget(widget.WindowCount):
         )
 
 ### BARS ###
-single_top_bar = Bar([
-    # # POWERBUTTON # 
-    # seperator(-3),
-    # PowerButton(),
+box_top_bar = Bar([
+    # POWERBUTTON # 
+    seperator(-3),
+    PowerButton(),
 
-    # # LAYOUTICON # 
-    # seperator(),
-    # LayoutIcon(),
+    # LAYOUTICON # 
+    seperator(),
+    LayoutIcon(),
 
-    # # TICKTICK MENU #
-    # seperator(),
-    # TickTickMenu(),
+    # TICKTICK MENU #
+    seperator(),
+    TickTickMenu(),
     TextWidget("", fontsize=widget_default_font_size + 10),
 
-    TextWidget("About", font=bold_font),
+    widget.Spacer(bar.STRETCH),
+
+    # BLUETOOTH #
+    BluetoothIcon(),
+    BluetoothWidget(),
+    seperator(),
+
+    # VOLUME #
+    VolumeIcon(),
+    VolumeWidget(),
+    seperator(),
+
+    #  WIFI #
+    WifiIcon(),
+    WifiWidget(),
+
+    # CPU TEMP #
+    seperator(),
+    CpuTempIcon(),
+    CpuTempWidget(),
+
+    # CPU LOAD #
+    seperator(),
+    CpuLoadIcon(),
+    CpuLoadWidget(),
+
+    # BATTERY #
+    seperator(),
+    BatteryIcon(),
+    BatteryWidget(),
+
+    # WATTAGE #
+    seperator(),
+    WattageIcon(),
+    WattageWidget(),
+
+    # URGENT NOTIFICATION #
+    seperator(),
+    NotificationIcon(),
+    NotificationWidget(),
+
+    # BACKLIGHT #
+    seperator(),
+    BacklightIcon(),
+    BacklightWidget(),
+
+    seperator(5),
+    BatteryIconWidget(),
+    seperator(5),
+
+    # TIME #
+    ClockWidget(),
+    seperator(-5),
+
+], top_bar_size, margin = bar_margin_top, background = bar_background_color, border_width = bar_width_top, border_color = bar_border_color, opacity=1)
+
+single_top_bar = Bar([
+    ActiveWindowIcon("", fontsize=widget_default_font_size + 2),
+    ActiveWindowWidget(),
     TextWidget("File"),
     TextWidget("Edit"),
     TextWidget("View"),
@@ -996,56 +1104,39 @@ single_top_bar = Bar([
 
     # BLUETOOTH #
     BluetoothIcon(),
-    # BluetoothWidget(),
     seperator(),
 
     # VOLUME #
     VolumeIcon(),
-    # VolumeWidget(),
     seperator(),
 
     #  WIFI #
     WifiIcon(),
-    # WifiWidget(),
-
-    # CPU TEMP #
-    seperator(),
-    CpuTempIcon(),
-    # CpuTempWidget(),
 
     # CPU LOAD #
     seperator(),
     CpuLoadIcon(),
-    # CpuLoadWidget(),
-
-    # BATTERY #
-    seperator(),
-    BatteryIcon(),
-    # BatteryWidget(),
-
-    # WATTAGE #
-    seperator(),
-    WattageIcon(),
-    # WattageWidget(),
 
     # URGENT NOTIFICATION #
     seperator(),
     NotificationIcon(),
-    # NotificationWidget(),
 
     # BACKLIGHT #
     seperator(),
     BacklightIcon(),
-    # BacklightWidget(),
+
+    # BATTERY #
+    seperator(),
+    BatteryIconWidget(),
 
     # TIME #
     seperator(),
-    MouseOverClock(),
-    seperator(-5),
+    ClockWidget(),
+    seperator(-2),
 
 ], top_bar_size, margin = bar_margin_top, background = bar_background_color, border_width = bar_width_top, border_color = bar_border_color, opacity=1)
 
-single_bottom_bar = Bar([
+box_bottom_bar = Bar([
     # GROUPBOX #
     GroupBoxWidget(),
     
@@ -1059,11 +1150,21 @@ single_bottom_bar = Bar([
 
     # APPS #
     seperator(background=transparent),
-    AppIcon("", icon_background_2, ["firefox", "c", ""]),
-    AppIcon("", icon_background_3, ["code", "v", ""]),
-    AppIcon("", icon_background_7, ["pcmanfm", "n", ""]),
-    AppIcon("", icon_background_8, launch="spotify"),
-    AppIcon(" ", icon_background_9, launch="python3 ~/scripts/qtile/settings_menu/app/settings_menu.py"),
+    AppTrayIcon("", app_tray_icon_color_1, ["firefox", "c", ""]),
+    AppTrayIcon("", app_tray_icon_color_2, ["code", "v", ""]),
+    AppTrayIcon("", app_tray_icon_color_3, ["pcmanfm", "n", ""]),
+    AppTrayIcon("", app_tray_icon_color_4, launch="spotify"),
+    AppTrayIcon(" ", app_tray_icon_color_5, launch="python3 ~/scripts/qtile/settings_menu/app/settings_menu.py"),
+
+], bottom_bar_size, margin = bar_margin_bottom, background = bar_background_color, border_width = bar_width_bottom, border_color = bar_border_color, opacity=1)
+
+single_bottom_bar = Bar([
+    # GROUPBOX #
+    # GroupBoxWidget(),
+    
+    # TASKLIST #
+    seperator(background=transparent),
+    widget.TaskList(**task_list_settings),
 
 ], bottom_bar_size, margin = bar_margin_bottom, background = bar_background_color, border_width = bar_width_bottom, border_color = bar_border_color, opacity=1)
 
@@ -1116,7 +1217,7 @@ top_bar_1 = Bar([
 
     # TIME #
     seperator(),
-    MouseOverClock(),
+    ClockWidget(),
     seperator(),
 
 ], top_bar_size, margin = bar_margin_top, background = bar_background_color, border_width = bar_width_top, border_color = bar_border_color, opacity=1)
@@ -1140,11 +1241,11 @@ top_bar_2 = Bar([
 
 bottom_bar_1 = Bar([
     # APPS #
-    AppIcon("", icon_background_2, ["firefox", "c", ""]),
-    AppIcon("", icon_background_3, ["code", "v", ""]),
-    AppIcon("", icon_background_7, ["pcmanfm", "n", ""]),
-    AppIcon("", icon_background_8, launch="spotify"),
-    AppIcon(" ", icon_background_9, launch="~/scripts/qtile/settings_menu/app/settings_menu.py"),
+    AppTrayIcon("", icon_background_2, ["firefox", "c", ""]),
+    AppTrayIcon("", icon_background_3, ["code", "v", ""]),
+    AppTrayIcon("", icon_background_7, ["pcmanfm", "n", ""]),
+    AppTrayIcon("", icon_background_8, launch="spotify"),
+    AppTrayIcon(" ", icon_background_9, launch="~/scripts/qtile/settings_menu/app/settings_menu.py"),
 
     # WINDOWCOUNT #
     seperator(background=transparent),
@@ -1174,11 +1275,11 @@ bottom_bar_2 = Bar([
 
     # APPS #
     seperator(background=transparent),
-    AppIcon("", icon_background_2, ["firefox", "c", ""]),
-    AppIcon("", icon_background_3, ["code", "v", ""]),
-    AppIcon("", icon_background_7, ["pcmanfm", "n", ""]),
-    AppIcon("", icon_background_8, launch="spotify"),
-    AppIcon(" ", icon_background_9, launch="python3 /home/jonalm/scripts/qtile/settings_menu/app"),
+    AppTrayIcon("", icon_background_2, ["firefox", "c", ""]),
+    AppTrayIcon("", icon_background_3, ["code", "v", ""]),
+    AppTrayIcon("", icon_background_7, ["pcmanfm", "n", ""]),
+    AppTrayIcon("", icon_background_8, launch="spotify"),
+    AppTrayIcon(" ", icon_background_9, launch="python3 /home/jonalm/scripts/qtile/settings_menu/app"),
 
 ], bottom_bar_size, margin = bar_margin_bottom, background = bar_background_color, border_width = bar_width_bottom, border_color = bar_border_color, opacity=1)
 
@@ -1291,7 +1392,7 @@ def _(notify_event):
 @hook.subscribe.suspend
 def lock_on_sleep():
     Qtile.spawn("sudo sddm")
-    
+
 @hook.subscribe.startup_once
 def autostart():
     home = os.path.expanduser('~/.config/qtile/autostart.sh')
