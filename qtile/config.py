@@ -954,20 +954,20 @@ widget_defaults = dict(
 )
 
 task_list_settings = dict(
-    font                = "FiraCode Nerd Font Bold",
+    font                = bold_font,
     fontsize            = widget_default_font_size + 1,
     padding_y           = widget_default_padding + 4 if laptop else widget_default_padding - 2,
     margin              = task_list_margin,
     borderwidth         = task_list_border_width,
     spacing             = task_list_spacing,
     icon_size           = task_list_icon_size,
+    rounded             = True,
     markup_floating     = "<span font='Font Awesome 6 free solid {icon_size}' foreground='#A7BEAE' size='medium'> 缾 </span>{}",
     markup_minimized    = "<span font='Font Awesome 6 free solid {icon_size}' foreground='#b16286' size='medium'> 絛 </span>{}",
     markup_maximized    = "<span font='Font Awesome 6 free solid {icon_size}' foreground='#b16286' size='medium'> 类 </span>{}",
     title_width_method  = "uniform",
     urgent_alert_method = "border",
     highlight_method    = 'block',
-    rounded             = True,
     parse_text          = modify_window_name,
     border              = bar_border_color,
     background          = transparent,
@@ -1163,7 +1163,7 @@ single_bottom_bar = Bar([
     # GroupBoxWidget(),
     
     # TASKLIST #
-    seperator(background=transparent),
+    # seperator(background=transparent),
     widget.TaskList(**task_list_settings),
 
 ], bottom_bar_size, margin = bar_margin_bottom, background = bar_background_color, border_width = bar_width_bottom, border_color = bar_border_color, opacity=1)

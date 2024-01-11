@@ -47,9 +47,9 @@
 
     text_icon_padding = 0
 
-    frame_width = 2
+    frame_width = 1
 
-    frame_color = "#4f586e"
+    frame_color = "#454951"
 
     gap_size = 0
 
@@ -249,7 +249,6 @@
     # Otherwise the "#" and following would be interpreted as a comment.
     background = "#23272e"
     foreground = "#ffffff"
-    frame_color = "#454951"
     timeout = 10
     # Icon for notifications with low urgency, uncomment to enable
     #default_icon = /path/to/icon

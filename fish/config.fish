@@ -11,7 +11,7 @@ nitch
 ### FUNCTIONS ###
 function code
     if test "$argv" = "."
-        command code . | qtile cmd-obj -o group 2 -f toscreen
+        command code . | qtile cmd-obj -o group v -f toscreen
     else
         command code $argv
     end
