@@ -15,14 +15,14 @@ json_file="$HOME/scripts/rofi/automation/laptop_version/save_files_data.json"
 current_date_time=$(date "+%Y-%m-%d %H:%M:%S")
 old_date=$(date "+%Y-%m-%d %H:%M:%S")
 
-# if test -f "$json_file"; then
-#   old_date=$(jq -r '.date' "$json_file")
-#   old_number=$(jq '.number' "$json_file")
-#   new_number=$((old_number + 1))
-# else
-#   new_number=1
-#   echo "{ \"number\": $new_number, \"date\": \"$current_date_time\", \"old_date\": \"$old_date\" }" | jq . > "$json_file"
-# fi
+if test -f "$json_file"; then
+  old_date=$(jq -r '.date' "$json_file")
+  old_number=$(jq '.number' "$json_file")
+  new_number=$((old_number + 1))
+else
+  new_number=1
+  echo "{ \"number\": $new_number, \"date\": \"$current_date_time\", \"old_date\": \"$old_date\" }" | jq . > "$json_file"
+fi
 
 sudo rsync -av --delete $HOME/laptopgit/Laptop/ $HOME/laptopgit/LaptopBackup/
 sudo rsync -av --delete $HOME/scripts "$git_path"
@@ -39,9 +39,9 @@ sudo rsync -av --delete $HOME/.inputrc "$git_path"
 # sudo rsync -av --delete /usr/share/backgrounds/ "$git_path"
 
 cd $HOME/laptopgit/Laptop/
-# git add --all
-# git commit -m "commit ${new_number}"
-# git push -u --force origin main
+git add --all
+git commit -m "commit ${new_number}"
+git push -u --force origin main
 
 current_time="Time:$(date +'%T')"
 
