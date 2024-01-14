@@ -5,7 +5,7 @@ setxkbmap se
 xss-lock --lock &
 powertop --auto-tune
 nitrogen --restore &
-picom -b &
+picom --blur-method dual_kawase &
 fusuma &
 killall alttab
 background_path=$(awk -F'=' '/file=/{print $2}' ~/.config/nitrogen/bg-saved.cfg)

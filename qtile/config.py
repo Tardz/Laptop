@@ -669,7 +669,7 @@ class BatteryWidget(widget.Battery):
         self.bar.window.window.set_cursor("left_ptr")
 
 class BatteryIconWidget(widget.BatteryIcon):
-    def __init__(self):
+    def __init__(self, decor=False):
         widget.BatteryIcon.__init__(
             self,
             theme_path = "/home/jonalm/.config/qtile/battery_icons/horizontal/",
@@ -677,7 +677,7 @@ class BatteryIconWidget(widget.BatteryIcon):
             scale = 2.8,
             # update_interval = battery_update_interval,
             # mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("python3 /home/jonalm/scripts/qtile/bar_menus/power/power_management_menu.py")},
-            # decorations = right_decor(),
+            decorations = right_decor() if decor else right_decor(transparent),
         )
             
     def mouse_enter(self, *args, **kwargs):
@@ -803,11 +803,11 @@ class BacklightWidget(widget.Backlight):
         self.bar.window.window.set_cursor("left_ptr")
 
 class ClockWidget(widget.Clock):
-    def __init__(self):
+    def __init__(self, decor_color=right_decor_background):
         widget.Clock.__init__(
             self,
             format = "%A %d %B %H:%M",
-            decorations = right_decor(),
+            decorations = right_decor(decor_color),
         )
 
 @lazy.function
@@ -861,7 +861,7 @@ class AppTrayIcon(widget.TextBox):
         self.fontsize = self.normal_fontsize
         self.bar.draw()
 
-class TextWidget(widget.TextBox):
+class WindowOptionWidget(widget.TextBox):
     def __init__(self, text="", foreground=text_color, fontsize=widget_default_font_size + 2):
         widget.TextBox.__init__(
             self,
@@ -936,6 +936,16 @@ class ActiveWindowWidget(widget.WindowName):
     def mouse_leave(self, *args, **kwargs):
         self.bar.window.window.set_cursor("left_ptr")
         self.bar.draw()
+
+class CustomIconWidget(widget.TextBox):
+    def __init__(self, foreground=text_color, fontsize=widget_default_font_size + 2):
+        widget.TextBox.__init__(
+            self,
+            text = "",
+            fontsize = icon_size + 10,
+            padding = widget_default_padding + 16,
+            background = bar_background_color,
+        )
 
 class NothingWidget(widget.TextBox):
     def __init__(self):
@@ -1021,7 +1031,7 @@ class WindowCountWidget(widget.WindowCount):
         )
 
 ### BARS ###
-box_top_bar = Bar([
+box_style_single_top_bar = Bar([
     # POWERBUTTON # 
     seperator(-3),
     PowerButton(),
@@ -1033,7 +1043,6 @@ box_top_bar = Bar([
     # TICKTICK MENU #
     seperator(),
     TickTickMenu(),
-    TextWidget("", fontsize=widget_default_font_size + 10),
 
     widget.Spacer(bar.STRETCH),
 
@@ -1064,7 +1073,7 @@ box_top_bar = Bar([
     # BATTERY #
     seperator(),
     BatteryIcon(),
-    BatteryWidget(),
+    BatteryIconWidget(decor=True),
 
     # WATTAGE #
     seperator(),
@@ -1081,72 +1090,20 @@ box_top_bar = Bar([
     BacklightIcon(),
     BacklightWidget(),
 
-    seperator(5),
-    BatteryIconWidget(),
-    seperator(5),
-
     # TIME #
+    seperator(),
     ClockWidget(),
     seperator(-5),
 
 ], top_bar_size, margin = bar_margin_top, background = bar_background_color, border_width = bar_width_top, border_color = bar_border_color, opacity=1)
 
-single_top_bar = Bar([
-    ActiveWindowIcon("", fontsize=widget_default_font_size + 2),
-    ActiveWindowWidget(),
-    TextWidget("File"),
-    TextWidget("Edit"),
-    TextWidget("View"),
-    TextWidget("Go"),
-    TextWidget("Window"),
-
-    widget.Spacer(bar.STRETCH),
-
-    # BLUETOOTH #
-    BluetoothIcon(),
-    seperator(),
-
-    # VOLUME #
-    VolumeIcon(),
-    seperator(),
-
-    #  WIFI #
-    WifiIcon(),
-
-    # CPU LOAD #
-    seperator(),
-    CpuLoadIcon(),
-
-    # URGENT NOTIFICATION #
-    seperator(),
-    NotificationIcon(),
-
-    # BACKLIGHT #
-    seperator(),
-    BacklightIcon(),
-
-    # BATTERY #
-    seperator(),
-    BatteryIconWidget(),
-
-    # TIME #
-    seperator(),
-    ClockWidget(),
-    seperator(-2),
-
-], top_bar_size, margin = bar_margin_top, background = bar_background_color, border_width = bar_width_top, border_color = bar_border_color, opacity=1)
-
-box_bottom_bar = Bar([
+box_style_single_bottom_bar = Bar([
     # GROUPBOX #
     GroupBoxWidget(),
     
     # TASKLIST #
     seperator(background=transparent),
     widget.TaskList(**task_list_settings),
-
-    # WINDOWCOUNT #
-    seperator(background=transparent),
-    WindowCountWidget(),
 
     # APPS #
     seperator(background=transparent),
@@ -1158,17 +1115,7 @@ box_bottom_bar = Bar([
 
 ], bottom_bar_size, margin = bar_margin_bottom, background = bar_background_color, border_width = bar_width_bottom, border_color = bar_border_color, opacity=1)
 
-single_bottom_bar = Bar([
-    # GROUPBOX #
-    # GroupBoxWidget(),
-    
-    # TASKLIST #
-    # seperator(background=transparent),
-    widget.TaskList(**task_list_settings),
-
-], bottom_bar_size, margin = bar_margin_bottom, background = bar_background_color, border_width = bar_width_bottom, border_color = bar_border_color, opacity=1)
-
-top_bar_1 = Bar([
+box_style_dual_top_bar_1 = Bar([
     widget.Spacer(bar.STRETCH),
     
     # BLUETOOTH #
@@ -1222,7 +1169,7 @@ top_bar_1 = Bar([
 
 ], top_bar_size, margin = bar_margin_top, background = bar_background_color, border_width = bar_width_top, border_color = bar_border_color, opacity=1)
 
-top_bar_2 = Bar([
+box_style_dual_top_bar_2 = Bar([
     # POWERBUTTON #
     seperator(),
     PowerButton(),
@@ -1239,7 +1186,7 @@ top_bar_2 = Bar([
 
 ], top_bar_size, margin = bar_margin_top, background = bar_background_color, border_width = bar_width_top, border_color = bar_border_color, opacity=1)
 
-bottom_bar_1 = Bar([
+box_style_dual_bottom_bar_1 = Bar([
     # APPS #
     AppTrayIcon("", icon_background_2, ["firefox", "c", ""]),
     AppTrayIcon("", icon_background_3, ["code", "v", ""]),
@@ -1261,7 +1208,177 @@ bottom_bar_1 = Bar([
 
 ], bottom_bar_size, margin = bar_margin_bottom, background = bar_background_color, border_width = bar_width_bottom, border_color = bar_border_color, opacity=1)
 
-bottom_bar_2 = Bar([
+box_style_dual_bottom_bar_2 = Bar([
+    # GROUPBOX #
+    GroupBoxWidget(),
+
+    # TASKLIST #
+    seperator(background=transparent),
+    widget.TaskList(**task_list_settings),
+
+    # WINDOWCOUNT #
+    seperator(background=transparent),
+    WindowCountWidget(),
+
+    # APPS #
+    seperator(background=transparent),
+    AppTrayIcon("", icon_background_2, ["firefox", "c", ""]),
+    AppTrayIcon("", icon_background_3, ["code", "v", ""]),
+    AppTrayIcon("", icon_background_7, ["pcmanfm", "n", ""]),
+    AppTrayIcon("", icon_background_8, launch="spotify"),
+    AppTrayIcon(" ", icon_background_9, launch="python3 /home/jonalm/scripts/qtile/settings_menu/app"),
+
+], bottom_bar_size, margin = bar_margin_bottom, background = bar_background_color, border_width = bar_width_bottom, border_color = bar_border_color, opacity=1)
+
+simple_style_single_top_bar = Bar([
+    ActiveWindowIcon("", fontsize=widget_default_font_size + 2),
+    ActiveWindowWidget(),
+    WindowOptionWidget("File"),
+    WindowOptionWidget("Edit"),
+    WindowOptionWidget("View"),
+    WindowOptionWidget("Go"),
+    WindowOptionWidget("Window"),
+
+    widget.Spacer(bar.STRETCH),
+
+    # BLUETOOTH #
+    BluetoothIcon(),
+    seperator(),
+
+    # VOLUME #
+    VolumeIcon(),
+    seperator(),
+
+    #  WIFI #
+    WifiIcon(),
+
+    # CPU LOAD #
+    seperator(),
+    CpuLoadIcon(),
+
+    # URGENT NOTIFICATION #
+    seperator(),
+    NotificationIcon(),
+
+    # BACKLIGHT #
+    seperator(),
+    BacklightIcon(),
+
+    # BATTERY #
+    seperator(),
+    BatteryIconWidget(),
+
+    # TIME #
+    seperator(),
+    ClockWidget(decor_color=transparent),
+    seperator(-2),
+
+], top_bar_size, margin = bar_margin_top, background = bar_background_color, border_width = bar_width_top, border_color = bar_border_color, opacity=1)
+
+simple_style_single_bottom_bar = Bar([
+    # GROUPBOX #
+    # GroupBoxWidget(),
+    
+    # TASKLIST #
+    # seperator(background=transparent),
+    widget.TaskList(**task_list_settings),
+
+], bottom_bar_size, margin = bar_margin_bottom, background = bar_background_color, border_width = bar_width_bottom, border_color = bar_border_color, opacity=1)
+
+simple_style_dual_top_bar_1 = Bar([
+    widget.Spacer(bar.STRETCH),
+    
+    # BLUETOOTH #
+    BluetoothIcon(),
+    BluetoothWidget(),
+    
+    # VOLUME #
+    seperator(),
+    VolumeIcon(),
+    VolumeWidget(),
+
+    #  WIFI #
+    seperator(),
+    WifiIcon(),
+    WifiWidget(),
+
+    # CPU TEMP #
+    seperator(),
+    CpuTempIcon(),
+    CpuTempWidget(),
+
+    # CPU LOAD #
+    seperator(),
+    CpuLoadIcon(),
+    CpuLoadWidget(),
+
+    # BATTERY #
+    seperator() if laptop else NothingWidget(),
+    BatteryIcon() if laptop else NothingWidget(),
+    BatteryWidget() if laptop else NothingWidget(),
+
+    # WATTAGE #
+    seperator() if laptop else NothingWidget(),
+    WattageIcon() if laptop else NothingWidget(),
+    WattageWidget() if laptop else NothingWidget(),
+
+    # URGENT NOTIFICATION #
+    seperator(),
+    NotificationIcon(),
+    NotificationWidget(),
+
+    # BACKLIGHT #
+    seperator() if laptop else NothingWidget(),
+    BacklightIcon() if laptop else NothingWidget(),
+    BacklightWidget() if laptop else NothingWidget(),
+
+    # TIME #
+    seperator(),
+    ClockWidget(),
+    seperator(),
+
+], top_bar_size, margin = bar_margin_top, background = bar_background_color, border_width = bar_width_top, border_color = bar_border_color, opacity=1)
+
+simple_style_dual_top_bar_2 = Bar([
+    # POWERBUTTON #
+    seperator(),
+    PowerButton(),
+
+    # LAYOUTICON #
+    seperator(),
+    LayoutIcon(),
+
+    # TICKTICK MENU #
+    seperator(),
+    TickTickMenu(),
+
+    widget.Spacer(bar.STRETCH),
+
+], top_bar_size, margin = bar_margin_top, background = bar_background_color, border_width = bar_width_top, border_color = bar_border_color, opacity=1)
+
+simple_style_dual_bottom_bar_1 = Bar([
+    # APPS #
+    AppTrayIcon("", icon_background_2, ["firefox", "c", ""]),
+    AppTrayIcon("", icon_background_3, ["code", "v", ""]),
+    AppTrayIcon("", icon_background_7, ["pcmanfm", "n", ""]),
+    AppTrayIcon("", icon_background_8, launch="spotify"),
+    AppTrayIcon(" ", icon_background_9, launch="~/scripts/qtile/settings_menu/app/settings_menu.py"),
+
+    # WINDOWCOUNT #
+    seperator(background=transparent),
+    WindowCountWidget(),
+
+    # TASKLIST #
+    seperator(background=transparent),
+    widget.TaskList(**task_list_settings),
+
+    # GROUPBOX #
+    seperator(background=transparent),
+    GroupBoxWidget(),
+
+], bottom_bar_size, margin = bar_margin_bottom, background = bar_background_color, border_width = bar_width_bottom, border_color = bar_border_color, opacity=1)
+
+simple_style_dual_bottom_bar_2 = Bar([
     # GROUPBOX #
     GroupBoxWidget(),
 
@@ -1335,17 +1452,32 @@ extension_defaults = widget_defaults.copy()
 
 ### DECLARING PANEL ###
 if top_bar_on and bottom_bar_on:
-    single_screen = Screen(top=single_top_bar, bottom=single_bottom_bar, left=bar.Gap(bar_gap_size), right=bar.Gap(bar_gap_size))
-    left_screen   = Screen(top=top_bar_1, bottom=bottom_bar_1, left=bar.Gap(bar_gap_size), right=bar.Gap(bar_gap_size))
-    right_screen  = Screen(top=top_bar_2, bottom=bottom_bar_2, left=bar.Gap(bar_gap_size), right=bar.Gap(bar_gap_size))
+    if bar_style == "box":
+        single_screen = Screen(top=box_style_single_top_bar, bottom=box_style_single_bottom_bar, left=bar.Gap(bar_gap_size), right=bar.Gap(bar_gap_size))
+        left_screen   = Screen(top=box_style_dual_top_bar_1, bottom=box_style_dual_bottom_bar_1, left=bar.Gap(bar_gap_size), right=bar.Gap(bar_gap_size))
+        right_screen  = Screen(top=box_style_dual_top_bar_2, bottom=box_style_dual_bottom_bar_2, left=bar.Gap(bar_gap_size), right=bar.Gap(bar_gap_size))
+    elif bar_style == "simple":
+        single_screen = Screen(top=simple_style_single_top_bar, bottom=simple_style_single_bottom_bar, left=bar.Gap(bar_gap_size), right=bar.Gap(bar_gap_size))
+        left_screen   = Screen(top=simple_style_dual_top_bar_1, bottom=simple_style_dual_bottom_bar_1, left=bar.Gap(bar_gap_size), right=bar.Gap(bar_gap_size))
+        right_screen  = Screen(top=simple_style_dual_top_bar_2, bottom=simple_style_dual_bottom_bar_2, left=bar.Gap(bar_gap_size), right=bar.Gap(bar_gap_size))
 elif top_bar_on and not bottom_bar_on:
-    single_screen = Screen(top=single_top_bar, bottom=bar.Gap(bar_gap_size), left=bar.Gap(bar_gap_size), right=bar.Gap(bar_gap_size))
-    left_screen   = Screen(top=top_bar_1, bottom=bar.Gap(bar_gap_size), left=bar.Gap(bar_gap_size), right=bar.Gap(bar_gap_size))
-    right_screen  = Screen(top=top_bar_2, bottom=bar.Gap(bar_gap_size), left=bar.Gap(bar_gap_size), right=bar.Gap(bar_gap_size))
+    if bar_style == "box":
+        single_screen = Screen(top=simple_style_single_top_bar, bottom=bar.Gap(bar_gap_size), left=bar.Gap(bar_gap_size), right=bar.Gap(bar_gap_size))
+        left_screen   = Screen(top=simple_style_dual_top_bar_1, bottom=bar.Gap(bar_gap_size), left=bar.Gap(bar_gap_size), right=bar.Gap(bar_gap_size))
+        right_screen  = Screen(top=simple_style_dual_top_bar_2, bottom=bar.Gap(bar_gap_size), left=bar.Gap(bar_gap_size), right=bar.Gap(bar_gap_size))
+    elif bar_style == "simple":
+        single_screen = Screen(top=simple_style_single_top_bar, bottom=bar.Gap(bar_gap_size), left=bar.Gap(bar_gap_size), right=bar.Gap(bar_gap_size))
+        left_screen   = Screen(top=simple_style_dual_top_bar_1, bottom=bar.Gap(bar_gap_size), left=bar.Gap(bar_gap_size), right=bar.Gap(bar_gap_size))
+        right_screen  = Screen(top=simple_style_dual_top_bar_2, bottom=bar.Gap(bar_gap_size), left=bar.Gap(bar_gap_size), right=bar.Gap(bar_gap_size))
 elif bottom_bar_on and not top_bar_on:
-    single_screen = Screen(top=bar.Gap(bar_gap_size), bottom=single_bottom_bar, left=bar.Gap(bar_gap_size), right=bar.Gap(bar_gap_size))
-    left_screen   = Screen(top=bar.Gap(bar_gap_size), bottom=bottom_bar_1, left=bar.Gap(bar_gap_size), right=bar.Gap(bar_gap_size))
-    right_screen  = Screen(top=bar.Gap(bar_gap_size), bottom=bottom_bar_2, left=bar.Gap(bar_gap_size), right=bar.Gap(bar_gap_size))
+    if bar_style == "box":
+        single_screen = Screen(top=bar.Gap(bar_gap_size), bottom=simple_style_single_bottom_bar, left=bar.Gap(bar_gap_size), right=bar.Gap(bar_gap_size))
+        left_screen   = Screen(top=bar.Gap(bar_gap_size), bottom=simple_style_dual_bottom_bar_1, left=bar.Gap(bar_gap_size), right=bar.Gap(bar_gap_size))
+        right_screen  = Screen(top=bar.Gap(bar_gap_size), bottom=simple_style_dual_bottom_bar_2, left=bar.Gap(bar_gap_size), right=bar.Gap(bar_gap_size))
+    elif bar_style == "simple":
+        single_screen = Screen(top=bar.Gap(bar_gap_size), bottom=simple_style_single_bottom_bar, left=bar.Gap(bar_gap_size), right=bar.Gap(bar_gap_size))
+        left_screen   = Screen(top=bar.Gap(bar_gap_size), bottom=simple_style_dual_bottom_bar_1, left=bar.Gap(bar_gap_size), right=bar.Gap(bar_gap_size))
+        right_screen  = Screen(top=bar.Gap(bar_gap_size), bottom=simple_style_dual_bottom_bar_2, left=bar.Gap(bar_gap_size), right=bar.Gap(bar_gap_size))
 else:
     single_screen = Screen(top=bar.Gap(bar_gap_size), bottom=bar.Gap(bar_gap_size), left=bar.Gap(bar_gap_size), right=bar.Gap(bar_gap_size))
     left_screen   = Screen(top=bar.Gap(bar_gap_size), bottom=bar.Gap(bar_gap_size), left=bar.Gap(bar_gap_size), right=bar.Gap(bar_gap_size))

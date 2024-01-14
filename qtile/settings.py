@@ -140,6 +140,12 @@ else:
 #*           BAR               ##
 #*###############################
 #?#############
+#?   STYLE   ##
+#?#############
+# Styles are: "simple", "box"
+bar_style = qtile_settings.get("bar_style", "simple")
+
+#?#############
 #?   COLORS  ##
 #?#############
 #!ALL
@@ -159,31 +165,32 @@ group_box_highlight_text_color      = colors[3]
 group_box_urgentborder_color        = colors[3]
 
 if laptop:
-    # icon_background_1                   = "#b48ead"
-    # icon_background_2                   = "#9B98B7"
-    # icon_background_3                   = "#81A1C1"
-    # icon_background_4                   = "#8fbcbb"
-    # icon_background_5                   = "#8fbcbb"
-    # icon_background_6                   = "#a3be8c"
-    # icon_background_7                   = "#a3be8c"
-    # icon_background_8                   = "#d08770"
-    # icon_background_9                   = "#bf616a"
-    # icon_background_10                  = "#b48ead"
-    # icon_background_11                  = "#9B98B7"
-    # icon_background_12                  = "#81A1C1"
-
-    icon_background_1                   = transparent
-    icon_background_2                   = transparent
-    icon_background_3                   = transparent
-    icon_background_4                   = transparent
-    icon_background_5                   = transparent
-    icon_background_6                   = transparent
-    icon_background_7                   = transparent
-    icon_background_8                   = transparent
-    icon_background_9                   = transparent
-    icon_background_10                  = transparent
-    icon_background_11                  = transparent
-    icon_background_12                  = transparent
+    if bar_style == "box":
+        icon_background_1                   = "#b48ead"
+        icon_background_2                   = "#9B98B7"
+        icon_background_3                   = "#81A1C1"
+        icon_background_4                   = "#8fbcbb"
+        icon_background_5                   = "#8fbcbb"
+        icon_background_6                   = "#a3be8c"
+        icon_background_7                   = "#a3be8c"
+        icon_background_8                   = "#d08770"
+        icon_background_9                   = "#bf616a"
+        icon_background_10                  = "#b48ead"
+        icon_background_11                  = "#9B98B7"
+        icon_background_12                  = "#81A1C1"
+    elif bar_style == "simple":
+        icon_background_1                   = transparent
+        icon_background_2                   = transparent
+        icon_background_3                   = transparent
+        icon_background_4                   = transparent
+        icon_background_5                   = transparent
+        icon_background_6                   = transparent
+        icon_background_7                   = transparent
+        icon_background_8                   = transparent
+        icon_background_9                   = transparent
+        icon_background_10                  = transparent
+        icon_background_11                  = transparent
+        icon_background_12                  = transparent
 else:
     icon_background_1                   = "#b48ead"
     icon_background_2                   = "#9B98B7"
@@ -198,31 +205,32 @@ else:
     icon_background_11                  = "#9B98B7"
     icon_background_12                  = "#81A1C1"
 
-# icon_foreground_1                   = "#1e2227"
-# icon_foreground_2                   = "#1e2227"
-# icon_foreground_3                   = "#1e2227"
-# icon_foreground_4                   = "#1e2227"
-# icon_foreground_5                   = "#1e2227"
-# icon_foreground_6                   = "#1e2227"
-# icon_foreground_7                   = "#1e2227"
-# icon_foreground_8                   = "#1e2227"
-# icon_foreground_9                   = "#1e2227"
-# icon_foreground_10                  = "#1e2227"
-# icon_foreground_11                  = "#1e2227"
-# icon_foreground_12                  = "#1e2227"
-    
-icon_foreground_1                   = "#b48ead"
-icon_foreground_2                   = "#9B98B7"
-icon_foreground_3                   = "#81A1C1"
-icon_foreground_4                   = "#8fbcbb"
-icon_foreground_5                   = "#8fbcbb"
-icon_foreground_6                   = "#a3be8c"
-icon_foreground_7                   = "#a3be8c"
-icon_foreground_8                   = "#d08770"
-icon_foreground_9                   = "#bf616a"
-icon_foreground_10                  = "#b48ead"
-icon_foreground_11                  = "#9B98B7"
-icon_foreground_12                  = "#81A1C1"
+if bar_style == "box":
+    icon_foreground_1                   = "#1e2227"
+    icon_foreground_2                   = "#1e2227"
+    icon_foreground_3                   = "#1e2227"
+    icon_foreground_4                   = "#1e2227"
+    icon_foreground_5                   = "#1e2227"
+    icon_foreground_6                   = "#1e2227"
+    icon_foreground_7                   = "#1e2227"
+    icon_foreground_8                   = "#1e2227"
+    icon_foreground_9                   = "#1e2227"
+    icon_foreground_10                  = "#1e2227"
+    icon_foreground_11                  = "#1e2227"
+    icon_foreground_12                  = "#1e2227"
+elif bar_style == "simple":
+    icon_foreground_1                   = "#b48ead"
+    icon_foreground_2                   = "#9B98B7"
+    icon_foreground_3                   = "#81A1C1"
+    icon_foreground_4                   = "#8fbcbb"
+    icon_foreground_5                   = "#8fbcbb"
+    icon_foreground_6                   = "#a3be8c"
+    icon_foreground_7                   = "#a3be8c"
+    icon_foreground_8                   = "#d08770"
+    icon_foreground_9                   = "#bf616a"
+    icon_foreground_10                  = "#b48ead"
+    icon_foreground_11                  = "#9B98B7"
+    icon_foreground_12                  = "#81A1C1"
 
 app_tray_icon_color_1               = "#81A1C1"
 app_tray_icon_color_2               = "#8fbcbb"
@@ -238,8 +246,8 @@ app_tray_icon_color_5               = "#bf616a"
 #!BLACK
 bar_background_color                = "#1e2227.8"
 bar_border_color                    = "#454951"
-right_decor_background              = transparent
-# right_decor_background              = "#717c99.5"
+# right_decor_background              = transparent
+right_decor_background              = "#717c99.5"
 
 #!OTHER
 # bar_border_color                   = "#4f586e.95"
@@ -265,14 +273,18 @@ for num in qtile_settings.get("bar_width_top", [0, 0, 1, 0]):
 bar_width_top                       = bar_width
 bar_margin_top                      = qtile_settings.get("bar_margin_top", [0, -2, 2 ,-2])
 bar_width_bottom                    = qtile_settings.get("bar_width_bottom", [0, 0, 0 ,0])
-bar_margin_bottom                   = qtile_settings.get("bar_margin_bottom", [5, 450, 10, 450])
+bar_margin_bottom                   = qtile_settings.get("bar_margin_bottom", [5, 580, 10, 580])
 # bar_margin_bottom                   = qtile_settings.get("bar_margin_bottom", [5, 300, 16, 300])
 
 #!GAP
 bar_gap_size                        = qtile_settings.get("bar_gap_size", 0)
 
 #!SEPERATOR
-seperator_padding                   = int(qtile_settings.get("seperator_padding", 15)*seperator_padding_scaling)
+if bar_style == "box":
+    seperator_padding               = int(qtile_settings.get("seperator_padding", 5)*seperator_padding_scaling)
+elif bar_style == "simple":
+    seperator_padding               = int(qtile_settings.get("seperator_padding", 15)*seperator_padding_scaling)
+
 seperator_line_width                = int(qtile_settings.get("seperator_line_width", 15)*seperator_line_scaling)
 
 #!WIDGET DEFAULT
