@@ -14,11 +14,11 @@ class EventHandler:
     def on_search_changed(self, entry):
         search_text = entry.get_text().lower()
         
-        for row in self.app.list.get_children():
-            self.app.list.remove(row)
+        for row in self.app.side_bar.list.get_children():
+            self.app.side_bar.list.remove(row)
 
         if not search_text:
-            self.app.configure_list()
+            self.app.side_bar.configure_list()
             return
         
         new_list_elements = []
@@ -27,7 +27,7 @@ class EventHandler:
             if search_text in info["title"].lower():
                 new_list_elements.append(info)
         
-        self.app.configure_list(new_list_elements)
+        self.app.side_bar.configure_list(new_list_elements)
 
     def on_search_pressed(self, entry):
         self.on_item_clicked(None, None, self.app.first_list_info, self.app.first_list_box)
@@ -78,11 +78,15 @@ class EventHandler:
 
     def change_global_options_visability(self):
         if self.app.qtile_data == self.app.qtile_data_copy:
-            self.app.side_bar.save_box.hide()
-            self.app.side_bar.revert_box.hide()
+            self.app.content.save_box.get_style_context().remove_class('visible-box');
+            self.app.content.save_box.get_style_context().add_class('hidden-box');
+            self.app.content.revert_box.get_style_context().remove_class('visible-box');
+            self.app.content.revert_box.get_style_context().add_class('hidden-box');
         else:
-            self.app.side_bar.save_box.show_all()
-            self.app.side_bar.revert_box.show_all()
+            self.app.content.save_box.get_style_context().add_class('visible-box');
+            self.app.content.save_box.get_style_context().remove_class('hidden-box');
+            self.app.content.revert_box.get_style_context().add_class('visible-box');
+            self.app.content.revert_box.get_style_context().remove_class('hidden-box');
 
     def global_options_on_box_enter(self, widget, event, box, icon, box_css):
         box.set_name(box_css)

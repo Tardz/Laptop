@@ -676,7 +676,7 @@ class BatteryIconWidget(widget.BatteryIcon):
             battery = 0,
             scale = 2.8,
             # update_interval = battery_update_interval,
-            # mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("python3 /home/jonalm/scripts/qtile/bar_menus/power/power_management_menu.py")},
+            mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("python3 /home/jonalm/scripts/qtile/bar_menus/power/power_management_menu.py")},
             decorations = right_decor() if decor else right_decor(transparent),
         )
             
@@ -900,11 +900,18 @@ class ActiveWindowIcon(widget.TextBox):
     def __init__(self, foreground=text_color, fontsize=widget_default_font_size + 2):
         widget.TextBox.__init__(
             self,
-            text = "",
+            text = "",
             fontsize = icon_size + 10,
-            padding = widget_default_padding + 16,
+            padding = widget_default_padding + 14,
             background = bar_background_color,
+            mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("python3 /home/jonalm/scripts/qtile/settings_menu/app/settings_menu.py")}
         )
+
+    def mouse_enter(self, *args, **kwargs):
+        self.bar.window.window.set_cursor("hand2")
+
+    def mouse_leave(self, *args, **kwargs):
+        self.bar.window.window.set_cursor("left_ptr")
 
 class ActiveWindowWidget(widget.WindowName):
     def __init__(self, foreground=text_color):

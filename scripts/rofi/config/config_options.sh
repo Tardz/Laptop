@@ -21,6 +21,7 @@ declare -a options=(
 "Qtile scripts - $HOME/scripts/qtile/"
 "Term scripts - $HOME/scripts/term/"
 "Generall scripts - $HOME/scripts/"
+"Settings menu - $HOME/scripts/qtile/settings_menu/"
 "Rofi config - $HOME/.config/rofi/"
 )
 

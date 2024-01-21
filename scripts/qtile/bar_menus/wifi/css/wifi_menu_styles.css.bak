@@ -1,14 +1,14 @@
 .root {
     border-width: 5px;
     border-color: rgba(79, 88, 110, 0.9);
-    background: rgba(30, 34, 39, 0.8);
+    background: rgba(46, 52, 64, 0.9);
 }
 .content-area {
     margin-top: 5px;    
     margin-right: 5px;  
     margin-bottom: 5px;
     margin-left: 5px;
-    background: rgba(30, 34, 39, 0.8);
+    background: rgba(46, 52, 64, 0.9);
 }
 
 /* TITLE */
@@ -21,7 +21,7 @@
     font-family: 'Font Awesome 6 Free Solid';
 }
 #status-dot-inactive {
-    color: rgba(30, 34, 39, 0.8);
+    color: rgba(46, 52, 64, 0.9);
 }
 #status-dot-list-update {
     color: #81a1c1;
@@ -30,8 +30,8 @@
     color: #c1656e;
 }
 .toggle-title-box {
-    border-radius: 8px;
-    background: rgba(79, 88, 110, 0.6);
+    border-radius: 5px;
+    background: rgba(79, 88, 110, 0.8);
 }
 .toggle-title {
     margin-top: 9px;    
@@ -57,7 +57,7 @@
     margin-right: 10px;  
     margin-bottom: 10px;
     margin-left: 10px;
-    border-radius: 8px;
+    border-radius: 5px;
 }
 #toggle-icon-box-enabled {
     background: #81a1c1;
@@ -70,7 +70,7 @@
     margin-right: 10px;  
     margin-bottom: 10px;
     margin-left: 10px;
-    border-radius: 8px;
+    border-radius: 5px;
     font-size: 24px;
     font-family: 'Font Awesome 6 Free Solid';
 
@@ -86,22 +86,22 @@
 
 /* LIST */
 .list-box {
-    border-radius: 8px;
-    background: rgba(79, 88, 110, 0.6);
+    border-radius: 5px;
+    background: rgba(79, 88, 110, 0.8);
 }
 .list {
     margin-top: 10px;    
     margin-bottom: 10px;
-    border-radius: 8px;
-    background: rgba(79, 88, 110, 0.6);
+    border-radius: 5px;
+    background: rgba(79, 88, 110, 0.8);
 }
 .row {
     margin-left: 5px;
     margin-right: 5px;
-    border-radius: 8px;
+    border-radius: 5px;
 }
 .list-icon-box {
-    border-radius: 8px;
+    border-radius: 5px;
     background: #2e3440;
 }
 .list-icon {
@@ -115,7 +115,7 @@
 .list-name-box {
     margin-top: 4px;    
     margin-bottom: 4px;  
-    border-radius: 8px;
+    border-radius: 5px;
     font-size: 18px;
 }
 #list-name-box-inactive {
@@ -132,7 +132,7 @@
 .list-name {
     margin-bottom: 10px;  
     margin-top: 10px;    
-    border-radius: 8px;
+    border-radius: 5px;
     font-size: 18px;
     font-family: FiraCode Nerd Font;
 }
@@ -144,7 +144,7 @@
     font-family: 'Font Awesome 6 Free Solid';
 }
 #known-icon-active {
-    color: rgba(30, 34, 39, 0.8);
+    color: rgba(46, 52, 64, 0.9);
 }
 #known-icon-inactive {
     color: #a3be8c;
@@ -152,7 +152,7 @@
 
 .buttons {
     font-size: 18px;
-    border-radius: 8px;
+    border-radius: 5px;
     font-family: "FiraCode Nerd Font";
     font-weight: lighter;
 }
@@ -193,7 +193,7 @@
     border-radius: 3px;
 }
 #toggle-box-list-options-inactive {
-    background: rgba(79, 88, 110, 0.6);
+    background: rgba(79, 88, 110, 0.8);
 }
 #toggle-box-list-options-active {
     background: #81a1c1;

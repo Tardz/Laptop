@@ -1,4 +1,3 @@
-
 import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
@@ -19,15 +18,14 @@ class Sidebar:
         self.side_bar_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=11)
         self.side_bar_box.get_style_context().add_class("sidebar-box")
         
-        self.create_title()
+        # self.create_title()
         self.create_search()
         self.create_settings_list()
-        self.create_global_options()
+        self.create_profile_option()
 
-        self.side_bar_box.pack_start(self.title_box, False, True, 0)
+        # self.side_bar_box.pack_start(self.title_box, False, True, 0)
         self.side_bar_box.pack_start(self.search_box, False, True, 0)
         self.side_bar_box.pack_start(self.list_box, True, True, 0)
-        self.side_bar_box.pack_start(self.global_options_box, False, True, 0)
         self.side_bar_box.set_size_request(300, -1)
 
         self.configure_list()
@@ -37,6 +35,7 @@ class Sidebar:
         self.title_box.get_style_context().add_class("title-box")
 
         title = Gtk.Label()
+        title.set_halign(Gtk.Align.START)
         title.get_style_context().add_class("title")
         title.set_text("Settings")
         
@@ -134,51 +133,5 @@ class Sidebar:
                 
         self.app.show_all()
 
-    def create_global_options(self):
-        self.global_options_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=8)
-
-        self.quit_box = Gtk.EventBox()
-        self.quit_box.set_name("global-options-icon-box-inactive")
-        quit_icon_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
-        quit_icon_box.get_style_context().add_class("global-options-icon-box")
-        self.quit_icon = Gtk.Label()
-        self.quit_icon.get_style_context().add_class("global-options-icon")
-        self.quit_icon.set_name("quit-icon-inactive")
-        self.quit_icon.set_text("")
-        quit_icon_box.add(self.quit_icon)
-        self.quit_box.add(quit_icon_box)
-        self.quit_box.connect("enter-notify-event", self.app.event_handler.global_options_on_box_enter, self.quit_box, self.quit_icon, "quit-icon-box-active")
-        self.quit_box.connect("leave-notify-event", self.app.event_handler.global_options_on_box_leave, self.quit_box, self.quit_icon, "quit-icon-inactive")
-        self.quit_box.connect("button-press-event", self.app.event_handler.on_exit_press)
-
-        self.revert_box = Gtk.EventBox()
-        self.revert_box.set_name("global-options-icon-box-inactive")
-        revert_icon_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
-        revert_icon_box.get_style_context().add_class("global-options-icon-box")
-        self.revert_icon = Gtk.Label()
-        self.revert_icon.get_style_context().add_class("global-options-icon")
-        self.revert_icon.set_name("revert-icon-inactive")
-        self.revert_icon.set_text("")
-        revert_icon_box.add(self.revert_icon)
-        self.revert_box.add(revert_icon_box)
-        self.revert_box.connect("enter-notify-event", self.app.event_handler.global_options_on_box_enter, self.revert_box, self.revert_icon, "revert-icon-box-active")
-        self.revert_box.connect("leave-notify-event", self.app.event_handler.global_options_on_box_leave, self.revert_box, self.revert_icon, "revert-icon-inactive")
-        self.revert_box.connect("button-press-event", self.app.event_handler.revert_config)
-
-        self.save_box = Gtk.EventBox()
-        self.save_box.set_name("global-options-icon-box-inactive")
-        save_icon_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
-        save_icon_box.get_style_context().add_class("global-options-icon-box")
-        self.save_icon = Gtk.Label()
-        self.save_icon.get_style_context().add_class("global-options-icon")
-        self.save_icon.set_name("save-icon-inactive")
-        self.save_icon.set_text("")
-        save_icon_box.add(self.save_icon)
-        self.save_box.add(save_icon_box)
-        self.save_box.connect("enter-notify-event", self.app.event_handler.global_options_on_box_enter, self.save_box, self.save_icon, "save-icon-box-active")
-        self.save_box.connect("leave-notify-event", self.app.event_handler.global_options_on_box_leave, self.save_box, self.save_icon, "save-icon-inactive")
-        self.save_box.connect("button-press-event", self.app.event_handler.save_config)
-
-        self.global_options_box.pack_start(self.quit_box, True, True, 0)
-        self.global_options_box.pack_start(self.revert_box, True, True, 0)
-        self.global_options_box.pack_start(self.save_box, True, True, 0)
+    def create_profile_option(self):
+        pass

@@ -244,7 +244,7 @@ app_tray_icon_color_5               = "#bf616a"
 # right_decor_background             = "#606b86.9"
 
 #!BLACK
-bar_background_color                = "#1e2227.8"
+bar_background_color                = "#1e2227.7"
 bar_border_color                    = "#454951"
 # right_decor_background              = transparent
 right_decor_background              = "#717c99.5"
@@ -267,11 +267,11 @@ bottom_bar_size                     = int(qtile_settings.get("bottom_bar_size", 
 # bottom_bar_size                     = int(qtile_settings.get("bottom_bar_size", 55)*bar_scaling)
 
 bar_width = [] 
-for num in qtile_settings.get("bar_width_top", [0, 0, 1, 0]):
+for num in qtile_settings.get("bar_width_top", [0, 0, 0, 0]):
     bar_width.append(int(num*general_width_scaling))
 
 bar_width_top                       = bar_width
-bar_margin_top                      = qtile_settings.get("bar_margin_top", [0, -2, 2 ,-2])
+bar_margin_top                      = qtile_settings.get("bar_margin_top", [0, -2, 0 ,-2])
 bar_width_bottom                    = qtile_settings.get("bar_width_bottom", [0, 0, 0 ,0])
 bar_margin_bottom                   = qtile_settings.get("bar_margin_bottom", [5, 580, 10, 580])
 # bar_margin_bottom                   = qtile_settings.get("bar_margin_bottom", [5, 300, 16, 300])
@@ -290,7 +290,7 @@ seperator_line_width                = int(qtile_settings.get("seperator_line_wid
 #!WIDGET DEFAULT
 widget_default_font_size            = int(18*widget_size_scaling)
 widget_default_padding              = int(6*widget_padding_scaling)
-bottom_widget_width                 = int(2*general_width_scaling)
+bottom_widget_width                 = int(0*general_width_scaling)
 # bottom_widget_width                 = int(3*general_width_scaling)
 
 #!GROUPBOX

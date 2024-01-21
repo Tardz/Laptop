@@ -1,7 +1,6 @@
 #root {
-    border-width: 5px;
-    border-color: rgba(79, 88, 110, 0.9);
-    background: rgba(46, 52, 64, 0.95);
+    /* border-width: 5px; */
+    background: rgba(45, 51, 59, 0.9);
 }
 
 /* SIDEBAR */
@@ -10,54 +9,56 @@
 }
 
 .title-box {
-    border: 3px solid rgba(113, 124, 153, 0.9);
     border-radius: 8px;
-    background: rgba(79, 88, 110, 0.9);
+    background: rgba(69, 73, 81, 0.0);
 }
 .title {
     margin-top: 10px;    
     margin-right: 10px;  
     margin-bottom: 10px;
-    margin-left: 10px;
+    margin-left: 20px;
     font-size: 24px;
     font-family: FiraCode Nerd Font;
     font-weight: bold;
 }
 
 .search-box {
-    border: 3px solid rgba(113, 124, 153, 0.9);
+    margin-top: 10px;
+    margin-right: 12px;
+    margin-left: 12px;
     border-radius: 8px;
-    background: rgba(79, 88, 110, 0.9);
+    background: rgba(69, 73, 81, 0.9);
 }
 .search-bar {
     border: 3px solid rgba(113, 124, 153, 0.0);
-    margin: 5px;
+    margin-top: 10px;
+    margin-bottom: 8px;
+    margin-left: 4px;
+    margin-right: 8px;
     background: rgba(79, 88, 110, 0.0);
     color: white;
-    font-size: 20px;
+    font-size: 19px;
     font-family: FiraCode Nerd Font;
     font-weight: normal;
 }
 .search-icon {
-    margin-left: 12px;
+    margin-left: 14px;
     margin-bottom: 1px;
-    font-size: 16px;
+    font-size: 17px;
     font-family: 'Font Awesome 6 Free Solid', serif;
 }
 
 .list-box {
     border-radius: 8px;
-    background: rgba(79, 88, 110, 0.9);
+    background: rgba(69, 73, 81, 0.0);
 }
 .scrolled-window {
-    border: 3px solid rgba(113, 124, 153, 0.9);
     border-radius: 8px;
-    background: rgba(79, 88, 110, 0.9);
+    background: rgba(69, 73, 81, 0.0);
 }
 .list {
     border-radius: 8px;
-    background: rgba(79, 88, 110, 0.9);
-
+    background: rgba(69, 73, 81, 0.0);
 }
 .list-item-box {
     /* margin-top: 8px;
@@ -65,9 +66,9 @@
     margin-right: 5px; */
 }
 #list-item-box-active {
-    border: 2px solid rgba(113, 124, 153, 0.9);
-    border-radius: 5px;
-    background: rgba(104, 116, 146, 0.9);
+    border: 2px solid rgba(69, 73, 81, 0.9);
+    border-radius: 8px;
+    background: rgba(69, 73, 81, 0.9);
 }
 #list-item-box-inactive {
     border: 2px solid rgba(113, 124, 153, 0);
@@ -79,9 +80,9 @@
     transition-duration: 0ms;
 }
 .list-row:hover {
-    border: 2px solid rgba(113, 124, 153, 0.9);
-    background: rgba(104, 116, 146, 0.9);
-    border-radius: 5px;
+    border: 2px solid rgba(69, 73, 81, 0.9);
+    background: rgba(69, 73, 81, 0.9);
+    border-radius: 8px;
     padding: 0px;
 }
 #first-list-row {
@@ -256,16 +257,25 @@
     font-size: 19px;
 }
 
-.global-options-icon {
-    margin: 5px;
-    color: black;
-    font-family: 'Font Awesome 6 Free Solid', serif;
-    font-size: 23px;
-    margin-top: 8px;
-    margin-bottom: 8px;
+.global-options-box {
+    margin-left: 12px;
+    margin-right: 12px;
+    margin-top: 3px;
+    margin-bottom: 3px;
 }
 .global-options-icon-box {
     border-radius: 8px;
+}
+.global-options-icon {
+    color: black;
+    font-family: 'Font Awesome 6 Free Solid', serif;
+    font-size: 24px;
+    margin-top: 12px;
+    margin-bottom: 12px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 25px;
+    padding-right: 25px;
 }
 #quit-icon-box-active {
     border-radius: 8px;
@@ -280,9 +290,8 @@
     background: rgba(163, 190, 160, 0.9);
 }
 #global-options-icon-box-inactive {
-    border: 3px solid rgba(113, 124, 153, 0.9);
     border-radius: 8px;
-    background: rgba(79, 88, 110, 0.95);
+    background: rgba(45, 51, 59, 0.8);
 }
 #quit-icon-inactive {
     color: rgba(191, 97, 106, 0.9);
@@ -296,21 +305,38 @@
 #global-options-icon-active {
     color: black;
 }
+.hidden-box {
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+.visible-box {
+    opacity: 1;
+    transition: opacity 0.2s ease;
+}
+.profile-name {
+    margin-top: 5px;
+    margin-left: -15px;
+    margin-right: 30px;
+    font-family: FiraCode Nerd Font;
+    font-weight: bolder;
+    font-size: 20px;
+}
+
+/* OVERLAY OPTIONS */
+.overlay-box {
+    margin: 15px;
+}
+
 /* MAIN CONTENT */
 .main-content-box {
-    border: 3px solid rgba(113, 124, 153, 0.9);
-    margin-top: 10px;
-    margin-bottom: 10px;
-    margin-left: 2px;
-    margin-right: 10px;
-    border-radius: 8px;
-    background: rgba(79, 88, 110, 0.9);
+    border-left: 2px solid rgba(69, 73, 81, 0.6);
+    background: rgba(69, 73, 81, 0.85);
 }
 .content-title-box {
-    border: 2px solid rgba(54, 63, 77, 0.9);
-    margin: 15px;
+    background: rgba(45, 51, 59, 0.85);
     border-radius: 8px;
-    background: rgba(104, 116, 146, 0.9);
+    padding: 5px;
+    margin: 15px;
 }
 .content-title {
     margin: 10px;
@@ -427,37 +453,51 @@
 /* GENERAL CONTENT */
 .switch-box {
     margin-top: 5px;
-    margin-bottom: 15px;
+    margin-bottom: 30px;
     margin-left: 60px;
 }
 .switch {
-    border: 3px solid rgba(54, 63, 77, 0.9);
+    border: 3px solid rgba(45, 51, 59, 0.0);
     /* border: 3px solid rgba(113, 124, 153, 0.9); */
     padding: 10px;
     margin: 3px;
     border-radius: 8px;
-    background: rgba(104, 116, 146, 0.9);
+    background: rgba(45, 51, 59, 0.9);
 }
 .switch:checked {
     background-color: #81a1c1;
 }
+.switch-desc-box {
+    margin-left: 15px;
+}
+.switch-desc-title {
+    font-family: FiraCode Nerd Font;
+    font-weight: bolder;
+    font-size: 19px;
+}
+.switch-desc {
+    color: #81a1c1;
+    font-family: FiraCode Nerd Font;
+    font-weight: bold;
+    font-size: 18px;
+}
 
 .sub-content-title-box {
     margin-top: 5px;
-    margin-bottom: 15px;
+    margin-bottom: 20px;
     margin-left: 15px;
 }
 .sub-content-title {
-    border: 2px solid rgba(54, 63, 77, 0.9);
-    padding: 10px;
+    padding: 14px;
     border-radius: 8px;
-    background: rgba(104, 116, 146, 0.9);
+    background: rgba(45, 51, 59, 0.85);
     font-family: FiraCode Nerd Font;
     font-weight: bolder;
     font-size: 20px;
 }
 .sub-content-desc-box {
-    margin-left: 15px;
+    margin-bottom: 15px;
+    margin-left: 45px;
 }
 .sub-content-desc-title {
     font-family: FiraCode Nerd Font;
@@ -465,15 +505,14 @@
     font-size: 19px;
 }
 .sub-content-desc {
-    color: #81a1c1;
     font-family: FiraCode Nerd Font;
-    font-weight: bold;
-    font-size: 17px;
+    font-weight: normal;
+    font-size: 18px;
 }
-#sub-content-desc-active {
+#switch-desc-active {
     color: #81a1c1;
 }
-#sub-content-desc-inactive {
+#switch-desc-inactive {
     color: #bf616a;
 }
 
@@ -486,6 +525,13 @@
     margin-right: 15px;
     border-radius: 8px;
     background: rgba(104, 116, 146, 0.9);
+}
+
+.info-card-box {
+    margin: 20px;
+}
+.info-card {
+
 }
 
 /* QTILE */

@@ -56,7 +56,7 @@ class SettingsMenu(Gtk.Window):
         self.other_data_copy = copy.deepcopy(self.other_data)
 
     def setup_ui(self):
-        self.move(950, 300)
+        self.move(780, 300)
         self.window_width = 1120
         self.window_height = 720
         self.set_size_request(self.window_width, self.window_height)
@@ -66,11 +66,10 @@ class SettingsMenu(Gtk.Window):
         self.css()
         self.side_bar = Sidebar(self)
         self.content = Content(self)
-        print(self.list_elements)
 
         self.main_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=0)
         self.main_box.pack_start(self.side_bar.side_bar_box, False, True, 1)
-        self.main_box.pack_start(self.content.main_content_box, True, True, 0)
+        self.main_box.pack_start(self.content.overlay, True, True, 0)
         self.add(self.main_box)
     
         self.show_all()
