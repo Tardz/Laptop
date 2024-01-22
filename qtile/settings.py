@@ -244,7 +244,7 @@ app_tray_icon_color_5               = "#bf616a"
 # right_decor_background             = "#606b86.9"
 
 #!BLACK
-bar_background_color                = "#1e2227.7"
+bar_background_color                = "#1e2227.8"
 bar_border_color                    = "#454951"
 # right_decor_background              = transparent
 right_decor_background              = "#717c99.5"

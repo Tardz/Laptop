@@ -1434,6 +1434,7 @@ floating_layout = Floating(
     float_rules   = [
         *Floating.default_float_rules,
         Match(wm_class = "nitrogen"),
+        Match(wm_class = "wifi_menu.py"),
         Match(wm_class = "settings_menu.py"),
         Match(wm_class = "electron"),
         Match(wm_class = "PatternRecognition"),

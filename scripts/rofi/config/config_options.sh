@@ -11,6 +11,7 @@ declare -a options=(
 "Alacritty config - $HOME/.config/alacritty/alacritty.toml"
 "Picom config all - $HOME/.config/picom/"
 "Picom config - $HOME/.config/picom/picom.conf"
+"Rofi config - $HOME/.config/rofi/"
 "Doom init config - $HOME/.doom.d/init.el"
 "Synth shell config - $HOME/.config/synth-shell/synth-shell-prompt.config"
 "Bashrc - $HOME/.bashrc"
@@ -21,8 +22,8 @@ declare -a options=(
 "Qtile scripts - $HOME/scripts/qtile/"
 "Term scripts - $HOME/scripts/term/"
 "Generall scripts - $HOME/scripts/"
+"Bar menus - $HOME/scripts/qtile/bar_menus/"
 "Settings menu - $HOME/scripts/qtile/settings_menu/"
-"Rofi config - $HOME/.config/rofi/"
 )
 
 display_options=$(printf '%s\n' "${options[@]}" | cut -d'-' -f1-1)

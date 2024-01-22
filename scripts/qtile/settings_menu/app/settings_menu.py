@@ -57,7 +57,7 @@ class SettingsMenu(Gtk.Window):
 
     def setup_ui(self):
         self.move(780, 300)
-        self.window_width = 1120
+        self.window_width = 1160
         self.window_height = 720
         self.set_size_request(self.window_width, self.window_height)
 

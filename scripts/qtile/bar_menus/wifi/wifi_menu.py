@@ -326,16 +326,16 @@ class OptionWindow(Gtk.Dialog):
         self.main_window.ignore_focus_lost = False
         
         if self.network["CONNECTED"]:
-            self.active_widget.get_parent().get_parent().set_name("list-name-box-active")
+            self.active_widget.get_parent().get_parent().set_name("row-box-active")
         else: 
-            self.active_widget.get_parent().get_parent().set_name("list-name-box-inactive")
+            self.active_widget.get_parent().get_parent().set_name("row-box-inactive")
 
         self.main_window.update_list_with_networks(scan_offline=True)
         self.destroy()
 
-class WifiMenu(Gtk.Dialog):
+class WifiMenu(Gtk.Window):
     def __init__(self, pid_file_path, wifi_process):
-        Gtk.Dialog.__init__(self, "Sound Control", None, 0)
+        Gtk.Window.__init__(self, title="Wifi Menu")
 
         import signal
         self.wifi_process = wifi_process
@@ -362,32 +362,30 @@ class WifiMenu(Gtk.Dialog):
         self.active_known_widget = None
         self.skip_update = False
 
-        self.content_area = self.get_content_area()
-
-        self.content_area.get_style_context().add_class('content-area')
-        self.get_style_context().add_class('root')
+        self.set_name('root')
 
         self.css()
         self.title()
-        self.list()
+        self.create_list()
         self.list_options()
 
         self.connect("focus-out-event", self.on_focus_out)
         self.connect("key-press-event", self.on_escape_press)
 
         self.main_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=8)
+        self.main_box.get_style_context().add_class("main")
         self.main_box.pack_start(self.title_box, False, False, 0)
-        self.main_box.pack_start(self.list_main_box, True, True, 0)        
+        self.main_box.pack_start(self.list_box, True, True, 0)        
         self.main_box.pack_start(self.list_options_main_box, False, False, 0)
 
-        self.content_area.pack_start(self.main_box, True, True, 0)   
+        self.add(self.main_box)   
 
         self.show_all()
 
         if not self.wifi_on:
             self.resize(self.window_width, 10)
             self.set_size_request(self.window_width, 10)
-            self.list_main_box.hide()
+            self.list_box.hide()
             self.list_options_main_box.hide()
 
     def title(self):
@@ -443,25 +441,27 @@ class WifiMenu(Gtk.Dialog):
 
         left_box.connect("button-press-event", self.wifi_clicked)
 
-    def list(self):
-        self.list_main_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=16)
+    def create_list(self):
+        self.list_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=16)
+        self.list_box.get_style_context().add_class('list-box')
         
-        self.list_box = Gtk.ListBox()
-        self.list_box.get_style_context().add_class('list')
-        self.list_box.set_selection_mode(Gtk.SelectionMode.NONE)
+        self.list = Gtk.ListBox()
+        self.list.get_style_context().add_class('list')
+        self.list.set_selection_mode(Gtk.SelectionMode.NONE)
         
         scrolled_window = Gtk.ScrolledWindow()
-        scrolled_window.get_style_context().add_class('list-box')
+        scrolled_window.get_style_context().add_class('scrolled-window')
         scrolled_window.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC) 
-        scrolled_window.add(self.list_box)  
+        scrolled_window.add(self.list)  
 
-        self.list_main_box.pack_start(scrolled_window, True, True, 0)
+        self.list_box.pack_start(scrolled_window, True, True, 0)
 
         self.update_list_with_networks()
         GLib.timeout_add(7000, self.update_list_with_networks)
 
     def list_options(self):
         self.list_options_main_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=8)
+        self.list_options_main_box.get_style_context().add_class("options-box")
         self.scan_box = Gtk.EventBox()
         self.scan_box.get_style_context().add_class("toggle-box-list-options")
         self.scan_box.set_name("toggle-box-list-options-active")
@@ -494,7 +494,6 @@ class WifiMenu(Gtk.Dialog):
         style_context.add_provider_for_screen(screen, provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION)
         provider.load_from_path(os.path.expanduser("~/scripts/qtile/bar_menus/wifi/css/wifi_menu_styles.css"))
         visual = screen.get_rgba_visual()
-        self.content_area.set_visual(visual)
         self.set_visual(visual)
 
     def restore_status_dot(self):
@@ -511,7 +510,7 @@ class WifiMenu(Gtk.Dialog):
             subprocess.run(["nmcli",  "radio", "wifi", "off"])
             self.icon_box.set_name("toggle-icon-box-disabled")
             self.icon.set_name("toggle-icon-disabled")
-            self.list_main_box.hide()
+            self.list_box.hide()
             self.list_options_main_box.hide()
         else:
             self.wifi_on = True
@@ -544,7 +543,7 @@ class WifiMenu(Gtk.Dialog):
     def on_network_clicked(self, widget, event=False, network=False):
         self.ignore_focus_lost = True
         self.active_widget = widget
-        widget.get_parent().get_parent().set_name("list-name-box-clicked")
+        widget.get_parent().get_parent().set_name("row-box-clicked")
         dialog = OptionWindow(self, self, network, widget)
         dialog.run()
 
@@ -660,43 +659,43 @@ class WifiMenu(Gtk.Dialog):
             
             self.desc.set_text(f"{len(networks)} Available")
             
-            for child in self.list_box.get_children():
-                self.list_box.remove(child)
+            for child in self.list.get_children():
+                self.list.remove(child)
 
             for network in networks:
                 row = Gtk.ListBoxRow()
-                row.get_style_context().add_class('row')
+                row.get_style_context().add_class('list-row')
+
+                row_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=0)
+                row_box.get_style_context().add_class('row-box')
+
+                icon_box = Gtk.EventBox()
+                icon_box.get_style_context().add_class('list-icon-box')
+                icon = Gtk.Label()
+                icon.get_style_context().add_class('list-icon')
+
+                name_box = Gtk.EventBox()
+                name_box.connect("button-press-event", self.on_network_clicked, network)
                 name = Gtk.Label()
                 name.get_style_context().add_class('list-name')
                 name.set_text(network["SSID"][:15])
                 name.set_halign(Gtk.Align.START)
 
-                list_content_main_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
-                list_content_main_box.get_style_context().add_class('list-name-box')
-
-                list_content_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=0)
-
-                list_obj_icon_box = Gtk.EventBox()
-                list_obj_icon_box.get_style_context().add_class('list-icon-box')
-                icon = Gtk.Label()
-                icon.get_style_context().add_class('list-icon')
-
-                list_obj_clickable_box = Gtk.EventBox()
-                list_obj_clickable_box.connect("button-press-event", self.on_network_clicked, network)
-
                 if network["CONNECTED"]:
-                    list_content_main_box.set_name("list-name-box-active")
+                    row_box.set_name("row-box-active")
+                    row.set_name("list-row-connected")
                 else:
-                    list_content_main_box.set_name("list-name-box-inactive")
+                    row_box.set_name("row-box-inactive")
+                    row.set_name("list-row-disconnected")
 
                 if not get_known:
                     icon.set_name("list-icon")
                     icon.set_text(network["STRENGTH"])
-                    list_obj_icon_box.add(icon)
-                    list_content_box.pack_start(list_obj_icon_box, False, False, 0)
+                    icon_box.add(icon)
+                    row_box.pack_start(icon_box, False, False, 0)
                 
-                list_obj_clickable_box.add(name)
-                list_content_box.pack_start(list_obj_clickable_box, False, False, 0)
+                name_box.add(name)
+                row_box.pack_start(name_box, False, False, 0)
 
                 if network["KNOWN"] and not get_known:
                     known_icon = Gtk.Label()
@@ -707,17 +706,53 @@ class WifiMenu(Gtk.Dialog):
                     else:
                         known_icon.set_name("known-icon-inactive")
                     known_icon.set_text("")
-                    list_content_box.pack_start(known_icon, True, True, 0)
+                    row_box.pack_start(known_icon, True, True, 0)
                     
-                list_content_main_box.pack_start(list_content_box, False, False, 0)
-                
-                row.add(list_content_main_box)
-                row.connect("activate", self.on_network_pressed, list_obj_clickable_box, network)
-                self.list_box.add(row)
+                row.add(row_box)
+                row.connect("activate", self.on_network_pressed, name_box, network)
+                self.list.add(row)
 
-            self.list_box.show_all()
+            self.add_test_networks(4)
+            self.list.show_all()
 
         return True
+    
+    def add_test_networks(self, n):
+        for i in range(n):
+            row = Gtk.ListBoxRow()
+            row.get_style_context().add_class('list-row')
+
+            name = Gtk.Label()
+            name.get_style_context().add_class('list-name')
+            name.set_text(f"Test network {i}")
+            name.set_halign(Gtk.Align.START)
+
+            list_content_main_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
+            list_content_main_box.get_style_context().add_class('row-box')
+
+            list_content_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=0)
+
+            list_obj_icon_box = Gtk.EventBox()
+            list_obj_icon_box.get_style_context().add_class('list-icon-box')
+            icon = Gtk.Label()
+            icon.get_style_context().add_class('list-icon')
+
+            list_obj_clickable_box = Gtk.EventBox()
+
+            list_content_main_box.set_name("row-box-inactive")
+
+            icon.set_name("list-icon")
+            icon.set_text("▂▄▆_")
+            list_obj_icon_box.add(icon)
+            list_content_box.pack_start(list_obj_icon_box, False, False, 0)
+            
+            list_obj_clickable_box.add(name)
+            list_content_box.pack_start(list_obj_clickable_box, False, False, 0)
+
+            list_content_main_box.pack_start(list_content_box, False, False, 0)
+            
+            row.add(list_content_main_box)
+            self.list.add(row)
 
     def get_mouse_position(self):
         from Xlib.ext import randr

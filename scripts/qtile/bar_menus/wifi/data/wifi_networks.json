@@ -1,102 +1,114 @@
 [
   {
-    "SSID": "JonathansIphone",
-    "STRENGTH": "\u2582\u2584\u2586\u2588",
+    "SSID": "BOXER_E748",
+    "STRENGTH": "\u2582\u2584\u2582\u2582",
     "CONNECTED": true,
     "KNOWN": true
   },
   {
-    "SSID": "Matchstick50",
+    "SSID": "BOXER_E748",
+    "STRENGTH": "\u2582\u2584\u2586\u2582",
+    "CONNECTED": false,
+    "KNOWN": true
+  },
+  {
+    "SSID": "SG_Play",
+    "STRENGTH": "\u2582\u2584\u2586\u2582",
+    "CONNECTED": false,
+    "KNOWN": false
+  },
+  {
+    "SSID": "lj_5G",
+    "STRENGTH": "\u2582\u2584\u2586\u2582",
+    "CONNECTED": false,
+    "KNOWN": false
+  },
+  {
+    "SSID": "Oscar",
+    "STRENGTH": "\u2582\u2584\u2586\u2582",
+    "CONNECTED": false,
+    "KNOWN": false
+  },
+  {
+    "SSID": "lj",
+    "STRENGTH": "\u2582\u2584\u2586\u2582",
+    "CONNECTED": false,
+    "KNOWN": false
+  },
+  {
+    "SSID": "eduroam",
+    "STRENGTH": "\u2582\u2584\u2586\u2582",
+    "CONNECTED": false,
+    "KNOWN": false
+  },
+  {
+    "SSID": "Blau",
     "STRENGTH": "\u2582\u2584\u2582\u2582",
     "CONNECTED": false,
     "KNOWN": false
   },
   {
-    "SSID": "c68642fc",
+    "SSID": "LukasLager",
     "STRENGTH": "\u2582\u2584\u2582\u2582",
     "CONNECTED": false,
     "KNOWN": false
   },
   {
-    "SSID": "Tele2_206396",
+    "SSID": "Blau_5G",
     "STRENGTH": "\u2582\u2584\u2582\u2582",
     "CONNECTED": false,
     "KNOWN": false
   },
   {
-    "SSID": "#Telia-84EBA0",
+    "SSID": "LukasDoNotUse_5G",
     "STRENGTH": "\u2582\u2584\u2582\u2582",
     "CONNECTED": false,
     "KNOWN": false
   },
   {
-    "SSID": "Tele2_33121b",
+    "SSID": "TP-Link_A37D",
     "STRENGTH": "\u2582\u2584\u2582\u2582",
     "CONNECTED": false,
     "KNOWN": false
   },
   {
-    "SSID": "Tele2_350cdb",
-    "STRENGTH": "\u2582\u2584\u2582\u2582",
-    "CONNECTED": false,
-    "KNOWN": false
-  },
-  {
-    "SSID": "Tele2_41eafc",
-    "STRENGTH": "\u2582\u2584\u2582\u2582",
-    "CONNECTED": false,
-    "KNOWN": false
-  },
-  {
-    "SSID": "COMHEM_4a598c",
-    "STRENGTH": "\u2582\u2584\u2582\u2582",
-    "CONNECTED": false,
-    "KNOWN": false
-  },
-  {
-    "SSID": "Tele2_34ce7c",
-    "STRENGTH": "\u2582\u2584\u2582\u2582",
-    "CONNECTED": false,
-    "KNOWN": false
-  },
-  {
-    "SSID": "Takida",
-    "STRENGTH": "\u2582\u2584\u2582\u2582",
-    "CONNECTED": false,
-    "KNOWN": false
-  },
-  {
-    "SSID": "ComHem2998B3",
+    "SSID": "gretchensvibrationer",
     "STRENGTH": "\u2582\u2582\u2582\u2582",
     "CONNECTED": false,
     "KNOWN": false
   },
   {
-    "SSID": "COMHEM_88f89c",
+    "SSID": "TP-Link_1E21",
     "STRENGTH": "\u2582\u2582\u2582\u2582",
     "CONNECTED": false,
     "KNOWN": false
   },
   {
-    "SSID": "Tele2_ff8f61",
+    "SSID": "kuku.n040",
     "STRENGTH": "\u2582\u2582\u2582\u2582",
     "CONNECTED": false,
     "KNOWN": false
   },
   {
-    "SSID": "Jonkoping",
+    "SSID": "ASUS",
     "STRENGTH": "\u2582\u2582\u2582\u2582",
     "CONNECTED": false,
     "KNOWN": false
   },
   {
-    "SSID": "#Telia-548ED0",
+    "SSID": "TP-Link_A37D_5G",
     "STRENGTH": "\u2582\u2582\u2582\u2582",
     "CONNECTED": false,
     "KNOWN": false
   },
   {
-    "SSID": "COMHEM_184271",
+    "SSID": "gretchensvibrationer-5G",
+    "STRENGTH": "\u2582\u2582\u2582\u2582",
+    "CONNECTED": false,
+    "KNOWN": false
+  },
+  {
+    "SSID": "Morell23",
     "STRENGTH": "\u2582\u2582\u2582\u2582",
     "CONNECTED": false,
     "KNOWN": false
