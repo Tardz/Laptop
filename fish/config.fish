@@ -1,6 +1,8 @@
 ### ENVIROMENTAL VARIABLES ###
-export DUNSTRC=/home/jonalm/.config/dunst/dunstrc.ini
-
+# export DUNSTRC=/home/jonalm/.config/dunst/dunstrc.ini
+set -U fish_user_paths /home/jonalm/Documents/uni/2/pintos/utils/ $fish_user_paths
+set -U fish_user_paths /home/jonalm/android/Sdk/emulator/qemu/linux-x86_64/ $fish_user_paths
+export LD_LIBRARY_PATH=/home/jonalm/android/Sdk/emulator/lib64:$LD_LIBRARY_PATH
 ### KEYBINDINGS ###
 function fish_user_key_bindings
 end

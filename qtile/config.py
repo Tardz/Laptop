@@ -760,15 +760,18 @@ class NotificationIcon(widget.TextBox):
             self,
             text = f"<span font='Font Awesome 6 free solid {icon_size}' foreground='{icon_foreground_8}' size='medium'></span>",
             decorations = left_decor(icon_background_8),
+            mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("python3 /home/jonalm/scripts/other/get_notifications.py")},
         )
 
     def mouse_enter(self, *args, **kwargs):
-        if not notification_shown:
-            Qtile.cmd_spawn("/home/jonalm/scripts/other/get_notifications.py")
+        self.bar.window.window.set_cursor("hand2")
+        # if not notification_shown:
+        #     Qtile.cmd_spawn("/home/jonalm/scripts/other/get_notifications.py")
 
     def mouse_leave(self, *args, **kwargs):
-        if not notification_shown:
-            Qtile.cmd_spawn("/home/jonalm/scripts/other/get_notifications.py")
+        self.bar.window.window.set_cursor("left_ptr")
+        # if not notification_shown:
+        #     Qtile.cmd_spawn("/home/jonalm/scripts/other/get_notifications.py")
 
 class BacklightIcon(widget.TextBox):
     def __init__(self):
@@ -1240,11 +1243,11 @@ box_style_dual_bottom_bar_2 = Bar([
 simple_style_single_top_bar = Bar([
     ActiveWindowIcon("", fontsize=widget_default_font_size + 2),
     ActiveWindowWidget(),
-    WindowOptionWidget("File"),
-    WindowOptionWidget("Edit"),
-    WindowOptionWidget("View"),
-    WindowOptionWidget("Go"),
-    WindowOptionWidget("Window"),
+    # WindowOptionWidget("File"),
+    # WindowOptionWidget("Edit"),
+    # WindowOptionWidget("View"),
+    # WindowOptionWidget("Go"),
+    # WindowOptionWidget("Window"),
 
     widget.Spacer(bar.STRETCH),
 
