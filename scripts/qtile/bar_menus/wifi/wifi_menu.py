@@ -8,9 +8,9 @@ import json
 from Xlib import display
 from multiprocessing import Process, Value
 
-class OptionWindow(Gtk.Dialog):
-    def __init__(self, parent, main_window, network, active_widget):
-        super(OptionWindow, self).__init__(title="Device Options", transient_for=parent)
+class OptionWindow(Gtk.Window):
+    def __init__(self, main_window, network, active_widget):
+        super(OptionWindow, self).__init__(title="Network Options", transient_for=main_window)
         self.main_window = main_window
         self.active_widget = active_widget
         self.network = network
@@ -34,46 +34,55 @@ class OptionWindow(Gtk.Dialog):
         self.connect("focus-out-event", self.on_focus_out)
         self.connect("key-press-event", self.on_escape_press)
 
-        self.content_area = self.get_content_area()
-        self.content_area.get_style_context().add_class('root')
+        self.set_name("root")
+        self.main_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=8)
+        self.main_box.get_style_context().add_class("main")
 
-        connection_button = Gtk.Button()
-        connection_button.get_style_context().add_class('buttons')
+        connection_button_box = Gtk.EventBox()
+        connection_button_box.get_style_context().add_class('network-option-box')
+        connection_button_text = Gtk.Label()
+        connection_button_text.set_text("Connect")
+        connection_button_box.add(connection_button_text)
 
         if not self.main_window.history_shown:
-            self.content_area.pack_start(connection_button, True, True, 0)
+            self.main_box.pack_start(connection_button_box, True, True, 0)
         
         password_entry = Gtk.Entry()
         password_entry.get_style_context().add_class('buttons')
 
         if self.network["KNOWN"]:
-            remove_button = Gtk.Button(label = "Remove")
-            remove_button.get_style_context().add_class('buttons')
-            remove_button.connect("button-press-event", self.on_remove_clicked)
-            remove_button.connect("activate", self.on_remove_clicked)
+            remove_button_box = Gtk.EventBox()
+            remove_button_box.get_style_context().add_class('network-option-box')
+            remove_button_text = Gtk.Label()
+            remove_button_text.set_text("Remove")
+            remove_button_box.add(remove_button_text)
 
-            self.content_area.pack_start(remove_button, True, True, 0)
+            remove_button_box.connect("button-press-event", self.on_remove_clicked)
+            remove_button_box.connect("key-press-event", self.on_remove_clicked)
+
+            self.main_box.pack_start(remove_button_box, True, True, 0)
         else:
             password_entry.set_placeholder_text("Password")
-            self.content_area.pack_start(password_entry, True, True, 0)
+            self.main_box.pack_start(password_entry, True, True, 0)
         
         if self.network["CONNECTED"]:
-            connection_button.set_label("Disconnect")
-            connection_button.connect("button-press-event", self.on_disconnect_clicked)
-            connection_button.connect("activate", self.on_disconnect_clicked)
+            connection_button_text.set_text("Disconnect")
+            connection_button_box.connect("button-press-event", self.on_disconnect_clicked)
+            connection_button_box.connect("key-press-event", self.on_disconnect_clicked)
             self.main_window.previous_network_in_use = True
         else:
-            connection_button.set_label("Connect")
+            connection_button_text.set_text("Connect")
             if self.network["KNOWN"]:
-                connection_button.connect("button-press-event", self.on_connect_clicked)
-                connection_button.connect("activate", self.on_connect_clicked)
-                password_entry.connect("activate", self.on_password_pressed)
+                connection_button_box.connect("button-press-event", self.on_connect_clicked)
+                connection_button_box.connect("key-press-event", self.on_connect_clicked)
+                password_entry.connect("key-press-event", self.on_password_pressed)
             else:
-                connection_button.connect("button-press-event", self.on_connect_clicked, password_entry)
-                connection_button.connect("activate", self.on_password_pressed, password_entry)
-                password_entry.connect("activate", self.on_password_pressed, password_entry)
+                connection_button_box.connect("button-press-event", self.on_connect_clicked, password_entry)
+                connection_button_box.connect("key-press-event", self.on_password_pressed, password_entry)
+                password_entry.connect("key-press-event", self.on_password_pressed, password_entry)
                 password_entry.grab_focus()
 
+        self.add(self.main_box)
         self.show_all()
         
     def on_password_pressed(self, entry=False, password_entry=False):
@@ -86,8 +95,8 @@ class OptionWindow(Gtk.Dialog):
             if not password:
                 return False
         
-        for child in self.content_area.get_children():
-            self.content_area.remove(child)
+        for child in self.main_box.get_children():
+            self.main_box.remove(child)
 
         self.ignore_focus_lost = True
         x, y = self.main_window.get_position()
@@ -159,8 +168,8 @@ class OptionWindow(Gtk.Dialog):
         connect_animation_box.pack_start(self.load_circle_6, True, False, 0)
         connect_animation_box.pack_start(self.internet_icon, True, False, 0)
 
-        self.content_area.pack_start(connect_animation_box, True, False, 0)
-        self.content_area.show_all()
+        self.main_box.pack_start(connect_animation_box, True, False, 0)
+        self.show_all()
         
         self.activate_load_circle_stage_1()
         self.connect_process = Process(target=self.connect_process_start, args=(password,))
@@ -201,8 +210,8 @@ class OptionWindow(Gtk.Dialog):
     def deactivate_load_circle_stage_1(self):
         with self.wrong_password.get_lock():
             if self.wrong_password.value:
-                for child in self.content_area.get_children():
-                    self.content_area.remove(child)
+                for child in self.get_children():
+                    self.remove(child)
                 self.wrong_password = False
                 self.terminate_connect_process()
                 return False
@@ -344,8 +353,8 @@ class WifiMenu(Gtk.Window):
         x, y = self.get_mouse_position()
         self.move(x, y)
 
-        self.window_width = 340
-        self.window_height = 400
+        self.window_width = 350
+        self.window_height = 350
 
         self.wifi_on = self.get_wifi_on()
         if self.wifi_on:
@@ -363,6 +372,9 @@ class WifiMenu(Gtk.Window):
         self.skip_update = False
 
         self.set_name('root')
+        self.main_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=8)
+        self.main_box.get_style_context().add_class("main")
+        self.add(self.main_box)   
 
         self.css()
         self.title()
@@ -371,14 +383,6 @@ class WifiMenu(Gtk.Window):
 
         self.connect("focus-out-event", self.on_focus_out)
         self.connect("key-press-event", self.on_escape_press)
-
-        self.main_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=8)
-        self.main_box.get_style_context().add_class("main")
-        self.main_box.pack_start(self.title_box, False, False, 0)
-        self.main_box.pack_start(self.list_box, True, True, 0)        
-        self.main_box.pack_start(self.list_options_main_box, False, False, 0)
-
-        self.add(self.main_box)   
 
         self.show_all()
 
@@ -389,8 +393,8 @@ class WifiMenu(Gtk.Window):
             self.list_options_main_box.hide()
 
     def title(self):
-        self.title_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=0)
-        self.title_box.get_style_context().add_class('toggle-title-box')
+        title_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=0)
+        title_box.get_style_context().add_class('toggle-title-box')
 
         desc_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
 
@@ -407,8 +411,7 @@ class WifiMenu(Gtk.Window):
 
         left_box = Gtk.EventBox()
 
-        self.icon_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=0)
-        self.icon_box.get_style_context().add_class('toggle-icon-box')
+        icon_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=0)
 
         self.icon = Gtk.Label()
         self.icon.get_style_context().add_class('toggle-icon')
@@ -416,10 +419,8 @@ class WifiMenu(Gtk.Window):
         self.icon.set_halign(Gtk.Align.START)
 
         if self.wifi_on:
-            self.icon_box.set_name("toggle-icon-box-enabled")
             self.icon.set_name("toggle-icon-enabled")
         else:
-            self.icon_box.set_name("toggle-icon-box-disabled")
             self.icon.set_name("toggle-icon-disabled")
 
         self.status_dot = Gtk.Label()
@@ -431,48 +432,50 @@ class WifiMenu(Gtk.Window):
             self.status_dot.set_name("status-dot-off")
         self.status_dot.set_halign(Gtk.Align.END)
 
-        self.icon_box.pack_start(self.icon, False, False, 0)
-        left_box.add(self.icon_box)
+        icon_box.pack_start(self.icon, False, False, 0)
+        left_box.add(icon_box)
         desc_box.pack_start(title, False, False, 0)
         desc_box.pack_start(self.desc, False, False, 0)
-        self.title_box.pack_start(left_box, False, False, 0)
-        self.title_box.pack_start(desc_box, False, False, 0)
-        self.title_box.pack_start(self.status_dot, True, True, 0)
+        title_box.pack_start(left_box, False, False, 0)
+        title_box.pack_start(desc_box, False, False, 0)
+        title_box.pack_start(self.status_dot, True, True, 0)
 
         left_box.connect("button-press-event", self.wifi_clicked)
+        self.main_box.pack_start(title_box, False, False, 0)
 
     def create_list(self):
         self.list_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=16)
         self.list_box.get_style_context().add_class('list-box')
         
-        self.list = Gtk.ListBox()
-        self.list.get_style_context().add_class('list')
-        self.list.set_selection_mode(Gtk.SelectionMode.NONE)
-        
         scrolled_window = Gtk.ScrolledWindow()
-        scrolled_window.get_style_context().add_class('scrolled-window')
+        scrolled_window.get_style_context().add_class('none')
         scrolled_window.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC) 
-        scrolled_window.add(self.list)  
+        
+        self.list = Gtk.ListBox()
+        self.list.get_style_context().add_class('none')
+        self.list.set_selection_mode(Gtk.SelectionMode.NONE)
 
+        scrolled_window.add(self.list)  
         self.list_box.pack_start(scrolled_window, True, True, 0)
 
         self.update_list_with_networks()
         GLib.timeout_add(7000, self.update_list_with_networks)
+        self.main_box.pack_start(self.list_box, True, True, 0)
 
     def list_options(self):
         self.list_options_main_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=8)
-        self.list_options_main_box.get_style_context().add_class("options-box")
+        self.list_options_main_box.get_style_context().add_class("list-options-box")
         self.scan_box = Gtk.EventBox()
-        self.scan_box.get_style_context().add_class("toggle-box-list-options")
-        self.scan_box.set_name("toggle-box-list-options-active")
+        self.scan_box.get_style_context().add_class("list-options")
+        self.scan_box.set_name("list-options-active")
         self.scan_title = Gtk.Label()
         self.scan_title.get_style_context().add_class("list-options-title")
         self.scan_title.set_name("list-opitons-title-active")
         self.scan_title.set_text("")
 
         self.history_box = Gtk.EventBox()
-        self.history_box.get_style_context().add_class("toggle-box-list-options")
-        self.history_box.set_name("toggle-box-list-options-inactive")
+        self.history_box.get_style_context().add_class("list-options")
+        self.history_box.set_name("list-options-inactive")
         self.config_title = Gtk.Label()
         self.config_title.get_style_context().add_class("list-options-title")
         self.config_title.set_name("list-opitons-title-inactive")
@@ -486,6 +489,7 @@ class WifiMenu(Gtk.Window):
 
         self.scan_box.connect("button-press-event", self.scan_clicked)
         self.history_box.connect("button-press-event", self.history_clicked)
+        self.main_box.pack_start(self.list_options_main_box, False, False, 0)
 
     def css(self):
         screen = Gdk.Screen.get_default()
@@ -508,7 +512,6 @@ class WifiMenu(Gtk.Window):
             self.desc.set_text("Off")
             self.status_dot.set_name("status-dot-off")
             subprocess.run(["nmcli",  "radio", "wifi", "off"])
-            self.icon_box.set_name("toggle-icon-box-disabled")
             self.icon.set_name("toggle-icon-disabled")
             self.list_box.hide()
             self.list_options_main_box.hide()
@@ -518,25 +521,24 @@ class WifiMenu(Gtk.Window):
             self.set_size_request(self.window_width, self.window_height)
             self.status_dot.set_name("status-dot-inactive")
             subprocess.run(["nmcli",  "radio", "wifi", "on"])
-            self.icon_box.set_name("toggle-icon-box-enabled")
             self.icon.set_name("toggle-icon-enabled")
             self.main_box.show_all()
 
     def scan_clicked(self, widget, event):
         self.history_shown = False
         self.active_known_widget = None
-        self.history_box.set_name("toggle-box-list-options-inactive")
+        self.history_box.set_name("list-options-inactive")
         self.config_title.set_name("list-opitons-title-inactive")
-        self.scan_box.set_name("toggle-box-list-options-active")
+        self.scan_box.set_name("list-options-active")
         self.scan_title.set_name("list-opitons-title-active")
         self.update_list_with_networks()
         
     def history_clicked(self, widget, event):
         self.active_widget = None
         self.skip_update = False
-        self.history_box.set_name("toggle-box-list-options-active")
+        self.history_box.set_name("list-options-active")
         self.config_title.set_name("list-opitons-title-active")
-        self.scan_box.set_name("toggle-box-list-options-inactive")
+        self.scan_box.set_name("list-options-inactive")
         self.scan_title.set_name("list-opitons-title-inactive")
         self.update_list_with_networks(get_known=True)
     
@@ -544,7 +546,7 @@ class WifiMenu(Gtk.Window):
         self.ignore_focus_lost = True
         self.active_widget = widget
         widget.get_parent().get_parent().set_name("row-box-clicked")
-        dialog = OptionWindow(self, self, network, widget)
+        dialog = OptionWindow(self, network, widget)
         dialog.run()
 
     def on_network_pressed(self, entry, widget, network):
@@ -670,7 +672,6 @@ class WifiMenu(Gtk.Window):
                 row_box.get_style_context().add_class('row-box')
 
                 icon_box = Gtk.EventBox()
-                icon_box.get_style_context().add_class('list-icon-box')
                 icon = Gtk.Label()
                 icon.get_style_context().add_class('list-icon')
 
@@ -684,9 +685,11 @@ class WifiMenu(Gtk.Window):
                 if network["CONNECTED"]:
                     row_box.set_name("row-box-active")
                     row.set_name("list-row-connected")
+                    icon.set_name("list-icon-active")
                 else:
                     row_box.set_name("row-box-inactive")
                     row.set_name("list-row-disconnected")
+                    icon.set_name("list-icon-inactive")
 
                 if not get_known:
                     icon.set_name("list-icon")
@@ -712,7 +715,7 @@ class WifiMenu(Gtk.Window):
                 row.connect("activate", self.on_network_pressed, name_box, network)
                 self.list.add(row)
 
-            self.add_test_networks(4)
+            # self.add_test_networks(4)
             self.list.show_all()
 
         return True
@@ -800,6 +803,7 @@ class WifiMenu(Gtk.Window):
             with open(self.pid_file_path, "r") as file:
                 pid = int(file.read().strip())
             try:
+                subprocess.run("qtile cmd-obj -o widget wifiicon -f unclick", shell=True)
                 os.remove(self.pid_file_path)
                 os.kill(pid, 15)
             except ProcessLookupError:
@@ -891,6 +895,7 @@ if __name__ == '__main__':
             with open(pid_file_path, "r") as file:
                 pid = int(file.read().strip())
             try:
+                subprocess.run("qtile cmd-obj -o widget wifiicon -f unclick", shell=True)
                 os.remove(pid_file_path)
                 os.kill(pid, 15)    
             except ProcessLookupError:

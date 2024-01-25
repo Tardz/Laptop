@@ -301,6 +301,19 @@ def left_decor(color, round=True, padding_x=None, padding_y=left_decor_padding):
         )
     ]
 
+def clicked_decor(color, round=True, padding_x=None, padding_y=left_decor_padding):
+    radius = 6 if round else [4, 0, 0, 4]
+    if not laptop:
+        radius = 5
+    return RectDecoration(
+            colour = color,
+            radius = radius,
+            filled = True,
+            padding_x = padding_x,
+            padding_y = padding_y,
+
+        )
+
 def left_decor_hover(color, round=True, padding_x=2, padding_y=left_decor_padding + 2):
     radius = 6 if round else [4, 0, 0, 4]
     if not laptop:
@@ -340,6 +353,7 @@ def task_list_decor(color=bar_background_color, radius=12 if laptop else 5, grou
         padding_y = padding_y,
         padding_x = padding_x,
         group = group,
+        use_widget_background = False
     )
 
 def icon_decor(color=bar_background_color, border_width=[3, 0, 3, 0]):
@@ -409,18 +423,33 @@ class TickTickMenu(widget.TextBox):
 
 class BluetoothIcon(widget.TextBox):
     def __init__(self):
-
         self.normal_decorator = left_decor(icon_background_1)
         self.hover_decorator = left_decor(bar_border_color)
         widget.TextBox.__init__(
             self,
-            text            = f"<span font='Font Awesome 6 free solid {icon_size + 1}' foreground='{icon_foreground_1}' size='medium'></span>",
-            foreground      = text_color,
-            padding         = widget_default_padding + 2, 
-            mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("python3 /home/jonalm/scripts/qtile/bar_menus/bluetooth/bluetooth_menu.py")},
+            text            = "",
+            font            = icon_font,
+            fontsize        = icon_size + 8,
+            foreground      = icon_foreground_1,
+            background      = None,
+            padding         = 20,
+            mouse_callbacks = {"Button1": lambda: self.clicked()},
             decorations     = self.normal_decorator,
         )
 
+        self.active_background = bar_border_color
+        self.inactive_background = self.background
+    
+    def clicked(self):
+        Qtile.cmd_spawn("python3 /home/jonalm/scripts/qtile/bar_menus/bluetooth/bluetooth_menu.py")
+        self.background = self.active_background
+        self.bar.draw()
+
+    @expose_command()
+    def unclick(self):
+        self.background = self.inactive_background
+        self.bar.draw()
+    
     def mouse_enter(self, *args, **kwargs):
         self.bar.window.window.set_cursor("hand2")
         self.bar.draw()
@@ -484,11 +513,28 @@ class VolumeIcon(widget.TextBox):
     def __init__(self):
         widget.TextBox.__init__(
             self,
-            text            = f"<span font='Font Awesome 6 free solid {icon_size - 1}' foreground='{icon_foreground_2}' size='medium'></span>",
-            foreground      = text_color,
-            mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("python3 /home/jonalm/scripts/qtile/bar_menus/volume/volume_menu.py")},
+            text            = "",
+            font            = icon_font,
+            fontsize        = icon_size + 5,
+            foreground      = icon_foreground_2,
+            background      = None,
+            padding         = 20,
+            mouse_callbacks = {"Button1": lambda: self.clicked()},
             decorations     = left_decor(icon_background_2),
         )
+
+        self.active_background = bar_border_color
+        self.inactive_background = self.background
+
+    def clicked(self):
+        Qtile.cmd_spawn("python3 /home/jonalm/scripts/qtile/bar_menus/volume/volume_menu.py")
+        self.background = self.active_background
+        self.bar.draw()
+
+    @expose_command()
+    def unclick(self):
+        self.background = self.inactive_background
+        self.bar.draw()
         
     def mouse_enter(self, *args, **kwargs):
         self.bar.window.window.set_cursor("hand2")
@@ -514,11 +560,29 @@ class WifiIcon(widget.TextBox):
     def __init__(self):
         widget.TextBox.__init__(
             self,
-            text            = f"<span font='Font Awesome 6 free solid {icon_size - 1}' foreground='{icon_foreground_3}' size='medium'></span>",
-            foreground      = text_color,
-            mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("python3 /home/jonalm/scripts/qtile/bar_menus/wifi/wifi_menu.py")},
+            text            = "",
+            font            = icon_font,
+            fontsize        = icon_size + 5,
+            foreground      = icon_foreground_3,
+            rounded         = True,
+            mouse_callbacks = {"Button1": lambda: self.clicked()},
             decorations     = left_decor(icon_background_3),
+            backgroubd      = None,
+            padding         = 20,
         )
+
+        self.active_background = bar_border_color
+        self.inactive_background = self.background
+
+    def clicked(self):
+        Qtile.cmd_spawn("python3 /home/jonalm/scripts/qtile/bar_menus/wifi/wifi_menu.py")
+        self.background = self.active_background
+        self.bar.draw()
+
+    @expose_command()
+    def unclick(self):
+        self.background = self.inactive_background
+        self.bar.draw()
         
     def mouse_enter(self, *args, **kwargs):
         self.bar.window.window.set_cursor("hand2")
@@ -676,6 +740,7 @@ class BatteryIconWidget(widget.BatteryIcon):
             battery = 0,
             scale = 2.8,
             # update_interval = battery_update_interval,
+            padding         = 20,
             mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("python3 /home/jonalm/scripts/qtile/bar_menus/power/power_management_menu.py")},
             decorations = right_decor() if decor else right_decor(transparent),
         )
@@ -758,8 +823,9 @@ class NotificationIcon(widget.TextBox):
     def __init__(self):
         widget.TextBox.__init__(
             self,
-            text = f"<span font='Font Awesome 6 free solid {icon_size}' foreground='{icon_foreground_8}' size='medium'></span>",
-            decorations = left_decor(icon_background_8),
+            text            = f"<span font='Font Awesome 6 free solid {icon_size}' foreground='{icon_foreground_8}' size='medium'></span>",
+            padding         = 20,
+            decorations     = left_decor(icon_background_8),
             mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("python3 /home/jonalm/scripts/other/get_notifications.py")},
         )
 
@@ -778,6 +844,7 @@ class BacklightIcon(widget.TextBox):
         widget.TextBox.__init__(
             self,
             text        = f"<span font='Font Awesome 6 free solid {icon_size}' foreground='{icon_foreground_9}'size='medium'></span>",
+            padding     = 20,
             decorations = left_decor(icon_background_9),
         )
 
@@ -833,10 +900,10 @@ class AppTrayIcon(widget.TextBox):
         widget.TextBox.__init__(
             self,
             text = f"<span font='Font Awesome 6 free solid' size='medium'>{icon}</span>",
-            background = transparent,
-            fontsize = icon_size + 10,
+            fontsize = icon_size + 14,
             padding = widget_default_padding + 14,
             foreground = foreground,
+            background = transparent,
             markup = True,
             mouse_callbacks = mouse_callback,
             decorations = [task_list_decor(group=True)],
@@ -905,7 +972,7 @@ class ActiveWindowIcon(widget.TextBox):
             self,
             text = "",
             fontsize = icon_size + 10,
-            padding = widget_default_padding + 14,
+            padding = widget_default_padding + 18,
             background = bar_background_color,
             mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("python3 /home/jonalm/scripts/qtile/settings_menu/app/settings_menu.py")}
         )
@@ -923,6 +990,7 @@ class ActiveWindowWidget(widget.WindowName):
             background = bar_background_color,
             font = bold_font,
             fontsize = widget_default_font_size + 2,
+            padding = 2,
             format = "{name}",
             foreground = foreground,
             empty_group_string = "Desktop",
@@ -976,8 +1044,8 @@ widget_defaults = dict(
 task_list_settings = dict(
     font                = bold_font,
     fontsize            = widget_default_font_size + 1,
-    padding_y           = widget_default_padding + 4 if laptop else widget_default_padding - 2,
-    margin              = task_list_margin,
+    padding_y           = widget_default_padding + 9 if laptop else widget_default_padding - 2,
+    margin              = task_list_margin - 1,
     borderwidth         = task_list_border_width,
     spacing             = task_list_spacing,
     icon_size           = task_list_icon_size,
@@ -992,19 +1060,20 @@ task_list_settings = dict(
     border              = bar_border_color,
     background          = transparent,
     foreground          = "#d8dee9",
-    unfocused_border    = "#383b41",
+    unfocused_border    = bar_background_color,
     theme_mode          = "preferred",
-    theme_path          = "/usr/share/icons/Adwaita",
+    # theme_path          = "/usr/share/icons/Adwaita",
     decorations         = [task_list_decor()],
 )
 
 group_box_settings = dict(
     # margin                      = groupbox_margin,
-    padding_x                   = 15,
-    margin_x                    = 10,
-    borderwidth                 = 2,
+    padding_x                   = 20,
+    padding_y                   = 5,
+    margin_x                    = 24,
+    borderwidth                 = True,
     rounded                     = True,
-    disable_drag                = True,
+    disable_drag                = False,
     hide_unused                 = True,
     font                        = icon_font,
     highlight_method            = "block",
@@ -1025,8 +1094,8 @@ class GroupBoxWidget(widget.GroupBox):
         widget.GroupBox.__init__(
             self,
             **group_box_settings, 
-            background = transparent, 
-            decorations = [task_list_decor()]
+            # background = transparent, 
+            # decorations = [task_list_decor()]
         )
 
 class WindowCountWidget(widget.WindowCount):
@@ -1241,7 +1310,7 @@ box_style_dual_bottom_bar_2 = Bar([
 ], bottom_bar_size, margin = bar_margin_bottom, background = bar_background_color, border_width = bar_width_bottom, border_color = bar_border_color, opacity=1)
 
 simple_style_single_top_bar = Bar([
-    ActiveWindowIcon("", fontsize=widget_default_font_size + 2),
+    ActiveWindowIcon(),
     ActiveWindowWidget(),
     # WindowOptionWidget("File"),
     # WindowOptionWidget("Edit"),
@@ -1262,9 +1331,13 @@ simple_style_single_top_bar = Bar([
     #  WIFI #
     WifiIcon(),
 
+    # TICKTICK #
+    # seperator(),
+    # TickTickMenu(),
+
     # CPU LOAD #
-    seperator(),
-    CpuLoadIcon(),
+    # seperator(),
+    # CpuLoadIcon(),
 
     # URGENT NOTIFICATION #
     seperator(),
@@ -1279,9 +1352,9 @@ simple_style_single_top_bar = Bar([
     BatteryIconWidget(),
 
     # TIME #
-    seperator(),
+    seperator(22),
     ClockWidget(decor_color=transparent),
-    seperator(-2),
+    seperator(4),
 
 ], top_bar_size, margin = bar_margin_top, background = bar_background_color, border_width = bar_width_top, border_color = bar_border_color, opacity=1)
 
@@ -1290,8 +1363,15 @@ simple_style_single_bottom_bar = Bar([
     # GroupBoxWidget(),
     
     # TASKLIST #
-    # seperator(background=transparent),
     widget.TaskList(**task_list_settings),
+    seperator(background=transparent),
+    
+    # APPTRAY #
+    AppTrayIcon("", app_tray_icon_color_1, ["firefox", "c", ""]),
+    AppTrayIcon("", app_tray_icon_color_2, ["code", "v", ""]),
+    AppTrayIcon("", app_tray_icon_color_3, ["pcmanfm", "n", ""]),
+    AppTrayIcon("", app_tray_icon_color_4, launch="spotify"),
+    AppTrayIcon(" ", app_tray_icon_color_5, launch="python3 ~/scripts/qtile/settings_menu/app/settings_menu.py"),
 
 ], bottom_bar_size, margin = bar_margin_bottom, background = bar_background_color, border_width = bar_width_bottom, border_color = bar_border_color, opacity=1)
 
@@ -1437,6 +1517,9 @@ floating_layout = Floating(
     float_rules   = [
         *Floating.default_float_rules,
         Match(wm_class = "nitrogen"),
+        Match(wm_class = "pcmanfm"),
+        Match(wm_class = "bluetooth_menu.py"),
+        Match(wm_class = "volume_menu.py"),
         Match(wm_class = "wifi_menu.py"),
         Match(wm_class = "settings_menu.py"),
         Match(wm_class = "electron"),
@@ -1527,6 +1610,12 @@ def configure_screens(startup=False):
     
 configure_screens(startup=True)
 
+def float_to_front():
+    for group in Qtile.groups:
+        for window in group.windows:
+            if window.floating:
+                window.cmd_bring_to_front()
+
 ### HOOKS ###
 @hook.subscribe.screen_change
 def _(notify_event):
@@ -1535,6 +1624,15 @@ def _(notify_event):
 @hook.subscribe.suspend
 def lock_on_sleep():
     Qtile.spawn("sudo sddm")
+
+@hook.subscribe.focus_change
+def client_focus():
+    current_window = Qtile.current_window
+    if current_window is not None:
+        if not current_window.floating:
+            float_to_front()
+        else:
+            current_window.cmd_bring_to_front()
 
 @hook.subscribe.startup_once
 def autostart():

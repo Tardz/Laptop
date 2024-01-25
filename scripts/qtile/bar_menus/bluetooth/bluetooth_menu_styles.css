@@ -1,14 +1,13 @@
-.root {
+#root {
     border-width: 5px;
-    border-color: rgba(79, 88, 110, 0.9);
-    background: rgba(46, 52, 64, 0.9);
+    /* border-color: rgba(69, 73, 81, 0.7); */
+    background: rgba(45, 51, 59, 0.85);
 }
-.content-area {
-    margin-top: 5px;    
-    margin-right: 5px;  
-    margin-bottom: 5px;
-    margin-left: 5px;
-    background: rgba(46, 52, 64, 0.9);
+.main {
+    margin: 8px;
+}
+.none {
+    background: rgba(0, 0, 0, 0.0);
 }
 
 /* TITLE */
@@ -21,10 +20,10 @@
     font-family: 'Font Awesome 6 Free Solid';
 }
 #status-dot-inactive {
-    color: rgba(46, 52, 64, 0.8);
+    color: rgba(73, 80, 89, 0.9);
 }
 #status-dot-list-update {
-    color: #9B98B7;
+    color: #b48ead;
 }
 #status-dot-off {
     color: #c1656e;
@@ -38,119 +37,111 @@
     font-family: 'Font Awesome 6 Free Solid';
 }
 #load-bar-active {
-    color: #9B98B7;
+    color: #b48ead;
 }
 #load-bar-inactive {
     color: rgba(46, 52, 64, 0.8);
 }
 .toggle-title-box {
-    border-radius: 5px;
-    background: rgba(79, 88, 110, 0.8);
+    border-radius: 8px;
+    background: rgba(73, 80, 89, 0.0);
 }
 .toggle-title {
     margin-top: 9px;    
     margin-right: 10px;  
-    margin-bottom: 0px;
     margin-left: 2px;
     color: white;
     font-size: 20px;
     font-family: FiraCode Nerd Font;
     font-weight: bold;
 }
-.toggle-desc-box {
-    margin-right: 10px;  
-    margin-left: 2px;
-}
 .toggle-desc {
     margin-top: 2px;    
     margin-right: 10px;  
-    margin-bottom: 0px;
     margin-left: 2px;
     color: white;
     font-size: 14px;
     font-family: FiraCode Nerd Font;
 }
-.toggle-icon-box {
-    margin-top: 10px;    
-    margin-right: 10px;  
-    margin-bottom: 10px;
-    margin-left: 10px;
-    border-radius: 5px;
-}
-#toggle-icon-box-enabled {
-    background: #9B98B7;
-}
-#toggle-icon-box-disabled {
-    background: rgba(46, 52, 64, 0.8);
-}
 .toggle-icon {
-    margin-top: 6px;    
-    margin-right: 15px;  
-    margin-bottom: 6px;
-    margin-left: 15px;
-    border-radius: 5px;
+    margin: 10px;
+    padding-top: 9px;
+    padding-bottom: 9px;
+    padding-left: 19px;
+    padding-right: 19px;
+    border-radius: 8px;
     font-size: 26px;
     font-family: 'Font Awesome 6 Free Solid';
-
 }
 #toggle-icon-enabled {
     color: black;
-    background: #9B98B7;
+    background: #b48ead;
 }
 #toggle-icon-disabled {
     color: white;
-    background: rgba(46, 52, 64, 0.8);
+    background: rgba(69, 73, 81, 0.9);
 }
 
 /* LIST */
 .list-box {
-    border-radius: 5px;
-    background: rgba(79, 88, 110, 0.8);
+    margin-left: 11px;
+    margin-right: 11px;
+    border-radius: 8px;
+    background: rgba(73, 80, 89, 0.0);
 }
-.list {
-    margin-top: 10px;    
-    margin-bottom: 10px;
-    border-radius: 5px;
-    background: rgba(79, 88, 110, 0.8);
+.row-box{
+    border-radius: 8px;
+    font-size: 18px;
 }
-.row {
-    margin-left: 5px;
-    margin-right: 5px;
-    border-radius: 5px;
+#row-box-inactive {
+    color: white;
 }
-.list-icon-box {
-    border-radius: 5px;
-    background: #2e3440;
+#row-box-active {
+    background: #b48ead;
+    color: black;
 }
-#list-icon-box-with-battery {
+#row-box-clicked {
+    background: rgba(46, 52, 64, 0.90);
+}
+.list-row {
+    margin-top: 5px;
+    margin-bottom: 5px;
+    padding: 2px;
+    border-radius: 8px;
+    background: rgba(69, 73, 81, 0.0);
+    transition-duration: 0ms;
+}
+#list-row-connected {
+    background: #81a1c1;
+}
+#list-row-disconnected {
+}
+.list-row:hover {
+    border: 1px solid rgba(69, 73, 81, 0.9);
+    background: rgba(69, 73, 81, 0.9);
+}
+#list-icon-box-with-info {
     border-radius: 5px 0px 0px 5px;
 }
-
 .list-icon {
+    padding: 10px;
+    margin-left: 6px;
+    margin-right: 6px;
+    border-radius: 8px;
+    color: black;
+    background: rgba(69, 73, 81, 0);
     font-family: 'Font Awesome 6 Free Solid';
     font-weight: bold;   
 }
 #list-icon-headphone {
-    margin-top: 12px;    
-    margin-right: 10px;  
-    margin-bottom: 12px;
-    margin-left: 2px;
     color: white;
     font-size: 18px;
 }
 #list-icon-speaker {
-    margin-top: 12px;    
-    margin-right: 9px;  
-    margin-bottom: 12px;
-    margin-left: 1px;
     color: white;
     font-size: 16px;
 }
 #list-icon-unknown {
-    margin-top: 12px;    
-    margin-right: 14px;  
-    margin-bottom: 12px;
-    margin-left: 6px;
     color: white;
     font-size: 16px;
 }
@@ -172,27 +163,9 @@
 #list-battery-under-20 {
     color: #bf616a;
 }
-.list-name-box {
-    margin-top: 4px;    
-    margin-bottom: 4px;  
-    border-radius: 5px;
-    font-size: 18px;
-}
-#list-name-box-inactive {
-    background: #434b5d;  
-    color: white;
-}
-#list-name-box-active {
-    background: #9B98B7;
-    color: black;
-}
-#list-name-box-clicked {
-    background: rgba(46, 52, 64, 0.8);
-}
 .list-name {
-    margin-bottom: 10px;  
-    margin-top: 10px;    
-    border-radius: 5px;
+    margin-right: 10px;
+    border-radius: 8px;
     font-size: 18px;
     font-family: FiraCode Nerd Font;
 }
@@ -227,21 +200,27 @@
     color: #a3be8c;
 }
 #connect-animation-active {
-    color: #9B98B7;
+    color: #b48ead;
 }
 #connect-animation-inactive {
     color: #4f586e;
 }
 
 /* OPTIONS */
-.toggle-box-list-options {
-    border-radius: 3px;
+.list-options-box {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    margin-left: 11px;
+    margin-right: 11px;
 }
-#toggle-box-list-options-inactive {
-    background: rgba(79, 88, 110, 0.8);
+.list-options {
+    border-radius: 6px;
 }
-#toggle-box-list-options-active {
-    background: #9B98B7;
+#list-options-inactive {
+    background: rgba(69, 73, 81, 0.0);
+}
+#list-options-active {
+    background: #b48ead;
 }
 .list-options-title {
     margin-top: 10px;    

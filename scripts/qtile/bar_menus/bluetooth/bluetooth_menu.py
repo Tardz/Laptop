@@ -236,16 +236,16 @@ class OptionWindow(Gtk.Dialog):
         self.main_window.ignore_focus_lost = False
         
         if self.device["CONNECTED"]:
-            self.active_widget.get_parent().get_parent().set_name("list-name-box-active")
+            self.active_widget.get_parent().get_parent().set_name("row-box-active")
         else: 
-            self.active_widget.get_parent().get_parent().set_name("list-name-box-inactive")
+            self.active_widget.get_parent().get_parent().set_name("row-box-inactive")
 
         self.main_window.update_ui_with_devices()
         self.destroy()
 
-class BluetoothMenu(Gtk.Dialog):
+class BluetoothMenu(Gtk.Window):
     def __init__(self, pid_file_path, bluetooth_process):
-        Gtk.Dialog.__init__(self, "Bluetooth menu", None, 0)
+        Gtk.Window.__init__(self, title="Bluetooth menu")
 
         self.bluetooth_process = bluetooth_process
         signal.signal(signal.SIGTERM, self.handle_sigterm)
@@ -254,8 +254,8 @@ class BluetoothMenu(Gtk.Dialog):
 
         self.move(x, y)
 
-        self.window_width = 340
-        self.window_height = 300
+        self.window_width = 350
+        self.window_height = 350
 
         self.bluetooth_on = self.get_bluetooth_on()
         if self.bluetooth_on:
@@ -275,39 +275,33 @@ class BluetoothMenu(Gtk.Dialog):
         self.no_devices = False
         self.known_shown = False
 
-        self.content_area = self.get_content_area()
-        self.content_area.get_style_context().add_class('content-area')
-        self.get_style_context().add_class('root')
+        self.set_name('root')
 
         self.main_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=8)
+        self.main_box.get_style_context().add_class("main")
         
         self.css()
-        self.title() 
+        self.create_title() 
         self.initialize_loading_screen()
-        self.list()
-        self.list_options()
+        self.create_list()
+        self.create_list_options()
 
         self.connect("focus-out-event", self.on_focus_out)
         self.connect("key-press-event", self.on_escape_press)
 
-        self.main_box.pack_start(self.title_main_box, False, False, 0)
-        self.main_box.pack_start(self.list_main_box, True, True, 0)        
-        self.main_box.pack_start(self.list_options_main_box, False, False, 0)
-
-        self.content_area.pack_start(self.main_box, True, True, 0)        
-
+        self.add(self.main_box)
         self.show_all()
         self.load_bar_box.hide()
 
         if not self.bluetooth_on:
             self.resize(self.window_width, 10)
             self.set_size_request(self.window_width, 10)
-            self.list_main_box.hide()
+            self.list_box.hide()
             self.list_options_main_box.hide()
 
         self.update_ui_with_devices()
 
-    def title(self):
+    def create_title(self):
         self.title_main_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
 
         title_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=0)
@@ -331,7 +325,6 @@ class BluetoothMenu(Gtk.Dialog):
         left_box.set_name("toggle-left-box")
 
         self.icon_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=0)
-        self.icon_box.get_style_context().add_class('toggle-icon-box')
 
         self.icon = Gtk.Label()
         self.icon.get_style_context().add_class('toggle-icon')
@@ -339,10 +332,8 @@ class BluetoothMenu(Gtk.Dialog):
         self.icon.set_halign(Gtk.Align.START)
 
         if self.bluetooth_on:
-            self.icon_box.set_name("toggle-icon-box-enabled")
             self.icon.set_name("toggle-icon-enabled")
         else:
-            self.icon_box.set_name("toggle-icon-box-disabled")
             self.icon.set_name("toggle-icon-disabled")
 
         self.status_dot = Gtk.Label()
@@ -362,36 +353,40 @@ class BluetoothMenu(Gtk.Dialog):
         self.title_main_box.pack_start(title_box, False, False, 0)
         
         left_box.connect("button-press-event", self.bluetooth_clicked)
+        self.main_box.pack_start(self.title_main_box, False, False, 0)
 
-    def list(self):
-        self.list_main_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=16)
-        
-        self.list_box = Gtk.ListBox()
-        self.list_box.get_style_context().add_class('list')
-        self.list_box.set_selection_mode(Gtk.SelectionMode.NONE)
+    def create_list(self):
+        self.list_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=16)
+        self.list_box.get_style_context().add_class('list-box')
         
         scrolled_window = Gtk.ScrolledWindow()
-        scrolled_window.get_style_context().add_class("list-box")
+        scrolled_window.get_style_context().add_class('none')
         scrolled_window.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC) 
-        scrolled_window.add(self.list_box)  
+        
+        self.list = Gtk.ListBox()
+        self.list.get_style_context().add_class('none')
+        self.list.set_selection_mode(Gtk.SelectionMode.NONE)
 
-        self.list_main_box.pack_start(scrolled_window, True, True, 0)
+        scrolled_window.add(self.list)  
+        self.list_box.pack_start(scrolled_window, True, True, 0)
 
         GLib.timeout_add(6000, self.update_ui_with_devices)
+        self.main_box.pack_start(self.list_box, True, True, 0)
 
-    def list_options(self):
+    def create_list_options(self):
         self.list_options_main_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=8)
+        self.list_options_main_box.get_style_context().add_class("list-options-box")
         self.scan_box = Gtk.EventBox()
-        self.scan_box.get_style_context().add_class("toggle-box-list-options")
-        self.scan_box.set_name("toggle-box-list-options-active")
+        self.scan_box.get_style_context().add_class("list-options")
+        self.scan_box.set_name("list-options-active")
         self.scan_title = Gtk.Label()
         self.scan_title.get_style_context().add_class("list-options-title")
         self.scan_title.set_name("list-opitons-title-active")
         self.scan_title.set_text("")
 
         self.config_box = Gtk.EventBox()
-        self.config_box.get_style_context().add_class("toggle-box-list-options")
-        self.config_box.set_name("toggle-box-list-options-inactive")
+        self.config_box.get_style_context().add_class("list-options")
+        self.config_box.set_name("list-options-inactive")
         self.config_title = Gtk.Label()
         self.config_title.get_style_context().add_class("list-options-title")
         self.config_title.set_name("list-opitons-title-inactive")
@@ -405,6 +400,8 @@ class BluetoothMenu(Gtk.Dialog):
 
         self.scan_box.connect("button-press-event", self.scan_clicked)
         self.config_box.connect("button-press-event", self.known_clicked)
+        
+        self.main_box.pack_start(self.list_options_main_box, False, False, 0)
 
     def initialize_loading_screen(self):
         self.load_bar_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=0)
@@ -522,7 +519,6 @@ class BluetoothMenu(Gtk.Dialog):
         style_context.add_provider_for_screen(screen, provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION)
         provider.load_from_path("/home/jonalm/scripts/qtile/bar_menus/bluetooth/bluetooth_menu_styles.css")
         visual = screen.get_rgba_visual()
-        self.content_area.set_visual(visual)
         self.set_visual(visual)
 
     def restore_status_dot(self):
@@ -689,12 +685,11 @@ class BluetoothMenu(Gtk.Dialog):
                 self.status_dot.set_name("status-dot-off")
                 self.load_bars_active = False
                 
-                self.icon_box.set_name("toggle-icon-box-disabled")
                 self.icon.set_name("toggle-icon-disabled")
                 
                 self.main_box.show_all()
                 self.load_bar_box.hide()
-                self.list_main_box.hide()
+                self.list_box.hide()
                 self.list_options_main_box.hide()
         else:
             on_result = subprocess.call(["sudo", "systemctl",  "start", "bluetooth"])
@@ -703,7 +698,6 @@ class BluetoothMenu(Gtk.Dialog):
                 
                 self.status_dot.set_name("status-dot-inactive")
                 
-                self.icon_box.set_name("toggle-icon-box-enabled")
                 self.icon.set_name("toggle-icon-enabled")
                 
                 self.main_box.show_all()
@@ -715,9 +709,9 @@ class BluetoothMenu(Gtk.Dialog):
     def scan_clicked(self, widget, event):
         self.known_shown = False
         self.active_known_widget = None
-        self.config_box.set_name("toggle-box-list-options-inactive")
+        self.config_box.set_name("list-options-inactive")
         self.config_title.set_name("list-opitons-title-inactive")
-        self.scan_box.set_name("toggle-box-list-options-active")
+        self.scan_box.set_name("list-options-active")
         self.scan_title.set_name("list-opitons-title-active")
         self.update_ui_with_devices()
         if self.no_devices:
@@ -726,15 +720,14 @@ class BluetoothMenu(Gtk.Dialog):
         
     def known_clicked(self, widget, event):
         self.active_widget = None
-        self.config_box.set_name("toggle-box-list-options-active")
+        self.config_box.set_name("list-options-active")
         self.config_title.set_name("list-opitons-title-active")
-        self.scan_box.set_name("toggle-box-list-options-inactive")
+        self.scan_box.set_name("list-options-inactive")
         self.scan_title.set_name("list-opitons-title-inactive")
         self.update_ui_with_devices(True)
         if self.no_devices:
             x, y = self.get_mouse_position()
             subprocess.run(f"xdotool mousemove {x} {y - 175}", shell = True)
-        
 
     def get_bluetooth_on(self):
         try:
@@ -749,7 +742,7 @@ class BluetoothMenu(Gtk.Dialog):
     def on_device_clicked(self, widget, event=False, device=False):
         self.ignore_focus_lost = True
         self.active_widget = widget
-        widget.get_parent().get_parent().set_name("list-name-box-clicked")
+        widget.get_parent().get_parent().set_name("row-box-clicked")
         dialog = OptionWindow(self, self, device, widget)
         dialog.run()
 
@@ -762,7 +755,7 @@ class BluetoothMenu(Gtk.Dialog):
         return devices
     
     def get_known_devices(self):
-        known_devices_output = subprocess.check_output("bluetoothctl devices", shell=True).decode("utf-8")
+        known_devices_output = subprocess.check_output("bluetoothctl devices Trusted", shell=True).decode("utf-8")
         known_devices = []
 
         if known_devices_output:
@@ -950,14 +943,14 @@ class BluetoothMenu(Gtk.Dialog):
 
             devices = self.get_devices(get_known)
 
-            for child in self.list_box.get_children():
-                self.list_box.remove(child)
+            for child in self.list.get_children():
+                self.list.remove(child)
 
             if not devices:
                 self.main_box.show_all()
                 self.resize(self.window_width, 10)
                 self.set_size_request(self.window_width, 10)
-                self.list_main_box.hide()
+                self.list_box.hide()
                 if not self.load_bars_active and not get_known:
                     self.desc.hide()
                     self.load_bars_active = True
@@ -975,24 +968,31 @@ class BluetoothMenu(Gtk.Dialog):
                 self.desc.show()
                 self.desc.set_text(f"{len(devices)} Available")
 
-            for i, device in enumerate(devices):
+            for device in devices:
                 row = Gtk.ListBoxRow()
-                row.get_style_context().add_class('row')
+                row.get_style_context().add_class('list-row')
+
+                row_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
+                row_box.get_style_context().add_class('row-box')
+
+                icon_box = Gtk.EventBox()
+                icon = Gtk.Label()
+                icon.get_style_context().add_class('list-icon')
+
+                name_box = Gtk.EventBox()
+                name_box.connect("button-press-event", self.on_device_clicked, device)
                 name = Gtk.Label()
                 name.get_style_context().add_class('list-name')
                 name.set_text(device["DEVICE"][:20])
                 name.set_halign(Gtk.Align.START)
-        
-                list_content_main_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
-                list_content_main_box.get_style_context().add_class('list-name-box')
 
-                list_content_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=0)
+                device_info_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=0)
                 
-                list_obj_icon_box = Gtk.EventBox()
-                list_obj_icon_box.get_style_context().add_class('list-icon-box')
-                icon = Gtk.Label()
-                icon.get_style_context().add_class('list-icon')
-                
+                battery_box = Gtk.EventBox()
+                battery_box.get_style_context().add_class("list-battery-box")
+                battery = Gtk.Label()
+                battery.get_style_context().add_class("list-battery")
+
                 device_type = device["DEVICE-TYPE"] 
                 if device_type == "audio-headphones-bluetooth":
                     icon.set_name("list-icon-headphone")
@@ -1007,11 +1007,6 @@ class BluetoothMenu(Gtk.Dialog):
                     icon.set_name("list-icon-unknown")
                     icon.set_text("?")
 
-                list_obj_battery_box = Gtk.EventBox()
-                list_obj_battery_box.get_style_context().add_class("list-battery-box")
-                battery = Gtk.Label()
-                battery.get_style_context().add_class("list-battery")
-
                 battery_percentage = device["BATTERY"]
                 if battery_percentage:
                     battery.set_text(battery_percentage + "%")
@@ -1020,33 +1015,30 @@ class BluetoothMenu(Gtk.Dialog):
                     else:
                         battery.set_name("list-battery-over-20")
                 else:
-                    list_obj_icon_box.set_name("list-icon-box")
-
-                list_obj_clickable_box = Gtk.EventBox()
-                list_obj_clickable_box.connect("button-press-event", self.on_device_clicked, device)
+                    icon_box.set_name("list-icon-box")
 
                 if device["CONNECTED"]:
-                    list_content_main_box.set_name("list-name-box-active")
+                    row.set_name("row-box-active")
                 else:
-                    list_content_main_box.set_name("list-name-box-inactive")
+                    row.set_name("row-box-inactive")
                 
-                list_obj_icon_box.add(icon)
-                list_obj_clickable_box.add(name)
+                icon_box.add(icon)
+                name_box.add(name)
 
-                list_content_box.pack_start(list_obj_icon_box, False, False, 0)
+                device_info_box.pack_start(icon_box, False, False, 0)
                 if battery_percentage:
-                    list_obj_icon_box.set_name('list-icon-box-with-battery')
-                    list_obj_battery_box.add(battery)
-                    list_content_box.pack_start(list_obj_battery_box, False, False, 0)
-                list_content_box.pack_start(list_obj_clickable_box, False, False, 0)
+                    # icon_box.set_name('list-icon-box-with-info')
+                    battery_box.add(battery)
+                    device_info_box.pack_start(battery_box, False, False, 0)
+                device_info_box.pack_start(name_box, False, False, 0)
                 
-                list_content_main_box.pack_start(list_content_box, False, False, 0)
+                row_box.pack_start(device_info_box, False, False, 0)
                 
-                row.add(list_content_main_box)
-                row.connect("activate", self.on_device_clicked, list_obj_clickable_box, device)
-                self.list_box.add(row)
+                row.add(row_box)
+                row.connect("activate", self.on_device_clicked, name_box, device)
+                self.list.add(row)
 
-            self.list_box.show_all()  
+            self.list.show_all()  
 
         return True
     
@@ -1094,6 +1086,7 @@ class BluetoothMenu(Gtk.Dialog):
             with open(self.pid_file_path, "r") as file:
                 pid = int(file.read().strip())
             try:
+                subprocess.run("qtile cmd-obj -o widget bluetoothicon -f unclick", shell=True)
                 os.remove(self.pid_file_path)
                 os.kill(pid, 15)
             except ProcessLookupError:
@@ -1146,6 +1139,7 @@ if __name__ == '__main__':
             with open(pid_file_path, "r") as file:
                 pid = int(file.read().strip())
             try:
+                subprocess.run("qtile cmd-obj -o widget bluetoothicon -f unclick", shell=True)
                 os.remove(pid_file_path)
                 os.kill(pid, 15)            
             except ProcessLookupError:

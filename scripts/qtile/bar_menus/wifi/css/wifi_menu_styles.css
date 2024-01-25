@@ -1,10 +1,13 @@
 #root {
     border-width: 5px;
-    border-color: rgba(69, 73, 81, 0.7);
+    /* border-color: rgba(69, 73, 81, 0.7); */
     background: rgba(45, 51, 59, 0.85);
 }
 .main {
     margin: 8px;
+}
+.none {
+    background: rgba(0, 0, 0, 0.0);
 }
 
 /* TITLE */
@@ -32,7 +35,6 @@
 .toggle-title {
     margin-top: 9px;    
     margin-right: 10px;  
-    margin-bottom: 0px;
     margin-left: 2px;
     color: white;
     font-size: 20px;
@@ -42,34 +44,17 @@
 .toggle-desc {
     margin-top: 2px;    
     margin-right: 10px;  
-    margin-bottom: 0px;
     margin-left: 2px;
     color: white;
     font-size: 14px;
     font-family: FiraCode Nerd Font;
 }
-.toggle-icon-box {
-    margin-top: 10px;    
-    margin-right: 10px;  
-    margin-bottom: 10px;
-    margin-left: 10px;
-    border-radius: 8px;
-}
-#toggle-icon-box-enabled {
-    background: #81a1c1;
-}
-#toggle-icon-box-disabled {
-    background: rgba(69, 73, 81, 0.9);
-}
 .toggle-icon {
-    margin-top: 10px;    
-    margin-right: 10px;  
-    margin-bottom: 10px;
-    margin-left: 10px;
+    margin: 10px;
+    padding: 12px;
     border-radius: 8px;
     font-size: 24px;
     font-family: 'Font Awesome 6 Free Solid';
-
 }
 #toggle-icon-enabled {
     color: black;
@@ -87,39 +72,6 @@
     border-radius: 8px;
     background: rgba(73, 80, 89, 0.0);
 }
-.scrolled_window {
-    border-radius: 8px;
-    background: rgba(69, 73, 81, 0.0);
-}
-.list {
-    border-radius: 8px;
-    background: rgba(69, 73, 81, 0.0);
-}
-.list-row {
-    margin-top: 5px;
-    margin-bottom: 5px;
-    padding: 10px;
-    border-radius: 8px;
-    background: rgba(69, 73, 81, 0.0);
-    transition-duration: 0ms;
-}
-.list-row:hover {
-    border: 2px solid rgba(69, 73, 81, 0.9);
-    background: rgba(69, 73, 81, 0.9);
-}
-#list-row-connected {
-    background: #81a1c1;
-}
-#list-row-disconnected {
-}
-.list-icon-box {
-    border-radius: 8px;
-    /* background: rgba(73, 80, 89, 0.7); */
-}
-.list-icon {
-    color: white;
-    font-size: 13px;
-}
 .row-box{
     border-radius: 8px;
     font-size: 18px;
@@ -134,11 +86,37 @@
 #row-box-clicked {
     background: rgba(46, 52, 64, 0.90);
 }
+.list-row {
+    margin-top: 5px;
+    margin-bottom: 5px;
+    padding: 10px;
+    border-radius: 8px;
+    background: rgba(69, 73, 81, 0.0);
+    transition-duration: 0ms;
+}
+.list-row:hover {
+    border: 1px solid rgba(69, 73, 81, 0.9);
+    background: rgba(69, 73, 81, 0.9);
+}
+#list-row-connected {
+    background: #81a1c1;
+}
+#list-row-disconnected {
+}
+.list-icon {
+    font-size: 13px;
+}
+#list-icon-active {
+    color: black;
+}
+#list-icon-inactive {
+    color: white;
+}
 .list-name {
     margin-left: 10px;
     border-radius: 8px;
     font-size: 18px;
-    font-family: FiraCode Nerd Font;
+    font-family: "FiraCode Nerd Font";
 }
 
 /* KNOWN ICON */
@@ -154,11 +132,12 @@
     color: #a3be8c;
 }
 
-.buttons {
+.network-option-box {
     font-size: 18px;
     border-radius: 8px;
     font-family: "FiraCode Nerd Font";
     font-weight: lighter;
+    background: rgba(0, 0, 0, 0.0);
 }
 
 /* CONNECT ANIMATION */
@@ -189,23 +168,23 @@
     color: #81a1c1;
 }
 #connect-animation-inactive {
-    color: #4f586e;
+    color: rgba(69, 73, 81, 0.8);
 }
 
 /* OPTIONS */
-.options-box {
+.list-options-box {
     margin-top: 10px;
     margin-bottom: 10px;
     margin-left: 11px;
     margin-right: 11px;
 }
-.toggle-box-list-options {
+.list-options {
     border-radius: 6px;
 }
-#toggle-box-list-options-inactive {
+#list-options-inactive {
     background: rgba(69, 73, 81, 0.0);
 }
-#toggle-box-list-options-active {
+#list-options-active {
     background: #81a1c1;
 }
 .list-options-title {

@@ -263,7 +263,8 @@ bottom_bar_on                       = qtile_settings.get("bottom_bar_status", Tr
 #?#############
 #!BAR
 top_bar_size                        = int(qtile_settings.get("top_bar_size", 46)*bar_scaling)
-bottom_bar_size                     = int(qtile_settings.get("bottom_bar_size", 62)*bar_scaling)
+bottom_bar_size                     = int(qtile_settings.get("bottom_bar_size", 70)*bar_scaling)
+# bottom_bar_size                     = int(qtile_settings.get("bottom_bar_size", 62)*bar_scaling)
 # bottom_bar_size                     = int(qtile_settings.get("bottom_bar_size", 55)*bar_scaling)
 
 bar_width = [] 
@@ -271,7 +272,7 @@ for num in qtile_settings.get("bar_width_top", [0, 0, 0, 0]):
     bar_width.append(int(num*general_width_scaling))
 
 bar_width_top                       = bar_width
-bar_margin_top                      = qtile_settings.get("bar_margin_top", [0, -2, 0 ,-2])
+bar_margin_top                      = qtile_settings.get("bar_margin_top", [0, -10, 0, -10])
 bar_width_bottom                    = qtile_settings.get("bar_width_bottom", [0, 0, 0 ,0])
 bar_margin_bottom                   = qtile_settings.get("bar_margin_bottom", [5, 580, 10, 580])
 # bar_margin_bottom                   = qtile_settings.get("bar_margin_bottom", [5, 300, 16, 300])

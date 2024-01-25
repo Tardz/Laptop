@@ -2,15 +2,16 @@ import gi
 gi.require_version('Gtk', '3.0')
 
 from gi.repository import Gtk, Gdk, GLib
+import subprocess
 import pulsectl
 import pygame
 import signal
 import sys
 import os
 
-class VolumeMenu(Gtk.Dialog):
+class VolumeMenu(Gtk.Window):
     def __init__(self, pid_file_path):
-        Gtk.Dialog.__init__(self, "Sound Control", None, 0)
+        Gtk.Window.__init__(self, title="Sound Control")
         self.pid_file_path = pid_file_path
         self.initialize_resources()
         self.setup_ui()
@@ -33,87 +34,85 @@ class VolumeMenu(Gtk.Dialog):
         style_context.add_provider_for_screen(screen, provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION)
         provider.load_from_path("/home/jonalm/scripts/qtile/bar_menus/volume/volume_menu_styles.css")
         visual = screen.get_rgba_visual()
-        self.content_area.set_visual(visual)
         self.set_visual(visual)
 
     def setup_ui(self):
         x, y = self.get_mouse_position()
         self.move(x, y)
 
-        self.window_width = 200
-        self.window_height = 250
+        self.window_width = 290
+        self.window_height = 220
         self.set_size_request(self.window_width, self.window_height)
 
-        self.content_area = self.get_content_area()
-        self.content_area.set_name("content-area")
         self.set_name("root")
 
-        self.css()
-        self.title()
-        self.list()
-
         self.main_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=8)
-        self.main_box.pack_start(self.title_box, False, False, 0)
-        self.main_box.pack_start(self.list_main_box, True, True, 0)
+        self.main_box.get_style_context().add_class("main")
 
-        self.content_area.pack_start(self.main_box, True, True, 0)
+        self.css()
+        self.create_title()
+        self.create_list()
 
+        self.add(self.main_box)
+        self.main_box.grab_focus()
         self.show_all()
 
-    def title(self):
-        self.title_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=0)
-        self.title_box.set_name("toggle-box")
+    def create_title(self):
+        title_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=0)
+        title_box.get_style_context().add_class("toggle-box")
 
         desc_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
-        desc_box.set_name("toggle-desc-box")
 
         title = Gtk.Label()
+        title.get_style_context().add_class("toggle-title")
         title.set_text("Outputs")
-        title.set_name("toggle-title")
         title.set_halign(Gtk.Align.START)
 
         self.desc = Gtk.Label()
-        self.desc.set_name("toggle-desc")
+        self.desc.get_style_context().add_class("toggle-desc")
         self.desc.set_halign(Gtk.Align.START)
+        if not self.sound_on:
+            self.desc.set_text("Off")
 
         left_box = Gtk.EventBox()
-        left_box.set_name("toggle-left-box")
-
-        self.icon_background_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=0)
+        icon_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=0)
 
         self.icon = Gtk.Label()
-        self.icon.set_text("")
+        self.icon.get_style_context().add_class('toggle-icon')
+        self.icon.set_text("")
         self.icon.set_halign(Gtk.Align.START)
 
         if self.sound_on:
-            self.icon_background_box.set_name("toggle-icon-background-enabled")
             self.icon.set_name("toggle-icon-enabled")
         else:
-            self.icon_background_box.set_name("toggle-icon-background-disabled")
             self.icon.set_name("toggle-icon-disabled")
 
-        self.icon_background_box.pack_start(self.icon, False, False, 0)
-        left_box.add(self.icon_background_box)
+        icon_box.pack_start(self.icon, False, False, 0)
+        left_box.add(icon_box)
         desc_box.pack_start(title, False, False, 0)
         desc_box.pack_start(self.desc, False, False, 0)
-        self.title_box.pack_start(left_box, False, False, 0)
-        self.title_box.pack_start(desc_box, False, False, 0)
+        title_box.pack_start(left_box, False, False, 0)
+        title_box.pack_start(desc_box, False, False, 0)
 
         left_box.connect("button-press-event", self.volume_clicked)
+        self.main_box.pack_start(title_box, False, False, 0)
 
-    def list(self):
-        self.list_main_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=16)
-        
-        self.list_box = Gtk.ListBox()
-        self.list_box.set_name("list")
-        self.list_box.set_selection_mode(Gtk.SelectionMode.NONE)
+    def create_list(self):
+        self.list_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=16)
+        self.list_box.get_style_context().add_class('list-box')
         
         scrolled_window = Gtk.ScrolledWindow()
-        scrolled_window.set_name("list-box")
+        scrolled_window.get_style_context().add_class('none')
         scrolled_window.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC) 
-        scrolled_window.add(self.list_box)  
+        
+        self.list = Gtk.ListBox()
+        self.list.get_style_context().add_class('none')
+        self.list.set_selection_mode(Gtk.SelectionMode.NONE)
 
-        self.list_main_box.pack_start(scrolled_window, True, True, 0)
+        scrolled_window.add(self.list)  
+        self.list_box.pack_start(scrolled_window, True, True, 0)
+
+        self.main_box.pack_start(self.list_box, True, True, 0)
 
         # GLib.timeout_add(4000, self.update_list_with_sound_outputs)
 
@@ -123,13 +122,11 @@ class VolumeMenu(Gtk.Dialog):
             self.desc.set_text("Muted")
             self.icon.set_text("")
             self.pulse.sink_mute(self.active_sink.index, 1)
-            self.icon_background_box.set_name("toggle-icon-background-disabled")
             self.icon.set_name("toggle-icon-disabled")
         else:
             self.sound_on = True
             self.icon.set_text("")
             self.pulse.sink_mute(self.active_sink.index, 0)
-            self.icon_background_box.set_name("toggle-icon-background-enabled")
             self.icon.set_name("toggle-icon-enabled")
             self.update_list_with_sound_outputs()
 
@@ -142,7 +139,6 @@ class VolumeMenu(Gtk.Dialog):
         
     def get_active_sink(self):
         sinks = self.pulse.sink_list()
-
         default_sink = self.pulse.server_info().default_sink_name
         active_sink = None
         for sink in sinks:
@@ -162,59 +158,105 @@ class VolumeMenu(Gtk.Dialog):
         else:
             self.desc.set_text("Muted")
         
-        for child in self.list_box.get_children():
-            self.list_box.remove(child)
+        for child in self.list.get_children():
+            self.list.remove(child)
 
         for sink in sinks:
             row = Gtk.ListBoxRow()
-            row.set_name("row")
-            label = Gtk.Label()
+            row.get_style_context().add_class('list-row')
 
-            list_content_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=0)
-            list_obj_icon_box = Gtk.EventBox()
-            list_obj_icon_box.set_name("list-icon-box")
+            row_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=0)
+            row_box.get_style_context().add_class('row-box')
+
+            icon_box = Gtk.EventBox()
             icon = Gtk.Label()
+            icon.get_style_context().add_class('list-icon')
+
+            name_box = Gtk.EventBox()
+            name = Gtk.Label()
+            name.get_style_context().add_class('list-name')
+            name.set_halign(Gtk.Align.START)
 
             device_type = sink.proplist["device.icon_name"] 
-            if device_type == "audio-headphones-bluetooth":
-                icon.set_name("list-icon-headphone")
-                icon.set_text("")
-            elif device_type == "audio-card-pci":
-                icon.set_name("list-icon-speaker")
-                icon.set_text("")
-            elif device_type == "audio-card-usb":
-                icon.set_name("list-icon-headphone")
-                icon.set_text("")
-
-            list_obj_clickable_box = Gtk.EventBox()
 
             if sink.name == self.active_sink.name:
-                label.set_name("list-obj")
-                list_content_box.set_name("list-obj-box-active")
+                row.set_name("row-box-active")
+                if device_type == "audio-headphones-bluetooth":
+                    icon.set_name("list-icon-headphone-active")
+                    icon.set_text("")
+                elif device_type == "audio-card-pci":
+                    icon.set_name("list-icon-speaker-active")
+                    icon.set_text("")
+                elif device_type == "audio-card-usb":
+                    icon.set_name("list-icon-headphone-active")
+                    icon.set_text("")
             else:
-                list_obj_clickable_box.connect("button-press-event", self.sound_output_clicked, sink)
-                list_content_box.set_name("list-obj-box-inactive")
-                label.set_name("list-obj")
+                if device_type == "audio-headphones-bluetooth":
+                    icon.set_name("list-icon-headphone-inactive")
+                    icon.set_text("")
+                elif device_type == "audio-card-pci":
+                    icon.set_name("list-icon-speaker-inactive")
+                    icon.set_text("")
+                elif device_type == "audio-card-usb":
+                    icon.set_name("list-icon-headphone-inactive")
+                    icon.set_text("")
+                name_box.connect("button-press-event", self.sound_output_clicked, sink)
+                row.set_name("row-box-inactive")
 
             if sink.description == "Family 17h/19h HD Audio Controller Analog Stereo":
-                label.set_text("Laptop Speakers")
+                name.set_text("Laptop Speakers")
             elif sink.description == "HyperX Cloud Alpha Wireless Analog Stereo":
-                label.set_text("HyperX Headphones")
+                name.set_text("HyperX Headphones")
             else:
-                label.set_text(sink.description)
+                if "Bose" in sink.description:
+                    name.set_text("Bose Headphones")
+                else:
+                    name.set_text(sink.description)
             
-            label.set_halign(Gtk.Align.START)
-            
-            list_obj_icon_box.add(icon)
-            list_obj_clickable_box.add(label)
+            icon_box.add(icon)
+            name_box.add(name)
 
-            list_content_box.pack_start(list_obj_icon_box, False, False, 0)
-            list_content_box.pack_start(list_obj_clickable_box, False, False, 0)
-            row.add(list_content_box)
-            self.list_box.add(row)
+            row_box.pack_start(icon_box, False, False, 0)
+            row_box.pack_start(name_box, False, False, 0)
+            row.add(row_box)
+            self.list.add(row)
 
-        self.list_box.show_all()
+        # self.add_test_outputs(2)
+        self.list.show_all()
         return False
+    
+    def add_test_outputs(self, n):
+        for i in range(n):
+            row = Gtk.ListBoxRow()
+            row.get_style_context().add_class('list-row')
+
+            row_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=0)
+            row_box.get_style_context().add_class('row-box')
+
+            icon_box = Gtk.EventBox()
+            icon_box.get_style_context().add_class('list-icon-box')
+            icon = Gtk.Label()
+            icon.get_style_context().add_class('list-icon')
+
+            name_box = Gtk.EventBox()
+            name = Gtk.Label()
+            name.get_style_context().add_class('list-name')
+            name.set_halign(Gtk.Align.START)
+
+            icon.set_name("list-icon-headphone-inactive")
+            icon.set_text("")
+
+            row.set_name("row-box-inactive")
+
+            name.set_text(f"Test output {i}")
+            
+            icon_box.add(icon)
+            name_box.add(name)
+
+            row_box.pack_start(icon_box, False, False, 0)
+            row_box.pack_start(name_box, False, False, 0)
+            row.add(row_box)
+            self.list.add(row)
 
     def get_mouse_position(self):
         from Xlib import display 
@@ -260,6 +302,7 @@ class VolumeMenu(Gtk.Dialog):
             with open(self.pid_file_path, "r") as file:
                 pid = int(file.read().strip())
             try:
+                subprocess.run("qtile cmd-obj -o widget volumeicon -f unclick", shell=True)
                 os.remove(self.pid_file_path)
                 os.kill(pid, 15)
             except ProcessLookupError:
@@ -276,6 +319,7 @@ if __name__ == '__main__':
             with open(pid_file_path, "r") as file:
                 pid = int(file.read().strip())
             try:
+                subprocess.run("qtile cmd-obj -o widget volumeicon -f unclick", shell=True)
                 os.remove(pid_file_path)
                 os.kill(pid, 9)    
             except Exception as e:

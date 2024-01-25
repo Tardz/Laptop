@@ -13,8 +13,7 @@
 
     origin = top-right
 
-    offset = 2x32
-    # offset = 2x34
+    offset = 2x30
 
     scale = 0
 
@@ -37,7 +36,7 @@
 
     indicate_hidden = yes
  
-    transparency = 0
+    transparency = 0.1
 
     separator_height = 2
 
@@ -49,9 +48,9 @@
 
     frame_width = 1
 
-    frame_color = "#454951"
+    frame_color = "#454951.0"
 
-    gap_size = 0
+    gap_size = 2
 
     separator_color = frame
 

@@ -1,10 +1,10 @@
 .root {
-    border-width: 5px;
-    border-color: rgba(79, 88, 110, 0.9);
-    background: rgba(46, 52, 64, 0.96);
+    border-width: 8px;
+    /* border-color: rgba(79, 88, 110, 0.9); */
+    background: rgba(46, 52, 64, 0.85);
 }
 .content-area {
-    margin: 5px;
+    margin: 8px;
     background: rgba(46, 52, 64, 0);
 }
 
@@ -15,8 +15,8 @@
 }
 .options-box {
     margin: 5px;
-    border-radius: 5px;
-    background: rgba(79, 88, 110, 0.8);
+    border-radius: 12px;
+    background: rgba(79, 88, 110, 0.0);
 }
 #turn-off-box-active {
     background: rgba(191, 97, 106, 1);
@@ -39,7 +39,7 @@
     border: 2px solid black;
 }
 #box-inactive {
-    background: rgba(79, 88, 110, 0.8);
+    background: rgba(79, 88, 110, 0.0);
 }
 .options-icon {
     margin: 18px;
@@ -74,10 +74,10 @@
 
 /* TITLE */
 .title-and-uptime-root-box {
-    margin: 5px;
+    margin: 8px;
 }
 .title-box {
-    border-radius: 5px;
+    border-radius: 8px;
     border: 2px solid black;
     /*border-color: black;*/
 }
@@ -105,7 +105,7 @@
 }
 .uptime-icon-box {
     background: #a3be8c;
-    border-radius: 5px;
+    border-radius: 8px;
     border: 2px solid black;
 }
 .uptime-icon {
@@ -119,19 +119,20 @@
     font-family: 'Font Awesome 6 Free Solid', serif;
 }
 .uptime-box {
-    background: rgba(79, 88, 110, 0.8);
-    border-radius: 5px;
-    /*border: 2px solid black;*/
+    border: 2px solid black;
+    background: #a3be8c;
+    border-radius: 8px;
 }
 .uptime {
     margin: 10px;
+    color: black;
     font-size: 20px;
     font-weight: bold;
     font-family: FiraCode Nerd Font, serif;
 }
 .user-icon-box {
     background: #d5c4a1;
-    border-radius: 5px;
+    border-radius: 8px;
     border: 2px solid black;
 }
 .user-icon {
@@ -145,14 +146,16 @@
     font-family: 'Font Awesome 6 Free Solid', serif;
 }
 .username-box {
-    background: rgba(79, 88, 110, 0.8);
-    border-radius: 5px;
+    border: 2px solid black;
+    background: #d5c4a1;
+    border-radius: 8px;
 }
 .username {
     margin-top: 10px;
     margin-bottom: 10px;
     margin-left: 15px;
     margin-right: 15px;
+    color: black;
     font-size: 20px;
     font-weight: bold;
     font-family: FiraCode Nerd Font, serif;
