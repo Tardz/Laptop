@@ -257,7 +257,7 @@ simple_style_single_top_bar = Bar([
     BatteryIconWidget(),
 
     # TIME #
-    seperator(22),
+    seperator(),
     ClockWidget(decor_color=transparent),
     seperator(4),
 
@@ -283,7 +283,7 @@ simple_style_single_bottom_bar = Bar([
 simple_style_dual_top_bar_1 = Bar([
     widget.Spacer(bar.STRETCH),
 
-     # BLUETOOTH #
+    # BLUETOOTH #
     BluetoothIcon(),
     seperator(),
 
@@ -294,9 +294,25 @@ simple_style_dual_top_bar_1 = Bar([
     #  WIFI #
     WifiIcon(),
 
+    # TICKTICK #
+    # seperator(),
+    # TickTickMenu(),
+
+    # CPU LOAD #
+    seperator(),
+    CpuLoadIcon(),
+
     # URGENT NOTIFICATION #
     seperator(),
     NotificationIcon(),
+
+    # BACKLIGHT #
+    seperator() if laptop else NothingWidget(),
+    BacklightIcon() if laptop else NothingWidget(),
+
+    # BATTERY #
+    seperator() if laptop else NothingWidget(),
+    BatteryIconWidget() if laptop else NothingWidget(),
 
     # TIME #
     seperator(),

@@ -17,10 +17,10 @@ extension_defaults = widget_defaults.copy()
 
 def seperator(custom_padding=seperator_padding, background=None):
     return widget.Sep(
-        background = background,
-        linewidth = seperator_line_width,
-        foreground = bar_background_color,
-        padding = custom_padding,
+        background   = background,
+        linewidth    = seperator_line_width,
+        foreground   = bar_background_color,
+        padding      = custom_padding,
         size_percent = 0,
     )
 
@@ -31,9 +31,9 @@ def left_decor(color, round=True, padding_x=None, padding_y=left_decor_padding):
         radius = 5
     return [
         RectDecoration(
-            colour = color,
-            radius = radius,
-            filled = True,
+            colour    = color,
+            radius    = radius,
+            filled    = True,
             padding_x = padding_x,
             padding_y = padding_y,
         )
@@ -44,9 +44,9 @@ def clicked_decor(color, round=True, padding_x=None, padding_y=left_decor_paddin
     if not laptop:
         radius = 5
     return RectDecoration(
-            colour = color,
-            radius = radius,
-            filled = True,
+            colour    = color,
+            radius    = radius,
+            filled    = True,
             padding_x = padding_x,
             padding_y = padding_y,
         )
@@ -57,9 +57,9 @@ def left_decor_hover(color, round=True, padding_x=2, padding_y=left_decor_paddin
         radius = 5
     return [
         RectDecoration(
-            colour = color,
-            radius = radius,
-            filled = True,
+            colour    = color,
+            radius    = radius,
+            filled    = True,
             padding_x = padding_x,
             padding_y = padding_y,
         )
@@ -71,10 +71,10 @@ def right_decor(color=right_decor_background, round=True, padding_x=0, padding_y
         radius = 5
     return [
         RectDecoration(
-            colour = color,
-            radius = radius,
-            filled = True,
-            group = True,
+            colour    = color,
+            radius    = radius,
+            filled    = True,
+            group     = True,
             padding_x = padding_x,
             padding_y = padding_y,
         )
@@ -82,14 +82,14 @@ def right_decor(color=right_decor_background, round=True, padding_x=0, padding_y
 
 def task_list_decor(color=bar_background_color, radius=12 if laptop else 5, group=False, padding_x=0, padding_y=0):
     return RectDecoration(
-        line_width = bottom_widget_width,
-        line_colour = bar_border_color,
-        colour = color,
-        radius = radius,
-        filled = True,
-        padding_y = padding_y,
-        padding_x = padding_x,
-        group = group,
+        line_width            = bottom_widget_width,
+        line_colour           = bar_border_color,
+        colour                = color,
+        radius                = radius,
+        filled                = True,
+        padding_y             = padding_y,
+        padding_x             = padding_x,
+        group                 = group,
         use_widget_background = False
     )
 
@@ -101,7 +101,6 @@ def icon_decor(color=bar_background_color, border_width=[3, 0, 3, 0]):
 
 def modify_window_name(text):
     parts = text.split('-')
-
     cleaned_parts = [part.strip() for part in parts]
 
     if len(cleaned_parts) >= 2:
@@ -117,9 +116,9 @@ class PowerButton(widget.TextBox):
     def __init__(self):
         widget.TextBox.__init__(
             self,
-            text = f"<span font='Font Awesome 6 free solid {icon_size}' foreground='{icon_foreground_12}' size='medium'></span>",
+            text            = f"<span font='Font Awesome 6 free solid {icon_size}' foreground='{icon_foreground_12}' size='medium'></span>",
             mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("python3 /home/jonalm/scripts/qtile/bar_menus/system/system_menu.py")},
-            decorations = left_decor(icon_background_12),
+            decorations     = left_decor(icon_background_12),
         )
         
     def mouse_enter(self, *args, **kwargs):
@@ -147,9 +146,9 @@ class TickTickMenu(widget.TextBox):
     def __init__(self):
         widget.TextBox.__init__(
             self,
-            text        = f"<span font='Font Awesome 6 free solid {icon_size}' foreground='{icon_foreground_10}' size='medium'></span>",
+            text            = f"<span font='Font Awesome 6 free solid {icon_size}' foreground='{icon_foreground_10}' size='medium'></span>",
             mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("python3 /home/jonalm/scripts/qtile/bar_menus/ticktick/launch.py")},
-            decorations = left_decor(icon_background_10),
+            decorations     = left_decor(icon_background_10),
         )
         
     def mouse_enter(self, *args, **kwargs):
@@ -174,7 +173,7 @@ class BluetoothIcon(widget.TextBox):
             decorations     = self.normal_decorator,
         )
 
-        self.active_background = bar_border_color
+        self.active_background   = bar_border_color
         self.inactive_background = self.background
     
     def clicked(self):
@@ -367,10 +366,10 @@ class CpuTempIcon(widget.TextBox):
     def __init__(self):
         widget.TextBox.__init__(
             self,
-            padding = widget_default_padding + 2,
-            text = f"<span font='Font Awesome 6 free solid {icon_size + 1}' foreground='{icon_foreground_4}'size='medium'></span>",
+            padding         = widget_default_padding + 2,
+            text            = f"<span font='Font Awesome 6 free solid {icon_size + 1}' foreground='{icon_foreground_4}'size='medium'></span>",
             mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("python3 /home/jonalm/scripts/qtile/bar_menus/cpu/cpu_stats_menu.py")},
-            decorations = left_decor(icon_background_4),
+            decorations     = left_decor(icon_background_4),
         )
         
     def mouse_enter(self, *args, **kwargs):
@@ -383,13 +382,13 @@ class CpuTempWidget(widget.ThermalSensor):
     def __init__(self):
         widget.ThermalSensor.__init__(
             self,
-            format = "{temp:.0f}{unit}",
-            threshold = 80.0,
+            format           = "{temp:.0f}{unit}",
+            threshold        = 80.0,
             foreground_alert = "#bf616a",
-            markup = True,
-            update_interval = cpu_update_interval,
-            mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("python3 /home/jonalm/scripts/qtile/bar_menus/cpu/cpu_stats_menu.py")},
-            decorations = right_decor(),
+            markup           = True,
+            update_interval  = cpu_update_interval,
+            mouse_callbacks  = {"Button1": lambda: Qtile.cmd_spawn("python3 /home/jonalm/scripts/qtile/bar_menus/cpu/cpu_stats_menu.py")},
+            decorations      = right_decor(),
         )
         
     def mouse_enter(self, *args, **kwargs):
@@ -402,9 +401,13 @@ class CpuLoadIcon(widget.TextBox):
     def __init__(self):
         widget.TextBox.__init__(
             self,
-            text = f"<span font='Font Awesome 6 free solid {icon_size}' foreground='{icon_foreground_5}'size='medium'></span>",
+            text            = "",
+            font            = icon_font,
+            fontsize        = icon_size + 5,
+            foreground      = icon_foreground_5,
+            padding         = 20,
             mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("python3 /home/jonalm/scripts/qtile/bar_menus/cpu/cpu_stats_menu.py")},
-            decorations = left_decor(icon_background_5),
+            decorations     = left_decor(icon_background_5),
         )
 
     def mouse_enter(self, *args, **kwargs):
@@ -417,15 +420,15 @@ class CpuLoadWidget(widget.CPU):
     def __init__(self):
         widget.CPU.__init__(
             self,
-            format = "{load_percent}%",
-            markup = True,
+            format          = "{load_percent}%",
+            markup          = True,
             update_interval = cpu_update_interval,
             mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("python3 /home/jonalm/scripts/qtile/bar_menus/cpu/cpu_stats_menu.py")},
-            decorations = right_decor(),
+            decorations     = right_decor(),
         )
         
         self.normal_format = self.format
-        self.hover_format = "{load_percent}%{temp:.0f}{unit}"
+        self.hover_format  = "{load_percent}%{temp:.0f}{unit}"
 
     def mouse_enter(self, *args, **kwargs):
         self.format = self.hover_format
@@ -441,9 +444,9 @@ class BatteryIcon(widget.TextBox):
     def __init__(self):
         widget.TextBox.__init__(
             self,
-            text = f"<span font='Font Awesome 6 free solid {icon_size}' foreground='{icon_foreground_6}'size='medium'></span>",
+            text            = f"<span font='Font Awesome 6 free solid {icon_size}' foreground='{icon_foreground_6}'size='medium'></span>",
             mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("python3 /home/jonalm/scripts/qtile/bar_menus/power/power_management_menu.py")},
-            decorations = left_decor(icon_background_6),
+            decorations     = left_decor(icon_background_6),
         )
             
     def mouse_enter(self, *args, **kwargs):
@@ -456,11 +459,11 @@ class BatteryWidget(widget.Battery):
     def __init__(self):
         widget.Battery.__init__(
             self,
-            format = "{percent:2.0%}",
-            markup = True,
+            format          = "{percent:2.0%}",
+            markup          = True,
             update_interval = battery_update_interval,
             mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("python3 /home/jonalm/scripts/qtile/bar_menus/power/power_management_menu.py")},
-            decorations = right_decor(),
+            decorations     = right_decor(),
         )
             
     def mouse_enter(self, *args, **kwargs):
@@ -473,13 +476,12 @@ class BatteryIconWidget(widget.BatteryIcon):
     def __init__(self, decor=False):
         widget.BatteryIcon.__init__(
             self,
-            theme_path = "/home/jonalm/.config/qtile/battery_icons/horizontal/",
-            battery = 0,
-            scale = 2.8,
-            # update_interval = battery_update_interval,
+            theme_path      = "/home/jonalm/.config/qtile/battery_icons/horizontal/",
+            battery         = 0,
+            scale           = 2.8,
             padding         = 20,
             mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("python3 /home/jonalm/scripts/qtile/bar_menus/power/power_management_menu.py")},
-            decorations = right_decor() if decor else right_decor(transparent),
+            decorations     = right_decor() if decor else right_decor(transparent),
         )
             
     def mouse_enter(self, *args, **kwargs):
@@ -492,9 +494,9 @@ class WattageIcon(widget.TextBox):
     def __init__(self):
         widget.TextBox.__init__(
             self,
-            text = f"<span font='Font Awesome 6 free solid {icon_size}' foreground='{icon_foreground_7}'size='medium'></span>",
+            text            = f"<span font='Font Awesome 6 free solid {icon_size}' foreground='{icon_foreground_7}'size='medium'></span>",
             mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("python3 /home/jonalm/scripts/qtile/bar_menus/power/power_management_menu.py")},
-            decorations=left_decor(icon_background_7),
+            decorations     = left_decor(icon_background_7),
         )
 
     def mouse_enter(self, *args, **kwargs):
@@ -507,11 +509,11 @@ class WattageWidget(widget.Battery):
     def __init__(self):
         widget.Battery.__init__(
             self,
-            format = "{watt:.2f}",
-            markup = True,
+            format          = "{watt:.2f}",
+            markup          = True,
             update_interval = battery_update_interval,
             mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("python3 /home/jonalm/scripts/qtile/bar_menus/power/power_management_menu.py")},
-            decorations = right_decor(),
+            decorations     = right_decor(),
         )
 
     def mouse_enter(self, *args, **kwargs):
@@ -527,8 +529,8 @@ class NotificationWidget(widget.TextBox, base.InLoopPollText):
         base.InLoopPollText.__init__(
             self,
             update_interval = wifi_update_interval,
-            max_chars = 6,
-            decorations = right_decor()
+            max_chars       = 6,
+            decorations     = right_decor()
         )
 
         self.shown = False
@@ -598,12 +600,12 @@ class BacklightWidget(widget.Backlight):
     def __init__(self):
         widget.Backlight.__init__(
             self,
-            format = "{percent:2.0%}",
-            markup = True,
-            backlight_name = "amdgpu_bl1",
+            format          = "{percent:2.0%}",
+            markup          = True,
+            backlight_name  = "amdgpu_bl1",
             brightness_file = "/sys/class/backlight/amdgpu_bl1/actual_brightness",
             update_interval = backlight_update_interval,
-            decorations = right_decor(),
+            decorations     = right_decor(),
         )
 
     def mouse_enter(self, *args, **kwargs):
@@ -616,12 +618,12 @@ class ClockWidget(widget.Clock):
     def __init__(self, decor_color=right_decor_background):
         widget.Clock.__init__(
             self,
-            format = "%A %d %B %H:%M",
-            font = bold_font,
-            foreground = text_color,
-            fontsize = widget_default_font_size,
+            format      = "%A %d %B %H:%M",
+            font        = bold_font,
+            foreground  = text_color,
+            fontsize    = widget_default_font_size,
             decorations = right_decor(decor_color),
-            padding = widget_default_padding + 6
+            padding     = widget_default_padding + 6
         )
 
 # def launch_app_from_bar(check_command):
@@ -642,14 +644,14 @@ class AppTrayIcon(widget.TextBox):
         mouse_callback = {"Button1": lambda: Qtile.cmd_spawn("python3 /home/jonalm/scripts/qtile/settings_menu/app/settings_menu.py &")}
         widget.TextBox.__init__(
             self,
-            text = f"<span font='Font Awesome 6 free solid' size='medium'>{icon}</span>",
-            fontsize = icon_size + 14,
-            padding = widget_default_padding + 14,
-            foreground = foreground,
-            background = transparent,
-            markup = True,
+            text            = f"<span font='Font Awesome 6 free solid' size='medium'>{icon}</span>",
+            fontsize        = icon_size + 14,
+            padding         = widget_default_padding + 14,
+            foreground      = foreground,
+            background      = transparent,
+            markup          = True,
             mouse_callbacks = mouse_callback,
-            decorations = [task_list_decor(group=True)],
+            decorations     = [task_list_decor(group=True)],
         )
         self.normal_foreground = self.foreground
         self.hover_foreground = text_color
@@ -678,13 +680,13 @@ class ActiveWindowOptionWidget(widget.TextBox):
     def __init__(self, text="", foreground=text_color, fontsize=widget_default_font_size + 2):
         widget.TextBox.__init__(
             self,
-            text = text,
-            font = normal_font,
+            text       = text,
+            font       = normal_font,
             background = bar_background_color,
-            fontsize = fontsize,
-            padding = widget_default_padding + 14,
+            fontsize   = fontsize,
+            padding    = widget_default_padding + 14,
             foreground = foreground,
-            markup = True,
+            markup     = True,
         )
         self.normal_foreground = self.foreground
         self.hover_foreground = text_color
@@ -692,20 +694,15 @@ class ActiveWindowOptionWidget(widget.TextBox):
         self.normal_fontsize = self.fontsize
         self.hover_fontsize = self.fontsize + 50
 
-        self.normal_padding = self.padding
-        self.hover_padding = self.padding - 2
-    
     def mouse_enter(self, *args, **kwargs):
         self.bar.window.window.set_cursor("hand2")
         self.foreground = self.hover_foreground
-        # self.padding = self.hover_padding
         self.fontsize = self.hover_fontsize
         self.bar.draw()
 
     def mouse_leave(self, *args, **kwargs):
         self.bar.window.window.set_cursor("left_ptr")
         self.foreground = self.normal_foreground
-        # self.padding = self.normal_padding
         self.fontsize = self.normal_fontsize
         self.bar.draw()
 
@@ -713,10 +710,10 @@ class ActiveWindowIcon(widget.TextBox):
     def __init__(self, foreground=text_color):
         widget.TextBox.__init__(
             self,
-            text = "",
-            fontsize = icon_size + 9,
-            padding = widget_default_padding + 18,
-            background = bar_background_color,
+            text            = "",
+            fontsize        = icon_size + 9,
+            padding         = widget_default_padding + 18,
+            background      = bar_background_color,
             mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("python3 /home/jonalm/scripts/qtile/settings_menu/app/settings_menu.py")}
         )
 
@@ -762,7 +759,7 @@ class NothingWidget(widget.TextBox):
     def __init__(self):
         widget.TextBox.__init__(
             self,
-            padding = 0,
+            padding  = 0,
             fontsize = 0,
         )
 
@@ -827,9 +824,9 @@ class WindowCountWidget(widget.WindowCount):
     def __init__(self):
         widget.WindowCount.__init__(
             self,
-            padding = widget_default_padding + 16, 
-            background = transparent, 
-            show_zero = True, 
-            fontsize = widget_default_font_size + 2,
+            padding     = widget_default_padding + 16, 
+            background  = transparent, 
+            show_zero   = True, 
+            fontsize    = widget_default_font_size + 2,
             decorations = [task_list_decor()]
         )

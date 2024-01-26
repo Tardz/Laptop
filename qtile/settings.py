@@ -127,7 +127,7 @@ if laptop:
     task_list_scaling               = 1
 else:
     bar_scaling                     = 0.7
-    icon_size_scaling               = 0.68
+    icon_size_scaling               = 0.6
     icon_padding_scaling            = 0.65
     widget_padding_scaling          = 0.9
     widget_size_scaling             = 0.74
