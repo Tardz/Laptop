@@ -259,7 +259,7 @@ for num in qtile_settings.get("bar_width_top", [0, 0, 0, 0]):
     bar_width.append(int(num*general_width_scaling))
 
 bar_width_top                       = bar_width
-bar_margin_top                      = qtile_settings.get("bar_margin_top", [0, -10, 0, -10])
+bar_margin_top                      = qtile_settings.get("bar_margin_top", [0, 0, 0, 0])
 bar_width_bottom                    = qtile_settings.get("bar_width_bottom", [0, 0, 0 ,0])
 bar_margin_bottom                   = qtile_settings.get("bar_margin_bottom", [5, 580, 10, 580])
 # bar_margin_bottom                   = qtile_settings.get("bar_margin_bottom", [5, 300, 16, 300])

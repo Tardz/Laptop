@@ -623,7 +623,6 @@ class ClockWidget(widget.Clock):
             foreground  = text_color,
             fontsize    = widget_default_font_size,
             decorations = right_decor(decor_color),
-            padding     = widget_default_padding + 6
         )
 
 # def launch_app_from_bar(check_command):
@@ -712,7 +711,7 @@ class ActiveWindowIcon(widget.TextBox):
             self,
             text            = "",
             fontsize        = icon_size + 9,
-            padding         = widget_default_padding + 6,
+            padding         = widget_default_padding + 10,
             background      = bar_background_color,
             mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("python3 /home/jonalm/scripts/qtile/settings_menu/app/settings_menu.py")}
         )
@@ -730,7 +729,6 @@ class ActiveWindowWidget(widget.WindowName):
             background = bar_background_color,
             font = bold_font,
             fontsize = widget_default_font_size + 1,
-            padding = 6,
             format = "{name}",
             foreground = foreground,
             empty_group_string = "Desktop",

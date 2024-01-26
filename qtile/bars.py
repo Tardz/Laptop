@@ -216,6 +216,7 @@ box_style_dual_bottom_bar_2 = Bar([
 
 simple_style_single_top_bar = Bar([
     ActiveWindowIcon(),
+    seperator(-8),
     ActiveWindowWidget(),
     # ActiveWindowOptionWidget("File"),
     # ActiveWindowOptionWidget("Edit"),
@@ -253,13 +254,13 @@ simple_style_single_top_bar = Bar([
     BacklightIcon(),
 
     # BATTERY #
-    seperator(),
+    seperator(25),
     BatteryIconWidget(),
 
     # TIME #
-    seperator(),
+    seperator(30),
     ClockWidget(decor_color=transparent),
-    seperator(4),
+    seperator(0),
 
 ], top_bar_size, margin = bar_margin_top, background = bar_background_color, border_width = bar_width_top, border_color = bar_border_color, opacity=1)
 
