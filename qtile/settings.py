@@ -136,7 +136,7 @@ else:
     seperator_line_scaling          = 0.6
     general_width_scaling           = 0.9
     task_list_scaling               = 0.9
-    gap_scaling                     = 0
+    gap_scaling                     = 3
 
 #*###############################
 #*           BAR               ##

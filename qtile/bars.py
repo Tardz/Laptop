@@ -315,9 +315,9 @@ simple_style_dual_top_bar_1 = Bar([
     BatteryIconWidget() if laptop else NothingWidget(),
 
     # TIME #
-    seperator(),
+    seperator(0),
     ClockWidget(decor_color=transparent),
-    seperator(4),
+    # seperator(),
 
 ], top_bar_size, margin = bar_margin_top, background = bar_background_color, border_width = bar_width_top, border_color = bar_border_color, opacity=1)
 
