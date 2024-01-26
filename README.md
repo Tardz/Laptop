@@ -2,18 +2,17 @@
 **(Under progress, do not install)**
 ## Preview
 <p align="center">
-  <img src="https://github.com/Tardz/Laptop/blob/main/readme_images/desktop_screenshot_modified.png" alt="Image 1" width="850" />
-  <img src="https://github.com/Tardz/Laptop/blob/main/desktop_screenshot.png" alt="Image 1" width="850" />
+  <img src="https://github.com/Tardz/Laptop/blob/main/github/desktop_screenshot_modified.png" alt="Image 1" width="850" />
 </p>
 
 <p align="center">
-  <img src="https://github.com/Tardz/Laptop/blob/main/readme_images/wifi_menu_screenshot_modified.png" alt="Image 1" width="350" />
-  <img src="https://github.com/Tardz/Laptop/blob/main/readme_images/bluetooth_menu_screenshot_modified.png" alt="Image 2" width="350" />
-  <img src="https://github.com/Tardz/Laptop/blob/main/readme_images/volume_menu_screenshot_modified.png" alt="Image 3" width="350" />
+  <img src="https://github.com/Tardz/Laptop/blob/main/github/wifi_menu_screenshot_modified.png" alt="Image 1" width="350" />
+  <img src="https://github.com/Tardz/Laptop/blob/main/github/bluetooth_menu_screenshot_modified.png" alt="Image 2" width="350" />
+  <img src="https://github.com/Tardz/Laptop/blob/main/github/volume_menu_screenshot_modified.png" alt="Image 3" width="350" />
 </p>
 
 <p align="center">
-  <img src="https://github.com/Tardz/Laptop/blob/main/readme_images/settings_menu_screenshot_modified.png" alt="Image 1" width="750" />
+  <img src="https://github.com/Tardz/Laptop/blob/main/github/settings_menu_screenshot_modified.png" alt="Image 1" width="750" />
 </p>
 
 ## About
