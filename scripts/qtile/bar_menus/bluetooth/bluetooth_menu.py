@@ -997,17 +997,29 @@ class BluetoothMenu(Gtk.Window):
 
                 device_type = device["DEVICE-TYPE"] 
                 if device_type == "audio-headphones-bluetooth":
-                    icon.set_name("list-icon-headphone")
                     icon.set_text("")
+                    if device["CONNECTED"]:
+                        icon.set_name("list-icon-headphone-active")
+                    else:
+                        icon.set_name("list-icon-headphone-inactive")
                 elif device_type == "audio-card-pci":
-                    icon.set_name("list-icon-speaker")
                     icon.set_text("")
+                    if device["CONNECTED"]:
+                        icon.set_name("list-icon-speaker-active")
+                    else:
+                        icon.set_name("list-icon-speaker-inactive")
                 elif device_type == "audio-card-usb":
-                    icon.set_name("list-icon-headphone")
                     icon.set_text("")
+                    if device["CONNECTED"]:
+                        icon.set_name("list-icon-headphone-active")
+                    else:
+                        icon.set_name("list-icon-headphone-inactive")
                 else:
-                    icon.set_name("list-icon-unknown")
                     icon.set_text("?")
+                    if device["CONNECTED"]:
+                        icon.set_name("list-icon-unknown-active")
+                    else:
+                        icon.set_name("list-icon-unknown-inactive")
 
                 battery_percentage = device["BATTERY"]
                 if battery_percentage:

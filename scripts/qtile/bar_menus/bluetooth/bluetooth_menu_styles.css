@@ -133,15 +133,27 @@
     font-family: 'Font Awesome 6 Free Solid';
     font-weight: bold;   
 }
-#list-icon-headphone {
+#list-icon-headphone-active {
+    color: black;
+    font-size: 18px;
+}
+#list-icon-headphone-inactive {
     color: white;
     font-size: 18px;
 }
-#list-icon-speaker {
+#list-icon-speaker-active {
+    color: black;
+    font-size: 16px;
+}
+#list-icon-speaker-inactive {
     color: white;
     font-size: 16px;
 }
-#list-icon-unknown {
+#list-icon-unknown-active {
+    color: black;
+    font-size: 16px;
+}
+#list-icon-unknown-inactive {
     color: white;
     font-size: 16px;
 }

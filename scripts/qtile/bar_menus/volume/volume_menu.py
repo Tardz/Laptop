@@ -17,6 +17,7 @@ class VolumeMenu(Gtk.Window):
         self.pid_file_path = pid_file_path
         self.initialize_resources()
         self.setup_ui()
+        GLib.idle_add(self.update_list_with_sound_outputs)
 
     def initialize_resources(self):
         self.connect("focus-out-event", self.on_focus_out)
@@ -115,7 +116,6 @@ class VolumeMenu(Gtk.Window):
 
         self.main_box.pack_start(self.list_box, True, True, 0)
 
-        self.update_list_with_sound_outputs()
         GLib.timeout_add(6000, self.update_list_with_sound_outputs)
 
     def volume_clicked(self, widget, event):
