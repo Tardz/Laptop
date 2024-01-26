@@ -8,15 +8,15 @@ layouts = [
     MonadTall(
         border_normal       = layout_normal_color_monadtall,
         border_focus        = layout_focus_color_monadtall,
-        margin              = layout_margin,
-        single_margin       = layout_margin,
+        margin              = monadtall_layout_margin,
+        single_margin       = stack_layout_margin,
         border_width        = layout_border_width,
         single_border_width = layout_border_width,
     ),
     Stack(
         border_normal       = layout_normal_color_monadtall,
         border_focus        = layout_focus_color_monadtall,
-        margin              = layout_margin,
+        margin              = stack_layout_margin,
         num_stacks          = layout_num_stacks,
         border_width        = layout_border_width,
     ),

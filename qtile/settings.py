@@ -136,7 +136,7 @@ else:
     seperator_line_scaling          = 0.6
     general_width_scaling           = 0.9
     task_list_scaling               = 0.9
-    gap_scaling                     = 8
+    gap_scaling                     = 0
 
 #*###############################
 #*           BAR               ##
@@ -342,7 +342,8 @@ layout_focus_color_floating         = bar_border_color
 #?   SIZE    ##
 #?#############
 #!ALL
-layout_margin                       = int(8*bar_scaling)
+stack_layout_margin                 = int(6*bar_scaling)
+monadtall_layout_margin             = int(6*bar_scaling)
 layout_border_width                 = int(qtile_settings.get("layout_border_with", 0)*general_width_scaling)
 # layout_border_width                 = int(qtile_settings.get("layout_border_with", 3)*general_width_scaling)
 layout_num_stacks                   = 1
