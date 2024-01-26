@@ -125,6 +125,7 @@ if laptop:
     seperator_line_scaling          = 1
     general_width_scaling           = 1
     task_list_scaling               = 1
+    gap_scaling                     = 0
 else:
     bar_scaling                     = 0.7
     icon_size_scaling               = 0.6
@@ -135,6 +136,7 @@ else:
     seperator_line_scaling          = 0.6
     general_width_scaling           = 0.9
     task_list_scaling               = 0.9
+    gap_scaling                     = 8
 
 #*###############################
 #*           BAR               ##
@@ -263,7 +265,7 @@ bar_margin_bottom                   = qtile_settings.get("bar_margin_bottom", [5
 # bar_margin_bottom                   = qtile_settings.get("bar_margin_bottom", [5, 300, 16, 300])
 
 #!GAP
-bar_gap_size                        = qtile_settings.get("bar_gap_size", 0)
+bar_gap_size                        = (qtile_settings.get("bar_gap_size", 0) - gap_scaling)
 
 #!SEPERATOR
 if bar_style == "box":
@@ -341,7 +343,7 @@ layout_focus_color_floating         = bar_border_color
 #?#############
 #!ALL
 layout_margin                       = int(8*bar_scaling)
-layout_border_width                 = int(qtile_settings.get("layout_border_with", 2)*general_width_scaling)
+layout_border_width                 = int(qtile_settings.get("layout_border_with", 0)*general_width_scaling)
 # layout_border_width                 = int(qtile_settings.get("layout_border_with", 3)*general_width_scaling)
 layout_num_stacks                   = 1
 
