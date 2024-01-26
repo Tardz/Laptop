@@ -14,7 +14,14 @@ git_path="$HOME/laptopgit/Laptop"
 
 sudo rsync -av --delete "$git_path" $HOME/laptopgit/LaptopBackup/
 sudo rsync --exclude-from="$excludeListPath" -av --delete $HOME/scripts "$git_path"
-sudo rsync -av --delete $HOME/.config/qtile "$git_path"
+sudo rsync -av --delete $HOME/.config/qtile/settings.py "$git_path"/qtile/settings.py
+sudo rsync -av --delete $HOME/.config/qtile/config "$git_path"/qtile/config.py
+sudo rsync -av --delete $HOME/.config/qtile/functions.py "$git_path"/qtile/functions.py
+sudo rsync -av --delete $HOME/.config/qtile/keybindings.py "$git_path"/qtile/keybindings.py
+sudo rsync -av --delete $HOME/.config/qtile/groups.py "$git_path"/qtile/groups.py
+sudo rsync -av --delete $HOME/.config/qtile/widgets.py "$git_path"/qtile/widgets.py
+sudo rsync -av --delete $HOME/.config/qtile/bars.py "$git_path"/qtile/bars.py
+sudo rsync -av --delete $HOME/.config/qtile/layouts.py "$git_path"/qtile/layouts.py
 
 cd "$git_path"
 git add --all

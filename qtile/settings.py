@@ -164,34 +164,7 @@ group_box_background_color          = colors[3]
 group_box_highlight_text_color      = colors[3]
 group_box_urgentborder_color        = colors[3]
 
-if laptop:
-    if bar_style == "box":
-        icon_background_1                   = "#b48ead"
-        icon_background_2                   = "#9B98B7"
-        icon_background_3                   = "#81A1C1"
-        icon_background_4                   = "#8fbcbb"
-        icon_background_5                   = "#8fbcbb"
-        icon_background_6                   = "#a3be8c"
-        icon_background_7                   = "#a3be8c"
-        icon_background_8                   = "#d08770"
-        icon_background_9                   = "#bf616a"
-        icon_background_10                  = "#b48ead"
-        icon_background_11                  = "#9B98B7"
-        icon_background_12                  = "#81A1C1"
-    elif bar_style == "simple":
-        icon_background_1                   = transparent
-        icon_background_2                   = transparent
-        icon_background_3                   = transparent
-        icon_background_4                   = transparent
-        icon_background_5                   = transparent
-        icon_background_6                   = transparent
-        icon_background_7                   = transparent
-        icon_background_8                   = transparent
-        icon_background_9                   = transparent
-        icon_background_10                  = transparent
-        icon_background_11                  = transparent
-        icon_background_12                  = transparent
-else:
+if bar_style == "box":
     icon_background_1                   = "#b48ead"
     icon_background_2                   = "#9B98B7"
     icon_background_3                   = "#81A1C1"
@@ -204,6 +177,19 @@ else:
     icon_background_10                  = "#b48ead"
     icon_background_11                  = "#9B98B7"
     icon_background_12                  = "#81A1C1"
+elif bar_style == "simple":
+    icon_background_1                   = transparent
+    icon_background_2                   = transparent
+    icon_background_3                   = transparent
+    icon_background_4                   = transparent
+    icon_background_5                   = transparent
+    icon_background_6                   = transparent
+    icon_background_7                   = transparent
+    icon_background_8                   = transparent
+    icon_background_9                   = transparent
+    icon_background_10                  = transparent
+    icon_background_11                  = transparent
+    icon_background_12                  = transparent
 
 if bar_style == "box":
     icon_foreground_1                   = "#1e2227"
@@ -246,7 +232,6 @@ app_tray_icon_color_5               = "#bf616a"
 #!BLACK
 bar_background_color                = "#1e2227.8"
 bar_border_color                    = "#454951"
-# right_decor_background              = transparent
 right_decor_background              = "#717c99.5"
 
 #!OTHER
@@ -289,7 +274,7 @@ elif bar_style == "simple":
 seperator_line_width                = int(qtile_settings.get("seperator_line_width", 15)*seperator_line_scaling)
 
 #!WIDGET DEFAULT
-widget_default_font_size            = int(18*widget_size_scaling)
+widget_default_font_size            = int(17*widget_size_scaling)
 widget_default_padding              = int(6*widget_padding_scaling)
 bottom_widget_width                 = int(0*general_width_scaling)
 # bottom_widget_width                 = int(3*general_width_scaling)
@@ -302,7 +287,7 @@ layouticon_padding                  = int(-2*widget_padding_scaling)
 layouticon_scale                    = 0.48*widget_padding_scaling
 
 #!ICONS
-icon_size                           = int(15*icon_size_scaling)
+icon_size                           = int(12*icon_size_scaling)
 # icon_size                           = int(14*icon_size_scaling)
 
 #!DECOR
@@ -368,8 +353,8 @@ floating_border_width               = int(qtile_settings.get("layout_border_with
 #*           FONTS           ##
 #*#############################
 normal_font                         = "FiraCode Nerd Font"
-active_window_buttons_font_normal   = "San Francisco"
-active_window_buttons_font_bold     = "San Francisco bold"
+apple_font                          = "San Francisco"
+apple_font_bold                     = "San Francisco bold"
 bold_font                           = "FiraCode Nerd Font Bold"
 icon_font                           = "Font Awesome 6 Free Solid"
 other_font                          = "ttf-dejavu"

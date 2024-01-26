@@ -1,13 +1,13 @@
 [
   {
     "SSID": "BOXER_E748",
-    "STRENGTH": "\u2582\u2584\u2582\u2582",
+    "STRENGTH": "\u2582\u2584\u2586\u2582",
     "CONNECTED": true,
     "KNOWN": true
   },
   {
     "SSID": "BOXER_E748",
-    "STRENGTH": "\u2582\u2584\u2586\u2582",
+    "STRENGTH": "\u2582\u2584\u2586\u2588",
     "CONNECTED": false,
     "KNOWN": true
   },
@@ -18,8 +18,20 @@
     "KNOWN": false
   },
   {
-    "SSID": "lj",
+    "SSID": "lj_5G",
     "STRENGTH": "\u2582\u2584\u2586\u2588",
+    "CONNECTED": false,
+    "KNOWN": false
+  },
+  {
+    "SSID": "TP-Link_1E21",
+    "STRENGTH": "\u2582\u2584\u2586\u2582",
+    "CONNECTED": false,
+    "KNOWN": false
+  },
+  {
+    "SSID": "Blau",
+    "STRENGTH": "\u2582\u2584\u2586\u2582",
     "CONNECTED": false,
     "KNOWN": false
   },
@@ -36,49 +48,13 @@
     "KNOWN": false
   },
   {
-    "SSID": "Blau_5G",
-    "STRENGTH": "\u2582\u2584\u2586\u2582",
-    "CONNECTED": false,
-    "KNOWN": false
-  },
-  {
-    "SSID": "TP-Link_1E21",
-    "STRENGTH": "\u2582\u2584\u2586\u2582",
-    "CONNECTED": false,
-    "KNOWN": false
-  },
-  {
     "SSID": "eduroam",
     "STRENGTH": "\u2582\u2584\u2586\u2582",
     "CONNECTED": false,
     "KNOWN": false
   },
   {
-    "SSID": "Blau",
-    "STRENGTH": "\u2582\u2584\u2582\u2582",
-    "CONNECTED": false,
-    "KNOWN": false
-  },
-  {
-    "SSID": "Oscar",
-    "STRENGTH": "\u2582\u2584\u2582\u2582",
-    "CONNECTED": false,
-    "KNOWN": false
-  },
-  {
     "SSID": "TP-Link_A37D",
-    "STRENGTH": "\u2582\u2584\u2582\u2582",
-    "CONNECTED": false,
-    "KNOWN": false
-  },
-  {
-    "SSID": "TP-LINK_28DB",
-    "STRENGTH": "\u2582\u2584\u2582\u2582",
-    "CONNECTED": false,
-    "KNOWN": false
-  },
-  {
-    "SSID": "kuku.n040",
     "STRENGTH": "\u2582\u2584\u2582\u2582",
     "CONNECTED": false,
     "KNOWN": false
@@ -90,25 +66,43 @@
     "KNOWN": false
   },
   {
-    "SSID": "Morell23",
-    "STRENGTH": "\u2582\u2582\u2582\u2582",
+    "SSID": "Oscar",
+    "STRENGTH": "\u2582\u2584\u2582\u2582",
     "CONNECTED": false,
     "KNOWN": false
   },
   {
-    "SSID": "_Linkoping_WiFi",
-    "STRENGTH": "\u2582\u2582\u2582\u2582",
+    "SSID": "Blau_5G",
+    "STRENGTH": "\u2582\u2584\u2582\u2582",
     "CONNECTED": false,
     "KNOWN": false
   },
   {
-    "SSID": "mycloud",
+    "SSID": "TP-Link_D69E",
+    "STRENGTH": "\u2582\u2584\u2582\u2582",
+    "CONNECTED": false,
+    "KNOWN": false
+  },
+  {
+    "SSID": "ASUS_88",
+    "STRENGTH": "\u2582\u2584\u2582\u2582",
+    "CONNECTED": false,
+    "KNOWN": false
+  },
+  {
+    "SSID": "TP-Link_21DC",
     "STRENGTH": "\u2582\u2582\u2582\u2582",
     "CONNECTED": false,
     "KNOWN": false
   },
   {
     "SSID": "TP-Link_A37D_5G",
+    "STRENGTH": "\u2582\u2582\u2582\u2582",
+    "CONNECTED": false,
+    "KNOWN": false
+  },
+  {
+    "SSID": "gretchensvibrationer-5G",
     "STRENGTH": "\u2582\u2582\u2582\u2582",
     "CONNECTED": false,
     "KNOWN": false
