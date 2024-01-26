@@ -127,7 +127,7 @@ if laptop:
     task_list_scaling               = 1
 else:
     bar_scaling                     = 0.7
-    icon_size_scaling               = 0.72
+    icon_size_scaling               = 0.68
     icon_padding_scaling            = 0.65
     widget_padding_scaling          = 0.9
     widget_size_scaling             = 0.74
@@ -287,7 +287,7 @@ layouticon_padding                  = int(-2*widget_padding_scaling)
 layouticon_scale                    = 0.48*widget_padding_scaling
 
 #!ICONS
-icon_size                           = int(12*icon_size_scaling)
+icon_size                           = int(14*icon_size_scaling)
 # icon_size                           = int(14*icon_size_scaling)
 
 #!DECOR

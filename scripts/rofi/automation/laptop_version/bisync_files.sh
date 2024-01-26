@@ -26,7 +26,17 @@ fi
 
 sudo rsync -av --delete $HOME/laptopgit/Laptop/ $HOME/laptopgit/LaptopBackup/
 sudo rsync -av --delete $HOME/scripts "$git_path"
-sudo rsync -av --delete $HOME/.config/qtile "$git_path"
+
+sudo rsync -av --delete $HOME/.config/qtile/settings.py "$git_path"/qtile/settings.py
+sudo rsync -av --delete $HOME/.config/qtile/config "$git_path"/qtile/config.py
+sudo rsync -av --delete $HOME/.config/qtile/functions.py "$git_path"/qtile/functions.py
+sudo rsync -av --delete $HOME/.config/qtile/keybindings.py "$git_path"/qtile/keybindings.py
+sudo rsync -av --delete $HOME/.config/qtile/groups.py "$git_path"/qtile/groups.py
+sudo rsync -av --delete $HOME/.config/qtile/widgets.py "$git_path"/qtile/widgets.py
+sudo rsync -av --delete $HOME/.config/qtile/bars.py "$git_path"/qtile/bars.py
+sudo rsync -av --delete $HOME/.config/qtile/layouts.py "$git_path"/qtile/layouts.py
+sudo rsync -av --delete $HOME/.config/fish/config.fish "$git_path"/fish/config.fish
+
 sudo rsync -av --delete $HOME/.config/rofi "$git_path"
 sudo rsync -av --delete $HOME/.config/alacritty "$git_path"
 sudo rsync -av --delete $HOME/.config/picom "$git_path"

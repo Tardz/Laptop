@@ -19,8 +19,15 @@ fi
 
 sudo rsync -av --delete "$git_path/" "$HOME/laptopgit/LaptopBackup/"
 sudo rsync -av --delete "$git_path/scripts/" "$HOME/scripts/"
-sudo rsync -av --delete "$git_path/qtile/settings.py" "$HOME/.config/qtile/"
-sudo rsync -av --delete "$git_path/qtile/config.py" "$HOME/.config/qtile/"
+sudo rsync -av --delete "$git_path"/qtile/settings.py $HOME/.config/qtile/settings.py
+sudo rsync -av --delete "$git_path"/qtile/config.py $HOME/.config/qtile/config.py
+sudo rsync -av --delete "$git_path"/qtile/functions.py $HOME/.config/qtile/functions.py
+sudo rsync -av --delete "$git_path"/qtile/keybindings.py $HOME/.config/qtile/keybindings.py
+sudo rsync -av --delete "$git_path"/qtile/groups.py $HOME/.config/qtile/groups.py
+sudo rsync -av --delete "$git_path"/qtile/widgets.py $HOME/.config/qtile/widgets.py
+sudo rsync -av --delete "$git_path"/qtile/bars.py $HOME/.config/qtile/bars.py
+sudo rsync -av --delete "$git_path"/qtile/layouts.py $HOME/.config/qtile/layouts.py
+sudo rsync -av --delete "$git_path"/fish/config.fish $HOME/.config/fish/config.fish
 
 current_time="Time:$(date +'%T')"
 
