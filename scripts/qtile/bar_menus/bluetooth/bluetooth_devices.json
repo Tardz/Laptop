@@ -1,14 +1,18 @@
 [
   {
+    "DEVICE": "MacBook Air som tillh\u00f6r Tove",
+    "MAC-ADDR": "C4:35:D9:97:62:EB"
+  },
+  {
     "DEVICE": "8BitDo Adapter",
     "MAC-ADDR": "E4:17:D8:5B:75:6F"
   },
   {
-    "DEVICE": "Argon Octave BOX1",
-    "MAC-ADDR": "58:B3:FC:DB:3A:8E"
+    "DEVICE": "Arch",
+    "MAC-ADDR": "6C:6A:77:E2:B3:27"
   },
   {
-    "DEVICE": "[Monitor] Samsung M5 (27)",
-    "MAC-ADDR": "8C:EA:48:46:B3:AD"
+    "DEVICE": "Argon Octave BOX1",
+    "MAC-ADDR": "58:B3:FC:DB:3A:8E"
   }
 ]

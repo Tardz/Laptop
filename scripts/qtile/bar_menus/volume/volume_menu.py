@@ -17,7 +17,6 @@ class VolumeMenu(Gtk.Window):
         self.pid_file_path = pid_file_path
         self.initialize_resources()
         self.setup_ui()
-        GLib.idle_add(self.update_list_with_sound_outputs)
 
     def initialize_resources(self):
         self.connect("focus-out-event", self.on_focus_out)
@@ -116,7 +115,8 @@ class VolumeMenu(Gtk.Window):
 
         self.main_box.pack_start(self.list_box, True, True, 0)
 
-        # GLib.timeout_add(4000, self.update_list_with_sound_outputs)
+        self.update_list_with_sound_outputs()
+        GLib.timeout_add(6000, self.update_list_with_sound_outputs)
 
     def volume_clicked(self, widget, event):
         if self.sound_on:
@@ -180,12 +180,18 @@ class VolumeMenu(Gtk.Window):
             name.set_halign(Gtk.Align.START)
 
             device_type = sink.proplist["device.icon_name"] 
+            print("sinkname: " + sink.name)
+            print("sink desc: " + sink.description)
+            print("device_type: " + device_type + "\n")
 
             if sink.name == self.active_sink.name:
                 row.set_name("row-box-active")
                 if device_type == "audio-headphones-bluetooth":
+                    if "Pods" in sink.description:
+                        icon.set_text("")
+                    else:
+                        icon.set_text("")
                     icon.set_name("list-icon-headphone-active")
-                    icon.set_text("")
                 elif device_type == "audio-card-pci":
                     icon.set_name("list-icon-speaker-active")
                     icon.set_text("")
@@ -194,8 +200,11 @@ class VolumeMenu(Gtk.Window):
                     icon.set_text("")
             else:
                 if device_type == "audio-headphones-bluetooth":
+                    if "Pods" in sink.description:
+                        icon.set_text("")
+                    else:
+                        icon.set_text("")
                     icon.set_name("list-icon-headphone-inactive")
-                    icon.set_text("")
                 elif device_type == "audio-card-pci":
                     icon.set_name("list-icon-speaker-inactive")
                     icon.set_text("")
@@ -209,11 +218,12 @@ class VolumeMenu(Gtk.Window):
                 name.set_text("Laptop Speakers")
             elif sink.description == "HyperX Cloud Alpha Wireless Analog Stereo":
                 name.set_text("HyperX Headphones")
+            elif "Bose" in sink.description:
+                name.set_text("Bose Headphones")
+            elif "Pods" in sink.description:
+                name.set_text("Airpods")
             else:
-                if "Bose" in sink.description:
-                    name.set_text("Bose Headphones")
-                else:
-                    name.set_text(sink.description)
+                name.set_text(sink.description)
             
             icon_box.add(icon)
             name_box.add(name)

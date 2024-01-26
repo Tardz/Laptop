@@ -757,7 +757,7 @@ class BluetoothMenu(Gtk.Window):
         return devices
     
     def get_known_devices(self):
-        known_devices_output = subprocess.check_output("bluetoothctl devices Trusted", shell=True).decode("utf-8")
+        known_devices_output = subprocess.check_output("bluetoothctl devices", shell=True).decode("utf-8")
         known_devices = []
 
         if known_devices_output:

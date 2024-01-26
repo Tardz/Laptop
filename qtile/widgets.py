@@ -118,7 +118,7 @@ class PowerButton(widget.TextBox):
         widget.TextBox.__init__(
             self,
             text            = f"<span font='Font Awesome 6 free solid {icon_size}' foreground='{icon_foreground_12}' size='medium'></span>",
-            mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("python3 /home/jonalm/scripts/qtile/bar_menus/system/system_menu.py")},
+            mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("python3 " + os.path.expanduser("~/scripts/qtile/bar_menus/system/system_menu.py"))},
             decorations     = left_decor(icon_background_12),
         )
         
@@ -148,7 +148,7 @@ class TickTickMenu(widget.TextBox):
         widget.TextBox.__init__(
             self,
             text            = f"<span font='Font Awesome 6 free solid {icon_size}' foreground='{icon_foreground_10}' size='medium'></span>",
-            mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("python3 /home/jonalm/scripts/qtile/bar_menus/ticktick/launch.py")},
+            mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("python3 " + os.path.expanduser("~/scripts/qtile/bar_menus/ticktick/launch.py"))},
             decorations     = left_decor(icon_background_10),
         )
         
@@ -158,29 +158,52 @@ class TickTickMenu(widget.TextBox):
     def mouse_leave(self, *args, **kwargs):
         self.bar.window.window.set_cursor("left_ptr")
 
-class BluetoothIcon(widget.TextBox):
+class BluetoothIcon(widget.TextBox, base.InLoopPollText):
     def __init__(self):
-        self.normal_decorator = left_decor(icon_background_1)
-        self.hover_decorator = left_decor(bar_border_color)
-        widget.TextBox.__init__(
+        base.InLoopPollText.__init__(
             self,
-            text            = "",
+            # text            = "",
             font            = icon_font,
             fontsize        = icon_size + 8,
             foreground      = icon_foreground_1,
             background      = None,
             padding         = 20,
+            update_interval = wifi_update_interval,
             mouse_callbacks = {"Button1": lambda: self.clicked()},
-            decorations     = self.normal_decorator,
+            decorations     = left_decor(icon_background_1),
         )
 
         self.active_background   = bar_border_color
         self.inactive_background = self.background
-    
+
+    def poll(self):
+        bluetooth_state = subprocess.check_output("systemctl status bluetooth | grep Running", shell=True, stderr=subprocess.PIPE, text=True).strip()
+        if "Running" in bluetooth_state:
+            connected_devices_output = subprocess.check_output("bluetoothctl devices Connected", shell=True).decode("utf-8")
+            lines = connected_devices_output.splitlines()
+
+            if connected_devices_output:
+                lines = connected_devices_output.splitlines()
+                parts = lines[0].split(" ", 2)
+
+                device_name = parts[2]
+
+                if "Jonathans Bose QC35 II" in device_name:
+                    return ""
+                elif device_name == "Jonathans Pods - Find My":
+                    return ""
+                elif device_name == "controller available":
+                    return "Error"
+                else:
+                    return ""
+            
+            else:
+                return ""
+            
     def clicked(self):
         global bluetooth_menu_pid
         if not bluetooth_menu_pid:
-            Qtile.cmd_spawn("python3 /home/jonalm/scripts/qtile/bar_menus/bluetooth/bluetooth_menu.py")
+            Qtile.cmd_spawn("python3 " + os.path.expanduser("~/scripts/qtile/bar_menus/bluetooth/bluetooth_menu.py"))
             
         os.kill(bluetooth_menu_pid, 15)
         self.background = self.active_background
@@ -216,7 +239,7 @@ class BluetoothWidget(widget.TextBox, base.InLoopPollText):
             update_interval = wifi_update_interval,
             font            = bold_font,
             padding         = widget_default_padding,
-            mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("python3 /home/jonalm/scripts/qtile/bar_menus/bluetooth/bluetooth_menu.py")},
+            mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("python3 " + os.path.expanduser("~/scripts/qtile/bar_menus/bluetooth/bluetooth_menu.py"))},
             decorations     = right_decor()
         )
 
@@ -270,17 +293,17 @@ class VolumeIcon(widget.TextBox):
             foreground      = icon_foreground_2,
             background      = None,
             padding         = 20,
-            mouse_callbacks = {"Button1": lambda: self.clicked()},
+            mouse_callbacks = {"Button1": lambda: self.click()},
             decorations     = left_decor(icon_background_2),
         )
 
         self.active_background = bar_border_color
         self.inactive_background = self.background
 
-    def clicked(self):
+    def click(self):
         global volume_menu_pid
         if not volume_menu_pid:
-            Qtile.cmd_spawn("python3 /home/jonalm/scripts/qtile/bar_menus/volume/volume_menu.py")
+            Qtile.cmd_spawn("python3 " + os.path.expanduser("~/scripts/qtile/bar_menus/volume/volume_menu.py"))
 
         os.kill(volume_menu_pid, 15)
         self.background = self.active_background
@@ -311,7 +334,7 @@ class VolumeWidget(widget.PulseVolume):
     def __init__(self):
         widget.PulseVolume.__init__(
             self,
-            mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("python3 /home/jonalm/scripts/qtile/bar_menus/volume/volume_menu.py")},
+            mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("python3 " + os.path.expanduser("~/scripts/qtile/bar_menus/volume/volume_menu.py"))},
             decorations     = right_decor(),
         )
         
@@ -342,7 +365,7 @@ class WifiIcon(widget.TextBox):
     def clicked(self):
         global wifi_menu_pid
         if not wifi_menu_pid:
-            Qtile.cmd_spawn("python3 /home/jonalm/scripts/qtile/bar_menus/wifi/wifi_menu.py")
+            Qtile.cmd_spawn("python3 " + os.path.expanduser("~/scripts/qtile/bar_menus/wifi/wifi_menu.py"))
             
         os.kill(wifi_menu_pid, 15)
         self.background = self.active_background
@@ -376,7 +399,7 @@ class WifiWidget(widget.TextBox, base.InLoopPollText):
             update_interval = wifi_update_interval,
             font            = bold_font,
             padding         = widget_default_padding,
-            mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("python3 /home/jonalm/scripts/qtile/bar_menus/wifi/wifi_menu.py")},
+            mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("python3 " + os.path.expanduser("~/scripts/qtile/bar_menus/wifi/wifi_menu.py"))},
             decorations     = right_decor(),
         )
 
@@ -411,7 +434,7 @@ class CpuTempIcon(widget.TextBox):
             self,
             padding         = widget_default_padding + 2,
             text            = f"<span font='Font Awesome 6 free solid {icon_size + 1}' foreground='{icon_foreground_4}'size='medium'></span>",
-            mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("python3 /home/jonalm/scripts/qtile/bar_menus/cpu/cpu_stats_menu.py")},
+            mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("python3 " + os.path.expanduser("~/scripts/qtile/bar_menus/cpu/cpu_stats_menu.py"))},
             decorations     = left_decor(icon_background_4),
         )
         
@@ -430,7 +453,7 @@ class CpuTempWidget(widget.ThermalSensor):
             foreground_alert = "#bf616a",
             markup           = True,
             update_interval  = cpu_update_interval,
-            mouse_callbacks  = {"Button1": lambda: Qtile.cmd_spawn("python3 /home/jonalm/scripts/qtile/bar_menus/cpu/cpu_stats_menu.py")},
+            mouse_callbacks  = {"Button1": lambda: Qtile.cmd_spawn("python3 " + os.path.expanduser("~/scripts/qtile/bar_menus/cpu/cpu_stats_menu.py"))},
             decorations      = right_decor(),
         )
         
@@ -449,7 +472,7 @@ class CpuLoadIcon(widget.TextBox):
             fontsize        = icon_size + 5,
             foreground      = icon_foreground_5,
             padding         = 20,
-            mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("python3 /home/jonalm/scripts/qtile/bar_menus/cpu/cpu_stats_menu.py")},
+            mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("python3 " + os.path.expanduser("~/scripts/qtile/bar_menus/cpu/cpu_stats_menu.py"))},
             decorations     = left_decor(icon_background_5),
         )
 
@@ -466,7 +489,7 @@ class CpuLoadWidget(widget.CPU):
             format          = "{load_percent}%",
             markup          = True,
             update_interval = cpu_update_interval,
-            mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("python3 /home/jonalm/scripts/qtile/bar_menus/cpu/cpu_stats_menu.py")},
+            mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("python3 " + os.path.expanduser("~/scripts/qtile/bar_menus/cpu/cpu_stats_menu.py"))},
             decorations     = right_decor(),
         )
         
@@ -488,7 +511,7 @@ class BatteryIcon(widget.TextBox):
         widget.TextBox.__init__(
             self,
             text            = f"<span font='Font Awesome 6 free solid {icon_size}' foreground='{icon_foreground_6}'size='medium'></span>",
-            mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("python3 /home/jonalm/scripts/qtile/bar_menus/power/power_management_menu.py")},
+            mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("python3 " + os.path.expanduser("~/scripts/qtile/bar_menus/power/power_management_menu.py"))},
             decorations     = left_decor(icon_background_6),
         )
             
@@ -505,7 +528,7 @@ class BatteryWidget(widget.Battery):
             format          = "{percent:2.0%}",
             markup          = True,
             update_interval = battery_update_interval,
-            mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("python3 /home/jonalm/scripts/qtile/bar_menus/power/power_management_menu.py")},
+            mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("python3 " + os.path.expanduser("~/scripts/qtile/bar_menus/power/power_management_menu.py"))},
             decorations     = right_decor(),
         )
             
@@ -519,11 +542,11 @@ class BatteryIconWidget(widget.BatteryIcon):
     def __init__(self, decor=False):
         widget.BatteryIcon.__init__(
             self,
-            theme_path      = "/home/jonalm/.config/qtile/battery_icons/horizontal/",
+            theme_path      = os.path.expanduser("~/.config/qtile/battery_icons/horizontal/"),
             battery         = 0,
             scale           = 2.8,
             padding         = 20,
-            mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("python3 /home/jonalm/scripts/qtile/bar_menus/power/power_management_menu.py")},
+            mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("python3 " + os.path.expanduser("~/scripts/qtile/bar_menus/power/power_management_menu.py"))},
             decorations     = right_decor() if decor else right_decor(transparent),
         )
             
@@ -538,7 +561,7 @@ class WattageIcon(widget.TextBox):
         widget.TextBox.__init__(
             self,
             text            = f"<span font='Font Awesome 6 free solid {icon_size}' foreground='{icon_foreground_7}'size='medium'></span>",
-            mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("python3 /home/jonalm/scripts/qtile/bar_menus/power/power_management_menu.py")},
+            mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("python3 " + os.path.expanduser("~/scripts/qtile/bar_menus/power/power_management_menu.py"))},
             decorations     = left_decor(icon_background_7),
         )
 
@@ -555,7 +578,7 @@ class WattageWidget(widget.Battery):
             format          = "{watt:.2f}",
             markup          = True,
             update_interval = battery_update_interval,
-            mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("python3 /home/jonalm/scripts/qtile/bar_menus/power/power_management_menu.py")},
+            mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("python3 " + os.path.expanduser("~/scripts/qtile/bar_menus/power/power_management_menu.py"))},
             decorations     = right_decor(),
         )
 
@@ -582,7 +605,7 @@ class NotificationWidget(widget.TextBox, base.InLoopPollText):
 
     def poll(self):
         global notification_shown
-        self.notification_message = subprocess.check_output(['/home/jonalm/scripts/other/get_recent_urgent_notification.py'], text=True).strip()
+        self.notification_message = subprocess.check_output([os.path.expanduser('~/scripts/other/get_recent_urgent_notification.py')], text=True).strip()
         if self.notification_message and self.notification_message != self.seen_notification_message:
             notification_shown = True
             return self.notification_message
@@ -591,14 +614,14 @@ class NotificationWidget(widget.TextBox, base.InLoopPollText):
             return ""
 
     def mouse_enter(self, *args, **kwargs):
-        Qtile.cmd_spawn("/home/jonalm/scripts/other/get_notifications.py")
+        Qtile.cmd_spawn(os.path.expanduser("~/scripts/other/get_notifications.py"))
 
     def mouse_leave(self, *args, **kwargs):
         self.seen_notification_message = self.notification_message
         if self.notification_message:
             self.notification_message = None
         
-        Qtile.cmd_spawn("/home/jonalm/scripts/other/get_notifications.py")
+        Qtile.cmd_spawn(os.path.expanduser("~/scripts/other/get_notifications.py"))
         self.poll()
 
 class NotificationIcon(widget.TextBox):
@@ -611,7 +634,7 @@ class NotificationIcon(widget.TextBox):
             foreground      = icon_foreground_8,
             padding         = 20,
             decorations     = left_decor(icon_background_8),
-            mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("python3 /home/jonalm/scripts/other/get_notifications.py")},
+            mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("python3 " + os.path.expanduser("~/scripts/other/get_notifications.py"))},
         )
 
     def mouse_enter(self, *args, **kwargs):
@@ -675,7 +698,7 @@ class ClockWidget(widget.Clock):
 #         group.cmd_toscreen()
 #         group.cmd_focus()
 #     Qtile.cmd_run(check_command[0])
-    # qtile.cmd_spawn(["/home/jonalm/scripts/qtile/check_and_launch_app.py", check_command[0], check_command[1], check_command[2]])
+    # qtile.cmd_spawn([os.path.expanduser("~/scripts/qtile/check_and_launch_app.py"), check_command[0], check_command[1], check_command[2]])
 
 class AppTrayIcon(widget.TextBox):
     def __init__(self, icon="", foreground=text_color, check_command=None, launch=None):
@@ -683,7 +706,7 @@ class AppTrayIcon(widget.TextBox):
         #     mouse_callback = {"Button1": launch_app_from_bar(check_command)} if check_command else {"Button1": lambda: Qtile.cmd_spawn(launch)}
         # elif launch:
             # mouse_callback = {"Button1": lambda: Qtile.cmd_run(launch)}
-        mouse_callback = {"Button1": lambda: Qtile.cmd_spawn("python3 /home/jonalm/scripts/qtile/settings_menu/app/settings_menu.py &")}
+        mouse_callback = {"Button1": lambda: Qtile.cmd_spawn("python3 " + os.path.expanduser("~/scripts/qtile/settings_menu/app/settings_menu.py"))}
         widget.TextBox.__init__(
             self,
             text            = f"<span font='Font Awesome 6 free solid' size='medium'>{icon}</span>",
@@ -756,7 +779,7 @@ class ActiveWindowIcon(widget.TextBox):
             fontsize        = icon_size + 9,
             padding         = widget_default_padding + 10,
             background      = bar_background_color,
-            mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("python3 /home/jonalm/scripts/qtile/settings_menu/app/settings_menu.py")}
+            mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("python3 " + os.path.expanduser("~/scripts/qtile/settings_menu/app/settings_menu.py"))}
         )
 
     def mouse_enter(self, *args, **kwargs):
