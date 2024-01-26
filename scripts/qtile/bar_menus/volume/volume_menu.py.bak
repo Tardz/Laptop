@@ -27,7 +27,7 @@ class VolumeMenu(Gtk.Window):
         self.pulse = pulsectl.Pulse()
         self.active_sink = self.get_active_sink()
         self.sound_on = self.get_sound_on()
-        self.ignore_focus_lost = False
+        self.ignore_focus_lost = True
 
     def css(self):
         screen = Gdk.Screen.get_default()
@@ -288,88 +288,58 @@ class VolumeMenu(Gtk.Window):
 
     def on_focus_out(self, widget, event):
         if not self.ignore_focus_lost:
-            self.hide_menu()
+            self.exit_remove_pid()
 
     def on_escape_press(self, widget, event):
         keyval = event.keyval
         if keyval == Gdk.KEY_Escape:
-            self.hide_menu()
+            self.exit_remove_pid()
 
     def handle_sigterm(self, signum, frame):
-        self.hide_menu() 
+        self.exit_remove_pid() 
 
-    def hide_menu(self):  
+    def exit_remove_pid(self):  
         try:
-            if self.hidden:
-                self.ignore_focus_lost = False
-                self.pulse = pulsectl.Pulse()
-                self.hidden = False
-                self.show()
-                print("Showing")
-            else:
-                self.ignore_focus_lost = True
-                self.pulse.close()
-                self.hidden = True
-                print("Hiding\n")
-                subprocess.run("qtile cmd-obj -o widget volumeicon -f unclick", shell=True)
-                self.hide()
+            # self.pulse.close()
+            try:
+                # os.remove(self.pid_file_path)
+                if self.hidden:
+                    self.hidden = False
+                    self.show()
+                else:
+                    subprocess.run("qtile cmd-obj -o widget volumeicon -f unclick", shell=True)
+                    print("hiding")
+                    self.hidden = True
+                    self.hide()
 
+            except ProcessLookupError:
+                pass
         except Exception as e:
-            print(f"Error occurred: {e}")
-
-def write_pid_to_settings_data(pid, json_file_path):
-    import json
-    try:
-        with open(json_file_path, 'r') as file:
-            data = json.load(file)
-    except FileNotFoundError:
-        data = {}
-
-    data['volume_menu_pid'] = pid
-
-    with open(json_file_path, 'w') as file:
-        json.dump(data, file, indent=4)
-
-    subprocess.run("qtile cmd-obj -o widget volumeicon -f update_menu_pid", shell=True)
-
-def remove_pid_from_settings_data(json_file_path):
-    import json
-    try:
-        with open(json_file_path, 'r') as file:
-            data = json.load(file)
-    except FileNotFoundError:
-        data = {}
-
-    data['volume_menu_pid'] = None
-
-    with open(json_file_path, 'w') as file:
-        json.dump(data, file, indent=4)
-
-    subprocess.run("qtile cmd-obj -o widget volumeicon -f update_menu_pid", shell=True)
-
+            print("Something went wrong!")
+        # finally:
+            # sys.exit(0)
 
 if __name__ == '__main__':
-    pid_file_path = os.path.expanduser("~/scripts/qtile/bar_menus/volume/volume_menu_pid_file.pid")
-    json_file_path = os.path.expanduser("~/settings_data/qtile_data.json")
+    pid_file_path = "/home/jonalm/scripts/qtile/bar_menus/volume/volume_menu_pid_file.pid"
     dialog = None
 
     try:
-        if not os.path.isfile(pid_file_path):
-            pid = os.getpid()
-            write_pid_to_settings_data(pid, json_file_path)
-            
+        if os.path.isfile(pid_file_path):
+            with open(pid_file_path, "r") as file:
+                pid = int(file.read().strip())
+            try:
+                # os.remove(pid_file_path)
+                os.kill(pid, 15)    
+            except Exception as e:
+                print(f"An error occurred: {e}")
+        else:
             with open(pid_file_path, "w") as file:
-                file.write(str(pid))
+                file.write(str(os.getpid()))
 
             dialog = VolumeMenu(pid_file_path)
             Gtk.main()
                     
     except Exception as e:
         print(f"An error occurred: {e}")
-
     finally:
-        if dialog:
-            dialog.destroy()
-            remove_pid_from_settings_data(json_file_path)
-            os.remove(pid_file_path)
         sys.exit(0)

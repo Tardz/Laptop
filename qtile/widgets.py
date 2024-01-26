@@ -3,6 +3,7 @@ from libqtile.command.base import expose_command
 from libqtile import qtile as Qtile
 from libqtile.widget import base
 from qtile_extras import widget
+from libqtile.lazy import lazy
 from settings import *
 import subprocess
 
@@ -177,7 +178,11 @@ class BluetoothIcon(widget.TextBox):
         self.inactive_background = self.background
     
     def clicked(self):
-        Qtile.cmd_spawn("python3 /home/jonalm/scripts/qtile/bar_menus/bluetooth/bluetooth_menu.py")
+        global bluetooth_menu_pid
+        if not bluetooth_menu_pid:
+            Qtile.cmd_spawn("python3 /home/jonalm/scripts/qtile/bar_menus/bluetooth/bluetooth_menu.py")
+            
+        os.kill(bluetooth_menu_pid, 15)
         self.background = self.active_background
         self.bar.draw()
 
@@ -185,6 +190,16 @@ class BluetoothIcon(widget.TextBox):
     def unclick(self):
         self.background = self.inactive_background
         self.bar.draw()
+
+    @expose_command()
+    def update_menu_pid(self):
+        file_path = os.path.expanduser("~/settings_data/qtile_data.json")
+        if os.path.isfile(file_path):
+            with open(file_path, "r") as file:
+                qtile_settings = json.load(file)
+        
+        global bluetooth_menu_pid
+        bluetooth_menu_pid = qtile_settings.get("bluetooth_menu_pid", None)
     
     def mouse_enter(self, *args, **kwargs):
         self.bar.window.window.set_cursor("hand2")
@@ -263,7 +278,11 @@ class VolumeIcon(widget.TextBox):
         self.inactive_background = self.background
 
     def clicked(self):
-        Qtile.cmd_spawn("python3 /home/jonalm/scripts/qtile/bar_menus/volume/volume_menu.py")
+        global volume_menu_pid
+        if not volume_menu_pid:
+            Qtile.cmd_spawn("python3 /home/jonalm/scripts/qtile/bar_menus/volume/volume_menu.py")
+
+        os.kill(volume_menu_pid, 15)
         self.background = self.active_background
         self.bar.draw()
 
@@ -271,6 +290,16 @@ class VolumeIcon(widget.TextBox):
     def unclick(self):
         self.background = self.inactive_background
         self.bar.draw()
+
+    @expose_command()
+    def update_menu_pid(self):
+        file_path = os.path.expanduser("~/settings_data/qtile_data.json")
+        if os.path.isfile(file_path):
+            with open(file_path, "r") as file:
+                qtile_settings = json.load(file)
+        
+        global volume_menu_pid
+        volume_menu_pid = qtile_settings.get("volume_menu_pid", None)
         
     def mouse_enter(self, *args, **kwargs):
         self.bar.window.window.set_cursor("hand2")
@@ -311,7 +340,11 @@ class WifiIcon(widget.TextBox):
         self.inactive_background = self.background
 
     def clicked(self):
-        Qtile.cmd_spawn("python3 /home/jonalm/scripts/qtile/bar_menus/wifi/wifi_menu.py")
+        global wifi_menu_pid
+        if not wifi_menu_pid:
+            Qtile.cmd_spawn("python3 /home/jonalm/scripts/qtile/bar_menus/wifi/wifi_menu.py")
+            
+        os.kill(wifi_menu_pid, 15)
         self.background = self.active_background
         self.bar.draw()
 
@@ -319,6 +352,16 @@ class WifiIcon(widget.TextBox):
     def unclick(self):
         self.background = self.inactive_background
         self.bar.draw()
+
+    @expose_command()
+    def update_menu_pid(self):
+        file_path = os.path.expanduser("~/settings_data/qtile_data.json")
+        if os.path.isfile(file_path):
+            with open(file_path, "r") as file:
+                qtile_settings = json.load(file)
+        
+        global wifi_menu_pid
+        wifi_menu_pid = qtile_settings.get("wifi_menu_pid", None)
         
     def mouse_enter(self, *args, **kwargs):
         self.bar.window.window.set_cursor("hand2")

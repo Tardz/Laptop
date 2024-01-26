@@ -1,12 +1,12 @@
 import gi
 gi.require_version('Gtk', '3.0')
-import subprocess
-import os
+from multiprocessing import Process, Value
 from gi.repository import Gtk, Gdk, GLib
+from Xlib import display
+import subprocess
 import time
 import json
-from Xlib import display
-from multiprocessing import Process, Value
+import os
 
 class OptionWindow(Gtk.Window):
     def __init__(self, main_window, network, active_widget):
@@ -363,6 +363,7 @@ class WifiMenu(Gtk.Window):
             self.set_size_request(self.window_width, 10)
 
         self.pid_file_path = pid_file_path
+        self.hidden = False
         self.ignore_focus_lost = False
         self.previous_css_class = None
         self.active_widget = None
@@ -800,12 +801,10 @@ class WifiMenu(Gtk.Window):
                 self.wifi_process.terminate()
                 self.wifi_process.join() 
 
-            with open(self.pid_file_path, "r") as file:
-                pid = int(file.read().strip())
             try:
                 subprocess.run("qtile cmd-obj -o widget wifiicon -f unclick", shell=True)
                 os.remove(self.pid_file_path)
-                os.kill(pid, 15)
+
             except ProcessLookupError:
                 pass
         finally:
@@ -896,7 +895,6 @@ if __name__ == '__main__':
                 pid = int(file.read().strip())
             try:
                 subprocess.run("qtile cmd-obj -o widget wifiicon -f unclick", shell=True)
-                os.remove(pid_file_path)
                 os.kill(pid, 15)    
             except ProcessLookupError:
                 pass

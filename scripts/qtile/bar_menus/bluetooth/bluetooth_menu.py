@@ -6,10 +6,11 @@ from gi.repository import Gtk, Gdk, GLib
 from multiprocessing import Process, Value
 from Xlib import display 
 from Xlib.ext import randr
-import time
-import signal
-import json
 import pulsectl
+import signal
+import time
+import json
+import sys
 
 class OptionWindow(Gtk.Dialog):
     def __init__(self, parent, main_window, device, active_widget):
@@ -264,6 +265,7 @@ class BluetoothMenu(Gtk.Window):
             self.set_size_request(self.window_width, 20)
 
         self.pid_file_path = pid_file_path
+        self.hidden = False
         self.ignore_focus_lost = False
         self.previous_css_class = None
         self.active_widget = None
@@ -1068,7 +1070,7 @@ class BluetoothMenu(Gtk.Window):
 
     def on_focus_out(self, widget, event):
         if not self.ignore_focus_lost:
-            self.exit_remove_pid()
+            self.hide_menu()
 
     def on_escape_press(self, widget, event):
         keyval = event.keyval
@@ -1076,23 +1078,28 @@ class BluetoothMenu(Gtk.Window):
             self.on_focus_out(widget, event)
 
     def handle_sigterm(self, signum, frame):
-        self.exit_remove_pid() 
+        self.hide_menu() 
 
-    def exit_remove_pid(self):
+    def hide_menu(self):
         try:
-            if self.bluetooth_process.is_alive():
-                self.bluetooth_process.terminate()
-                self.bluetooth_process.join() 
-            with open(self.pid_file_path, "r") as file:
-                pid = int(file.read().strip())
-            try:
+            if self.hidden:
+                self.ignore_focus_lost = False
+                self.hidden = False
+                self.show()
+                print("Showing")
+            else:
+                if self.bluetooth_process.is_alive():
+                    self.bluetooth_process.terminate()
+                    self.bluetooth_process.join() 
+
+                self.ignore_focus_lost = True
+                self.hidden = True
+                print("Hiding\n")
                 subprocess.run("qtile cmd-obj -o widget bluetoothicon -f unclick", shell=True)
-                os.remove(self.pid_file_path)
-                os.kill(pid, 15)
-            except ProcessLookupError:
-                pass
-        finally:
-            exit(0)
+                self.hide()
+
+        except Exception as e:
+            print(f"Error occurred: {e}")
 
 def scan_devices():
     subprocess.run("bluetoothctl --timeout 10 scan on", shell = True)
@@ -1130,23 +1137,48 @@ def bluetooth_process():
             with open('/home/jonalm/scripts/qtile/bar_menus/bluetooth/bluetooth_devices.json', 'w') as json_file:
                 json.dump(unique_devices, json_file, indent=2)
 
+def write_pid_to_settings_data(pid, json_file_path):
+    import json
+    try:
+        with open(json_file_path, 'r') as file:
+            data = json.load(file)
+    except FileNotFoundError:
+        data = {}
+
+    data['bluetooth_menu_pid'] = pid
+
+    with open(json_file_path, 'w') as file:
+        json.dump(data, file, indent=4)
+
+    subprocess.run("qtile cmd-obj -o widget bluetoothicon -f update_menu_pid", shell=True)
+
+def remove_pid_from_settings_data(json_file_path):
+    import json
+    try:
+        with open(json_file_path, 'r') as file:
+            data = json.load(file)
+    except FileNotFoundError:
+        data = {}
+
+    data['bluetooth_menu_pid'] = None
+
+    with open(json_file_path, 'w') as file:
+        json.dump(data, file, indent=4)
+
+    subprocess.run("qtile cmd-obj -o widget bluetoothicon -f update_menu_pid", shell=True)
+
 if __name__ == '__main__':
-    pid_file_path = "/home/jonalm/scripts/qtile/bar_menus/bluetooth/bluetooth_menu_pid_file.pid"
+    pid_file_path = os.path.expanduser("~/scripts/qtile/bar_menus/bluetooth/bluetooth_menu_pid_file.pid")
+    json_file_path = os.path.expanduser("~/settings_data/qtile_data.json")
     dialog = None
 
     try:
-        if os.path.isfile(pid_file_path):
-            with open(pid_file_path, "r") as file:
-                pid = int(file.read().strip())
-            try:
-                subprocess.run("qtile cmd-obj -o widget bluetoothicon -f unclick", shell=True)
-                os.remove(pid_file_path)
-                os.kill(pid, 15)            
-            except ProcessLookupError:
-                pass
-        else:
+        if not os.path.isfile(pid_file_path):
+            pid = os.getpid()
+            write_pid_to_settings_data(pid, json_file_path)
+            
             with open(pid_file_path, "w") as file:
-                file.write(str(os.getpid()))
+                file.write(str(pid))
 
             process = Process(target=bluetooth_process)
             process.start()
@@ -1156,5 +1188,10 @@ if __name__ == '__main__':
                     
     except Exception as e:
         print(f"An error occurred: {e}")
+
     finally:
-        exit(0)
+        if dialog:
+            dialog.destroy()
+            remove_pid_from_settings_data(json_file_path)
+            os.remove(pid_file_path)
+        sys.exit(0)
