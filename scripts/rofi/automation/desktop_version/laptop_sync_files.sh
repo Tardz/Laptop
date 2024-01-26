@@ -19,6 +19,7 @@ fi
 
 sudo rsync -av --delete "$git_path" $HOME/laptopgit/LaptopBackup/
 sudo rsync -av --delete "$git_path"/scripts/ $HOME/scripts/
+
 sudo rsync -av --delete "$git_path"/qtile/settings.py $HOME/.config/qtile/settings.py
 sudo rsync -av --delete "$git_path"/qtile/config.py $HOME/.config/qtile/config.py
 sudo rsync -av --delete "$git_path"/qtile/functions.py $HOME/.config/qtile/functions.py
