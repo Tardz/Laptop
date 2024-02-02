@@ -146,6 +146,7 @@ class VolumeMenu(Gtk.Window):
         sinks = self.pulse.sink_list()
         default_sink = self.pulse.server_info().default_sink_name
         active_sink = None
+
         for sink in sinks:
             if sink.name == default_sink:
                 active_sink = sink
@@ -328,6 +329,8 @@ class VolumeMenu(Gtk.Window):
             if self.hidden:
                 self.ignore_focus_lost = False
                 self.pulse = pulsectl.Pulse()
+                self.active_sink = self.get_active_sink()
+                self.sound_on = self.get_sound_on()
                 self.update_list_with_sound_outputs()
                 self.update_sounds_timeout = GLib.timeout_add(6000, self.update_list_with_sound_outputs)
                 self.hidden = False
