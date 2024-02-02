@@ -172,6 +172,7 @@ class BluetoothIcon(widget.TextBox, base.InLoopPollText):
             mouse_callbacks = {"Button1": lambda: self.clicked()},
             decorations     = left_decor(icon_background_1),
         )
+        self.signal_file_path = os.path.expanduser("~/scripts/qtile/bar_menus/bluetooth/signal_data.txt") 
 
         self.active_background   = bar_border_color
         self.inactive_background = self.background
@@ -204,8 +205,11 @@ class BluetoothIcon(widget.TextBox, base.InLoopPollText):
         global bluetooth_menu_pid
         if not bluetooth_menu_pid:
             Qtile.cmd_spawn("python3 " + os.path.expanduser("~/scripts/qtile/bar_menus/bluetooth/bluetooth_menu.py"))
-            
-        os.kill(bluetooth_menu_pid, 15)
+        else:
+            with open(self.signal_file_path, "w") as file:
+                file.write("hide")
+            os.kill(bluetooth_menu_pid, 15)
+
         self.background = self.active_background
         self.bar.draw()
 
@@ -216,13 +220,13 @@ class BluetoothIcon(widget.TextBox, base.InLoopPollText):
 
     @expose_command()
     def update_menu_pid(self):
-        file_path = os.path.expanduser("~/settings_data/qtile_data.json")
+        file_path = os.path.expanduser("~/settings_data/processes.json")
         if os.path.isfile(file_path):
             with open(file_path, "r") as file:
-                qtile_settings = json.load(file)
+                processes = json.load(file)
         
         global bluetooth_menu_pid
-        bluetooth_menu_pid = qtile_settings.get("bluetooth_menu_pid", None)
+        bluetooth_menu_pid = processes.get("bluetooth_menu_pid", None)
     
     def mouse_enter(self, *args, **kwargs):
         self.bar.window.window.set_cursor("hand2")
@@ -299,13 +303,17 @@ class VolumeIcon(widget.TextBox):
 
         self.active_background = bar_border_color
         self.inactive_background = self.background
+        self.signal_file_path = os.path.expanduser("~/scripts/qtile/bar_menus/volume/signal_data.txt") 
 
     def click(self):
         global volume_menu_pid
         if not volume_menu_pid:
             Qtile.cmd_spawn("python3 " + os.path.expanduser("~/scripts/qtile/bar_menus/volume/volume_menu.py"))
-
-        os.kill(volume_menu_pid, 15)
+        else:
+            with open(self.signal_file_path, "w") as file:
+                file.write("hide")
+            os.kill(volume_menu_pid, 15)
+            
         self.background = self.active_background
         self.bar.draw()
 
@@ -316,13 +324,13 @@ class VolumeIcon(widget.TextBox):
 
     @expose_command()
     def update_menu_pid(self):
-        file_path = os.path.expanduser("~/settings_data/qtile_data.json")
+        file_path = os.path.expanduser("~/settings_data/processes.json")
         if os.path.isfile(file_path):
             with open(file_path, "r") as file:
-                qtile_settings = json.load(file)
+                processes = json.load(file)
         
         global volume_menu_pid
-        volume_menu_pid = qtile_settings.get("volume_menu_pid", None)
+        volume_menu_pid = processes.get("volume_menu_pid", None)
         
     def mouse_enter(self, *args, **kwargs):
         self.bar.window.window.set_cursor("hand2")
@@ -367,7 +375,7 @@ class WifiIcon(widget.TextBox):
         if not wifi_menu_pid:
             Qtile.cmd_spawn("python3 " + os.path.expanduser("~/scripts/qtile/bar_menus/wifi/wifi_menu.py"))
             
-        os.kill(wifi_menu_pid, 15)
+        os.kill(volume_menu_pid, 15)
         self.background = self.active_background
         self.bar.draw()
 
@@ -378,13 +386,13 @@ class WifiIcon(widget.TextBox):
 
     @expose_command()
     def update_menu_pid(self):
-        file_path = os.path.expanduser("~/settings_data/qtile_data.json")
+        file_path = os.path.expanduser("~/settings_data/processes.json")
         if os.path.isfile(file_path):
             with open(file_path, "r") as file:
-                qtile_settings = json.load(file)
-        
+                processes = json.load(file)
+
         global wifi_menu_pid
-        wifi_menu_pid = qtile_settings.get("wifi_menu_pid", None)
+        wifi_menu_pid = processes.get("wifi_menu_pid", None)
         
     def mouse_enter(self, *args, **kwargs):
         self.bar.window.window.set_cursor("hand2")

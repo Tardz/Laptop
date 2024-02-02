@@ -253,7 +253,8 @@ class SystemMenu(Gtk.Dialog):
             GLib.timeout_add(1000, self.run_option_command())
 
     def run_option_command(self):
-        subprocess.run(self.option_dict[str(self.active_option_number)]['command'], shell=True)
+        option = self.option_dict[str(self.active_option_number)]
+        subprocess.run(option['command'], shell=True)
         self.exit_remove_pid()
 
     def get_uptime(self):

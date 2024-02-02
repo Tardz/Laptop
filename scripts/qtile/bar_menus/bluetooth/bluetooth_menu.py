@@ -6,6 +6,7 @@ from gi.repository import Gtk, Gdk, GLib
 from multiprocessing import Process, Value
 from Xlib import display 
 from Xlib.ext import randr
+from background_process import BackgroundProcess
 import pulsectl
 import signal
 import time
@@ -245,11 +246,15 @@ class OptionWindow(Gtk.Dialog):
         self.destroy()
 
 class BluetoothMenu(Gtk.Window):
-    def __init__(self, pid_file_path, bluetooth_process):
+    def __init__(self, pid_file_path):
         Gtk.Window.__init__(self, title="Bluetooth menu")
 
-        self.bluetooth_process = bluetooth_process
+        self.bluetooth_process_instance = BackgroundProcess()
+        self.process = Process(target=self.bluetooth_process_instance.bluetooth_process)
+        self.process.start()
+
         signal.signal(signal.SIGTERM, self.handle_sigterm)
+        self.singal_file_path = os.path.expanduser("~/scripts/qtile/bar_menus/bluetooth/signal_data.txt")
 
         x, y = self.get_mouse_position()
 
@@ -372,7 +377,7 @@ class BluetoothMenu(Gtk.Window):
         scrolled_window.add(self.list)  
         self.list_box.pack_start(scrolled_window, True, True, 0)
 
-        GLib.timeout_add(6000, self.update_ui_with_devices)
+        self.update_devices_timeout = GLib.timeout_add(6000, self.update_ui_with_devices)
         self.main_box.pack_start(self.list_box, True, True, 0)
 
     def create_list_options(self):
@@ -932,7 +937,7 @@ class BluetoothMenu(Gtk.Window):
 
             
             complete_devices.sort(key=lambda x: (not x["CONNECTED"], not x["DEVICE-KNOWN"]))
-
+            pulse.close()
             return complete_devices
 
     def update_ui_with_devices(self, get_known=False):
@@ -1090,67 +1095,41 @@ class BluetoothMenu(Gtk.Window):
             self.on_focus_out(widget, event)
 
     def handle_sigterm(self, signum, frame):
-        self.hide_menu() 
+        with open(self.singal_file_path, "r") as file:
+            signal_arg = file.read()
+            with open(self.singal_file_path, "w") as file:
+                file.write("")
+
+            if signal_arg == "hide":
+                self.hide_menu()
+            elif signal_arg == "kill":
+                GLib.idle_add(Gtk.main_quit)  
 
     def hide_menu(self):
         try:
             if self.hidden:
+                # self.process = Process(target=self.bluetooth_process_instance.bluetooth_process)
+                # self.process.start()
+                self.update_devices_timeout = GLib.timeout_add(6000, self.update_ui_with_devices)
                 self.ignore_focus_lost = False
                 self.hidden = False
                 self.show()
-                print("Showing")
             else:
-                if self.bluetooth_process.is_alive():
-                    self.bluetooth_process.terminate()
-                    self.bluetooth_process.join() 
+                # if self.process.is_alive():
+                #     self.process.terminate()
+                #     self.process.join() 
+                    
+                GLib.source_remove(self.update_devices_timeout)
 
                 self.ignore_focus_lost = True
                 self.hidden = True
-                print("Hiding\n")
                 subprocess.run("qtile cmd-obj -o widget bluetoothicon -f unclick", shell=True)
                 self.hide()
 
         except Exception as e:
             print(f"Error occurred: {e}")
 
-def scan_devices():
-    subprocess.run("bluetoothctl --timeout 10 scan on", shell = True)
-    output = subprocess.check_output("hcitool scan", shell = True).decode("utf-8")
-    return output
-
-def get_bluetooth_on():
-    try:
-        bluetooth_state = subprocess.check_output("systemctl status bluetooth | grep Running", shell=True, stderr=subprocess.PIPE, text=True).strip()
-        if "Running" in bluetooth_state:
-            return True
-        else:
-            return False
-    except subprocess.CalledProcessError as e:
-        return False
-    
-def bluetooth_process():
-    while True:
-        if get_bluetooth_on():
-            bluetooth_output = scan_devices()
-            if bluetooth_output:
-                lines = bluetooth_output.splitlines()
-                unique_devices = []
-
-                for line in lines[1:]:
-                    parts = line.split("\t", 2)
-                    parts.pop(0)
-
-                    device_name = parts[1]
-                    device_addr = parts[0]
-
-                    if device_name != "n/a":
-                        unique_devices.append({"DEVICE": device_name, "MAC-ADDR": device_addr})
-            
-            with open('/home/jonalm/scripts/qtile/bar_menus/bluetooth/bluetooth_devices.json', 'w') as json_file:
-                json.dump(unique_devices, json_file, indent=2)
-
 def write_pid_to_settings_data(pid, json_file_path):
-    import json
     try:
         with open(json_file_path, 'r') as file:
             data = json.load(file)
@@ -1165,7 +1144,6 @@ def write_pid_to_settings_data(pid, json_file_path):
     subprocess.run("qtile cmd-obj -o widget bluetoothicon -f update_menu_pid", shell=True)
 
 def remove_pid_from_settings_data(json_file_path):
-    import json
     try:
         with open(json_file_path, 'r') as file:
             data = json.load(file)
@@ -1181,7 +1159,7 @@ def remove_pid_from_settings_data(json_file_path):
 
 if __name__ == '__main__':
     pid_file_path = os.path.expanduser("~/scripts/qtile/bar_menus/bluetooth/bluetooth_menu_pid_file.pid")
-    json_file_path = os.path.expanduser("~/settings_data/qtile_data.json")
+    json_file_path = os.path.expanduser("~/settings_data/processes.json")
     dialog = None
 
     try:
@@ -1191,12 +1169,11 @@ if __name__ == '__main__':
             
             with open(pid_file_path, "w") as file:
                 file.write(str(pid))
-
-            process = Process(target=bluetooth_process)
-            process.start()
             
-            dialog = BluetoothMenu(pid_file_path, process)
+            dialog = BluetoothMenu(pid_file_path)
             Gtk.main()
+        else:
+            print("Another instance of this menu is already active.")
                     
     except Exception as e:
         print(f"An error occurred: {e}")

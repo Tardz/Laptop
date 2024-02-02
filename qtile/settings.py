@@ -114,9 +114,15 @@ if os.path.isfile(file_path):
         qtile_colors = json.load(file)
 
 laptop = qtile_settings.get("laptop_version", False)
-volume_menu_pid = qtile_settings.get("volume_menu_pid", None)
-bluetooth_menu_pid = qtile_settings.get("bluetooth_menu_pid", None)
-wifi_menu_pid = qtile_settings.get("wifi_menu_pid", None)
+
+file_path = os.path.expanduser("~/settings_data/processes.json")
+if os.path.isfile(file_path):
+    with open(file_path, "r") as file:
+        processes = json.load(file)
+
+volume_menu_pid = processes.get("volume_menu_pid", None)
+bluetooth_menu_pid = processes.get("bluetooth_menu_pid", None)
+wifi_menu_pid = processes.get("wifi_menu_pid", None)
 
 if laptop:
     bar_scaling                     = 1

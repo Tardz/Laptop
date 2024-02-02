@@ -4,15 +4,18 @@ gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk, Gdk, GLib
 import subprocess
 import pulsectl
-import pygame
 import signal
 import sys
 import os
+
+os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide"
+import pygame
 
 class VolumeMenu(Gtk.Window):
     def __init__(self, pid_file_path):
         Gtk.Window.__init__(self, title="Sound Control")
         signal.signal(signal.SIGTERM, self.handle_sigterm)
+        self.singal_file_path = os.path.expanduser("~/scripts/qtile/bar_menus/volume/signal_data.txt")
         self.hidden = False
         self.pid_file_path = pid_file_path
         self.initialize_resources()
@@ -116,7 +119,7 @@ class VolumeMenu(Gtk.Window):
 
         self.main_box.pack_start(self.list_box, True, True, 0)
 
-        GLib.timeout_add(6000, self.update_list_with_sound_outputs)
+        self.update_sounds_timeout = GLib.timeout_add(6000, self.update_list_with_sound_outputs)
 
     def volume_clicked(self, widget, event):
         if self.sound_on:
@@ -186,8 +189,11 @@ class VolumeMenu(Gtk.Window):
 
             if sink.name == self.active_sink.name:
                 row.set_name("row-box-active")
-                if device_type == "audio-headphones-bluetooth":
-                    if "Pods" in sink.description:
+                print ("aiwda")
+                print(device_type)
+                if device_type == "audio-headphones-bluetooth" or device_type == "audio-headset-bluetooth":
+                    if "Pods" in sink.description or "Ear" in sink.description:
+                        print  ("aiwda")
                         icon.set_text("")
                     else:
                         icon.set_text("")
@@ -199,8 +205,8 @@ class VolumeMenu(Gtk.Window):
                     icon.set_name("list-icon-headphone-active")
                     icon.set_text("")
             else:
-                if device_type == "audio-headphones-bluetooth":
-                    if "Pods" in sink.description:
+                if device_type == "audio-headphones-bluetooth" or device_type == "audio-headset-bluetooth":
+                    if "Pods" in sink.description or "Ear" in sink.description:
                         icon.set_text("")
                     else:
                         icon.set_text("")
@@ -306,21 +312,31 @@ class VolumeMenu(Gtk.Window):
             self.hide_menu()
 
     def handle_sigterm(self, signum, frame):
-        self.hide_menu() 
+        with open(self.singal_file_path, "r") as file:
+            signal_arg = file.read()
+            with open(self.singal_file_path, "w") as file:
+                file.write("")
+
+            if signal_arg == "hide":
+                self.hide_menu()
+            elif signal_arg == "kill":
+                self.pulse.close()
+                GLib.idle_add(Gtk.main_quit)  
 
     def hide_menu(self):  
         try:
             if self.hidden:
                 self.ignore_focus_lost = False
                 self.pulse = pulsectl.Pulse()
+                self.update_list_with_sound_outputs()
+                self.update_sounds_timeout = GLib.timeout_add(6000, self.update_list_with_sound_outputs)
                 self.hidden = False
                 self.show()
-                print("Showing")
             else:
                 self.ignore_focus_lost = True
+                GLib.source_remove(self.update_sounds_timeout)
                 self.pulse.close()
                 self.hidden = True
-                print("Hiding\n")
                 subprocess.run("qtile cmd-obj -o widget volumeicon -f unclick", shell=True)
                 self.hide()
 
@@ -357,12 +373,11 @@ def remove_pid_from_settings_data(json_file_path):
 
     subprocess.run("qtile cmd-obj -o widget volumeicon -f update_menu_pid", shell=True)
 
-
 if __name__ == '__main__':
     pid_file_path = os.path.expanduser("~/scripts/qtile/bar_menus/volume/volume_menu_pid_file.pid")
-    json_file_path = os.path.expanduser("~/settings_data/qtile_data.json")
+    json_file_path = os.path.expanduser("~/settings_data/processes.json")
     dialog = None
-
+        
     try:
         if not os.path.isfile(pid_file_path):
             pid = os.getpid()
@@ -373,13 +388,15 @@ if __name__ == '__main__':
 
             dialog = VolumeMenu(pid_file_path)
             Gtk.main()
+        else:
+            print("Another instance of this menu is already active.")
                     
     except Exception as e:
         print(f"An error occurred: {e}")
 
     finally:
         if dialog:
-            dialog.destroy()
+            dialog.destroy
             remove_pid_from_settings_data(json_file_path)
             os.remove(pid_file_path)
         sys.exit(0)
