@@ -306,7 +306,7 @@ left_decor_padding                  = int(9*icon_padding_scaling)
 right_decor_padding                 = int(9*icon_padding_scaling)
 
 #!TASKLIST
-task_list_margin                    = int(7*task_list_scaling)
+task_list_margin                    = int(5*task_list_scaling)
 task_list_border_width              = int(4*general_width_scaling)
 task_list_spacing                   = 2
 task_list_icon_size                 = 0

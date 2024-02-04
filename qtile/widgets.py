@@ -67,9 +67,26 @@ def left_decor_hover(color, round=True, padding_x=2, padding_y=left_decor_paddin
     ]
 
 def right_decor(color=right_decor_background, round=True, padding_x=0, padding_y=left_decor_padding):
-    radius = 6 if round else [0, 4, 4, 0]
     if not laptop:
-        radius = 5
+        radius = 5 if round else [0, 4, 4, 0]
+    else:
+        radius = 6 if round else [0, 4, 4, 0]
+    return [
+        RectDecoration(
+            colour    = color,
+            radius    = radius,
+            filled    = True,
+            group     = True,
+            padding_x = padding_x,
+            padding_y = padding_y,
+        )
+    ]
+
+def active_window_decor(color=right_decor_background, round=True, padding_x=0, padding_y=6):
+    if not laptop:
+        radius = 5 if round else [0, 4, 4, 0]
+    else:
+        radius = 6 if round else [0, 4, 4, 0]
     return [
         RectDecoration(
             colour    = color,
@@ -694,7 +711,7 @@ class ClockWidget(widget.Clock):
             self,
             format      = "%A %d %B %H:%M",
             font        = bold_font,
-            padding     = widget_default_padding + 8,
+            padding     = widget_default_padding + 5,
             foreground  = text_color,
             fontsize    = widget_default_font_size,
             decorations = right_decor(decor_color),
@@ -784,30 +801,38 @@ class ActiveWindowIcon(widget.TextBox):
     def __init__(self, foreground=text_color):
         widget.TextBox.__init__(
             self,
-            text            = "",
-            fontsize        = icon_size + 9,
-            padding         = widget_default_padding + 10,
+            text            = "",
+            font            = icon_font,
+            fontsize        = icon_size + 5,
+            padding         = widget_default_padding + 3,
             background      = bar_background_color,
-            mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("python3 " + os.path.expanduser("~/scripts/qtile/settings_menu/app/settings_menu.py"))}
+            mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("python3 " + os.path.expanduser("~/scripts/qtile/settings_menu/app/settings_menu.py"))},
         )
 
     def mouse_enter(self, *args, **kwargs):
+        self.text = ""
+        self.padding = widget_default_padding + 2
         self.bar.window.window.set_cursor("hand2")
+        self.bar.draw()
 
     def mouse_leave(self, *args, **kwargs):
+        self.text = ""
+        self.padding = widget_default_padding + 3
         self.bar.window.window.set_cursor("left_ptr")
+        self.bar.draw()
 
 class ActiveWindowWidget(widget.WindowName):
     def __init__(self, foreground=text_color):
         widget.WindowName.__init__(
             self,
-            background = bar_background_color,
-            font = bold_font,
-            fontsize = widget_default_font_size + 1,
-            format = "{name}",
-            foreground = foreground,
+            background         = bar_background_color,
+            font               = bold_font,
+            fontsize           = widget_default_font_size + 1,
+            format             = "{name}",
+            foreground         = foreground,
             empty_group_string = "Desktop",
-            parse_text = self.modify_text,
+            padding            = widget_default_padding + 5,
+            parse_text         = self.modify_text,
         )
 
     def modify_text(self, text):
@@ -839,40 +864,42 @@ class NothingWidget(widget.TextBox):
 task_list_settings = dict(
     font                = bold_font,
     fontsize            = widget_default_font_size + 1,
-    padding_y           = widget_default_padding + 9 if laptop else widget_default_padding - 2,
+    padding_y           = widget_default_padding if laptop else widget_default_padding - 2,
     margin              = task_list_margin - 1,
     borderwidth         = task_list_border_width,
     spacing             = task_list_spacing,
     icon_size           = task_list_icon_size,
     rounded             = True,
-    markup_floating     = "<span font='Font Awesome 6 free solid {icon_size}' foreground='#A7BEAE' size='medium'> 缾 </span>{}",
-    markup_minimized    = "<span font='Font Awesome 6 free solid {icon_size}' foreground='#b16286' size='medium'> 絛 </span>{}",
-    markup_maximized    = "<span font='Font Awesome 6 free solid {icon_size}' foreground='#b16286' size='medium'> 类 </span>{}",
-    title_width_method  = "uniform",
+    markup_floating     = "<span font='Font Awesome 6 free solid 14' foreground='#A7BEAE' size='medium'> 缾 </span>{}",
+    markup_minimized    = "<span font='Font Awesome 6 free solid 14' foreground='#b16286' size='medium'> 絛 </span>{}",
+    markup_maximized    = "<span font='Font Awesome 6 free solid 14' foreground='#b16286' size='medium'> 类 </span>{}",
+    # title_width_method  = "uniform",
     urgent_alert_method = "border",
     highlight_method    = 'block',
     parse_text          = modify_window_name,
-    border              = bar_border_color,
-    background          = transparent,
+    border              = "#4b5662",
+    # background          = transparent,
     foreground          = "#d8dee9",
-    unfocused_border    = bar_background_color,
-    theme_mode          = "preferred",
+    unfocused_border    = "#3f4752",
+    # window_name_location = True,
+    # unfocused_border    = transparent,
+    # theme_mode          = "preferred",
     # theme_path          = "/usr/share/icons/Adwaita",
-    decorations         = [task_list_decor()],
 )
 
 group_box_settings = dict(
     # margin                      = groupbox_margin,
     padding_x                   = 20,
-    padding_y                   = 5,
-    margin_x                    = 24,
+    padding_y                   = 8,
+    margin_x                    = 4,
     borderwidth                 = True,
     rounded                     = True,
     disable_drag                = False,
     hide_unused                 = True,
     font                        = icon_font,
+    fontsize                    = icon_size + 3,
     highlight_method            = "block",
-    active                      = bar_border_color,
+    active                      = "#4b5662",
     inactive                    = bar_background_color,
     block_highlight_text_color  = "#000000",
     highlight_color             = "#000000",
@@ -880,7 +907,7 @@ group_box_settings = dict(
     this_screen_border          = bar_border_color,
     other_current_screen_border = group_box_other_border_color,
     other_screen_border         = group_box_other_border_color,
-    foreground                  = group_box_foreground_color,
+    foreground                  = "#4b5662",
     urgent_border               = group_box_urgentborder_color,
 )
 
@@ -903,3 +930,338 @@ class WindowCountWidget(widget.WindowCount):
             fontsize    = widget_default_font_size + 2,
             decorations = [task_list_decor()]
         )
+
+#!###################################################################################
+#!  Taken from Yonnji, github: https://github.com/Yonnji/qtile_config/tree/master  ##
+#!###################################################################################
+
+# class App(object):
+#     cmd = None
+#     window = None
+
+# class PinnedApp(App):
+#     def __init__(self, desktop, name, icon, cmd):
+#         self.desktop = desktop
+#         self.name = name
+#         self.icon = icon
+#         self.cmd = cmd
+
+#     def clone(self):
+#         return PinnedApp(desktop=self.desktop, name=self.name, icon=self.icon, cmd=self.cmd)
+
+#     def matches_window(self, window):
+#         win_classes = window.get_wm_class() or []
+
+#         if self.get_name() == window.name:
+#             return True
+
+#         if self.get_wm_class() and self.get_wm_class() in win_classes:
+#             return True
+
+#         for cl in win_classes:
+#             if self.name.lower() == cl.lower():
+#                 return True
+
+#             if self.get_name().lower().startswith(cl.lower()):
+#                 return True
+
+#             if self.get_icon().lower().startswith(cl.lower()):
+#                 return True
+
+#         return False
+
+#     def get_name(self):
+#         return self.desktop['Desktop Entry']['Name']
+
+#     def get_icon(self):
+#         return self.desktop['Desktop Entry']['Icon']
+
+#     def get_wm_class(self):
+#         if 'StartupWMClass' in self.desktop['Desktop Entry']:
+#             return self.desktop['Desktop Entry']['StartupWMClass']
+
+
+# class UnpinnedApp(App):
+#     def __init__(self, window):
+#         self.window = window
+
+
+# class Dock(IconTextMixin, AppMixin, widget.TaskList):
+#     def __init__(self, **config):
+#         base._Widget.__init__(self, bar.STRETCH, **config)
+#         self.add_defaults(widget.TaskList.defaults)
+#         self.add_defaults(base.PaddingMixin.defaults)
+#         self.add_defaults(base.MarginMixin.defaults)
+#         self._notifications = {}
+#         self._icons_cache = {}
+#         self._box_end_positions = []
+#         self.markup = False
+#         self.clicked = None
+#         if self.spacing is None:
+#             self.spacing = self.margin_x
+
+#         self.add_callbacks({'Button1': lambda: self.select_window()})
+#         self.add_callbacks({'Button2': lambda: self.select_window(run=True)})
+#         self.add_callbacks({'Button3': lambda: self.select_window(run=True)})
+
+#         self._fallback_icon = None
+#         icon = get_icon_path(
+#             'application-x-executable',
+#             size=self.icon_size, theme=self.theme_path)
+#         if icon:
+#             self._fallback_icon = self.get_icon_surface(icon, self.icon_size)
+
+#         self.other_border = config.get('other_border', self.border)
+
+#         self.pinned = []
+#         flatpaks = dict(self.get_flatpaks())
+#         for pinned_name in config.get('pinned_apps', []):
+#             if pinned_name in flatpaks:
+#                 desktop = flatpaks[pinned_name]
+#                 surface = self.get_flatpak_icon(pinned_name, desktop)
+#                 if surface:
+#                     app = PinnedApp(
+#                         desktop=desktop, name=pinned_name,
+#                         icon=surface, cmd=f'flatpak run {pinned_name}')
+#                     self.pinned.append(app)
+
+#             else:
+#                 for desktop_path, desktop in self.get_desktop_files():
+#                     if os.path.basename(desktop_path) != f'{pinned_name}.desktop':
+#                         continue
+
+#                     icon = get_icon_path(
+#                         desktop['Desktop Entry']['Icon'], size=self.icon_size,
+#                         theme=self.theme_path)
+#                     if icon:
+#                         cmd = desktop['Desktop Entry']['Exec']
+#                         cmd = re.sub(r'%[A-Za-z]', '', cmd)
+#                         surface = self.get_icon_surface(icon, self.icon_size)
+#                         app = PinnedApp(
+#                             desktop=desktop, name=pinned_name,
+#                             icon=surface, cmd=cmd)
+#                         self.pinned.append(app)
+
+#                     break
+
+#     async def _config_async(self):
+#         if notifier is None:
+#             return
+
+#         await notifier.register(self.on_notification, set(), on_close=self.on_close)
+
+#     def on_notification(self, notification):
+#         pid = -1
+#         name = None
+#         if 'sender-pid' in notification.hints:
+#             pid = notification.hints['sender-pid'].value
+#         if 'desktop-entry' in notification.hints:
+#             name = notification.hints['desktop-entry'].value
+
+#         window = None
+#         for app in self.windows:
+#             if app.window:
+#                 if app.window.get_pid() == pid:
+#                     window = app.window
+#                     break
+
+#                 if app.window.name == name:
+#                     window = app.window
+#                     break
+
+#                 for cl in (app.window.get_wm_class() or []):
+#                     if cl == name:
+#                         window = app.window
+#                         break
+
+#         if window:
+#             if window not in self._notifications:
+#                 self._notifications[window] = 0
+#             self._notifications[window] += 1
+
+#         # logger.warning(notification)
+#         # logger.warning(notification.id)
+#         # logger.warning(notification.app_name)
+#         # logger.warning(notification.body)
+#         # logger.warning(notification.hints.get('sender-pid'))
+#         # self.qtile.call_soon_threadsafe(self.update, notification)
+
+#     def on_close(self, notification_id):
+#         pass
+
+#     def box_width(self, text):
+#         return 0
+
+#     def get_taskname(self, app):
+#         if app.window:
+#             if app.window in self._notifications:
+#                 return str(self._notifications[app.window])
+
+#     def calc_box_widths(self):
+#         apps = self.windows
+#         if not apps:
+#             return []
+
+#         icons = [self.get_window_icon(app) for app in apps]
+#         names = [self.get_taskname(app) for app in apps]
+#         width_boxes = [(self.icon_size + self.padding_x) for icon in icons]
+#         return zip(apps, icons, names, width_boxes)
+
+#     @property
+#     def windows(self):
+#         pinned_apps = [app.clone() for app in self.pinned]
+#         unpinned_apps = []
+
+#         for group in self.qtile.groups:
+#             for window in group.windows:
+#                 for i, app in enumerate(pinned_apps):
+#                     if app.matches_window(window):
+#                         if app.window:
+#                             app = app.clone()
+#                             pinned_apps.insert(i + 1, app)
+#                         app.window = window
+#                         break
+#                 else:
+#                     unpinned_apps.append(UnpinnedApp(window))
+
+#         return pinned_apps + unpinned_apps
+
+#     def select_window(self, run=False):
+#         if self.clicked:
+#             app = self.clicked
+#             w = app.window
+#             self._notifications.pop(w, None)
+
+#             if (run and app.cmd) or not w:
+#                 qtile.spawn(app.cmd)
+#                 return
+
+#             if w is w.group.current_window and self.bar.screen.group.name == w.group.name:
+#                 # if not w.minimized:
+#                 #     w.minimized = True
+#                 w.toggle_minimize()
+
+#             else:
+#                 for i, screen in enumerate(qtile.screens):
+#                     if screen == w.group.screen:
+#                         qtile.focus_screen(i)
+#                         break
+#                 w.group.toscreen()
+#                 w.group.focus(w, False)
+
+#                 if w.minimized:
+#                     w.minimized = False
+#                 if w.floating:
+#                     w.bring_to_front()
+
+#     def get_window_icon(self, app):
+#         if isinstance(app, PinnedApp):
+#             return app.icon
+
+#         w = app.window
+#         icon = super().get_window_icon(w)
+#         if icon:
+#             return icon
+
+#         for cl in w.get_wm_class() or []:
+#             for appid, desktop in self.get_flatpaks():
+#                 name = desktop['Desktop Entry']['Name']
+#                 wmclass = desktop['Desktop Entry'].get('StartupWMClass')
+#                 if cl.lower() == name.lower() or cl.lower() == wmclass:
+#                     icon = desktop['Desktop Entry']['Icon']
+#                     surface = self.get_flatpak_icon(appid, desktop)
+#                     if surface:
+#                         self._icons_cache[w.wid] = surface
+#                         return surface
+
+#             for desktop_path, desktop in self.get_desktop_files():
+#                 name = desktop['Desktop Entry']['Name']
+#                 wmclass = desktop['Desktop Entry'].get('StartupWMClass')
+#                 if cl.lower() == name.lower() or cl.lower() == wmclass:
+#                     icon = desktop['Desktop Entry']['Icon']
+#                     surface = self.get_icon_surface(icon, self.icon_size)
+#                     if surface:
+#                         self._icons_cache[w.wid] = surface
+#                         return surface
+
+#         return self._fallback_icon
+
+#     def drawbox(self, offset, text, bordercolor, textcolor, width=None, rounded=False,
+#                 block=False, icon=None):
+#         self.drawer.set_source_rgb(bordercolor or self.background or self.bar.background)
+
+#         x = offset
+#         y = (self.bar.height - (self.icon_size + self.padding_y * 2)) // 2
+#         w = self.icon_size + self.padding_x * 2
+#         h = self.icon_size + self.padding_y * 2
+
+#         if not block:
+#             x += w // 4
+#             y = 0
+#             w = w // 2
+#             h = self.padding_y
+
+#         if bordercolor:
+#             if rounded:
+#                 self.drawer.rounded_fillrect(x, y, w, h, self.borderwidth)
+#             else:
+#                 self.drawer.fillrect(x, y, w, h, self.borderwidth)
+
+#         if icon:
+#             self.draw_icon(icon, offset)
+
+#         if text:
+#             self.layout.text = text
+#             framed = self.layout.framed(self.borderwidth, self.urgent_border, self.padding_x, self.padding_y / 2, textcolor)
+#             framed.draw_fill(offset, self.padding_y * 2 + self.icon_size - framed.height, rounded)
+
+#     def draw_icon(self, surface, offset):
+#         if not surface:
+#             return
+
+#         self.drawer.ctx.save()
+#         self.drawer.ctx.translate(offset + self.padding, (self.bar.height - self.icon_size) // 2)
+#         self.drawer.ctx.set_source(surface)
+#         self.drawer.ctx.paint()
+#         self.drawer.ctx.restore()
+
+#     def draw(self):
+#         self.drawer.clear(self.background or self.bar.background)
+#         offset = self.margin_x
+
+#         self._box_end_positions = []
+#         for app, icon, task, bw in self.calc_box_widths():
+#             self._box_end_positions.append(offset + bw)
+#             border = self.unfocused_border or None
+
+#             w = app.window
+#             if w:
+#                 if w.urgent and not task:
+#                     # border = self.urgent_border
+#                     task = '!'
+#                 elif w is w.group.current_window:
+#                     if self.bar.screen.group.name == w.group.name and self.qtile.current_screen == self.bar.screen:
+#                         border = self.border
+#                         self._notifications.pop(w, None)
+#                     elif self.qtile.current_screen == w.group.screen:
+#                         border = self.other_border
+#                         self._notifications.pop(w, None)
+#             else:
+#                 border = None
+
+#             textwidth = (
+#                 bw - 2 * self.padding_x - ((self.icon_size + self.padding_x) if icon else 0)
+#             )
+#             self.drawbox(
+#                 offset,
+#                 task,
+#                 border,
+#                 border,
+#                 rounded=self.rounded,
+#                 block=self.highlight_method == 'block',
+#                 width=textwidth,
+#                 icon=icon,
+#             )
+#             offset += bw + self.spacing
+
+#         self.drawer.draw(offsetx=self.offset, offsety=self.offsety, width=self.width)

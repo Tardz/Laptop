@@ -215,14 +215,16 @@ box_style_dual_bottom_bar_2 = Bar([
 ], bottom_bar_size, margin = bar_margin_bottom, background = bar_background_color, border_width = bar_width_bottom, border_color = bar_border_color, opacity=1)
 
 simple_style_single_top_bar = Bar([
-    ActiveWindowIcon(),
-    seperator(-8),
-    ActiveWindowWidget(),
-    ActiveWindowOptionWidget("File"),
-    ActiveWindowOptionWidget("Edit"),
-    ActiveWindowOptionWidget("View"),
-    ActiveWindowOptionWidget("Go"),
-    ActiveWindowOptionWidget("Window"),
+    seperator(-12),
+    GroupBoxWidget(),
+    widget.TaskList(**task_list_settings),
+
+    # ActiveWindowWidget(),
+    # ActiveWindowOptionWidget("File"),
+    # ActiveWindowOptionWidget("Edit"),
+    # ActiveWindowOptionWidget("View"),
+    # ActiveWindowOptionWidget("Go"),
+    # ActiveWindowOptionWidget("Window"),
 
     widget.Spacer(bar.STRETCH),
 
@@ -258,9 +260,9 @@ simple_style_single_top_bar = Bar([
     BatteryIconWidget(),
 
     # TIME #
-    seperator(15),
+    seperator(25),
     ClockWidget(decor_color=transparent),
-    seperator(0),
+    seperator(-12),
 
 ], top_bar_size, margin = bar_margin_top, background = bar_background_color, border_width = bar_width_top, border_color = bar_border_color, opacity=1)
 
