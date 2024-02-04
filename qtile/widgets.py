@@ -694,6 +694,7 @@ class ClockWidget(widget.Clock):
             self,
             format      = "%A %d %B %H:%M",
             font        = bold_font,
+            padding     = widget_default_padding + 8,
             foreground  = text_color,
             fontsize    = widget_default_font_size,
             decorations = right_decor(decor_color),
