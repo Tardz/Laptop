@@ -28,7 +28,7 @@ sudo rsync -av --delete $HOME/laptopgit/Laptop/ $HOME/laptopgit/LaptopBackup/
 sudo rsync -av --delete $HOME/scripts "$git_path"
 
 sudo rsync -av --delete $HOME/.config/qtile/settings.py "$git_path"/qtile/settings.py
-sudo rsync -av --delete $HOME/.config/qtile/config "$git_path"/qtile/config.py
+sudo rsync -av --delete $HOME/.config/qtile/config.py "$git_path"/qtile/config.py
 sudo rsync -av --delete $HOME/.config/qtile/functions.py "$git_path"/qtile/functions.py
 sudo rsync -av --delete $HOME/.config/qtile/keybindings.py "$git_path"/qtile/keybindings.py
 sudo rsync -av --delete $HOME/.config/qtile/groups.py "$git_path"/qtile/groups.py

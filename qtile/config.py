@@ -108,8 +108,28 @@ def client_focus():
         else:
             current_window.cmd_bring_to_front()
 
+@hook.subscribe.restart
+def restart():
+    volume_signal_file_path = os.path.expanduser("~/scripts/qtile/bar_menus/volume/signal_data.txt")
+    bluetooth_signal_file_path = os.path.expanduser("~/scripts/qtile/bar_menus/bluetooth/signal_data.txt")
+    wifi_signal_file_path = os.path.expanduser("~/scripts/qtile/bar_menus/wifi/signal_data.txt")
+    
+    with open(volume_signal_file_path, "w") as file:
+        file.write("kill")
+    with open(bluetooth_signal_file_path, "w") as file:
+        file.write("kill")
+    with open(wifi_signal_file_path, "w") as file:
+        file.write("kill")
+
+    global volume_menu_pid, bluetooth_menu_pid, wifi_menu_pid
+
+    os.kill(volume_menu_pid, 15)
+    os.kill(bluetooth_menu_pid, 15)
+    os.kill(wifi_menu_pid, 15)
+
 @hook.subscribe.startup_once
 def autostart():
+    subprocess.run("python3 " + os.path.expanduser("~/scripts/qtile/bar_menus/shared/reset_menu_data.py"), shell=True)
     home = os.path.expanduser('~/.config/qtile/autostart.sh')
     subprocess.call([home])
 
