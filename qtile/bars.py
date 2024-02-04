@@ -218,11 +218,11 @@ simple_style_single_top_bar = Bar([
     ActiveWindowIcon(),
     seperator(-8),
     ActiveWindowWidget(),
-    # ActiveWindowOptionWidget("File"),
-    # ActiveWindowOptionWidget("Edit"),
-    # ActiveWindowOptionWidget("View"),
-    # ActiveWindowOptionWidget("Go"),
-    # ActiveWindowOptionWidget("Window"),
+    ActiveWindowOptionWidget("File"),
+    ActiveWindowOptionWidget("Edit"),
+    ActiveWindowOptionWidget("View"),
+    ActiveWindowOptionWidget("Go"),
+    ActiveWindowOptionWidget("Window"),
 
     widget.Spacer(bar.STRETCH),
 

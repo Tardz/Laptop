@@ -757,7 +757,7 @@ class ActiveWindowOptionWidget(widget.TextBox):
             text       = text,
             font       = normal_font,
             background = bar_background_color,
-            fontsize   = fontsize,
+            fontsize   = fontsize - 1,
             padding    = widget_default_padding + 14,
             foreground = foreground,
             markup     = True,
