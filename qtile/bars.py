@@ -258,7 +258,7 @@ simple_style_single_top_bar = Bar([
     BatteryIconWidget(),
 
     # TIME #
-    seperator(30),
+    seperator(15),
     ClockWidget(decor_color=transparent),
     seperator(0),
 
