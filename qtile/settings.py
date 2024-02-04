@@ -353,12 +353,12 @@ layout_focus_color_floating         = bar_border_color
 #!ALL
 stack_layout_margin                 = int(6*bar_scaling)
 monadtall_layout_margin             = int(6*bar_scaling)
-layout_border_width                 = int(qtile_settings.get("layout_border_with", 0)*general_width_scaling)
+layout_border_width                 = int(qtile_settings.get("layout_border_with", 1)*general_width_scaling)
 # layout_border_width                 = int(qtile_settings.get("layout_border_with", 3)*general_width_scaling)
 layout_num_stacks                   = 1
 
 #!FLOATING
-floating_border_width               = int(qtile_settings.get("layout_border_with", 2)*general_width_scaling)
+floating_border_width               = int(qtile_settings.get("layout_border_with", 1)*general_width_scaling)
 # floating_border_width               = int(qtile_settings.get("layout_border_with", 3)*general_width_scaling)
 
 #*#############################
