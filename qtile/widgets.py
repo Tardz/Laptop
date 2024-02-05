@@ -902,7 +902,7 @@ task_list_settings = dict(
     # window_name_location = True,
     # unfocused_border    = transparent,
     theme_mode          = "preferred",
-    theme_path          = "/usr/share/icons/WhiteSur_dark/",
+    theme_path          = "/usr/share/icons/WhiteSur-dark/",
 )
 
 group_box_settings = dict(

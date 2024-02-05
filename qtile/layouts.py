@@ -14,8 +14,8 @@ layouts = [
         single_border_width = layout_border_width,
     ),
     Stack(
-        border_normal       = layout_normal_color_monadtall,
-        border_focus        = layout_focus_color_monadtall,
+        border_normal       = layout_normal_color_stack,
+        border_focus        = layout_focus_color_stack,
         margin              = stack_layout_margin,
         num_stacks          = layout_num_stacks,
         border_width        = layout_border_width,

@@ -343,7 +343,7 @@ layout_normal_color_monadtall       = colors[2][0]
 layout_normal_color_floating        = colors[2][0]
 
 #!FOCUS
-layout_focus_color_monadtall        = bar_border_color
+layout_focus_color_monadtall        = "#4b5662"
 layout_focus_color_stack            = colors[2][0]
 layout_focus_color_floating         = bar_border_color
 
@@ -353,7 +353,7 @@ layout_focus_color_floating         = bar_border_color
 #!ALL
 stack_layout_margin                 = int(6*bar_scaling)
 monadtall_layout_margin             = int(6*bar_scaling)
-layout_border_width                 = int(qtile_settings.get("layout_border_with", 1)*general_width_scaling)
+layout_border_width                 = int(qtile_settings.get("layout_border_with", 2)*general_width_scaling)
 # layout_border_width                 = int(qtile_settings.get("layout_border_with", 3)*general_width_scaling)
 layout_num_stacks                   = 1
 

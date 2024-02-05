@@ -88,16 +88,36 @@ configure_screens(startup=True)
 @hook.subscribe.screen_change
 def _(notify_event):
     configure_screens()
-        
+
+@hook.subscribe.layout_change
+def change_focus():
+    screen = Qtile.current_screen
+    x, y = screen.get_pointer()
+
+    # Find the window under the mouse cursor
+    window_under_cursor = screen.find_client(x, y)
+
+    # if window_under_cursor:
+    #     # Move the focus to the group containing the window
+    #     Qtile.groups_map[window_under_cursor.group.name].toscreen()
+
+    #     # Focus on the window under the mouse cursor
+    #     Qtile.current_group.focus(window_under_cursor)
+
+    #     # Move the mouse pointer to the focused window
+    #     screen.warp_pointer(window_under_cursor.x + window_under_cursor.width // 2,
+    #                         window_under_cursor.y + window_under_cursor.height // 2)
+
+
 @hook.subscribe.suspend
 def lock_on_sleep():
     Qtile.spawn("sudo sddm")
 
 def float_to_front():
-    for group in Qtile.groups:
-        for window in group.windows:
-            if window.floating:
-                window.cmd_bring_to_front()
+    current_group = Qtile.current_group
+    for window in current_group.windows:
+        if window.floating:
+            window.cmd_bring_to_front()
 
 @hook.subscribe.focus_change
 def client_focus():
