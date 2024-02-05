@@ -218,6 +218,7 @@ simple_style_single_top_bar = Bar([
     seperator(-12),
     GroupBoxWidget(),
     widget.TaskList(**task_list_settings),
+    seperator(),
 
     # ActiveWindowWidget(),
     # ActiveWindowOptionWidget("File"),
@@ -226,7 +227,6 @@ simple_style_single_top_bar = Bar([
     # ActiveWindowOptionWidget("Go"),
     # ActiveWindowOptionWidget("Window"),
 
-    widget.Spacer(bar.STRETCH),
 
     # BLUETOOTH #
     BluetoothIcon(),
@@ -244,8 +244,8 @@ simple_style_single_top_bar = Bar([
     # TickTickMenu(),
 
     # CPU LOAD #
-    # seperator(),
-    # CpuLoadIcon(),
+    seperator(),
+    CpuLoadIcon(),
 
     # URGENT NOTIFICATION #
     seperator(),

@@ -40,6 +40,20 @@ def left_decor(color, round=True, padding_x=None, padding_y=left_decor_padding):
         )
     ]
 
+def power_button_decor(color, round=True, padding_x=0, padding_y=6):
+    radius = 6 if round else [4, 0, 0, 4]
+    if not laptop:
+        radius = 5
+    return [
+        RectDecoration(
+            colour    = color,
+            radius    = radius,
+            filled    = True,
+            padding_x = padding_x,
+            padding_y = padding_y,
+        )
+    ]
+
 def clicked_decor(color, round=True, padding_x=None, padding_y=left_decor_padding):
     radius = 6 if round else [4, 0, 0, 4]
     if not laptop:
@@ -123,7 +137,7 @@ def modify_window_name(text):
 
     if len(cleaned_parts) >= 2:
         if cleaned_parts[-1] == "Visual Studio Code":
-            return f"Code - {cleaned_parts[0]}"
+            return f"{cleaned_parts[0]}"
         return f"{cleaned_parts[-1]} - {cleaned_parts[0]}"
     elif len(cleaned_parts) == 1:
         return cleaned_parts[0]
@@ -134,9 +148,13 @@ class PowerButton(widget.TextBox):
     def __init__(self):
         widget.TextBox.__init__(
             self,
-            text            = f"<span font='Font Awesome 6 free solid {icon_size}' foreground='{icon_foreground_12}' size='medium'></span>",
+            text            = "",
+            font            = icon_font,
+            foreground      = "#000000",
+            fontsize        = icon_size + 6,
+            padding         = widget_default_padding + 2,
             mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("python3 " + os.path.expanduser("~/scripts/qtile/bar_menus/system/system_menu.py"))},
-            decorations     = left_decor(icon_background_12),
+            decorations     = power_button_decor("#bf616a"),
         )
         
     def mouse_enter(self, *args, **kwargs):
@@ -865,7 +883,7 @@ task_list_settings = dict(
     font                = bold_font,
     fontsize            = widget_default_font_size + 1,
     padding_y           = widget_default_padding if laptop else widget_default_padding - 2,
-    margin              = task_list_margin - 1,
+    margin_y            = task_list_margin,
     borderwidth         = task_list_border_width,
     spacing             = task_list_spacing,
     icon_size           = task_list_icon_size,
@@ -883,8 +901,8 @@ task_list_settings = dict(
     unfocused_border    = "#3f4752",
     # window_name_location = True,
     # unfocused_border    = transparent,
-    # theme_mode          = "preferred",
-    # theme_path          = "/usr/share/icons/Adwaita",
+    theme_mode          = "preferred",
+    theme_path          = "/usr/share/icons/WhiteSur_dark/",
 )
 
 group_box_settings = dict(
@@ -901,9 +919,9 @@ group_box_settings = dict(
     highlight_method            = "block",
     active                      = "#4b5662",
     inactive                    = bar_background_color,
-    block_highlight_text_color  = "#000000",
+    block_highlight_text_color  = text_color,
     highlight_color             = "#000000",
-    this_current_screen_border  = "#bf616a",
+    this_current_screen_border  = "#4b5662",
     this_screen_border          = bar_border_color,
     other_current_screen_border = group_box_other_border_color,
     other_screen_border         = group_box_other_border_color,
