@@ -112,7 +112,7 @@ def active_window_decor(color=right_decor_background, round=True, padding_x=0, p
         )
     ]
 
-def task_list_decor(color=bar_background_color, radius=12 if laptop else 5, group=False, padding_x=0, padding_y=0):
+def task_list_decor(color="#313840", radius=12 if laptop else 5, group=False, padding_x=0, padding_y=0):
     return RectDecoration(
         line_width            = bottom_widget_width,
         line_colour           = bar_border_color,
