@@ -10,6 +10,7 @@ works and looks clone the scripts directory on https://github.com/Tardz/Laptop.g
 and use the settings menu.
 """
 
+import subprocess
 import json
 import os
 
@@ -123,6 +124,13 @@ if os.path.isfile(file_path):
 volume_menu_pid = processes.get("volume_menu_pid", None)
 bluetooth_menu_pid = processes.get("bluetooth_menu_pid", None)
 wifi_menu_pid = processes.get("wifi_menu_pid", None)
+
+icon_theme_name = subprocess.check_output(
+    "cat " + 
+    os.path.expanduser("~/.config/gtk-3.0/settings.ini") + 
+    " | grep -e gtk-icon-theme-name | awk -F '=' '{print $2}' | tr -d '[:space:]'", shell=True
+    ).decode("utf-8")
+current_icon_theme_path = "/usr/share/icons/" + icon_theme_name
 
 if laptop:
     bar_scaling                     = 1
@@ -259,7 +267,7 @@ bottom_bar_on                       = qtile_settings.get("bottom_bar_status", Tr
 #?#############
 #!BAR
 top_bar_size                        = int(qtile_settings.get("top_bar_size", 46)*bar_scaling)
-bottom_bar_size                     = int(qtile_settings.get("bottom_bar_size", 70)*bar_scaling)
+bottom_bar_size                     = int(qtile_settings.get("bottom_bar_size", 80)*bar_scaling)
 # bottom_bar_size                     = int(qtile_settings.get("bottom_bar_size", 62)*bar_scaling)
 # bottom_bar_size                     = int(qtile_settings.get("bottom_bar_size", 55)*bar_scaling)
 
@@ -270,7 +278,7 @@ for num in qtile_settings.get("bar_width_top", [0, 0, 0, 0]):
 bar_width_top                       = bar_width
 bar_margin_top                      = qtile_settings.get("bar_margin_top", [0, 0, 0, 0])
 bar_width_bottom                    = qtile_settings.get("bar_width_bottom", [0, 0, 0 ,0])
-bar_margin_bottom                   = qtile_settings.get("bar_margin_bottom", [5, 580, 10, 580])
+bar_margin_bottom                   = qtile_settings.get("bar_margin_bottom", [5, 814, 10, 814])
 # bar_margin_bottom                   = qtile_settings.get("bar_margin_bottom", [5, 300, 16, 300])
 
 #!GAP

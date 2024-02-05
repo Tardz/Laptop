@@ -1,7 +1,7 @@
 from functions import (
     move_focus_and_mouse, spawn_alttab_once, check, notify,
     close_all_windows, mute_or_unmute, show_or_hide_tabs, 
-    hide_bottom_bar, minimize_windows, swap_screens
+    minimize_windows, swap_screens
 )
 from libqtile.config import Key, KeyChord, Click, Drag
 from libqtile.lazy import lazy
@@ -38,7 +38,7 @@ keys = [
         Key([mod], "Down", lazy.screen.prev_group(), desc='Next group left'),
 
         #--[WINDWOW CONTROLS]--#
-        # Key(["mod1", "shift"], "d", hide_bottom_bar(), desc='Hide bottom bar'),
+        Key(["control", "shift"], "d", lazy.hide_show_bar("bottom"), desc='Hides the bottom bar'),
         Key([mod, "shift"], "h", minimize_windows(), desc="minimize/unminimize windows"),
         Key([mod], "Left", lazy.layout.down(), desc='Move focus down in current stack pane'),
         Key([mod], "Right", lazy.layout.up(), desc='Move focus up in current stack pane'),

@@ -122,21 +122,6 @@ def show_or_hide_tabs(screen=None, offset=0):
             bar.show(False)
 
 @lazy.function
-def hide_bottom_bar(screen=None, offset=0):
-    """
-    Hides the bottom bar.
-    """
-    if screen is None:
-        screen = Qtile.current_screen
-
-    bar = screen.bottom
-
-    if bar.window:
-        bar.show(False)
-    else:
-        bar.show()
-
-@lazy.function
 def minimize_windows(qtile):
     """
     Minimizes all windows wihtin current group.

@@ -694,7 +694,10 @@ class BacklightIcon(widget.TextBox):
     def __init__(self):
         widget.TextBox.__init__(
             self,
-            text        = f"<span font='Font Awesome 6 free solid {icon_size}' foreground='{icon_foreground_9}'size='medium'></span>",
+            text        = "",
+            font        = icon_font,
+            fontsize    = icon_size + 5,
+            foreground  = icon_foreground_9,
             padding     = 20,
             decorations = left_decor(icon_background_9),
         )
@@ -733,8 +736,15 @@ class ClockWidget(widget.Clock):
             foreground  = text_color,
             fontsize    = widget_default_font_size,
             decorations = right_decor(decor_color),
+            mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("python3 " + os.path.expanduser("~/scripts/qtile/settings_menu/app/settings_menu.py"))},
         )
 
+    def mouse_enter(self, *args, **kwargs):
+        self.bar.window.window.set_cursor("hand2")
+
+    def mouse_leave(self, *args, **kwargs):
+        self.bar.window.window.set_cursor("left_ptr")
+        
 # def launch_app_from_bar(check_command):
 #     group_name = check_command[1]
 #     group = Qtile.groups_map.get(group_name)
@@ -746,11 +756,6 @@ class ClockWidget(widget.Clock):
 
 class AppTrayIcon(widget.TextBox):
     def __init__(self, icon="", foreground=text_color, check_command=None, launch=None):
-        # if check_command:
-        #     mouse_callback = {"Button1": launch_app_from_bar(check_command)} if check_command else {"Button1": lambda: Qtile.cmd_spawn(launch)}
-        # elif launch:
-            # mouse_callback = {"Button1": lambda: Qtile.cmd_run(launch)}
-        mouse_callback = {"Button1": lambda: Qtile.cmd_spawn("python3 " + os.path.expanduser("~/scripts/qtile/settings_menu/app/settings_menu.py"))}
         widget.TextBox.__init__(
             self,
             text            = f"<span font='Font Awesome 6 free solid' size='medium'>{icon}</span>",
@@ -759,7 +764,6 @@ class AppTrayIcon(widget.TextBox):
             foreground      = foreground,
             background      = transparent,
             markup          = True,
-            mouse_callbacks = mouse_callback,
             decorations     = [task_list_decor(group=True)],
         )
         self.normal_foreground = self.foreground
@@ -783,6 +787,40 @@ class AppTrayIcon(widget.TextBox):
         self.foreground = self.normal_foreground
         # self.padding = self.normal_padding
         self.fontsize = self.normal_fontsize
+        self.bar.draw()
+
+class LaunchTray(widget.LaunchBar):
+    def __init__(self):
+        widget.LaunchBar.__init__(
+            self,
+            progs = [
+                ("vscode", "code"),
+                ("terminal", "alacritty"),
+                ("android-studio", "android-studio"),
+                ("spotify", "spotify"),
+                ("discord", "discord"),
+                ("youtube", "firefox youtube"),
+                ("firefox", "firefox"),
+                ("thunderbird", "thunderbird"),
+                ("ticktick", "ticktick"),
+                ("file-manager", "pcmanfm"),
+                ("|", ""),
+                ("system-run", "python3 " + os.path.expanduser("~/scripts/qtile/settings_menu/app/settings_menu.py")),
+                ("search", "alacritty"),
+            ],
+            background = transparent,
+            padding = 10,
+            icon_size = 65,
+            theme_path = "/usr/share/icons/WhiteSur/",
+            decorations = [task_list_decor(group=True)],
+        )
+
+    def mouse_enter(self, *args, **kwargs):
+        self.bar.window.window.set_cursor("hand2")
+        self.bar.draw()
+
+    def mouse_leave(self, *args, **kwargs):
+        self.bar.window.window.set_cursor("left_ptr")
         self.bar.draw()
 
 class ActiveWindowOptionWidget(widget.TextBox):
