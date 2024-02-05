@@ -26,7 +26,7 @@ def seperator(custom_padding=seperator_padding, background=None):
     )
 
 # Default padding_y = 9, Default padding_x = None
-def left_decor(color, round=True, padding_x=None, padding_y=left_decor_padding):
+def left_decor(color, round=False, padding_x=None, padding_y=left_decor_padding):
     radius = 6 if round else [4, 0, 0, 4]
     if not laptop:
         radius = 5
@@ -80,7 +80,7 @@ def left_decor_hover(color, round=True, padding_x=2, padding_y=left_decor_paddin
         )
     ]
 
-def right_decor(color=right_decor_background, round=True, padding_x=0, padding_y=left_decor_padding):
+def right_decor(color=right_decor_background, round=False, padding_x=0, padding_y=left_decor_padding):
     if not laptop:
         radius = 5 if round else [0, 4, 4, 0]
     else:
@@ -112,7 +112,7 @@ def active_window_decor(color=right_decor_background, round=True, padding_x=0, p
         )
     ]
 
-def task_list_decor(color="#313840", radius=12 if laptop else 5, group=False, padding_x=0, padding_y=0):
+def task_list_decor(color="#424b56.85", radius=12 if laptop else 5, group=False, padding_x=0, padding_y=0):
     return RectDecoration(
         line_width            = bottom_widget_width,
         line_colour           = bar_border_color,
@@ -202,10 +202,10 @@ class BluetoothIcon(widget.TextBox, base.InLoopPollText):
             fontsize        = icon_size + 8,
             foreground      = icon_foreground_1,
             background      = None,
-            padding         = 20,
+            padding         = icon_padding + 4,
             update_interval = wifi_update_interval,
             mouse_callbacks = {"Button1": lambda: self.clicked()},
-            decorations     = left_decor(icon_background_1),
+            decorations     = left_decor(round=True, color=icon_background_1),
         )
         self.signal_file_path = os.path.expanduser("~/scripts/qtile/bar_menus/bluetooth/signal_data.txt") 
 
@@ -277,6 +277,7 @@ class BluetoothWidget(widget.TextBox, base.InLoopPollText):
             self,
             update_interval = wifi_update_interval,
             font            = bold_font,
+            fontsize        = widget_default_font_size,
             padding         = widget_default_padding,
             mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("python3 " + os.path.expanduser("~/scripts/qtile/bar_menus/bluetooth/bluetooth_menu.py"))},
             decorations     = right_decor()
@@ -331,7 +332,7 @@ class VolumeIcon(widget.TextBox):
             fontsize        = icon_size + 5,
             foreground      = icon_foreground_2,
             background      = None,
-            padding         = 20,
+            padding         = icon_padding,
             mouse_callbacks = {"Button1": lambda: self.click()},
             decorations     = left_decor(icon_background_2),
         )
@@ -377,7 +378,14 @@ class VolumeWidget(widget.PulseVolume):
     def __init__(self):
         widget.PulseVolume.__init__(
             self,
-            mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("python3 " + os.path.expanduser("~/scripts/qtile/bar_menus/volume/volume_menu.py"))},
+            font = bold_font,
+            fontsize = widget_default_font_size,
+            padding = widget_default_padding,
+            mouse_callbacks = {
+                "Button1": lambda: Qtile.cmd_spawn(
+                    "python3 " + os.path.expanduser("~/scripts/qtile/bar_menus/volume/volume_menu.py")
+                    )
+                },
             decorations     = right_decor(),
         )
         
@@ -399,7 +407,7 @@ class WifiIcon(widget.TextBox):
             mouse_callbacks = {"Button1": lambda: self.clicked()},
             decorations     = left_decor(icon_background_3),
             backgroubd      = None,
-            padding         = 20,
+            padding         = icon_padding,
         )
 
         self.active_background = bar_border_color
@@ -441,8 +449,13 @@ class WifiWidget(widget.TextBox, base.InLoopPollText):
             self,
             update_interval = wifi_update_interval,
             font            = bold_font,
+            fontsize        = widget_default_font_size,
             padding         = widget_default_padding,
-            mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("python3 " + os.path.expanduser("~/scripts/qtile/bar_menus/wifi/wifi_menu.py"))},
+            mouse_callbacks = {
+                "Button1": lambda: Qtile.cmd_spawn(
+                    "python3 " + os.path.expanduser("~/scripts/qtile/bar_menus/wifi/wifi_menu.py")
+                    )
+                },
             decorations     = right_decor(),
         )
 
@@ -514,7 +527,7 @@ class CpuLoadIcon(widget.TextBox):
             font            = icon_font,
             fontsize        = icon_size + 5,
             foreground      = icon_foreground_5,
-            padding         = 20,
+            padding         = icon_padding,
             mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("python3 " + os.path.expanduser("~/scripts/qtile/bar_menus/cpu/cpu_stats_menu.py"))},
             decorations     = left_decor(icon_background_5),
         )
@@ -530,6 +543,9 @@ class CpuLoadWidget(widget.CPU):
         widget.CPU.__init__(
             self,
             format          = "{load_percent}%",
+            font            = bold_font,
+            fontsize        = widget_default_font_size,
+            padding         = widget_default_padding,
             markup          = True,
             update_interval = cpu_update_interval,
             mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("python3 " + os.path.expanduser("~/scripts/qtile/bar_menus/cpu/cpu_stats_menu.py"))},
@@ -553,7 +569,11 @@ class BatteryIcon(widget.TextBox):
     def __init__(self):
         widget.TextBox.__init__(
             self,
-            text            = f"<span font='Font Awesome 6 free solid {icon_size}' foreground='{icon_foreground_6}'size='medium'></span>",
+            text            = "",
+            font            = icon_font,
+            fontsize        = icon_size + 5,
+            padding         = icon_padding + 2,
+            foreground      = icon_foreground_6,
             mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("python3 " + os.path.expanduser("~/scripts/qtile/bar_menus/power/power_management_menu.py"))},
             decorations     = left_decor(icon_background_6),
         )
@@ -569,6 +589,9 @@ class BatteryWidget(widget.Battery):
         widget.Battery.__init__(
             self,
             format          = "{percent:2.0%}",
+            font            = bold_font,
+            fontsize        = widget_default_font_size,
+            padding         = widget_default_padding,
             markup          = True,
             update_interval = battery_update_interval,
             mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("python3 " + os.path.expanduser("~/scripts/qtile/bar_menus/power/power_management_menu.py"))},
@@ -588,7 +611,6 @@ class BatteryIconWidget(widget.BatteryIcon):
             theme_path      = os.path.expanduser("~/.config/qtile/battery_icons/horizontal/"),
             battery         = 0,
             scale           = 2.8,
-            padding         = 20,
             mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("python3 " + os.path.expanduser("~/scripts/qtile/bar_menus/power/power_management_menu.py"))},
             decorations     = right_decor() if decor else right_decor(transparent),
         )
@@ -637,6 +659,9 @@ class NotificationWidget(widget.TextBox, base.InLoopPollText):
     def __init__(self):
         base.InLoopPollText.__init__(
             self,
+            font            = bold_font,
+            fontsize        = widget_default_font_size,
+            padding         = widget_default_padding,
             update_interval = wifi_update_interval,
             max_chars       = 6,
             decorations     = right_decor()
@@ -675,9 +700,9 @@ class NotificationIcon(widget.TextBox):
             font            = icon_font,
             fontsize        = icon_size + 5,
             foreground      = icon_foreground_8,
-            padding         = 20,
-            decorations     = left_decor(icon_background_8),
+            padding         = icon_padding,
             mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("python3 " + os.path.expanduser("~/scripts/other/get_notifications.py"))},
+            decorations     = left_decor(color=icon_background_8, round=True),
         )
 
     def mouse_enter(self, *args, **kwargs):
@@ -698,7 +723,7 @@ class BacklightIcon(widget.TextBox):
             font        = icon_font,
             fontsize    = icon_size + 5,
             foreground  = icon_foreground_9,
-            padding     = 20,
+            padding     = icon_padding + 1,
             decorations = left_decor(icon_background_9),
         )
 
@@ -713,6 +738,9 @@ class BacklightWidget(widget.Backlight):
         widget.Backlight.__init__(
             self,
             format          = "{percent:2.0%}",
+            font            = bold_font,
+            fontsize        = widget_default_font_size,
+            padding         = widget_default_padding,
             markup          = True,
             backlight_name  = "amdgpu_bl1",
             brightness_file = "/sys/class/backlight/amdgpu_bl1/actual_brightness",
@@ -799,7 +827,7 @@ class LaunchTray(widget.LaunchBar):
                 ("android-studio", "android-studio"),
                 ("spotify", "spotify"),
                 ("discord", "discord"),
-                ("youtube", "firefox youtube"),
+                ("youtube", "firefox youtube.com"),
                 ("firefox", "firefox"),
                 ("thunderbird", "thunderbird"),
                 ("ticktick", "ticktick"),
@@ -946,17 +974,20 @@ task_list_settings = dict(
 group_box_settings = dict(
     # margin                      = groupbox_margin,
     padding_x                   = 20,
-    padding_y                   = 8,
+    padding_y                   = 6,
     margin_x                    = 4,
     borderwidth                 = True,
     rounded                     = True,
     disable_drag                = False,
-    hide_unused                 = True,
-    font                        = icon_font,
+    hide_unused                 = False,
+    font                        = bold_font,
+    # font                        = icon_font,
     fontsize                    = icon_size + 3,
     highlight_method            = "block",
-    active                      = "#4b5662",
-    inactive                    = bar_background_color,
+    active                      = text_color,
+    # active                      = "#4b5662",
+    inactive                    = "#4b5662",
+    # inactive                    = bar_background_color,
     block_highlight_text_color  = text_color,
     highlight_color             = "#000000",
     this_current_screen_border  = "#4b5662",

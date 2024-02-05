@@ -3,27 +3,49 @@ from settings import *
 
 ### GROUP SETTINGS ###
 groups = [
-        Group('c', label = "", matches=[ #Browser
+        Group('c', label = "Browser", matches=[ #Browser
             Match(wm_class = ["Navigator"]),
             Match(wm_class = ["chromium"]),
             Match(wm_class = ["brave-browser"]),
                 ]),
-        Group('v', label = "", matches=[ #Code
+        Group('v', label = "Code", matches=[ #Code
             Match(wm_class = ["code"]),
             Match(wm_class = ["jetbrains-clion"]),
             Match(wm_class = ["jetbrains-studio"]),
             Match(wm_class = ["jetbrains-idea"]),
             ]),
-        Group('n', label = "", matches=[ #Files
+        Group('n', label = "System", matches=[ #Files
             Match(wm_class = ["pcmanfm"]),
             Match(wm_class = ["thunderbird"]),
             Match(wm_class = ["lxappearance"]),
             Match(wm_class = ["tlpui"]),
             ]),
-        Group('d', label = "", matches=[ #Social
+        Group('d', label = "Social", matches=[ #Social
             Match(wm_class = ["discord"]),
             ]),
         Group('9', label = ""), #Scratchpad
+
+        # Group('c', label = "", matches=[ #Browser
+        #     Match(wm_class = ["Navigator"]),
+        #     Match(wm_class = ["chromium"]),
+        #     Match(wm_class = ["brave-browser"]),
+        #         ]),
+        # Group('v', label = "", matches=[ #Code
+        #     Match(wm_class = ["code"]),
+        #     Match(wm_class = ["jetbrains-clion"]),
+        #     Match(wm_class = ["jetbrains-studio"]),
+        #     Match(wm_class = ["jetbrains-idea"]),
+        #     ]),
+        # Group('n', label = "", matches=[ #Files
+        #     Match(wm_class = ["pcmanfm"]),
+        #     Match(wm_class = ["thunderbird"]),
+        #     Match(wm_class = ["lxappearance"]),
+        #     Match(wm_class = ["tlpui"]),
+        #     ]),
+        # Group('d', label = "", matches=[ #Social
+        #     Match(wm_class = ["discord"]),
+        #     ]),
+        # Group('9', label = ""), #Scratchpad
 ]
 
 ### SCRATCHPAD ###

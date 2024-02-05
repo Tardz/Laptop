@@ -214,19 +214,13 @@ box_style_dual_bottom_bar_2 = Bar([
 
 ], bottom_bar_size, margin = bar_margin_bottom, background = bar_background_color, border_width = bar_width_bottom, border_color = bar_border_color, opacity=1)
 
-simple_style_single_top_bar = Bar([
+simple_style_single_top_bar_1 = Bar([
     seperator(-12),
     GroupBoxWidget(),
-    widget.TaskList(**task_list_settings),
+    # widget.TaskList(**task_list_settings),
     seperator(),
 
-    # ActiveWindowWidget(),
-    # ActiveWindowOptionWidget("File"),
-    # ActiveWindowOptionWidget("Edit"),
-    # ActiveWindowOptionWidget("View"),
-    # ActiveWindowOptionWidget("Go"),
-    # ActiveWindowOptionWidget("Window"),
-
+    widget.Spacer(bar.STRETCH),
 
     # BLUETOOTH #
     BluetoothIcon(),
@@ -256,13 +250,65 @@ simple_style_single_top_bar = Bar([
     BacklightIcon(),
 
     # BATTERY #
-    seperator(25),
+    seperator(10),
     BatteryIconWidget(),
 
     # TIME #
-    seperator(25),
+    seperator(10),
     ClockWidget(decor_color=transparent),
     seperator(-12),
+
+], top_bar_size, margin = bar_margin_top, background = bar_background_color, border_width = bar_width_top, border_color = bar_border_color, opacity=1)
+
+simple_style_single_top_bar_2 = Bar([
+    seperator(-12),
+    GroupBoxWidget(),
+    # widget.TaskList(**task_list_settings),
+    seperator(),
+
+    widget.Spacer(bar.STRETCH),
+    ClockWidget(decor_color=transparent),
+    widget.Spacer(bar.STRETCH),
+
+    # BLUETOOTH #
+    BluetoothIcon(),
+    BluetoothWidget(),
+    seperator(),
+
+    # VOLUME #
+    VolumeIcon(),
+    VolumeWidget(),
+    seperator(),
+
+    #  WIFI #
+    WifiIcon(),
+    WifiWidget(),
+
+    # TICKTICK #
+    # seperator(),
+    # TickTickMenu(),
+
+    # CPU LOAD #
+    seperator(),
+    CpuLoadIcon(),
+    CpuLoadWidget(),
+
+    # URGENT NOTIFICATION #
+    seperator(),
+    NotificationIcon(),
+
+    # BACKLIGHT #
+    seperator(),
+    BacklightIcon(),
+    BacklightWidget(),
+
+    # BATTERY #
+    seperator(),
+    BatteryIcon(),
+    BatteryWidget(),
+
+    # TIME #
+    seperator(-6),
 
 ], top_bar_size, margin = bar_margin_top, background = bar_background_color, border_width = bar_width_top, border_color = bar_border_color, opacity=1)
 

@@ -24,16 +24,24 @@ if bar_style == "box":
         box_style_dual_bottom_bar_1 as dual_bottom_bar_1,
         box_style_dual_bottom_bar_2 as dual_bottom_bar_2
     )
-else:
+elif bar_style == "simple_1":
     from bars import (
-        simple_style_single_top_bar as single_top_bar, 
+        simple_style_single_top_bar_1 as single_top_bar, 
         simple_style_single_bottom_bar as single_bottom_bar,
         simple_style_dual_top_bar_1 as dual_top_bar_1,
         simple_style_dual_top_bar_2 as dual_top_bar_2,
         simple_style_dual_bottom_bar_1 as dual_bottom_bar_1,
         simple_style_dual_bottom_bar_2 as dual_bottom_bar_2
     )
-
+else:
+    from bars import (
+        simple_style_single_top_bar_2 as single_top_bar, 
+        simple_style_single_bottom_bar as single_bottom_bar,
+        simple_style_dual_top_bar_1 as dual_top_bar_1,
+        simple_style_dual_top_bar_2 as dual_top_bar_2,
+        simple_style_dual_bottom_bar_1 as dual_bottom_bar_1,
+        simple_style_dual_bottom_bar_2 as dual_bottom_bar_2
+    )
 if top_bar_on and bottom_bar_on:
     single_screen = Screen(top=single_top_bar, bottom=single_bottom_bar, left=bar.Gap(bar_gap_size), right=bar.Gap(bar_gap_size))
     left_screen   = Screen(top=dual_top_bar_1, bottom=dual_bottom_bar_1, left=bar.Gap(bar_gap_size), right=bar.Gap(bar_gap_size))
