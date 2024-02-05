@@ -115,7 +115,8 @@ def lock_on_sleep():
 
 def float_to_front():
     current_group = Qtile.current_group
-    for window in current_group.windows:
+    sorted_windows = sorted(current_group.windows, key=lambda w: w.width * w.height, reverse=True)
+    for window in sorted_windows:
         if window.floating:
             window.cmd_bring_to_front()
 
@@ -125,8 +126,8 @@ def client_focus():
     if current_window is not None:
         if not current_window.floating:
             float_to_front()
-        else:
-            current_window.cmd_bring_to_front()
+        # else:
+        #     current_window.cmd_bring_to_front()
 
 @hook.subscribe.restart
 def restart():
