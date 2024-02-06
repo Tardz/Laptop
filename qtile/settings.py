@@ -130,7 +130,7 @@ icon_theme_name = subprocess.check_output(
     os.path.expanduser("~/.config/gtk-3.0/settings.ini") + 
     " | grep -e gtk-icon-theme-name | awk -F '=' '{print $2}' | tr -d '[:space:]'", shell=True
     ).decode("utf-8")
-current_icon_theme_path = "/usr/share/icons/" + icon_theme_name
+current_icon_theme_path = "/usr/share/icons/" + icon_theme_name + "/scalable/"
 
 if laptop:
     bar_scaling                     = 1
@@ -278,7 +278,7 @@ for num in qtile_settings.get("bar_width_top", [0, 0, 0, 0]):
 bar_width_top                       = bar_width
 bar_margin_top                      = qtile_settings.get("bar_margin_top", [0, 0, 0, 0])
 bar_width_bottom                    = qtile_settings.get("bar_width_bottom", [0, 0, 0 ,0])
-bar_margin_bottom                   = qtile_settings.get("bar_margin_bottom", [5, 814, 10, 814])
+bar_margin_bottom                   = qtile_settings.get("bar_margin_bottom", [10, 744, 12, 744])
 # bar_margin_bottom                   = qtile_settings.get("bar_margin_bottom", [5, 300, 16, 300])
 
 #!GAP
@@ -286,7 +286,7 @@ bar_gap_size                        = (qtile_settings.get("bar_gap_size", 0) - g
 
 #!SEPERATOR
 if bar_style == "box" or bar_style == "simple_2":
-    seperator_padding               = int(qtile_settings.get("seperator_padding", 5)*seperator_padding_scaling)
+    seperator_padding               = int(qtile_settings.get("seperator_padding", 0)*seperator_padding_scaling)
 else:
     seperator_padding               = int(qtile_settings.get("seperator_padding", 0)*seperator_padding_scaling)
 

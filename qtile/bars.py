@@ -7,7 +7,7 @@ from widgets import (
     BacklightIcon, BacklightWidget, ClockWidget, AppTrayIcon, 
     ActiveWindowOptionWidget, ActiveWindowIcon, ActiveWindowWidget, 
     NothingWidget, GroupBoxWidget, WindowCountWidget, seperator, 
-    task_list_settings, LaunchTray
+    task_list_settings, LaunchTray, AppTraySeperator
 )
 from qtile_extras import widget
 from libqtile.bar import Bar
@@ -91,12 +91,6 @@ box_style_single_bottom_bar = Bar([
 
     # APPS #
     seperator(background=transparent),
-    AppTrayIcon("", app_tray_icon_color_1, ["firefox", "c", ""]),
-    AppTrayIcon("", app_tray_icon_color_2, ["code", "v", ""]),
-    AppTrayIcon("", app_tray_icon_color_3, ["pcmanfm", "n", ""]),
-    AppTrayIcon("", app_tray_icon_color_4, launch="spotify"),
-    AppTrayIcon(" ", app_tray_icon_color_5, launch="python3 ~/scripts/qtile/settings_menu/app/settings_menu.py"),
-
 ], bottom_bar_size, margin = bar_margin_bottom, background = bar_background_color, border_width = bar_width_bottom, border_color = bar_border_color, opacity=1)
 
 box_style_dual_top_bar_1 = Bar([
@@ -171,13 +165,6 @@ box_style_dual_top_bar_2 = Bar([
 ], top_bar_size, margin = bar_margin_top, background = bar_background_color, border_width = bar_width_top, border_color = bar_border_color, opacity=1)
 
 box_style_dual_bottom_bar_1 = Bar([
-    # APPS #
-    AppTrayIcon("", icon_background_2, ["firefox", "c", ""]),
-    AppTrayIcon("", icon_background_3, ["code", "v", ""]),
-    AppTrayIcon("", icon_background_7, ["pcmanfm", "n", ""]),
-    AppTrayIcon("", icon_background_8, launch="spotify"),
-    AppTrayIcon(" ", icon_background_9, launch="~/scripts/qtile/settings_menu/app/settings_menu.py"),
-
     # WINDOWCOUNT #
     seperator(background=transparent),
     WindowCountWidget(),
@@ -206,12 +193,6 @@ box_style_dual_bottom_bar_2 = Bar([
 
     # APPS #
     seperator(background=transparent),
-    AppTrayIcon("", icon_background_2, ["firefox", "c", ""]),
-    AppTrayIcon("", icon_background_3, ["code", "v", ""]),
-    AppTrayIcon("", icon_background_7, ["pcmanfm", "n", ""]),
-    AppTrayIcon("", icon_background_8, launch="spotify"),
-    AppTrayIcon(" ", icon_background_9, launch="python3 /home/jonalm/scripts/qtile/settings_menu/app"),
-
 ], bottom_bar_size, margin = bar_margin_bottom, background = bar_background_color, border_width = bar_width_bottom, border_color = bar_border_color, opacity=1)
 
 simple_style_single_top_bar_1 = Bar([
@@ -315,9 +296,21 @@ simple_style_single_top_bar_2 = Bar([
 simple_style_single_bottom_bar = Bar([
     # APPTRAY #
     # widget.Spacer(bar.STRETCH),
-    # AppTrayIcon("", app_tray_icon_color_1, ["firefox", "c", ""]),
-    LaunchTray(),
-
+    # LaunchTray(),
+    AppTrayIcon("vscode", "v", "code"),
+    AppTrayIcon("android-studio", "v", "android-studio"),
+    AppTrayIcon("discord", "d", "discord"),
+    AppTrayIcon("youtube", "c", "firefox youtube.com"),
+    AppTrayIcon("firefox", "c", "firefox"),
+    AppTrayIcon("thunderbird", "n", "thunderbird"),
+    AppTrayIcon("file-manager", "n", "pcmanfm"),
+    AppTraySeperator(),
+    AppTrayIcon("spotify", "", "spotify"),
+    AppTrayIcon("alacritty-simple", "", "alacritty"),
+    AppTrayIcon("ticktick", "", "ticktick"),
+    AppTraySeperator(),
+    AppTrayIcon("system-run", "", "python3 " + os.path.expanduser("~/scripts/qtile/settings_menu/app/settings_menu.py")),
+    AppTrayIcon("search"),
 
 ], bottom_bar_size, margin = bar_margin_bottom, background = bar_background_color, border_width = bar_width_bottom, border_color = bar_border_color, opacity=1)
 
@@ -377,13 +370,6 @@ simple_style_dual_bottom_bar_1 = Bar([
     # TASKLIST #
     widget.TaskList(**task_list_settings),
     seperator(background=transparent),
-    
-    # APPTRAY #
-    AppTrayIcon("", app_tray_icon_color_1, ["firefox", "c", ""]),
-    AppTrayIcon("", app_tray_icon_color_2, ["code", "v", ""]),
-    AppTrayIcon("", app_tray_icon_color_3, ["pcmanfm", "n", ""]),
-    AppTrayIcon("", app_tray_icon_color_4, launch="spotify"),
-    AppTrayIcon(" ", app_tray_icon_color_5, launch="python3 ~/scripts/qtile/settings_menu/app/settings_menu.py"),
 
 ], bottom_bar_size, margin = bar_margin_bottom, background = bar_background_color, border_width = bar_width_bottom, border_color = bar_border_color, opacity=1)
 
@@ -398,13 +384,4 @@ simple_style_dual_bottom_bar_2 = Bar([
     # WINDOWCOUNT #
     seperator(background=transparent),
     WindowCountWidget(),
-
-    # APPS #
-    seperator(background=transparent),
-    AppTrayIcon("", icon_background_2, ["firefox", "c", ""]),
-    AppTrayIcon("", icon_background_3, ["code", "v", ""]),
-    AppTrayIcon("", icon_background_7, ["pcmanfm", "n", ""]),
-    AppTrayIcon("", icon_background_8, launch="spotify"),
-    AppTrayIcon(" ", icon_background_9, launch="python3 /home/jonalm/scripts/qtile/settings_menu/app"),
-
 ], bottom_bar_size, margin = bar_margin_bottom, background = bar_background_color, border_width = bar_width_bottom, border_color = bar_border_color, opacity=1)

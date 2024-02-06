@@ -4,6 +4,7 @@ from libqtile import qtile as Qtile
 from libqtile.widget import base
 from qtile_extras import widget
 from libqtile.lazy import lazy
+from xdg import IconTheme
 from settings import *
 import subprocess
 
@@ -773,49 +774,67 @@ class ClockWidget(widget.Clock):
     def mouse_leave(self, *args, **kwargs):
         self.bar.window.window.set_cursor("left_ptr")
         
-# def launch_app_from_bar(check_command):
-#     group_name = check_command[1]
-#     group = Qtile.groups_map.get(group_name)
-#     if group:
-#         group.cmd_toscreen()
-#         group.cmd_focus()
-#     Qtile.cmd_run(check_command[0])
-    # qtile.cmd_spawn([os.path.expanduser("~/scripts/qtile/check_and_launch_app.py"), check_command[0], check_command[1], check_command[2]])
-
-class AppTrayIcon(widget.TextBox):
-    def __init__(self, icon="", foreground=text_color, check_command=None, launch=None):
-        widget.TextBox.__init__(
+class AppTrayIcon(widget.Image):
+    def __init__(self, icon_name="", group="", app=""):
+        icon_path = IconTheme.getIconPath(icon_name, 48, "WhiteSur")
+        widget.Image.__init__(
             self,
-            text            = f"<span font='Font Awesome 6 free solid' size='medium'>{icon}</span>",
-            fontsize        = icon_size + 14,
-            padding         = widget_default_padding + 14,
-            foreground      = foreground,
+            filename        = icon_path,
+            margin_x        = 5,
+            margin_y        = 5,
+            scaling         = 0.7,
             background      = transparent,
-            markup          = True,
             decorations     = [task_list_decor(group=True)],
+            mouse_callbacks = {"Button1": lambda: self.click(group, app)},
         )
-        self.normal_foreground = self.foreground
-        self.hover_foreground = text_color
 
-        self.normal_fontsize = self.fontsize
-        self.hover_fontsize = self.fontsize + 50
-
-        self.normal_padding = self.padding
-        self.hover_padding = self.padding - 2
+        self.margin_normal = self.margin_y
+        self.margin_hover = self.margin_y - 2
+        self.margin_clicked = self.margin_hover - 2
+        self.none_check_apps = [
+            "firefox youtube.com",
+            "alacritty",
+            "python3 " + os.path.expanduser("~/scripts/qtile/settings_menu/app/settings_menu.py")
+        ]
+        self.scratchpad_apps = [
+            "spotify",
+            "ticktick"
+        ]
+    def click(self, group, app):
+        if group:
+            Qtile.groups_map[group].cmd_toscreen()
+            if app in self.scratchpad_apps:
+                Qtile.groups_map["9"].dropdown_toggle(app)
+            elif app in self.none_check_apps:
+                Qtile.cmd_spawn(app)    
+            else:
+                Qtile.cmd_spawn("python3 " + os.path.expanduser("~/scripts/qtile/check_and_launch_app.py " + app + " " + group))
+        else:
+            Qtile.cmd_spawn(app)
+        self.margin_y = self.margin_clicked
 
     def mouse_enter(self, *args, **kwargs):
         self.bar.window.window.set_cursor("hand2")
-        self.foreground = self.hover_foreground
-        # self.padding = self.hover_padding
-        self.fontsize = self.hover_fontsize
+        self.margin_y = self.margin_hover
         self.bar.draw()
 
     def mouse_leave(self, *args, **kwargs):
         self.bar.window.window.set_cursor("left_ptr")
-        self.foreground = self.normal_foreground
-        # self.padding = self.normal_padding
-        self.fontsize = self.normal_fontsize
+        self.margin_y = self.margin_normal
         self.bar.draw()
+
+class AppTraySeperator(widget.TextBox):
+    def __init__(self):
+        widget.TextBox.__init__(
+            self,
+            text        = "|",
+            font        = icon_font,
+            fontsize    = icon_size + 15,
+            foreground  = "#2b3139",
+            background  = transparent,
+            padding     = 2,
+            decorations = [task_list_decor(group=True)],
+        )
 
 class LaunchTray(widget.LaunchBar):
     def __init__(self):
@@ -823,15 +842,16 @@ class LaunchTray(widget.LaunchBar):
             self,
             progs = [
                 ("vscode", "code"),
-                ("terminal", "alacritty"),
                 ("android-studio", "android-studio"),
-                ("spotify", "spotify"),
                 ("discord", "discord"),
                 ("youtube", "firefox youtube.com"),
-                ("firefox", "firefox"),
+                ("firefox", "python3 /home/jonalm/scripts/qtile/check_and_launch_app.py firefox c"),
                 ("thunderbird", "thunderbird"),
-                ("ticktick", "ticktick"),
                 ("file-manager", "pcmanfm"),
+                ("|", ""),
+                ("spotify", "spotify"),
+                ("alacritty-simple", "alacritty"),
+                ("ticktick", "ticktick"),
                 ("|", ""),
                 ("system-run", "python3 " + os.path.expanduser("~/scripts/qtile/settings_menu/app/settings_menu.py")),
                 ("search", "alacritty"),
@@ -841,7 +861,11 @@ class LaunchTray(widget.LaunchBar):
             icon_size = 65,
             theme_path = "/usr/share/icons/WhiteSur/",
             decorations = [task_list_decor(group=True)],
+            mouse_callbacks = {"Button1": lambda: self.click()},
         )
+    
+    def click(self):
+        pass
 
     def mouse_enter(self, *args, **kwargs):
         self.bar.window.window.set_cursor("hand2")

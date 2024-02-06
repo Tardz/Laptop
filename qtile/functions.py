@@ -41,7 +41,7 @@ def check(qtile, group_name=None, from_key_press=None):
     if not, launch the specified app else, do nothing.
     """
     if from_key_press:
-        qtile.cmd_spawn(["/home/jonalm/scripts/qtile/check_and_launch_app.py", from_key_press[0], from_key_press[1], from_key_press[2], "&"])
+        qtile.cmd_spawn(["/home/jonalm/scripts/qtile/check_and_launch_app.py", from_key_press[0], from_key_press[1], from_key_press[2]])
     elif group_name and check_dict[group_name][0]:
         info = check_dict[group_name]
         if info != []:

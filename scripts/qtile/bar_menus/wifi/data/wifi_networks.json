@@ -19,18 +19,12 @@
   },
   {
     "SSID": "SG_Play",
-    "STRENGTH": "\u2582\u2584\u2586\u2582",
+    "STRENGTH": "\u2582\u2584\u2586\u2588",
     "CONNECTED": false,
     "KNOWN": false
   },
   {
-    "SSID": "Oscar",
-    "STRENGTH": "\u2582\u2584\u2586\u2582",
-    "CONNECTED": false,
-    "KNOWN": false
-  },
-  {
-    "SSID": "LukasLager",
+    "SSID": "lj_5G",
     "STRENGTH": "\u2582\u2584\u2586\u2582",
     "CONNECTED": false,
     "KNOWN": false
@@ -42,7 +36,7 @@
     "KNOWN": false
   },
   {
-    "SSID": "Blau",
+    "SSID": "LukasLager",
     "STRENGTH": "\u2582\u2584\u2586\u2582",
     "CONNECTED": false,
     "KNOWN": false
@@ -54,7 +48,31 @@
     "KNOWN": false
   },
   {
+    "SSID": "Blau",
+    "STRENGTH": "\u2582\u2584\u2586\u2582",
+    "CONNECTED": false,
+    "KNOWN": false
+  },
+  {
+    "SSID": "TP-Link_A37D",
+    "STRENGTH": "\u2582\u2584\u2586\u2582",
+    "CONNECTED": false,
+    "KNOWN": false
+  },
+  {
     "SSID": "LukasDoNotUse_5G",
+    "STRENGTH": "\u2582\u2584\u2586\u2582",
+    "CONNECTED": false,
+    "KNOWN": false
+  },
+  {
+    "SSID": "Oscar",
+    "STRENGTH": "\u2582\u2584\u2582\u2582",
+    "CONNECTED": false,
+    "KNOWN": false
+  },
+  {
+    "SSID": "TP-Link_A37D_5G",
     "STRENGTH": "\u2582\u2584\u2582\u2582",
     "CONNECTED": false,
     "KNOWN": false
@@ -66,31 +84,31 @@
     "KNOWN": false
   },
   {
-    "SSID": "Morell23",
-    "STRENGTH": "\u2582\u2584\u2582\u2582",
-    "CONNECTED": false,
-    "KNOWN": false
-  },
-  {
     "SSID": "TP-LINK_28DB",
     "STRENGTH": "\u2582\u2584\u2582\u2582",
     "CONNECTED": false,
     "KNOWN": false
   },
   {
-    "SSID": "TP-Link_A37D",
-    "STRENGTH": "\u2582\u2584\u2582\u2582",
+    "SSID": "ASUS_68",
+    "STRENGTH": "\u2582\u2582\u2582\u2582",
     "CONNECTED": false,
     "KNOWN": false
   },
   {
-    "SSID": "TP-Link_A37D_5G",
+    "SSID": "gretchensvibrationer",
     "STRENGTH": "\u2582\u2582\u2582\u2582",
     "CONNECTED": false,
     "KNOWN": false
   },
   {
     "SSID": "gretchensvibrationer-5G",
+    "STRENGTH": "\u2582\u2582\u2582\u2582",
+    "CONNECTED": false,
+    "KNOWN": false
+  },
+  {
+    "SSID": "TP-Link_21DC",
     "STRENGTH": "\u2582\u2582\u2582\u2582",
     "CONNECTED": false,
     "KNOWN": false
