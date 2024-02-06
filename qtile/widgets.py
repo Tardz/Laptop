@@ -113,7 +113,7 @@ def active_window_decor(color=right_decor_background, round=True, padding_x=0, p
         )
     ]
 
-def task_list_decor(color="#31373f.85", radius=12 if laptop else 5, group=False, padding_x=0, padding_y=0):
+def task_list_decor(color=app_tray_color, radius=12 if laptop else 5, group=False, padding_x=0, padding_y=0):
     return RectDecoration(
         line_width            = bottom_widget_width,
         line_colour           = bar_border_color,
@@ -805,7 +805,7 @@ class AppTrayIcon(widget.Image):
             if app in self.scratchpad_apps:
                 Qtile.groups_map["9"].dropdown_toggle(app)
             elif app in self.none_check_apps:
-                Qtile.cmd_spawn(app)    
+                Qtile.cmd_spawn(app)
             else:
                 Qtile.cmd_spawn("python3 " + os.path.expanduser("~/scripts/qtile/check_and_launch_app.py " + app + " " + group))
         else:
@@ -829,7 +829,7 @@ class AppTraySeperator(widget.TextBox):
             text        = "|",
             font        = icon_font,
             fontsize    = icon_size + 15,
-            foreground  = bar_border_color,
+            foreground  = app_tray_seperator_color,
             background  = transparent,
             padding     = 2,
             decorations = [task_list_decor(group=True)],

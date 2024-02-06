@@ -164,6 +164,7 @@ else:
 #?#############
 # Styles are: "simple", "box"
 bar_style = qtile_settings.get("bar_style", "simple_2")
+darkmode = qtile_settings.get("darkmode", True)
 
 #?#############
 #?   COLORS  ##
@@ -242,6 +243,13 @@ app_tray_icon_color_2               = "#8fbcbb"
 app_tray_icon_color_3               = "#a3be8c"
 app_tray_icon_color_4               = "#d08770"
 app_tray_icon_color_5               = "#bf616a"
+
+if darkmode:
+    app_tray_color = "#31373f.85"
+    app_tray_seperator_color = "#454951.9"
+else:
+    app_tray_color = "#505a67.85"
+    app_tray_seperator_color = "#606671.9"
 
 #!NORD
 # bar_background_color               = "#353b4a.9"
