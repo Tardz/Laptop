@@ -46,6 +46,7 @@ sudo rsync -av --delete $HOME/.config/redshift "$git_path"
 sudo rsync -av --delete $HOME/.config/fish "$git_path"
 sudo rsync -av --delete $HOME/.imwheelrc "$git_path"
 sudo rsync -av --delete $HOME/.inputrc "$git_path"
+sudo rsync -av --delete /usr/share/icons/ "$git_path"/icons/
 # sudo rsync -av --delete /usr/share/backgrounds/ "$git_path"
 
 cd $HOME/laptopgit/Laptop/

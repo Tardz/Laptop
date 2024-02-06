@@ -16,12 +16,14 @@ groups = [
             ]),
         Group('n', label = "System", matches=[ #Files
             Match(wm_class = ["pcmanfm"]),
-            Match(wm_class = ["thunderbird"]),
             Match(wm_class = ["lxappearance"]),
             Match(wm_class = ["tlpui"]),
             ]),
         Group('d', label = "Social", matches=[ #Social
             Match(wm_class = ["discord"]),
+            ]),
+        Group('m', label = "Notepad", matches=[ #Writing
+            Match(wm_class = ["thunderbird"]),
             ]),
         Group('9', label = ""), #Scratchpad
 

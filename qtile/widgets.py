@@ -113,7 +113,7 @@ def active_window_decor(color=right_decor_background, round=True, padding_x=0, p
         )
     ]
 
-def task_list_decor(color="#424b56.85", radius=12 if laptop else 5, group=False, padding_x=0, padding_y=0):
+def task_list_decor(color="#31373f.85", radius=12 if laptop else 5, group=False, padding_x=0, padding_y=0):
     return RectDecoration(
         line_width            = bottom_widget_width,
         line_colour           = bar_border_color,
@@ -708,13 +708,11 @@ class NotificationIcon(widget.TextBox):
 
     def mouse_enter(self, *args, **kwargs):
         self.bar.window.window.set_cursor("hand2")
-        # if not notification_shown:
-        #     Qtile.cmd_spawn("/home/jonalm/scripts/other/get_notifications.py")
+        self.bar.draw()
 
     def mouse_leave(self, *args, **kwargs):
         self.bar.window.window.set_cursor("left_ptr")
-        # if not notification_shown:
-        #     Qtile.cmd_spawn("/home/jonalm/scripts/other/get_notifications.py")
+        self.bar.draw()
 
 class BacklightIcon(widget.TextBox):
     def __init__(self):
@@ -776,7 +774,8 @@ class ClockWidget(widget.Clock):
         
 class AppTrayIcon(widget.Image):
     def __init__(self, icon_name="", group="", app=""):
-        icon_path = IconTheme.getIconPath(icon_name, 48, "WhiteSur")
+        global icon_theme_name
+        icon_path = IconTheme.getIconPath(icon_name, 48, icon_theme_name)
         widget.Image.__init__(
             self,
             filename        = icon_path,
@@ -830,7 +829,7 @@ class AppTraySeperator(widget.TextBox):
             text        = "|",
             font        = icon_font,
             fontsize    = icon_size + 15,
-            foreground  = "#2b3139",
+            foreground  = bar_border_color,
             background  = transparent,
             padding     = 2,
             decorations = [task_list_decor(group=True)],

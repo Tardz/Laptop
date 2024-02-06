@@ -20,7 +20,7 @@ mod            = "mod4"
 myBrowser      = "brave"
 myTerm         = "alacritty"
 alttab_spawned = False
-home           = os.path.expanduser("~")
+HOME           = os.path.expanduser("~")
 active_window_name = ""
 
 check_dict = {
@@ -29,6 +29,7 @@ check_dict = {
     "d": ["discord", None, 0],
     "v": [None, None, 1],
     "n": ["pcmanfm", None, 0],
+    "m": ["thunderbird", None, 0],
     9  : []
 }
 
@@ -278,7 +279,7 @@ for num in qtile_settings.get("bar_width_top", [0, 0, 0, 0]):
 bar_width_top                       = bar_width
 bar_margin_top                      = qtile_settings.get("bar_margin_top", [0, 0, 0, 0])
 bar_width_bottom                    = qtile_settings.get("bar_width_bottom", [0, 0, 0 ,0])
-bar_margin_bottom                   = qtile_settings.get("bar_margin_bottom", [10, 744, 12, 744])
+bar_margin_bottom                   = qtile_settings.get("bar_margin_bottom", [10, 519, 12, 519])
 # bar_margin_bottom                   = qtile_settings.get("bar_margin_bottom", [5, 300, 16, 300])
 
 #!GAP
