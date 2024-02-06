@@ -46,7 +46,9 @@ sudo rsync -av --delete $HOME/.config/redshift "$git_path"
 sudo rsync -av --delete $HOME/.config/fish "$git_path"
 sudo rsync -av --delete $HOME/.imwheelrc "$git_path"
 sudo rsync -av --delete $HOME/.inputrc "$git_path"
-sudo rsync -av --delete /usr/share/icons/ "$git_path"/icons/
+sudo rsync -av --delete /usr/share/icons/WhiteSur-Dark "$git_path"/icons/
+sudo rsync -av --delete /usr/share/icons/WhiteSur-Light "$git_path"/icons/
+sudo rsync -av --delete /usr/share/icons/WhiteSur-Color "$git_path"/icons/
 # sudo rsync -av --delete /usr/share/backgrounds/ "$git_path"
 
 cd $HOME/laptopgit/Laptop/
