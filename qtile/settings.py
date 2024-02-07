@@ -289,6 +289,8 @@ bar_margin_top                      = qtile_settings.get("bar_margin_top", [0, 0
 bar_width_bottom                    = qtile_settings.get("bar_width_bottom", [0, 0, 0 ,0])
 if laptop:
     bar_margin_bottom                   = qtile_settings.get("bar_margin_bottom", [10, 519, 12, 519])
+    bar_1_margin_bottom                 = qtile_settings.get("bar_1_margin_bottom", [10, 477, 12, 477])
+    bar_2_margin_bottom                 = qtile_settings.get("bar_2_margin_bottom", [10, 638, 12, 638])
 else:
     bar_margin_bottom                   = qtile_settings.get("bar_margin_bottom", [10, 700, 12, 700])
     bar_1_margin_bottom                 = qtile_settings.get("bar_1_margin_bottom", [10, 477, 12, 477])

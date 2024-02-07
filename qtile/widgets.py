@@ -760,23 +760,39 @@ class BacklightWidget(widget.Backlight):
     def mouse_leave(self, *args, **kwargs):
         self.bar.window.window.set_cursor("left_ptr")
 
+class ClockIcon(widget.TextBox):
+    def __init__(self):
+        widget.TextBox.__init__(
+            self,
+            text       = "",
+            font       = icon_font,
+            background = bar_background_color,
+            foreground = icon_background_7,
+            fontsize   = icon_size + 4,
+            padding    = widget_default_padding - 4,
+        )
+
 class ClockWidget(widget.Clock):
     def __init__(self, decor_color=right_decor_background):
         widget.Clock.__init__(
             self,
-            format      = "%A %d %B %H:%M",
+            format      = "%H:%M",
             font        = bold_font,
             padding     = widget_default_padding + 5,
             foreground  = text_color,
-            fontsize    = widget_default_font_size,
+            fontsize    = widget_default_font_size + 2,
             decorations = right_decor(decor_color),
-            mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("python3 " + os.path.expanduser("~/scripts/qtile/settings_menu/app/settings_menu.py"))},
         )
 
+        self.normal_format = self.format
+        self.hover_format = "%A %d %B %H:%M"
+
     def mouse_enter(self, *args, **kwargs):
+        self.format = self.hover_format
         self.bar.window.window.set_cursor("hand2")
 
     def mouse_leave(self, *args, **kwargs):
+        self.format = self.normal_format
         self.bar.window.window.set_cursor("left_ptr")
         
 class AppTrayIcon(widget.Image):

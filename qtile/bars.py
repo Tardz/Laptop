@@ -7,7 +7,7 @@ from widgets import (
     BacklightIcon, BacklightWidget, ClockWidget, AppTrayIcon, 
     ActiveWindowOptionWidget, ActiveWindowIcon, ActiveWindowWidget, 
     NothingWidget, GroupBoxWidget, WindowCountWidget, seperator, 
-    task_list_settings, LaunchTray, AppTraySeperator
+    task_list_settings, LaunchTray, AppTraySeperator, ClockIcon
 )
 from qtile_extras import widget
 from libqtile.bar import Bar
@@ -62,6 +62,7 @@ simple_style_2_single_top_bar = Bar([
     seperator(),
 
     widget.Spacer(bar.STRETCH),
+    ClockIcon(),
     ClockWidget(decor_color=transparent),
     widget.Spacer(bar.STRETCH),
 
