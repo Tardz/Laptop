@@ -57,13 +57,13 @@ simple_style_1_single_top_bar = Bar([
 ], top_bar_size, margin = bar_margin_top, background = bar_background_color, border_width = bar_width_top, border_color = bar_border_color, opacity=1)
 
 simple_style_2_single_top_bar = Bar([
+    seperator(-6),
+    ClockWidget(decor_color=transparent),
     seperator(-12),
     GroupBoxWidget(),
     seperator(),
 
-    widget.Spacer(bar.STRETCH),
-    ClockIcon(),
-    ClockWidget(decor_color=transparent),
+    # ClockIcon(),
     widget.Spacer(bar.STRETCH),
 
     # BLUETOOTH #

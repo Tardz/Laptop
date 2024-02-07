@@ -781,7 +781,7 @@ class ClockWidget(widget.Clock):
             padding     = widget_default_padding + 5,
             foreground  = text_color,
             fontsize    = widget_default_font_size + 2,
-            decorations = right_decor(decor_color),
+            decorations = right_decor(round=True, padding_y=6),
         )
 
         self.normal_format = self.format
@@ -1036,8 +1036,8 @@ group_box_settings = dict(
     # inactive                    = bar_background_color,
     block_highlight_text_color  = text_color,
     highlight_color             = "#000000",
-    this_current_screen_border  = "#4b5662",
-    this_screen_border          = bar_border_color,
+    this_current_screen_border  = right_decor_background,
+    this_screen_border          = right_decor_background,
     other_current_screen_border = group_box_other_border_color,
     other_screen_border         = group_box_other_border_color,
     foreground                  = "#4b5662",
