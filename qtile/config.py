@@ -15,30 +15,22 @@ from keybindings import keys, mouse
 from groups import groups
 from widgets import extension_defaults
 
-if bar_style == "box":
+
+if bar_style == "simple_1":
     from bars import (
-        box_style_single_top_bar as single_top_bar, 
-        box_style_single_bottom_bar as single_bottom_bar,
-        box_style_dual_top_bar_1 as dual_top_bar_1,
-        box_style_dual_top_bar_2 as dual_top_bar_2,
-        box_style_dual_bottom_bar_1 as dual_bottom_bar_1,
-        box_style_dual_bottom_bar_2 as dual_bottom_bar_2
-    )
-elif bar_style == "simple_1":
-    from bars import (
-        simple_style_single_top_bar_1 as single_top_bar, 
+        simple_style_1_single_top_bar as single_top_bar, 
         simple_style_single_bottom_bar as single_bottom_bar,
-        simple_style_dual_top_bar_1 as dual_top_bar_1,
-        simple_style_dual_top_bar_2 as dual_top_bar_2,
+        simple_style_2_dual_top_bar_1 as dual_top_bar_1,
+        simple_style_2_dual_top_bar_2 as dual_top_bar_2,
         simple_style_dual_bottom_bar_1 as dual_bottom_bar_1,
         simple_style_dual_bottom_bar_2 as dual_bottom_bar_2
     )
 else:
     from bars import (
-        simple_style_single_top_bar_2 as single_top_bar, 
+        simple_style_2_single_top_bar as single_top_bar, 
         simple_style_single_bottom_bar as single_bottom_bar,
-        simple_style_dual_top_bar_1 as dual_top_bar_1,
-        simple_style_dual_top_bar_2 as dual_top_bar_2,
+        simple_style_2_dual_top_bar_1 as dual_top_bar_1,
+        simple_style_2_dual_top_bar_2 as dual_top_bar_2,
         simple_style_dual_bottom_bar_1 as dual_bottom_bar_1,
         simple_style_dual_bottom_bar_2 as dual_bottom_bar_2
     )
@@ -73,7 +65,6 @@ def configure_screens(startup=False):
         data = params._data
         if data["connection"] == 0:
             count += 1
-            # log.warning(f"Connected is Monitor {data['name']}, screen count set to {count}")
 
     amt_screens = count
     if amt_screens == 2:

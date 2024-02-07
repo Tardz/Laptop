@@ -134,7 +134,8 @@ icon_theme_name = subprocess.check_output(
 current_icon_theme_path = "/usr/share/icons/" + icon_theme_name + "/scalable/"
 
 if laptop:
-    bar_scaling                     = 1
+    top_bar_scaling                 = 1
+    bottom_bar_scaling              = 1
     icon_size_scaling               = 1
     icon_padding_scaling            = 1
     widget_padding_scaling          = 1
@@ -145,7 +146,8 @@ if laptop:
     task_list_scaling               = 1
     gap_scaling                     = 0
 else:
-    bar_scaling                     = 0.7
+    top_bar_scaling                 = 0.7
+    bottom_bar_scaling              = 1
     icon_size_scaling               = 0.6
     icon_padding_scaling            = 0.65
     widget_padding_scaling          = 0.9
@@ -162,7 +164,7 @@ else:
 #?#############
 #?   STYLE   ##
 #?#############
-# Styles are: "simple", "box"
+# Styles are: "simple_1", "simple_2"
 bar_style = qtile_settings.get("bar_style", "simple_2")
 darkmode = qtile_settings.get("darkmode", True)
 
@@ -185,7 +187,7 @@ group_box_background_color          = colors[3]
 group_box_highlight_text_color      = colors[3]
 group_box_urgentborder_color        = colors[3]
 
-if bar_style == "box" or bar_style == "simple_2":
+if bar_style == "simple_2":
     icon_background_1                   = "#b48ead"
     icon_background_2                   = "#9B98B7"
     icon_background_3                   = "#81A1C1"
@@ -275,10 +277,8 @@ bottom_bar_on                       = qtile_settings.get("bottom_bar_status", Tr
 #?   SIZE    ##
 #?#############
 #!BAR
-top_bar_size                        = int(qtile_settings.get("top_bar_size", 46)*bar_scaling)
-bottom_bar_size                     = int(qtile_settings.get("bottom_bar_size", 80)*bar_scaling)
-# bottom_bar_size                     = int(qtile_settings.get("bottom_bar_size", 62)*bar_scaling)
-# bottom_bar_size                     = int(qtile_settings.get("bottom_bar_size", 55)*bar_scaling)
+top_bar_size                        = int(qtile_settings.get("top_bar_size", 46)*top_bar_scaling)
+bottom_bar_size                     = int(qtile_settings.get("bottom_bar_size", 80)*bottom_bar_scaling)
 
 bar_width = [] 
 for num in qtile_settings.get("bar_width_top", [0, 0, 0, 0]):
@@ -287,8 +287,12 @@ for num in qtile_settings.get("bar_width_top", [0, 0, 0, 0]):
 bar_width_top                       = bar_width
 bar_margin_top                      = qtile_settings.get("bar_margin_top", [0, 0, 0, 0])
 bar_width_bottom                    = qtile_settings.get("bar_width_bottom", [0, 0, 0 ,0])
-bar_margin_bottom                   = qtile_settings.get("bar_margin_bottom", [10, 519, 12, 519])
-# bar_margin_bottom                   = qtile_settings.get("bar_margin_bottom", [5, 300, 16, 300])
+if laptop:
+    bar_margin_bottom                   = qtile_settings.get("bar_margin_bottom", [10, 519, 12, 519])
+else:
+    bar_margin_bottom                   = qtile_settings.get("bar_margin_bottom", [10, 700, 12, 700])
+    bar_1_margin_bottom                 = qtile_settings.get("bar_1_margin_bottom", [10, 477, 12, 477])
+    bar_2_margin_bottom                 = qtile_settings.get("bar_2_margin_bottom", [10, 638, 12, 638])
 
 #!GAP
 bar_gap_size                        = (qtile_settings.get("bar_gap_size", 0) - gap_scaling)
@@ -305,7 +309,6 @@ seperator_line_width                = int(qtile_settings.get("seperator_line_wid
 widget_default_font_size            = int(17*widget_size_scaling)
 widget_default_padding              = int(6*widget_padding_scaling)
 bottom_widget_width                 = int(0*general_width_scaling)
-# bottom_widget_width                 = int(3*general_width_scaling)
 
 #!GROUPBOX
 groupbox_margin                     = int(4*widget_padding_scaling)
@@ -320,7 +323,6 @@ if bar_style == "simple_1":
     icon_padding                        = int(20*icon_padding_scaling)
 else:
     icon_padding                        = int(8*icon_padding_scaling)
-# icon_size                           = int(14*icon_size_scaling)
 
 #!DECOR
 left_decor_padding                  = int(7*icon_padding_scaling)
@@ -372,8 +374,8 @@ layout_focus_color_floating         = bar_border_color
 #?   SIZE    ##
 #?#############
 #!ALL
-stack_layout_margin                 = int(6*bar_scaling)
-monadtall_layout_margin             = int(6*bar_scaling)
+stack_layout_margin                 = int(6*top_bar_scaling)
+monadtall_layout_margin             = int(6*top_bar_scaling)
 layout_border_width                 = int(qtile_settings.get("layout_border_with", 2)*general_width_scaling)
 # layout_border_width                 = int(qtile_settings.get("layout_border_with", 3)*general_width_scaling)
 layout_num_stacks                   = 1

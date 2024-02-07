@@ -28,9 +28,11 @@ def seperator(custom_padding=seperator_padding, background=None):
 
 # Default padding_y = 9, Default padding_x = None
 def left_decor(color, round=False, padding_x=None, padding_y=left_decor_padding):
-    radius = 6 if round else [4, 0, 0, 4]
-    if not laptop:
-        radius = 5
+    if laptop:
+        radius = 6 if round else [4, 0, 0, 4]
+    else:    
+        radius = 5 if round else [4, 0, 0, 4]
+        
     return [
         RectDecoration(
             colour    = color,
@@ -82,10 +84,10 @@ def left_decor_hover(color, round=True, padding_x=2, padding_y=left_decor_paddin
     ]
 
 def right_decor(color=right_decor_background, round=False, padding_x=0, padding_y=left_decor_padding):
-    if not laptop:
-        radius = 5 if round else [0, 4, 4, 0]
-    else:
+    if laptop:
         radius = 6 if round else [0, 4, 4, 0]
+    else:
+        radius = 5 if round else [0, 4, 4, 0]
     return [
         RectDecoration(
             colour    = color,
@@ -229,8 +231,8 @@ class BluetoothIcon(widget.TextBox, base.InLoopPollText):
                     return ""
                 elif device_name == "Jonathans Pods - Find My":
                     return ""
-                elif device_name == "controller available":
-                    return "Error"
+                # elif device_name == "controller available":
+                #     return "Error"
                 else:
                     return ""
             
@@ -489,8 +491,11 @@ class CpuTempIcon(widget.TextBox):
     def __init__(self):
         widget.TextBox.__init__(
             self,
+            text            = "",
+            font            = icon_font,
+            fontsize        = icon_size + 5,
+            foreground      = icon_foreground_4,
             padding         = widget_default_padding + 2,
-            text            = f"<span font='Font Awesome 6 free solid {icon_size + 1}' foreground='{icon_foreground_4}'size='medium'></span>",
             mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("python3 " + os.path.expanduser("~/scripts/qtile/bar_menus/cpu/cpu_stats_menu.py"))},
             decorations     = left_decor(icon_background_4),
         )
@@ -506,6 +511,8 @@ class CpuTempWidget(widget.ThermalSensor):
         widget.ThermalSensor.__init__(
             self,
             format           = "{temp:.0f}{unit}",
+            font             = bold_font,
+            padding         = widget_default_padding,
             threshold        = 80.0,
             foreground_alert = "#bf616a",
             markup           = True,
