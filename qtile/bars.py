@@ -307,7 +307,7 @@ simple_style_dual_bottom_bar_1 = Bar([
     AppTrayIcon("search", "", HOME + "/scripts/rofi/search/search_web.sh"),
     AppTraySeperator(),
     AppTrayIcon("discord", "d", "discord"),
-    AppTrayIcon("youtube", "c", "firefox youtube.com"),
+    AppTrayIcon("youtube", "c", "vivaldi youtube.com"),
     AppTrayIcon("vivaldi", "c", "vivaldi"),
     AppTrayIcon("file-manager", "n", "pcmanfm"),
     AppTraySeperator(),

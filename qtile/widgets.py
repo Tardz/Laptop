@@ -852,6 +852,8 @@ class AppTrayIcon(widget.Image):
             mouse_callbacks = {"Button1": lambda: self.click(group, app)},
         )
 
+        self.icon_name = icon_name
+
         self.margin_normal = self.margin_y
         self.margin_hover = self.margin_y - 2
         self.margin_clicked = self.margin_hover - 2
@@ -864,6 +866,7 @@ class AppTrayIcon(widget.Image):
             "spotify",
             "ticktick"
         ]
+        
     def click(self, group, app):
         if group:
             Qtile.groups_map[group].cmd_toscreen()
@@ -885,6 +888,17 @@ class AppTrayIcon(widget.Image):
     def mouse_leave(self, *args, **kwargs):
         self.bar.window.window.set_cursor("left_ptr")
         self.margin_y = self.margin_normal
+        self.bar.draw()
+
+    @expose_command()
+    def update_icons(self):
+        icon_theme_name = subprocess.check_output(
+            "cat " + 
+            os.path.expanduser("~/.config/gtk-3.0/settings.ini") + 
+            " | grep -e gtk-icon-theme-name | awk -F '=' '{print $2}' | tr -d '[:space:]'", shell=True
+            ).decode("utf-8")
+
+        self.filename = IconTheme.getIconPath(self.icon_name, 48, icon_theme_name)
         self.bar.draw()
 
 class AppTraySeperator(widget.TextBox):
