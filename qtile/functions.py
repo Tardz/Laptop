@@ -4,13 +4,36 @@ from settings import *
 import subprocess
 import re
 
+from Xlib import display
+from Xlib.ext import randr
+
+startup = True
+amt_screens = 0
+def configure_screens():
+    global amt_screens
+    d = display.Display()
+    s = d.screen()
+    res = randr.get_screen_resources(s.root)
+    count = 0
+    for output in res.outputs:
+        params = randr.get_output_info(s.root, output, res.config_timestamp)
+        data = params._data
+        if data["connection"] == 0:
+            count += 1
+
+    amt_screens = count
+
 @lazy.function
 def move_focus_and_mouse(qtile, group):
     """
     Moves focus to correct screen depending on what group is passed
     aswell as moving the mouse.
     """
-    global amt_screens
+    global startup, amt_screens
+    if startup:
+        startup = False
+        configure_screens()
+
     if amt_screens == 2:
         monitor = check_dict[group][2]
         qtile.cmd_to_screen(monitor)
