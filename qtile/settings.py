@@ -307,7 +307,7 @@ if laptop:
     bar_2_margin_bottom                 = qtile_settings.get("bar_2_margin_bottom", [10, 638, 12, 638])
 else:
     bar_margin_bottom                   = qtile_settings.get("bar_margin_bottom", [10, 700, 12, 700])
-    bar_1_margin_bottom                 = qtile_settings.get("bar_1_margin_bottom", [10, 546, 12, 547])
+    bar_1_margin_bottom                 = qtile_settings.get("bar_1_margin_bottom", [10, 577, 12, 577])
     bar_2_margin_bottom                 = qtile_settings.get("bar_2_margin_bottom", [10, 638, 12, 638])
 
 #!GAP

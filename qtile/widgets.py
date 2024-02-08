@@ -993,7 +993,6 @@ class ActiveWindowIcon(widget.TextBox):
         self.padding = widget_default_padding + 3
         self.bar.window.window.set_cursor("left_ptr")
         self.bar.draw()
-from libqtile import bar
 
 class ActiveWindowWidget(widget.WindowName):
     def __init__(self, foreground=text_color):
