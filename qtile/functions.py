@@ -9,7 +9,7 @@ from Xlib.ext import randr
 
 startup = True
 amt_screens = 0
-def configure_screens():
+def update_amt_screens():
     global amt_screens
     d = display.Display()
     s = d.screen()
@@ -32,7 +32,7 @@ def move_focus_and_mouse(qtile, group):
     global startup, amt_screens
     if startup:
         startup = False
-        configure_screens()
+        update_amt_screens()
 
     if amt_screens == 2:
         monitor = check_dict[group][2]
