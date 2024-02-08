@@ -21,6 +21,7 @@ simple_style_1_single_top_bar = Bar([
     GroupBoxWidget(),
     seperator(),
 
+    seperator(250),
     widget.Spacer(bar.STRETCH),
     # ActiveWindowIcon(),
     ActiveWindowWidget(),
