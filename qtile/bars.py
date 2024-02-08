@@ -39,6 +39,10 @@ simple_style_1_single_top_bar = Bar([
     # CPU LOAD #
     seperator(),
     CpuLoadIcon(),
+    
+    # CPU TEMP #
+    seperator(),
+    CpuTempIcon(),
 
     # URGENT NOTIFICATION #
     seperator(),

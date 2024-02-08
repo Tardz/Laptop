@@ -212,6 +212,9 @@ class BluetoothIcon(widget.TextBox, base.InLoopPollText):
         )
         self.signal_file_path = os.path.expanduser("~/scripts/qtile/bar_menus/bluetooth/signal_data.txt") 
 
+        self.normal_foreground = self.foreground
+        self.clicked_foreground = "#b48ead"
+
         self.active_background   = bar_border_color
         self.inactive_background = self.background
 
@@ -248,11 +251,13 @@ class BluetoothIcon(widget.TextBox, base.InLoopPollText):
                 file.write("hide")
             os.kill(bluetooth_menu_pid, 15)
 
+        self.foreground = self.clicked_foreground
         self.background = self.active_background
         self.bar.draw()
 
     @expose_command()
     def unclick(self):
+        self.foreground = self.normal_foreground
         self.background = self.inactive_background
         self.bar.draw()
 
@@ -340,6 +345,9 @@ class VolumeIcon(widget.TextBox):
             decorations     = left_decor(icon_background_2),
         )
 
+        self.normal_foreground = self.foreground
+        self.clicked_foreground = "#9B98B7"
+
         self.active_background = bar_border_color
         self.inactive_background = self.background
         self.signal_file_path = os.path.expanduser("~/scripts/qtile/bar_menus/volume/signal_data.txt") 
@@ -352,12 +360,14 @@ class VolumeIcon(widget.TextBox):
             with open(self.signal_file_path, "w") as file:
                 file.write("hide")
             os.kill(volume_menu_pid, 15)
-            
+        
+        self.foreground = self.clicked_foreground
         self.background = self.active_background
         self.bar.draw()
 
     @expose_command()
     def unclick(self):
+        self.foreground = self.normal_foreground
         self.background = self.inactive_background
         self.bar.draw()
 
@@ -413,6 +423,9 @@ class WifiIcon(widget.TextBox):
             padding         = icon_padding,
         )
 
+        self.normal_foreground = self.foreground
+        self.clicked_foreground = "#81A1C1"
+
         self.active_background = bar_border_color
         self.inactive_background = self.background
 
@@ -420,13 +433,16 @@ class WifiIcon(widget.TextBox):
         global wifi_menu_pid
         if not wifi_menu_pid:
             Qtile.cmd_spawn("python3 " + os.path.expanduser("~/scripts/qtile/bar_menus/wifi/wifi_menu.py"))
+        else:
+            os.kill(volume_menu_pid, 15)
             
-        os.kill(volume_menu_pid, 15)
+        self.foreground = self.clicked_foreground
         self.background = self.active_background
         self.bar.draw()
 
     @expose_command()
     def unclick(self):
+        self.foreground = self.normal_foreground
         self.background = self.inactive_background
         self.bar.draw()
 
