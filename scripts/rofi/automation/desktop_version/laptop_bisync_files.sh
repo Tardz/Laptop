@@ -23,6 +23,7 @@ sudo rsync -av --delete $HOME/.config/qtile/groups.py "$git_path"/qtile/groups.p
 sudo rsync -av --delete $HOME/.config/qtile/widgets.py "$git_path"/qtile/widgets.py
 sudo rsync -av --delete $HOME/.config/qtile/bars.py "$git_path"/qtile/bars.py
 sudo rsync -av --delete $HOME/.config/qtile/layouts.py "$git_path"/qtile/layouts.py
+sudo rsync -av --delete /usr/share/sddm/themes/sugar-candy/theme.conf "$git_path"/sddm/
 
 cd "$git_path"
 git add --all

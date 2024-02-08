@@ -22,14 +22,15 @@ myTerm         = "alacritty"
 alttab_spawned = False
 HOME           = os.path.expanduser("~")
 active_window_name = ""
+amt_screens    = 2
 
 check_dict = {
     #[0] - app, [1] - command, [2] - screen
-    "c": ["vivaldi", None, 0],
+    "c": ["vivaldi", None, 1],
     "d": ["discord", None, 0],
-    "v": [None, None, 1],
-    "n": ["pcmanfm", None, 0],
-    "m": ["thunderbird", None, 0],
+    "v": [None, None, 0],
+    "n": ["pcmanfm", None, 1],
+    "m": ["thunderbird", None,1],
     9  : []
 }
 

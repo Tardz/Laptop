@@ -16,11 +16,11 @@ if [ "$choice" ]; then
             if $DMEDITOR "$cfg"; then
                 # Editor was opened successfully
                 notify-send -u low -t 3000 '-h' "int:transient:1" "Open config" "<span foreground='#a3be8c' size='medium'>$choice</span>opened in vscode"
-                if [ $current_screen -eq 0 ]; then
+                if [ $current_screen -eq 1 ]; then
                     qtile cmd-obj -o cmd -f next_screen
                     qtile cmd-obj -o group v -f toscreen
                     xdotool mousemove 1500 800
-                elif [ $current_screen -eq 1 ]; then 
+                elif [ $current_screen -eq 0 ]; then 
                     qtile cmd-obj -o group v -f toscreen
                 fi
             else

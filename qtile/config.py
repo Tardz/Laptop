@@ -51,7 +51,6 @@ else:
     left_screen   = Screen(top=bar.Gap(bar_gap_size), bottom=bar.Gap(bar_gap_size), left=bar.Gap(bar_gap_size), right=bar.Gap(bar_gap_size))
     right_screen  = Screen(top=bar.Gap(bar_gap_size), bottom=bar.Gap(bar_gap_size), left=bar.Gap(bar_gap_size), right=bar.Gap(bar_gap_size))
 
-amt_screens = 2
 from Xlib import display
 from Xlib.ext import randr
 def configure_screens(startup=False):
