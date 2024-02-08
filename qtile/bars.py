@@ -129,7 +129,6 @@ simple_style_single_bottom_bar = Bar([
     AppTrayIcon("discord", "d", "discord"),
     AppTrayIcon("youtube", "c", "vivaldi youtube.com"),
     AppTrayIcon("vivaldi", "c", "vivaldi"),
-    AppTrayIcon("thunderbird", "m", "thunderbird"),
     AppTrayIcon("file-manager", "n", "pcmanfm"),
     AppTraySeperator(),
     AppTrayIcon("system-run", "", "python3 " + os.path.expanduser("~/scripts/qtile/settings_menu/app/settings_menu.py")),
@@ -305,7 +304,6 @@ simple_style_dual_bottom_bar_1 = Bar([
     AppTrayIcon("discord", "d", "discord"),
     AppTrayIcon("youtube", "c", "firefox youtube.com"),
     AppTrayIcon("vivaldi", "c", "vivaldi"),
-    AppTrayIcon("thunderbird", "m", "thunderbird"),
     AppTrayIcon("file-manager", "n", "pcmanfm"),
     AppTraySeperator(),
     AppTrayIcon("system-run", "", "python3 " + os.path.expanduser("~/scripts/qtile/settings_menu/app/settings_menu.py")),
@@ -317,7 +315,6 @@ simple_style_dual_bottom_bar_1 = Bar([
 
 simple_style_dual_bottom_bar_2 = Bar([
     # APPTRAY #
-    # AppTrayIcon("thunderbird", "m", "thunderbird"),
     # AppTrayIcon("file-manager", "n", "pcmanfm"),
     AppTrayIcon("system-run", "", "python3 " + os.path.expanduser("~/scripts/qtile/settings_menu/app/settings_menu.py")),
     AppTrayIcon("spotify", "", "spotify"),
