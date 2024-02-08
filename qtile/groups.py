@@ -25,6 +25,9 @@ groups = [
         Group('m', label = "Notepad", matches=[ #Writing
             Match(wm_class = ["thunderbird"]),
             ]),
+        Group('g', label = "Games", matches=[ #Games
+            Match(wm_class = ["Steam"]),
+            ]),
         Group('9', label = ""), #Scratchpad
 
         # Group('c', label = "", matches=[ #Browser

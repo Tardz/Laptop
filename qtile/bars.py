@@ -194,6 +194,10 @@ simple_style_2_dual_top_bar_1 = Bar([
     seperator() if laptop else NothingWidget(),
     BatteryIcon() if laptop else NothingWidget(),
     BatteryWidget() if laptop else NothingWidget(),
+
+    # MENU #
+    seperator(),
+    MenuIcon(),
     seperator(-4),
 ], top_bar_size, margin = bar_margin_top, background = bar_background_color, border_width = bar_width_top, border_color = bar_border_color, opacity=1)
 
@@ -207,7 +211,7 @@ simple_style_2_dual_top_bar_2 = Bar([
     seperator(),
     widget.Spacer(bar.STRETCH),
     GroupBoxWidget(
-        visible_groups = ["v", "d"]
+        visible_groups = ["v", "d", "g"]
     ),
     seperator(-9),
 
