@@ -143,6 +143,73 @@ simple_style_single_bottom_bar = Bar([
 ], bottom_bar_size, margin = bar_margin_bottom, background = bar_background_color, border_width = bar_width_bottom, border_color = bar_border_color, opacity=1)
 
 ### Dual monitor ###
+simple_style_1_dual_top_bar_1 = Bar([
+    # GROUPBOX #
+    seperator(-9),
+    GroupBoxWidget(
+        visible_groups = ["c", "m", "n"]
+    ),
+    seperator(),
+    widget.Spacer(bar.STRETCH),
+
+    # BLUETOOTH #
+    seperator(),
+    BluetoothIcon(),
+
+    # VOLUME #
+    seperator(),
+    VolumeIcon(),
+
+    #  WIFI #
+    seperator(),
+    WifiIcon(),
+
+    # TICKTICK #
+    # seperator(),
+    # TickTickMenu(),
+
+    # CPU LOAD #
+    seperator(),
+    CpuLoadIcon(),
+
+    # CPU TEMP #
+    seperator(),
+    CpuTempIcon(),
+
+    # URGENT NOTIFICATION #
+    seperator(),
+    NotificationIcon(),
+
+    # BACKLIGHT #
+    seperator() if laptop else NothingWidget(), 
+    BacklightIcon() if laptop else NothingWidget(),
+
+    # BATTERY #
+    seperator() if laptop else NothingWidget(),
+    BatteryIcon() if laptop else NothingWidget(),
+
+    # MENU #
+    seperator(),
+    MenuIcon(),
+    seperator(-4),
+], top_bar_size, margin = bar_margin_top, background = bar_background_color, border_width = bar_width_top, border_color = bar_border_color, opacity=1)
+
+simple_style_1_dual_top_bar_2 = Bar([
+    # TIME #
+    seperator(-4),
+    ClockWidget(decor_color=transparent),
+    widget.Spacer(bar.STRETCH),
+
+    # GROUPBOX #
+    seperator(),
+    widget.Spacer(bar.STRETCH),
+    GroupBoxWidget(
+        visible_groups = ["v", "d", "g"]
+    ),
+    seperator(-9),
+
+], top_bar_size, margin = bar_margin_top, background = bar_background_color, border_width = bar_width_top, border_color = bar_border_color, opacity=1)
+
 simple_style_2_dual_top_bar_1 = Bar([
     # GROUPBOX #
     seperator(-9),

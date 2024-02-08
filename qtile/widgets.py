@@ -491,11 +491,11 @@ class CpuTempIcon(widget.TextBox):
     def __init__(self):
         widget.TextBox.__init__(
             self,
-            text            = "",
+            text            = "",
             font            = icon_font,
             fontsize        = icon_size + 7,
             foreground      = icon_foreground_4,
-            padding         = widget_default_padding + 2,
+            padding         = icon_padding,
             mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("python3 " + os.path.expanduser("~/scripts/qtile/bar_menus/cpu/cpu_stats_menu.py"))},
             decorations     = left_decor(icon_background_4),
         )

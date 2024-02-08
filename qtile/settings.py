@@ -165,7 +165,7 @@ else:
 #?   STYLE   ##
 #?#############
 # Styles are: "simple_1", "simple_2"
-bar_style = qtile_settings.get("bar_style", "simple_2")
+bar_style = qtile_settings.get("bar_style", "simple_1")
 darkmode = qtile_settings.get("darkmode", True)
 
 #?#############
@@ -311,7 +311,7 @@ layouticon_padding                  = int(-2*widget_padding_scaling)
 layouticon_scale                    = 0.48*widget_padding_scaling
 
 #!ICONS
-icon_size                           = int(15*icon_size_scaling)
+icon_size                           = int(18*icon_size_scaling)
 if bar_style == "simple_1":
     icon_padding                        = int(20*icon_padding_scaling)
 else:

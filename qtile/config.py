@@ -20,8 +20,8 @@ if bar_style == "simple_1":
     from bars import (
         simple_style_1_single_top_bar as single_top_bar, 
         simple_style_single_bottom_bar as single_bottom_bar,
-        simple_style_2_dual_top_bar_1 as dual_top_bar_1,
-        simple_style_2_dual_top_bar_2 as dual_top_bar_2,
+        simple_style_1_dual_top_bar_1 as dual_top_bar_1,
+        simple_style_1_dual_top_bar_2 as dual_top_bar_2,
         simple_style_dual_bottom_bar_1 as dual_bottom_bar_1,
         simple_style_dual_bottom_bar_2 as dual_bottom_bar_2
     )
