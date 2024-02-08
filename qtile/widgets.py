@@ -806,7 +806,7 @@ class ClockWidget(widget.Clock):
             font        = bold_font,
             padding     = widget_default_padding + 5,
             foreground  = text_color,
-            fontsize    = widget_default_font_size + 2,
+            fontsize    = widget_default_font_size + 1,
             decorations = right_decor(round=True),
         )
 
@@ -957,11 +957,12 @@ class ActiveWindowIcon(widget.TextBox):
     def __init__(self, foreground=text_color):
         widget.TextBox.__init__(
             self,
-            text            = "",
+            text            = "",
             font            = icon_font,
-            fontsize        = icon_size + 5,
-            padding         = widget_default_padding + 3,
+            fontsize        = icon_size + 6,
+            padding         = widget_default_padding,
             background      = bar_background_color,
+            foreground      = text_color,
             mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("python3 " + os.path.expanduser("~/scripts/qtile/settings_menu/app/settings_menu.py"))},
         )
 
@@ -976,19 +977,21 @@ class ActiveWindowIcon(widget.TextBox):
         self.padding = widget_default_padding + 3
         self.bar.window.window.set_cursor("left_ptr")
         self.bar.draw()
+from libqtile import bar
 
 class ActiveWindowWidget(widget.WindowName):
     def __init__(self, foreground=text_color):
         widget.WindowName.__init__(
             self,
             background         = bar_background_color,
-            font               = bold_font,
+            font               = normal_font,
             fontsize           = widget_default_font_size + 1,
             format             = "{name}",
             foreground         = foreground,
             empty_group_string = "Desktop",
-            padding            = widget_default_padding + 5,
+            padding            = widget_default_padding,
             parse_text         = self.modify_text,
+            max_chars          = 200,
         )
 
     def modify_text(self, text):
@@ -1045,20 +1048,19 @@ task_list_settings = dict(
 
 group_box_settings = dict(
     #margin                      = groupbox_margin,
-    padding_x                   = 20,
+    padding_x                   = 10,
     padding_y                   = groupbox_padding_y,
-    margin_x                    = 4,
     borderwidth                 = True,
     rounded                     = True,
     disable_drag                = False,
     hide_unused                 = False,
-    font                        = bold_font,
-    fontsize                    = widget_default_font_size,
+    font                        = icon_font,
+    fontsize                    = widget_default_font_size + 3,
     highlight_method            = "block",
-    active                      = text_color,
+    active                      = "#4b5662",
     # active                      = "#4b5662",
-    inactive                    = "#4b5662",
-    # inactive                    = bar_background_color,
+    # inactive                    = "#4b5662",
+    inactive                    = bar_background_color,
     block_highlight_text_color  = text_color,
     highlight_color             = "#000000",
     this_current_screen_border  = right_decor_background,

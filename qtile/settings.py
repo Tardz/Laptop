@@ -174,14 +174,14 @@ darkmode = qtile_settings.get("darkmode", True)
 #!ALL
 transparent                         = "#000000.0"
 icon_background                     = "#1e2227"
-text_color                          = colors[1]
+text_color                          = "#b5b7c3"
 widget_default_foreground_color     = colors[9]
 
 group_box_active_color              = colors[60]
 group_box_inactive_color            = colors[10]
 group_box_block_highlight_color     = colors[3]
 group_box_highlight_color           = colors[3]
-group_box_other_border_color        = colors[26]
+group_box_other_border_color        = transparent
 group_box_foreground_color          = colors[2]
 group_box_background_color          = colors[3]
 group_box_highlight_text_color      = colors[3]
@@ -213,6 +213,11 @@ if bar_style == "simple_2":
     icon_foreground_10                  = "#1e2227"
     icon_foreground_11                  = "#1e2227"
     icon_foreground_12                  = "#1e2227"
+
+    if darkmode:
+        right_decor_background        = "#4e576d.8"
+    else:
+        right_decor_background        = "#1e2227.5"
 else:
     icon_background_1                   = transparent
     icon_background_2                   = transparent
@@ -227,18 +232,35 @@ else:
     icon_background_11                  = transparent
     icon_background_12                  = transparent
 
-    icon_foreground_1                   = "#b48ead"
-    icon_foreground_2                   = "#9B98B7"
-    icon_foreground_3                   = "#81A1C1"
-    icon_foreground_4                   = "#8fbcbb"
-    icon_foreground_5                   = "#8fbcbb"
-    icon_foreground_6                   = "#a3be8c"
-    icon_foreground_7                   = "#a3be8c"
-    icon_foreground_8                   = "#d08770"
-    icon_foreground_9                   = "#bf616a"
-    icon_foreground_10                  = "#b48ead"
-    icon_foreground_11                  = "#9B98B7"
-    icon_foreground_12                  = "#81A1C1"
+    icon_foreground_color               = "#b5b7c3"
+
+    icon_foreground_1                   = icon_foreground_color
+    icon_foreground_2                   = icon_foreground_color
+    icon_foreground_3                   = icon_foreground_color
+    icon_foreground_4                   = icon_foreground_color
+    icon_foreground_5                   = icon_foreground_color
+    icon_foreground_6                   = icon_foreground_color
+    icon_foreground_7                   = icon_foreground_color
+    icon_foreground_8                   = icon_foreground_color
+    icon_foreground_9                   = icon_foreground_color
+    icon_foreground_10                  = icon_foreground_color
+    icon_foreground_11                  = icon_foreground_color
+    icon_foreground_12                  = icon_foreground_color
+
+    # icon_foreground_1                   = "#b48ead"
+    # icon_foreground_2                   = "#9B98B7"
+    # icon_foreground_3                   = "#81A1C1"
+    # icon_foreground_4                   = "#8fbcbb"
+    # icon_foreground_5                   = "#8fbcbb"
+    # icon_foreground_6                   = "#a3be8c"
+    # icon_foreground_7                   = "#a3be8c"
+    # icon_foreground_8                   = "#d08770"
+    # icon_foreground_9                   = "#bf616a"
+    # icon_foreground_10                  = "#b48ead"
+    # icon_foreground_11                  = "#9B98B7"
+    # icon_foreground_12                  = "#81A1C1"
+
+    right_decor_background = transparent
 
 app_tray_icon_color_1               = "#81A1C1"
 app_tray_icon_color_2               = "#8fbcbb"
@@ -251,14 +273,12 @@ if darkmode:
     app_tray_seperator_color      = "#454951.9"
     bar_border_color              = "#454951"
     bar_background_color          = "#1e2227.85"
-    right_decor_background        = "#4e576d.8"
     # right_decor_background        = "#717c99.5"
 else:
     app_tray_color                = "#505a67.85"
     app_tray_seperator_color      = "#606671.9"
     bar_border_color              = "#505a67"
     bar_background_color          = "#505a67.85"
-    right_decor_background        = "#1e2227.5"
 
 #?#############
 #?  GENERAL  ##
@@ -311,7 +331,7 @@ layouticon_padding                  = int(-2*widget_padding_scaling)
 layouticon_scale                    = 0.48*widget_padding_scaling
 
 #!ICONS
-icon_size                           = int(18*icon_size_scaling)
+icon_size                           = int(15*icon_size_scaling)
 if bar_style == "simple_1":
     icon_padding                        = int(20*icon_padding_scaling)
 else:

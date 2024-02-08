@@ -8,25 +8,25 @@ groups = [
             Match(wm_class = ["chromium"]),
             Match(wm_class = ["brave-browser"]),
                 ]),
-        Group('v', label = "Code", matches=[ #Code
-            Match(wm_class = ["code"]),
-            Match(wm_class = ["jetbrains-clion"]),
-            Match(wm_class = ["jetbrains-studio"]),
-            Match(wm_class = ["jetbrains-idea"]),
-            ]),
         Group('n', label = "System", matches=[ #Files
             Match(wm_class = ["pcmanfm"]),
             Match(wm_class = ["lxappearance"]),
             Match(wm_class = ["tlpui"]),
-            ]),
-        Group('d', label = "Social", matches=[ #Social
-            Match(wm_class = ["discord"]),
             ]),
         Group('m', label = "Notepad", matches=[ #Writing
             Match(wm_class = ["thunderbird"]),
             ]),
         Group('g', label = "Games", matches=[ #Games
             Match(wm_class = ["Steam"]),
+            ]),
+        Group('d', label = "Social", matches=[ #Social
+            Match(wm_class = ["discord"]),
+            ]),
+        Group('v', label = "Code", matches=[ #Code
+            Match(wm_class = ["code"]),
+            Match(wm_class = ["jetbrains-clion"]),
+            Match(wm_class = ["jetbrains-studio"]),
+            Match(wm_class = ["jetbrains-idea"]),
             ]),
         Group('9', label = ""), #Scratchpad
 

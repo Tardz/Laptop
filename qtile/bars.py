@@ -145,11 +145,18 @@ simple_style_single_bottom_bar = Bar([
 ### Dual monitor ###
 simple_style_1_dual_top_bar_1 = Bar([
     # GROUPBOX #
-    seperator(-9),
+    seperator(-8),
     GroupBoxWidget(
         visible_groups = ["c", "m", "n"]
     ),
     seperator(),
+
+    seperator(480),
+    widget.Spacer(bar.STRETCH),
+    
+    # ActiveWindowIcon(),
+    ActiveWindowWidget(),
+
     widget.Spacer(bar.STRETCH),
 
     # BLUETOOTH #
@@ -188,21 +195,20 @@ simple_style_1_dual_top_bar_1 = Bar([
     seperator() if laptop else NothingWidget(),
     BatteryIcon() if laptop else NothingWidget(),
 
-    # MENU #
-    seperator(),
-    MenuIcon(),
-    seperator(-4),
+    # TIME #
+    ClockWidget(decor_color=transparent),
+    seperator(-8),
 ], top_bar_size, margin = bar_margin_top, background = bar_background_color, border_width = bar_width_top, border_color = bar_border_color, opacity=1)
 
 simple_style_1_dual_top_bar_2 = Bar([
-    # TIME #
-    seperator(-4),
-    ClockWidget(decor_color=transparent),
+    seperator(450),
+    widget.Spacer(bar.STRETCH),
+    ActiveWindowWidget(),
     widget.Spacer(bar.STRETCH),
 
     # GROUPBOX #
     seperator(),
-    widget.Spacer(bar.STRETCH),
+    # widget.Spacer(bar.STRETCH),
     GroupBoxWidget(
         visible_groups = ["v", "d", "g"]
     ),
