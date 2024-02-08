@@ -1,29 +1,37 @@
 swipe:
   3:
-    #left:
-    #  command: "xdotool key alt+Left" # History forward
-    #right:
-    #  command: "xdotool key alt+Right" # History back
-    #up:
-    #  command: "xdotool key super+Up" # Activity
-    #down:
-    #  command: "xdotool key super+Down" # Activity
-    right:
-      command: "xdotool key super+Up" # Activity
     left:
-      command: "xdotool key super+Down" # Activity
+      command: "xdotool key alt+Left" # History forward
+    right:
+      command: "xdotool key alt+Right" # History back
+    up:
+      command: "xdotool key alt+Up" # Activity
+    down:
+      command: "xdotool key alt+Down" # Activity
+    #right:
+    #  command: "xdotool key super+Up" # Activity
+    #left:
+    #  command: "xdotool key super+Down" # Activity
 
   4:
-    left:
-      command: "/home/jonalm/scripts/other/get_notifications.py"
-      # command: "xdotool key ctrl+alt+Left" # Switch to next workspace
-    right:
-      command: "/home/jonalm/scripts/other/get_notifications.py"
-      # command: "xdotool key ctrl+alt+Right" # Switch to previous workspace
     up:
-      command: "xdotool key ctrl+alt+Down" # Switch to next workspace
+      command: "xdotool key ctrl+alt+Up"
     down:
-      command: "python3 /home/jonalm/scripts/qtile/bar_menus/main_menu.py"
+      command: "xdotool key ctrl+alt+Down"
+    left:
+      command: "xdotool key ctrl+alt+Left"
+    right:
+      command: "xdotool key ctrl+alt+Right"
+    #left:
+    #  command: "/home/jonalm/scripts/other/get_notifications.py"
+      # command: "xdotool key ctrl+alt+Left" # Switch to next workspace
+      #right:
+      #command: "/home/jonalm/scripts/other/get_notifications.py"
+      # command: "xdotool key ctrl+alt+Right" # Switch to previous workspace
+      #up:
+      #command: "xdotool key ctrl+alt+Down" # Switch to next workspace
+      #down:
+      #command: "python3 /home/jonalm/scripts/qtile/bar_menus/main_menu.py"
 pinch:
   in:
     command: "xdotool keydown ctrl click 4 keyup ctrl" # Zoom in

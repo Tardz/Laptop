@@ -633,7 +633,11 @@ class WattageIcon(widget.TextBox):
     def __init__(self):
         widget.TextBox.__init__(
             self,
-            text            = f"<span font='Font Awesome 6 free solid {icon_size}' foreground='{icon_foreground_7}'size='medium'></span>",
+            text            = "",
+            font            = icon_font,
+            fontsize        = icon_size + 5,
+            padding         = icon_padding,
+            foreground      = icon_foreground_7,
             mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("python3 " + os.path.expanduser("~/scripts/qtile/bar_menus/power/power_management_menu.py"))},
             decorations     = left_decor(icon_background_7),
         )
@@ -649,6 +653,9 @@ class WattageWidget(widget.Battery):
         widget.Battery.__init__(
             self,
             format          = "{watt:.2f}",
+            font            = bold_font,
+            fontsize        = widget_default_font_size,
+            padding         = widget_default_padding,
             markup          = True,
             update_interval = battery_update_interval,
             mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("python3 " + os.path.expanduser("~/scripts/qtile/bar_menus/power/power_management_menu.py"))},
@@ -814,7 +821,7 @@ class AppTrayIcon(widget.Image):
         self.margin_hover = self.margin_y - 2
         self.margin_clicked = self.margin_hover - 2
         self.none_check_apps = [
-            "firefox youtube.com",
+            "vivaldi youtube.com",
             "alacritty",
             "python3 " + os.path.expanduser("~/scripts/qtile/settings_menu/app/settings_menu.py")
         ]

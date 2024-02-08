@@ -25,7 +25,7 @@ active_window_name = ""
 
 check_dict = {
     #[0] - app, [1] - command, [2] - screen
-    "c": ["firefox", None, 0],
+    "c": ["vivaldi", None, 0],
     "d": ["discord", None, 0],
     "v": [None, None, 1],
     "n": ["pcmanfm", None, 0],
@@ -247,25 +247,17 @@ app_tray_icon_color_4               = "#d08770"
 app_tray_icon_color_5               = "#bf616a"
 
 if darkmode:
-    app_tray_color = "#31373f.85"
-    app_tray_seperator_color = "#454951.9"
+    app_tray_color                = "#31373f.85"
+    app_tray_seperator_color      = "#454951.9"
+    bar_border_color              = "#454951"
+    bar_background_color          = "#1e2227.85"
+    right_decor_background        = "#717c99.5"
 else:
-    app_tray_color = "#505a67.85"
-    app_tray_seperator_color = "#606671.9"
-
-#!NORD
-# bar_background_color               = "#353b4a.9"
-# bar_border_color                   = "#717c99.9"
-# right_decor_background             = "#606b86.9"
-
-#!BLACK
-bar_background_color                = "#1e2227.85"
-
-bar_border_color                    = "#454951"
-right_decor_background              = "#717c99.5"
-
-#!OTHER
-# bar_border_color                   = "#4f586e.95"
+    app_tray_color                = "#505a67.85"
+    app_tray_seperator_color      = "#606671.9"
+    bar_border_color              = "#505a67"
+    bar_background_color          = "#505a67.85"
+    right_decor_background        = "#1e2227.5"
 
 #?#############
 #?  GENERAL  ##
@@ -287,6 +279,7 @@ for num in qtile_settings.get("bar_width_top", [0, 0, 0, 0]):
 bar_width_top                       = bar_width
 bar_margin_top                      = qtile_settings.get("bar_margin_top", [0, 0, 0, 0])
 bar_width_bottom                    = qtile_settings.get("bar_width_bottom", [0, 0, 0 ,0])
+
 if laptop:
     bar_margin_bottom                   = qtile_settings.get("bar_margin_bottom", [10, 519, 12, 519])
     bar_1_margin_bottom                 = qtile_settings.get("bar_1_margin_bottom", [10, 477, 12, 477])
@@ -379,12 +372,10 @@ layout_focus_color_floating         = bar_border_color
 stack_layout_margin                 = int(6*top_bar_scaling)
 monadtall_layout_margin             = int(6*top_bar_scaling)
 layout_border_width                 = int(qtile_settings.get("layout_border_with", 2)*general_width_scaling)
-# layout_border_width                 = int(qtile_settings.get("layout_border_with", 3)*general_width_scaling)
 layout_num_stacks                   = 1
 
 #!FLOATING
 floating_border_width               = int(qtile_settings.get("layout_border_with", 1)*general_width_scaling)
-# floating_border_width               = int(qtile_settings.get("layout_border_with", 3)*general_width_scaling)
 
 #*#############################
 #*           FONTS           ##

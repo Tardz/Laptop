@@ -1,6 +1,6 @@
 #!/bin/bash
 
-BROWSER="firefox"
+BROWSER="vivaldi"
 
 source /home/jonalm/googleDrive/search_options.sh
 

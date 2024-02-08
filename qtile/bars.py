@@ -89,6 +89,16 @@ simple_style_2_single_top_bar = Bar([
     CpuLoadIcon(),
     CpuLoadWidget(),
 
+    # WATTAGE #
+    seperator(),
+    WattageIcon(),
+    WattageWidget(),
+
+    # BATTERY #
+    seperator(),
+    BatteryIcon(),
+    BatteryWidget(),
+
     # URGENT NOTIFICATION #
     seperator(),
     NotificationIcon(),
@@ -97,11 +107,6 @@ simple_style_2_single_top_bar = Bar([
     seperator(),
     BacklightIcon(),
     BacklightWidget(),
-
-    # BATTERY #
-    seperator(),
-    BatteryIcon(),
-    BatteryWidget(),
 
     # TIME #
     seperator(-6),
@@ -116,8 +121,8 @@ simple_style_single_bottom_bar = Bar([
     AppTrayIcon("vscode", "v", "code"),
     AppTrayIcon("android-studio", "v", "android-studio"),
     AppTrayIcon("discord", "d", "discord"),
-    AppTrayIcon("youtube", "c", "firefox youtube.com"),
-    AppTrayIcon("firefox", "c", "firefox"),
+    AppTrayIcon("youtube", "c", "vivaldi youtube.com"),
+    AppTrayIcon("vivaldi", "c", "vivaldi"),
     AppTrayIcon("thunderbird", "m", "thunderbird"),
     AppTrayIcon("file-manager", "n", "pcmanfm"),
     AppTraySeperator(),
