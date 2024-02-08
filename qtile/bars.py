@@ -22,6 +22,8 @@ simple_style_1_single_top_bar = Bar([
     seperator(),
 
     widget.Spacer(bar.STRETCH),
+    # ActiveWindowIcon(),
+    ActiveWindowWidget(),
 
     # BLUETOOTH #
     BluetoothIcon(),
@@ -51,7 +53,7 @@ simple_style_1_single_top_bar = Bar([
     BatteryIconWidget(),
 
     # TIME #
-    seperator(10),
+    seperator(8),
     ClockWidget(decor_color=transparent),
     seperator(-12),
 
@@ -119,9 +121,9 @@ simple_style_2_single_top_bar = Bar([
 
 simple_style_single_bottom_bar = Bar([
     # APPTRAY #
-    AppTrayIcon("libreoffice-calc", "m", "libreoffice --calc"),
-    AppTrayIcon("libreoffice-writer", "m", "libreoffice --writer"),
-    AppTraySeperator(),
+    # AppTrayIcon("libreoffice-calc", "m", "libreoffice --calc"),
+    # AppTrayIcon("libreoffice-writer", "m", "libreoffice --writer"),
+    # AppTraySeperator(),
     AppTrayIcon("vscode", "v", "code"),
     AppTrayIcon("android-studio", "v", "android-studio"),
     AppTrayIcon("discord", "d", "discord"),

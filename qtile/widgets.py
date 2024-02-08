@@ -618,7 +618,7 @@ class BatteryIconWidget(widget.BatteryIcon):
             self,
             theme_path      = os.path.expanduser("~/.config/qtile/battery_icons/horizontal/"),
             battery         = 0,
-            scale           = 2.8,
+            scale           = 2.65,
             mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("python3 " + os.path.expanduser("~/scripts/qtile/bar_menus/power/power_management_menu.py"))},
             decorations     = right_decor() if decor else right_decor(transparent),
         )
@@ -984,7 +984,7 @@ class ActiveWindowWidget(widget.WindowName):
         widget.WindowName.__init__(
             self,
             background         = bar_background_color,
-            font               = normal_font,
+            font               = bold_font,
             fontsize           = widget_default_font_size + 1,
             format             = "{name}",
             foreground         = foreground,
