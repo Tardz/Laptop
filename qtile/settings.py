@@ -251,7 +251,8 @@ if darkmode:
     app_tray_seperator_color      = "#454951.9"
     bar_border_color              = "#454951"
     bar_background_color          = "#1e2227.85"
-    right_decor_background        = "#717c99.5"
+    right_decor_background        = "#4e576d.8"
+    # right_decor_background        = "#717c99.5"
 else:
     app_tray_color                = "#505a67.85"
     app_tray_seperator_color      = "#606671.9"
@@ -313,7 +314,7 @@ layouticon_padding                  = int(-2*widget_padding_scaling)
 layouticon_scale                    = 0.48*widget_padding_scaling
 
 #!ICONS
-icon_size                           = int(14*icon_size_scaling)
+icon_size                           = int(15*icon_size_scaling)
 if bar_style == "simple_1":
     icon_padding                        = int(20*icon_padding_scaling)
 else:

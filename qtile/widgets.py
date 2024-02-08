@@ -767,6 +767,25 @@ class BacklightWidget(widget.Backlight):
     def mouse_leave(self, *args, **kwargs):
         self.bar.window.window.set_cursor("left_ptr")
 
+class MenuIcon(widget.TextBox):
+    def __init__(self):
+        widget.TextBox.__init__(
+            self,
+            text            = "",
+            font            = icon_font,
+            fontsize        = icon_size + 8,
+            foreground      = text_color,
+            padding         = widget_default_padding + 2,
+            # mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("python3 " + os.path.expanduser("~/scripts/qtile/bar_menus/cpu/cpu_stats_menu.py"))},
+            decorations     = right_decor(round=True),
+        )
+        
+    def mouse_enter(self, *args, **kwargs):
+        self.bar.window.window.set_cursor("hand2")
+
+    def mouse_leave(self, *args, **kwargs):
+        self.bar.window.window.set_cursor("left_ptr")
+
 class ClockIcon(widget.TextBox):
     def __init__(self):
         widget.TextBox.__init__(
@@ -1034,8 +1053,7 @@ group_box_settings = dict(
     disable_drag                = False,
     hide_unused                 = False,
     font                        = bold_font,
-    # font                        = icon_font,
-    fontsize                    = icon_size + 3,
+    fontsize                    = widget_default_font_size,
     highlight_method            = "block",
     active                      = text_color,
     # active                      = "#4b5662",

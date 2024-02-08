@@ -106,7 +106,12 @@ def _(notify_event):
 #     #     # Move the mouse pointer to the focused window
 #     #     screen.warp_pointer(window_under_cursor.x + window_under_cursor.width // 2,
 #     #                         window_under_cursor.y + window_under_cursor.height // 2)
-
+    
+# @hook.subscribe.setgroup
+# def setgroup():
+#     for i in range(0, 5):
+#         Qtile.groups[i].label = ""
+#     Qtile.current_group.label = ""
 
 @hook.subscribe.suspend
 def lock_on_sleep():
