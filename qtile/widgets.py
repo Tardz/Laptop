@@ -115,7 +115,7 @@ def active_window_decor(color=right_decor_background, round=True, padding_x=0, p
         )
     ]
 
-def task_list_decor(color=app_tray_color, radius=12 if laptop else 5, group=False, padding_x=0, padding_y=0):
+def task_list_decor(color=app_tray_color, radius=12, group=False, padding_x=0, padding_y=0):
     return RectDecoration(
         line_width            = bottom_widget_width,
         line_colour           = bar_border_color,
@@ -493,7 +493,7 @@ class CpuTempIcon(widget.TextBox):
             self,
             text            = "",
             font            = icon_font,
-            fontsize        = icon_size + 5,
+            fontsize        = icon_size + 7,
             foreground      = icon_foreground_4,
             padding         = widget_default_padding + 2,
             mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("python3 " + os.path.expanduser("~/scripts/qtile/bar_menus/cpu/cpu_stats_menu.py"))},
@@ -512,7 +512,7 @@ class CpuTempWidget(widget.ThermalSensor):
             self,
             format           = "{temp:.0f}{unit}",
             font             = bold_font,
-            padding         = widget_default_padding,
+            padding          = widget_default_padding,
             threshold        = 80.0,
             foreground_alert = "#bf616a",
             markup           = True,
@@ -533,7 +533,7 @@ class CpuLoadIcon(widget.TextBox):
             self,
             text            = "",
             font            = icon_font,
-            fontsize        = icon_size + 5,
+            fontsize        = icon_size + 6,
             foreground      = icon_foreground_5,
             padding         = icon_padding,
             mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("python3 " + os.path.expanduser("~/scripts/qtile/bar_menus/cpu/cpu_stats_menu.py"))},
@@ -807,7 +807,7 @@ class ClockWidget(widget.Clock):
             padding     = widget_default_padding + 5,
             foreground  = text_color,
             fontsize    = widget_default_font_size + 2,
-            decorations = right_decor(round=True, padding_y=6),
+            decorations = right_decor(round=True),
         )
 
         self.normal_format = self.format
@@ -1044,9 +1044,9 @@ task_list_settings = dict(
 )
 
 group_box_settings = dict(
-    # margin                      = groupbox_margin,
+    #margin                      = groupbox_margin,
     padding_x                   = 20,
-    padding_y                   = 6,
+    padding_y                   = groupbox_padding_y,
     margin_x                    = 4,
     borderwidth                 = True,
     rounded                     = True,
@@ -1070,12 +1070,11 @@ group_box_settings = dict(
 )
 
 class GroupBoxWidget(widget.GroupBox):
-    def __init__(self):
+    def __init__(self, visible_groups=None):
         widget.GroupBox.__init__(
             self,
             **group_box_settings, 
-            # background = transparent, 
-            # decorations = [task_list_decor()]
+            visible_groups = visible_groups
         )
 
 class WindowCountWidget(widget.WindowCount):

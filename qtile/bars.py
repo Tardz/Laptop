@@ -146,7 +146,9 @@ simple_style_single_bottom_bar = Bar([
 simple_style_2_dual_top_bar_1 = Bar([
     # GROUPBOX #
     seperator(-9),
-    GroupBoxWidget(),
+    GroupBoxWidget(
+        visible_groups = ["c", "m", "n"]
+    ),
     seperator(),
     widget.Spacer(bar.STRETCH),
 
@@ -197,14 +199,16 @@ simple_style_2_dual_top_bar_1 = Bar([
 
 simple_style_2_dual_top_bar_2 = Bar([
     # TIME #
-    seperator(-9),
+    seperator(-4),
     ClockWidget(decor_color=transparent),
     widget.Spacer(bar.STRETCH),
 
     # GROUPBOX #
     seperator(),
     widget.Spacer(bar.STRETCH),
-    GroupBoxWidget(),
+    GroupBoxWidget(
+        visible_groups = ["v", "d"]
+    ),
     seperator(-9),
 
 ], top_bar_size, margin = bar_margin_top, background = bar_background_color, border_width = bar_width_top, border_color = bar_border_color, opacity=1)
@@ -216,12 +220,12 @@ simple_style_dual_bottom_bar_1 = Bar([
     AppTrayIcon("automation", "", HOME + "/scripts/rofi/automation/laptop_version/main/automation.sh"),
     AppTrayIcon("search", "", HOME + "/scripts/rofi/search/search_web.sh"),
     AppTraySeperator(),
-    AppTrayIcon("libreoffice-calc", "m", "libreoffice --calc"),
-    AppTrayIcon("libreoffice-writer", "m", "libreoffice --writer"),
-    AppTraySeperator(),
+    # AppTrayIcon("libreoffice-calc", "m", "libreoffice --calc"),
+    # AppTrayIcon("libreoffice-writer", "m", "libreoffice --writer"),
+    # AppTraySeperator(),
     AppTrayIcon("discord", "d", "discord"),
     AppTrayIcon("youtube", "c", "firefox youtube.com"),
-    AppTrayIcon("firefox", "c", "firefox"),
+    AppTrayIcon("vivaldi", "c", "vivaldi"),
     AppTrayIcon("thunderbird", "m", "thunderbird"),
     AppTrayIcon("file-manager", "n", "pcmanfm"),
     AppTraySeperator(),

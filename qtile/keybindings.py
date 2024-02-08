@@ -61,7 +61,7 @@ keys = [
         Key([mod], "minus", lazy.spawn("python3 /home/jonalm/scripts/qtile/bar_menus/wifi/wifi_menu.py"), desc='wifi'),
 
         #--[URLS]--#
-        Key([mod], "y", move_focus_and_mouse("c"), lazy.group["c"].toscreen(), lazy.spawn("firefox youtube.com"), desc='Youtube'),
+        Key([mod], "y", move_focus_and_mouse("c"), lazy.group["c"].toscreen(), lazy.spawn("vivaldi youtube.com"), desc='Youtube'),
 
         #--[TERM]--#
         Key([mod], "h", move_focus_and_mouse("n"), lazy.group["n"].toscreen(), check(from_key_press=["htop", "3", "alacritty --title Htop -e"]), desc='Htop'),

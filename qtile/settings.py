@@ -148,9 +148,9 @@ if laptop:
 else:
     top_bar_scaling                 = 0.7
     bottom_bar_scaling              = 1
-    icon_size_scaling               = 0.6
+    icon_size_scaling               = 0.55
     icon_padding_scaling            = 0.65
-    widget_padding_scaling          = 0.9
+    widget_padding_scaling          = 0.7
     widget_size_scaling             = 0.74
     seperator_padding_scaling       = 0.9
     seperator_line_scaling          = 0.6
@@ -287,18 +287,14 @@ if laptop:
     bar_2_margin_bottom                 = qtile_settings.get("bar_2_margin_bottom", [10, 638, 12, 638])
 else:
     bar_margin_bottom                   = qtile_settings.get("bar_margin_bottom", [10, 700, 12, 700])
-    bar_1_margin_bottom                 = qtile_settings.get("bar_1_margin_bottom", [10, 477, 12, 477])
+    bar_1_margin_bottom                 = qtile_settings.get("bar_1_margin_bottom", [10, 546, 12, 547])
     bar_2_margin_bottom                 = qtile_settings.get("bar_2_margin_bottom", [10, 638, 12, 638])
 
 #!GAP
 bar_gap_size                        = (qtile_settings.get("bar_gap_size", 0) - gap_scaling)
 
 #!SEPERATOR
-if bar_style == "box" or bar_style == "simple_2":
-    seperator_padding               = int(qtile_settings.get("seperator_padding", 0)*seperator_padding_scaling)
-else:
-    seperator_padding               = int(qtile_settings.get("seperator_padding", 0)*seperator_padding_scaling)
-
+seperator_padding                   = int(qtile_settings.get("seperator_padding", 0)*seperator_padding_scaling)
 seperator_line_width                = int(qtile_settings.get("seperator_line_width", 15)*seperator_line_scaling)
 
 #!WIDGET DEFAULT
@@ -308,6 +304,7 @@ bottom_widget_width                 = int(0*general_width_scaling)
 
 #!GROUPBOX
 groupbox_margin                     = int(4*widget_padding_scaling)
+groupbox_padding_y                 = int(6*widget_padding_scaling)
 
 #!LAYOUT ICON
 layouticon_padding                  = int(-2*widget_padding_scaling)
