@@ -8,6 +8,7 @@ from xdg import IconTheme
 from settings import *
 import subprocess
 
+from libqtile.bar import Bar
 from qtile_extras.widget.mixins import TooltipMixin
 
 widget_defaults = dict(
@@ -87,9 +88,9 @@ def left_decor_hover(color, round=True, padding_x=2, padding_y=left_decor_paddin
 
 def right_decor(color=right_decor_background, round=False, padding_x=0, padding_y=left_decor_padding):
     if laptop:
-        radius = 6 if round else [0, 4, 4, 0]
-    else:
         radius = 5 if round else [0, 4, 4, 0]
+    else:
+        radius = 3 if round else [0, 4, 4, 0]
     return [
         RectDecoration(
             colour    = color,
@@ -117,7 +118,7 @@ def active_window_decor(color=right_decor_background, round=True, padding_x=0, p
         )
     ]
 
-def task_list_decor(color=app_tray_color, radius=12, group=False, padding_x=0, padding_y=0):
+def task_list_decor(color=app_tray_color, radius=10, group=False, padding_x=0, padding_y=0):
     return RectDecoration(
         line_width            = bottom_widget_width,
         line_colour           = bar_border_color,
@@ -365,6 +366,7 @@ class VolumeIcon(base.InLoopPollText, TooltipMixin):
             ("tooltip_padding", tooltip_padding, "int for all sides or list for [top/bottom, left/right]"),
         ]
         self.add_defaults(tooltip_defaults)
+        self.tooltip_text = "placeholder"
 
         self.normal_foreground = self.foreground
         self.clicked_foreground = "#9B98B7"
@@ -561,7 +563,7 @@ class CpuTempIcon(widget.TextBox, TooltipMixin):
             foreground      = icon_foreground_4,
             padding         = icon_padding,
             mouse_callbacks = {"Button1": lambda: self.click()},
-            decorations     = left_decor(icon_background_4),
+            # decorations     = left_decor(icon_background_4),
         )
         self.tooltip_obj = TooltipMixin.__init__(self)
         tooltip_defaults = [
@@ -610,7 +612,7 @@ class CpuLoadIcon(widget.TextBox, TooltipMixin):
             foreground      = icon_foreground_5,
             padding         = icon_padding,
             mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("python3 " + os.path.expanduser("~/scripts/qtile/bar_menus/cpu/cpu_stats_menu.py"))},
-            decorations     = left_decor(icon_background_5),
+            # decorations     = left_decor(icon_background_5),
         )
 
         self.tooltip_obj = TooltipMixin.__init__(self)
@@ -808,7 +810,7 @@ class NotificationIcon(widget.TextBox, TooltipMixin):
             foreground      = icon_foreground_8,
             padding         = icon_padding,
             mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("python3 " + os.path.expanduser("~/scripts/other/get_notifications.py"))},
-            decorations     = left_decor(color=icon_background_8, round=True),
+            # decorations     = left_decor(color=icon_background_8, round=True),
         )
 
         self.tooltip_obj = TooltipMixin.__init__(self)
@@ -916,7 +918,7 @@ class ClockWidget(widget.Clock):
             padding     = widget_default_padding + 5,
             foreground  = text_color,
             fontsize    = widget_default_font_size + 1,
-            decorations = right_decor(round=True),
+            # decorations = right_decor(round=True),
         )
 
         self.normal_format = self.format
@@ -1110,7 +1112,7 @@ class ActiveWindowIcon(widget.TextBox):
         self.bar.draw()
 
 class ActiveWindowWidget(widget.WindowName):
-    def __init__(self, foreground=text_color):
+    def __init__(self, width, foreground=text_color):
         widget.WindowName.__init__(
             self,
             background         = bar_background_color,
@@ -1118,8 +1120,9 @@ class ActiveWindowWidget(widget.WindowName):
             fontsize           = widget_default_font_size + 1,
             format             = "{name}",
             foreground         = foreground,
+            padding            = widget_default_padding + 2,
+            width              = width,
             empty_group_string = "Desktop",
-            padding            = widget_default_padding,
             parse_text         = self.modify_text,
             max_chars          = 200,
         )
@@ -1133,14 +1136,6 @@ class ActiveWindowWidget(widget.WindowName):
         app_name = parts[-1].title()
 
         return app_name
-
-    def mouse_enter(self, *args, **kwargs):
-        self.bar.window.window.set_cursor("hand2")
-        self.bar.draw()
-
-    def mouse_leave(self, *args, **kwargs):
-        self.bar.window.window.set_cursor("left_ptr")
-        self.bar.draw()
 
 class NothingWidget(widget.TextBox):
     def __init__(self):

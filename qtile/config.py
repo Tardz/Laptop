@@ -15,6 +15,7 @@ from keybindings import keys, mouse
 from groups import groups
 from widgets import extension_defaults
 
+from libqtile.command.base import expose_command
 
 if bar_style == "simple_1":
     from bars import (
@@ -81,6 +82,14 @@ def configure_screens(startup=False):
         Qtile.reload_config()
 
 configure_screens(startup=True)
+
+class ExposedCommands():
+    def __init__(self):
+        pass
+    
+    @expose_command()
+    def bring_window_to_front(self, window):
+        pass
 
 ### HOOKS ###
 @hook.subscribe.screen_change

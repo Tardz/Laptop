@@ -33,11 +33,11 @@ for option in "${options[@]}"; do
     fi
 done
 
-if [ $current_screen -eq 1 ]; then
+if [ $current_screen -eq 0 ]; then
     qtile cmd-obj -o cmd -f next_screen
     qtile cmd-obj -o group c -f toscreen
     xdotool mousemove 4300 900
-elif [ $current_screen -eq 0 ]; then 
+elif [ $current_screen -eq 1 ]; then 
     qtile cmd-obj -o group c -f toscreen
 fi
 

@@ -271,6 +271,7 @@ app_tray_icon_color_5               = "#bf616a"
 
 if darkmode:
     app_tray_color                = "#31373f.85"
+    # app_tray_seperator_color      = "#1e2227.6"
     app_tray_seperator_color      = "#454951.9"
     bar_border_color              = "#454951"
     bar_background_color          = "#1e2227.85"
@@ -302,7 +303,7 @@ bar_width_top                       = bar_width
 if laptop:
     bar_margin_top                      = qtile_settings.get("bar_margin_top", [0, -6, 0, -6])
 else:
-    bar_margin_top                      = qtile_settings.get("bar_margin_top", [0, 0, 0, 0])
+    bar_margin_top                      = qtile_settings.get("bar_margin_top", [0, -6, 0, -6])
 bar_width_bottom                    = qtile_settings.get("bar_width_bottom", [0, 0, 0 ,0])
 
 if laptop:
@@ -356,6 +357,8 @@ tooltip_delay                       = 0.5
 tooltip_padding                     = 8
 tooltip_fontsize                    = widget_default_font_size + 1
 
+
+active_window_margin                = 300
 #*###############################
 #*           FOCUS             ##
 #*###############################

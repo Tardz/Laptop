@@ -24,7 +24,7 @@ simple_style_1_single_top_bar = Bar([
     seperator(250),
     widget.Spacer(bar.STRETCH),
     # ActiveWindowIcon(),
-    ActiveWindowWidget(),
+    ActiveWindowWidget(width=bar.CALCULATED),
 
     # BLUETOOTH #
     BluetoothIcon(),
@@ -151,19 +151,18 @@ simple_style_single_bottom_bar = Bar([
 ### Dual monitor ###
 simple_style_1_dual_top_bar_1 = Bar([
     # GROUPBOX #
-    seperator(-8),
+    seperator(-4),
     GroupBoxWidget(
         visible_groups = ["c", "m", "n"]
     ),
-    seperator(),
+    # widget.Image( # From Darkkal44, github: https://github.com/Darkkal44/Cozytile/tree/main #
+    #     filename='~/.config/qtile/Assets/5.png',
+    #     padding = -1
+    # ),
 
-    seperator(410),
-    widget.Spacer(bar.STRETCH),
-    
-    # ActiveWindowIcon(),
-    ActiveWindowWidget(),
-
-    widget.Spacer(bar.STRETCH),
+    widget.Spacer(),
+    ActiveWindowWidget(width=bar.CALCULATED),
+    widget.Spacer(),
 
     # BLUETOOTH #
     seperator(),
@@ -203,22 +202,55 @@ simple_style_1_dual_top_bar_1 = Bar([
 
     # TIME #
     ClockWidget(decor_color=transparent),
-    seperator(-8),
+    seperator(-4),
 ], top_bar_size, margin = bar_margin_top, background = bar_background_color, border_width = bar_width_top, border_color = bar_border_color, opacity=1)
 
 simple_style_1_dual_top_bar_2 = Bar([
-    seperator(425),
-    widget.Spacer(bar.STRETCH),
-    ActiveWindowWidget(),
-    widget.Spacer(bar.STRETCH),
+    # TIME #
+    seperator(-4),
+    ClockWidget(decor_color=transparent),
+
+    # BATTERY #
+    seperator() if laptop else NothingWidget(),
+    BatteryIcon() if laptop else NothingWidget(),
+
+    # BACKLIGHT #
+    seperator() if laptop else NothingWidget(), 
+    BacklightIcon() if laptop else NothingWidget(),
+
+    # URGENT NOTIFICATION #
+    NotificationIcon(),
+    seperator(),
+    
+    # CPU TEMP #
+    CpuTempIcon(),
+    seperator(),
+    
+    # CPU LOAD #
+    CpuLoadIcon(),
+    seperator(),
+    
+    #  WIFI #
+    WifiIcon(),
+    seperator(),
+    
+    # VOLUME #
+    VolumeIcon(),
+    seperator(),
+
+    # BLUETOOTH #
+    BluetoothIcon(),
+    seperator(),
+
+    widget.Spacer(),
+    ActiveWindowWidget(width=bar.CALCULATED),
+    widget.Spacer(),
 
     # GROUPBOX #
-    seperator(),
-    # widget.Spacer(bar.STRETCH),
     GroupBoxWidget(
         visible_groups = ["v", "d", "g"]
     ),
-    seperator(-9),
+    seperator(-4),
 
 ], top_bar_size, margin = bar_margin_top, background = bar_background_color, border_width = bar_width_top, border_color = bar_border_color, opacity=1)
 
@@ -298,9 +330,6 @@ simple_style_2_dual_top_bar_2 = Bar([
 
 simple_style_dual_bottom_bar_1 = Bar([
     # APPTRAY #
-    # AppTrayIcon("libreoffice-calc", "m", "libreoffice --calc"),
-    # AppTrayIcon("libreoffice-writer", "m", "libreoffice --writer"),
-    # AppTraySeperator(),
     AppTrayIcon("codeblocks", "", HOME + "/.config/rofi/files/launchers/apps/launcher.sh"),
     AppTrayIcon("codium", "", HOME + "/scripts/rofi/config/config_files.sh"),
     AppTrayIcon("automation", "", HOME + "/scripts/rofi/automation/laptop_version/main/automation.sh"),
@@ -315,11 +344,10 @@ simple_style_dual_bottom_bar_1 = Bar([
     AppTrayIcon("alacritty", "", "alacritty"),
     AppTrayIcon("ticktick", "", "ticktick"),
 
-], bottom_bar_size, margin = bar_1_margin_bottom, background = bar_background_color, border_width = bar_width_bottom, border_color = bar_border_color, opacity=1)
+], bottom_bar_size, margin = bar_1_margin_bottom, background = transparent, border_width = bar_width_bottom, border_color = bar_border_color, opacity=1)
 
 simple_style_dual_bottom_bar_2 = Bar([
     # APPTRAY #
-    # AppTrayIcon("file-manager", "n", "pcmanfm"),
     AppTrayIcon("system-run", "", "python3 " + os.path.expanduser("~/scripts/qtile/settings_menu/app/settings_menu.py")),
     AppTrayIcon("spotify", "", "spotify"),
     AppTrayIcon("alacritty", "", "alacritty"),
@@ -333,4 +361,4 @@ simple_style_dual_bottom_bar_2 = Bar([
     AppTrayIcon("codium", "", HOME + "/scripts/rofi/config/config_files.sh"),
     AppTrayIcon("automation", "", HOME + "/scripts/rofi/automation/laptop_version/main/automation.sh"),
     AppTrayIcon("search", "", HOME + "/scripts/rofi/search/search_web.sh"),
-], bottom_bar_size, margin = bar_2_margin_bottom, background = bar_background_color, border_width = bar_width_bottom, border_color = bar_border_color, opacity=1)
+], bottom_bar_size, margin = bar_2_margin_bottom, background = transparent, border_width = bar_width_bottom, border_color = bar_border_color, opacity=1)
