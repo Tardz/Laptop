@@ -17,7 +17,7 @@ from settings import *
 
 ### Single monitor ###
 simple_style_1_single_top_bar = Bar([
-    seperator(-12),
+    seperator(-10),
     GroupBoxWidget(),
     seperator(),
 
@@ -60,7 +60,7 @@ simple_style_1_single_top_bar = Bar([
     # TIME #
     seperator(8),
     ClockWidget(decor_color=transparent),
-    seperator(-12),
+    seperator(-10),
 
 ], top_bar_size, margin = bar_margin_top, background = bar_background_color, border_width = bar_width_top, border_color = bar_border_color, opacity=1)
 

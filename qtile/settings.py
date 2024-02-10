@@ -216,9 +216,9 @@ if bar_style == "simple_2":
     icon_foreground_12                  = "#1e2227"
 
     if darkmode:
-        right_decor_background        = "#4e576d.8"
+        right_decor_background          = "#4e576d.8"
     else:
-        right_decor_background        = "#1e2227.5"
+        right_decor_background          = "#1e2227.5"
 else:
     icon_background_1                   = transparent
     icon_background_2                   = transparent
@@ -299,7 +299,10 @@ for num in qtile_settings.get("bar_width_top", [0, 0, 0, 0]):
     bar_width.append(int(num*general_width_scaling))
 
 bar_width_top                       = bar_width
-bar_margin_top                      = qtile_settings.get("bar_margin_top", [0, 0, 0, 0])
+if laptop:
+    bar_margin_top                      = qtile_settings.get("bar_margin_top", [0, -6, 0, -6])
+else:
+    bar_margin_top                      = qtile_settings.get("bar_margin_top", [0, 0, 0, 0])
 bar_width_bottom                    = qtile_settings.get("bar_width_bottom", [0, 0, 0 ,0])
 
 if laptop:
@@ -325,7 +328,7 @@ bottom_widget_width                 = int(0*general_width_scaling)
 
 #!GROUPBOX
 groupbox_margin                     = int(4*widget_padding_scaling)
-groupbox_padding_y                 = int(6*widget_padding_scaling)
+groupbox_padding_y                  = int(6*widget_padding_scaling)
 
 #!LAYOUT ICON
 layouticon_padding                  = int(-2*widget_padding_scaling)
@@ -334,9 +337,9 @@ layouticon_scale                    = 0.48*widget_padding_scaling
 #!ICONS
 icon_size                           = int(15*icon_size_scaling)
 if bar_style == "simple_1":
-    icon_padding                        = int(20*icon_padding_scaling)
+    icon_padding                    = int(20*icon_padding_scaling)
 else:
-    icon_padding                        = int(8*icon_padding_scaling)
+    icon_padding                    = int(8*icon_padding_scaling)
 
 #!DECOR
 left_decor_padding                  = int(7*icon_padding_scaling)
@@ -347,6 +350,11 @@ task_list_margin                    = int(4*task_list_scaling)
 task_list_border_width              = int(4*general_width_scaling)
 task_list_spacing                   = 2
 task_list_icon_size                 = 28
+
+#!TOOLTIP
+tooltip_delay                       = 0.5
+tooltip_padding                     = 8
+tooltip_fontsize                    = widget_default_font_size + 1
 
 #*###############################
 #*           FOCUS             ##
@@ -409,7 +417,7 @@ other_font                          = "ttf-dejavu"
 #*#############################
 #*          UPDATES          ##
 #*#############################
-wifi_update_interval            = 10
-cpu_update_interval             = 10
-battery_update_interval         = 20
-backlight_update_interval       = 20
+wifi_update_interval                = 10
+cpu_update_interval                 = 10
+battery_update_interval             = 20
+backlight_update_interval           = 20

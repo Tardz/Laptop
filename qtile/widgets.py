@@ -8,6 +8,8 @@ from xdg import IconTheme
 from settings import *
 import subprocess
 
+from qtile_extras.widget.mixins import TooltipMixin
+
 widget_defaults = dict(
     font        = bold_font,
     fontsize    = widget_default_font_size,
@@ -196,7 +198,7 @@ class TickTickMenu(widget.TextBox):
     def mouse_leave(self, *args, **kwargs):
         self.bar.window.window.set_cursor("left_ptr")
 
-class BluetoothIcon(widget.TextBox, base.InLoopPollText):
+class BluetoothIcon(base.InLoopPollText, TooltipMixin):
     def __init__(self):
         base.InLoopPollText.__init__(
             self,
@@ -210,6 +212,19 @@ class BluetoothIcon(widget.TextBox, base.InLoopPollText):
             mouse_callbacks = {"Button1": lambda: self.clicked()},
             decorations     = left_decor(round=True, color=icon_background_1),
         )
+
+        self.tooltip_obj = TooltipMixin.__init__(self)
+        tooltip_defaults = [
+            ("tooltip_delay", tooltip_delay, "Time in seconds before tooltip displayed"),
+            ("tooltip_background", text_color, "Background colour for tooltip"),
+            ("tooltip_color", bar_background_color, "Font colur for tooltop"),
+            ("tooltip_font", "sans", "Font colour for tooltop"),
+            ("tooltip_fontsize", tooltip_fontsize, "Font size for tooltop"),
+            ("tooltip_padding", tooltip_padding, "int for all sides or list for [top/bottom, left/right]"),
+        ]
+        self.add_defaults(tooltip_defaults)
+        self.tooltip_text = "Disconnected"
+
         self.signal_file_path = os.path.expanduser("~/scripts/qtile/bar_menus/bluetooth/signal_data.txt") 
 
         self.normal_foreground = self.foreground
@@ -229,6 +244,7 @@ class BluetoothIcon(widget.TextBox, base.InLoopPollText):
                 parts = lines[0].split(" ", 2)
 
                 device_name = parts[2]
+                self.tooltip_text = device_name
 
                 if "Jonathans Bose QC35 II" in device_name:
                     return ""
@@ -240,6 +256,7 @@ class BluetoothIcon(widget.TextBox, base.InLoopPollText):
                     return ""
             
             else:
+                self.tooltip_text = "Disconnected"
                 return ""
             
     def clicked(self):
@@ -270,14 +287,6 @@ class BluetoothIcon(widget.TextBox, base.InLoopPollText):
         
         global bluetooth_menu_pid
         bluetooth_menu_pid = processes.get("bluetooth_menu_pid", None)
-    
-    def mouse_enter(self, *args, **kwargs):
-        self.bar.window.window.set_cursor("hand2")
-        self.bar.draw()
-
-    def mouse_leave(self, *args, **kwargs):
-        self.bar.window.window.set_cursor("left_ptr")
-        self.bar.draw()
 
 class BluetoothWidget(widget.TextBox, base.InLoopPollText):
     def __init__(self):
@@ -331,19 +340,31 @@ class BluetoothWidget(widget.TextBox, base.InLoopPollText):
         self.decorations = self.normal_decorator
         self.bar.draw()
 
-class VolumeIcon(widget.TextBox):
+class VolumeIcon(base.InLoopPollText, TooltipMixin):
     def __init__(self):
-        widget.TextBox.__init__(
+        base.InLoopPollText.__init__(
             self,
-            text            = "",
+            # text            = "",
             font            = icon_font,
             fontsize        = icon_size + 5,
             foreground      = icon_foreground_2,
             background      = None,
             padding         = icon_padding,
+            update_interval = wifi_update_interval,
             mouse_callbacks = {"Button1": lambda: self.click()},
             decorations     = left_decor(icon_background_2),
         )
+
+        self.tooltip_obj = TooltipMixin.__init__(self)
+        tooltip_defaults = [
+            ("tooltip_delay", tooltip_delay, "Time in seconds before tooltip displayed"),
+            ("tooltip_background", text_color, "Background colour for tooltip"),
+            ("tooltip_color", bar_background_color, "Font colur for tooltop"),
+            ("tooltip_font", "sans", "Font colour for tooltop"),
+            ("tooltip_fontsize", tooltip_fontsize, "Font size for tooltop"),
+            ("tooltip_padding", tooltip_padding, "int for all sides or list for [top/bottom, left/right]"),
+        ]
+        self.add_defaults(tooltip_defaults)
 
         self.normal_foreground = self.foreground
         self.clicked_foreground = "#9B98B7"
@@ -351,6 +372,11 @@ class VolumeIcon(widget.TextBox):
         self.active_background = bar_border_color
         self.inactive_background = self.background
         self.signal_file_path = os.path.expanduser("~/scripts/qtile/bar_menus/volume/signal_data.txt") 
+
+    def poll(self):
+        volume = subprocess.check_output("pamixer --get-volume", shell=True, text=True).strip()
+        self.tooltip_text = volume + "%"
+        return ""
 
     def click(self):
         global volume_menu_pid
@@ -381,11 +407,11 @@ class VolumeIcon(widget.TextBox):
         global volume_menu_pid
         volume_menu_pid = processes.get("volume_menu_pid", None)
         
-    def mouse_enter(self, *args, **kwargs):
-        self.bar.window.window.set_cursor("hand2")
+    # def mouse_enter(self, *args, **kwargs):
+    #     self.bar.window.window.set_cursor("hand2")
 
-    def mouse_leave(self, *args, **kwargs):
-        self.bar.window.window.set_cursor("left_ptr")
+    # def mouse_leave(self, *args, **kwargs):
+    #     self.bar.window.window.set_cursor("left_ptr")
 
 class VolumeWidget(widget.PulseVolume):
     def __init__(self):
@@ -408,26 +434,46 @@ class VolumeWidget(widget.PulseVolume):
     def mouse_leave(self, *args, **kwargs):
         self.bar.window.window.set_cursor("left_ptr")
 
-class WifiIcon(widget.TextBox):
+class WifiIcon(base.InLoopPollText, TooltipMixin):
     def __init__(self):
-        widget.TextBox.__init__(
+        base.InLoopPollText.__init__(
             self,
-            text            = "",
+            # text            = "",
             font            = icon_font,
             fontsize        = icon_size + 5,
             foreground      = icon_foreground_3,
-            rounded         = True,
+            padding         = icon_padding,
+            update_interval = wifi_update_interval,
             mouse_callbacks = {"Button1": lambda: self.clicked()},
             decorations     = left_decor(icon_background_3),
-            backgroubd      = None,
-            padding         = icon_padding,
         )
+        self.tooltip_obj = TooltipMixin.__init__(self)
+        tooltip_defaults = [
+            ("tooltip_delay", tooltip_delay, "Time in seconds before tooltip displayed"),
+            ("tooltip_background", text_color, "Background colour for tooltip"),
+            ("tooltip_color", bar_background_color, "Font colur for tooltop"),
+            ("tooltip_font", "sans", "Font colour for tooltop"),
+            ("tooltip_fontsize", tooltip_fontsize, "Font size for tooltop"),
+            ("tooltip_padding", tooltip_padding, "int for all sides or list for [top/bottom, left/right]"),
+        ]
+        self.add_defaults(tooltip_defaults)
+
+        self.tooltip_text = "BOXER_E748"
 
         self.normal_foreground = self.foreground
         self.clicked_foreground = "#81A1C1"
 
         self.active_background = bar_border_color
         self.inactive_background = self.background
+
+    def poll(self):
+        command = "iwconfig 2>/dev/null | grep -oP 'ESSID:\"\\K[^\"]+' | head -n 1"
+        wifi_name = subprocess.check_output(command, shell=True, text=True).strip()
+        if wifi_name:
+            self.tooltip_text = wifi_name
+        else:
+            self.tooltip_text = "Disconnected"
+        return ""
 
     def clicked(self):
         global wifi_menu_pid
@@ -503,24 +549,35 @@ class WifiWidget(widget.TextBox, base.InLoopPollText):
     def mouse_leave(self, *args, **kwargs):
         self.bar.window.window.set_cursor("left_ptr")
         
-class CpuTempIcon(widget.TextBox):
+class CpuTempIcon(widget.TextBox, TooltipMixin):
     def __init__(self):
         widget.TextBox.__init__(
             self,
+            # *args, 
+            # **kwargs,
             text            = "",
             font            = icon_font,
             fontsize        = icon_size + 7,
             foreground      = icon_foreground_4,
             padding         = icon_padding,
-            mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("python3 " + os.path.expanduser("~/scripts/qtile/bar_menus/cpu/cpu_stats_menu.py"))},
+            mouse_callbacks = {"Button1": lambda: self.click()},
             decorations     = left_decor(icon_background_4),
         )
-        
-    def mouse_enter(self, *args, **kwargs):
-        self.bar.window.window.set_cursor("hand2")
+        self.tooltip_obj = TooltipMixin.__init__(self)
+        tooltip_defaults = [
+            ("tooltip_delay", tooltip_delay, "Time in seconds before tooltip displayed"),
+            ("tooltip_background", text_color, "Background colour for tooltip"),
+            ("tooltip_color", bar_background_color, "Font colur for tooltop"),
+            ("tooltip_font", "sans", "Font colour for tooltop"),
+            ("tooltip_fontsize", tooltip_fontsize, "Font size for tooltop"),
+            ("tooltip_padding", tooltip_padding, "int for all sides or list for [top/bottom, left/right]"),
+        ]
+        self.add_defaults(tooltip_defaults)
 
-    def mouse_leave(self, *args, **kwargs):
-        self.bar.window.window.set_cursor("left_ptr")
+        self.tooltip_text = "60 C"
+
+    def click(self):
+        Qtile.cmd_spawn("python3 " + os.path.expanduser("~/scripts/qtile/bar_menus/cpu/cpu_stats_menu.py"))
 
 class CpuTempWidget(widget.ThermalSensor):
     def __init__(self):
@@ -543,7 +600,7 @@ class CpuTempWidget(widget.ThermalSensor):
     def mouse_leave(self, *args, **kwargs):
         self.bar.window.window.set_cursor("left_ptr")
 
-class CpuLoadIcon(widget.TextBox):
+class CpuLoadIcon(widget.TextBox, TooltipMixin):
     def __init__(self):
         widget.TextBox.__init__(
             self,
@@ -556,11 +613,17 @@ class CpuLoadIcon(widget.TextBox):
             decorations     = left_decor(icon_background_5),
         )
 
-    def mouse_enter(self, *args, **kwargs):
-        self.bar.window.window.set_cursor("hand2")
-
-    def mouse_leave(self, *args, **kwargs):
-        self.bar.window.window.set_cursor("left_ptr")
+        self.tooltip_obj = TooltipMixin.__init__(self)
+        tooltip_defaults = [
+            ("tooltip_delay", tooltip_delay, "Time in seconds before tooltip displayed"),
+            ("tooltip_background", text_color, "Background colour for tooltip"),
+            ("tooltip_color", bar_background_color, "Font colur for tooltop"),
+            ("tooltip_font", "sans", "Font colour for tooltop"),
+            ("tooltip_fontsize", tooltip_fontsize, "Font size for tooltop"),
+            ("tooltip_padding", tooltip_padding, "int for all sides or list for [top/bottom, left/right]"),
+        ]
+        self.add_defaults(tooltip_defaults)
+        self.tooltip_text = "6%"
 
 class CpuLoadWidget(widget.CPU):
     def __init__(self):
@@ -628,7 +691,7 @@ class BatteryWidget(widget.Battery):
     def mouse_leave(self, *args, **kwargs):
         self.bar.window.window.set_cursor("left_ptr")
 
-class BatteryIconWidget(widget.BatteryIcon):
+class BatteryIconWidget(widget.BatteryIcon, TooltipMixin):
     def __init__(self, decor=False):
         widget.BatteryIcon.__init__(
             self,
@@ -638,12 +701,24 @@ class BatteryIconWidget(widget.BatteryIcon):
             mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("python3 " + os.path.expanduser("~/scripts/qtile/bar_menus/power/power_management_menu.py"))},
             decorations     = right_decor() if decor else right_decor(transparent),
         )
-            
-    def mouse_enter(self, *args, **kwargs):
-        self.bar.window.window.set_cursor("hand2")
 
-    def mouse_leave(self, *args, **kwargs):
-        self.bar.window.window.set_cursor("left_ptr")
+        self.tooltip_obj = TooltipMixin.__init__(self)
+        tooltip_defaults = [
+            ("tooltip_delay", tooltip_delay, "Time in seconds before tooltip displayed"),
+            ("tooltip_background", text_color, "Background colour for tooltip"),
+            ("tooltip_color", bar_background_color, "Font colur for tooltop"),
+            ("tooltip_font", "sans", "Font colour for tooltop"),
+            ("tooltip_fontsize", tooltip_fontsize, "Font size for tooltop"),
+            ("tooltip_padding", tooltip_padding, "int for all sides or list for [top/bottom, left/right]"),
+        ]
+        self.add_defaults(tooltip_defaults)
+        self.tooltip_text = "placeholder"
+    
+    # def mouse_enter(self, *args, **kwargs):
+    #     self.bar.window.window.set_cursor("hand2")
+
+    # def mouse_leave(self, *args, **kwargs):
+    #     self.bar.window.window.set_cursor("left_ptr")
 
 class WattageIcon(widget.TextBox):
     def __init__(self):
@@ -723,7 +798,7 @@ class NotificationWidget(widget.TextBox, base.InLoopPollText):
         Qtile.cmd_spawn(os.path.expanduser("~/scripts/other/get_notifications.py"))
         self.poll()
 
-class NotificationIcon(widget.TextBox):
+class NotificationIcon(widget.TextBox, TooltipMixin):
     def __init__(self):
         widget.TextBox.__init__(
             self,
@@ -736,6 +811,18 @@ class NotificationIcon(widget.TextBox):
             decorations     = left_decor(color=icon_background_8, round=True),
         )
 
+        self.tooltip_obj = TooltipMixin.__init__(self)
+        tooltip_defaults = [
+            ("tooltip_delay", tooltip_delay, "Time in seconds before tooltip displayed"),
+            ("tooltip_background", text_color, "Background colour for tooltip"),
+            ("tooltip_color", bar_background_color, "Font colur for tooltop"),
+            ("tooltip_font", "sans", "Font colour for tooltop"),
+            ("tooltip_fontsize", tooltip_fontsize, "Font size for tooltop"),
+            ("tooltip_padding", tooltip_padding, "int for all sides or list for [top/bottom, left/right]"),
+        ]
+        self.add_defaults(tooltip_defaults)
+        self.tooltip_text = "2 notifications"
+
     def mouse_enter(self, *args, **kwargs):
         self.bar.window.window.set_cursor("hand2")
         self.bar.draw()
@@ -744,7 +831,7 @@ class NotificationIcon(widget.TextBox):
         self.bar.window.window.set_cursor("left_ptr")
         self.bar.draw()
 
-class BacklightIcon(widget.TextBox):
+class BacklightIcon(widget.TextBox, TooltipMixin):
     def __init__(self):
         widget.TextBox.__init__(
             self,
@@ -756,11 +843,17 @@ class BacklightIcon(widget.TextBox):
             decorations = left_decor(icon_background_9),
         )
 
-    def mouse_enter(self, *args, **kwargs):
-        self.bar.window.window.set_cursor("hand2")
-
-    def mouse_leave(self, *args, **kwargs):
-        self.bar.window.window.set_cursor("left_ptr")
+        self.tooltip_obj = TooltipMixin.__init__(self)
+        tooltip_defaults = [
+            ("tooltip_delay", tooltip_delay, "Time in seconds before tooltip displayed"),
+            ("tooltip_background", text_color, "Background colour for tooltip"),
+            ("tooltip_color", bar_background_color, "Font colur for tooltop"),
+            ("tooltip_font", "sans", "Font colour for tooltop"),
+            ("tooltip_fontsize", tooltip_fontsize, "Font size for tooltop"),
+            ("tooltip_padding", tooltip_padding, "int for all sides or list for [top/bottom, left/right]"),
+        ]
+        self.add_defaults(tooltip_defaults)
+        self.tooltip_text = "50%"
 
 class BacklightWidget(widget.Backlight):
     def __init__(self):
@@ -837,7 +930,7 @@ class ClockWidget(widget.Clock):
         self.format = self.normal_format
         self.bar.window.window.set_cursor("left_ptr")
         
-class AppTrayIcon(widget.Image):
+class AppTrayIcon(widget.Image, TooltipMixin):
     def __init__(self, icon_name="", group="", app=""):
         global icon_theme_name
         icon_path = IconTheme.getIconPath(icon_name, 48, icon_theme_name)
@@ -852,11 +945,29 @@ class AppTrayIcon(widget.Image):
             mouse_callbacks = {"Button1": lambda: self.click(group, app)},
         )
 
+        self.tooltip_obj = TooltipMixin.__init__(self, 670, -10, self.margin_y, self.margin_y - 3)
+        tooltip_defaults = [
+            ("tooltip_delay", 1, "Time in seconds before tooltip displayed"),
+            ("tooltip_background", text_color, "Background colour for tooltip"),
+            ("tooltip_color", bar_background_color, "Font colur for tooltop"),
+            ("tooltip_font", "sans", "Font colour for tooltop"),
+            ("tooltip_fontsize", tooltip_fontsize, "Font size for tooltop"),
+            ("tooltip_padding", tooltip_padding, "int for all sides or list for [top/bottom, left/right]"),
+        ]
+        self.add_defaults(tooltip_defaults)
+        if icon_name == "codeblocks":
+            icon_name = "App search"
+        elif icon_name == "codium":
+            icon_name = "Config search"
+        elif icon_name == "automation":
+            icon_name = "Automation"
+        elif icon_name == "search":
+            icon_name = "Link search"
+
+        self.tooltip_text = icon_name
+
         self.icon_name = icon_name
 
-        self.margin_normal = self.margin_y
-        self.margin_hover = self.margin_y - 2
-        self.margin_clicked = self.margin_hover - 2
         self.none_check_apps = [
             "vivaldi youtube.com",
             "alacritty",
@@ -878,17 +989,7 @@ class AppTrayIcon(widget.Image):
                 Qtile.cmd_spawn("python3 " + os.path.expanduser("~/scripts/qtile/check_and_launch_app.py " + app + " " + group))
         else:
             Qtile.cmd_spawn(app)
-        self.margin_y = self.margin_clicked
-
-    def mouse_enter(self, *args, **kwargs):
-        self.bar.window.window.set_cursor("hand2")
-        self.margin_y = self.margin_hover
-        self.bar.draw()
-
-    def mouse_leave(self, *args, **kwargs):
-        self.bar.window.window.set_cursor("left_ptr")
-        self.margin_y = self.margin_normal
-        self.bar.draw()
+        # self.margin_y = self.margin_clicked
 
     @expose_command()
     def update_icons(self):
