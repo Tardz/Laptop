@@ -21,10 +21,10 @@ simple_style_1_single_top_bar = Bar([
     GroupBoxWidget(),
     seperator(),
 
-    seperator(250),
-    widget.Spacer(bar.STRETCH),
+    widget.Spacer(),
     # ActiveWindowIcon(),
     ActiveWindowWidget(width=bar.CALCULATED),
+    widget.Spacer(),
 
     # BLUETOOTH #
     BluetoothIcon(),
@@ -64,9 +64,68 @@ simple_style_1_single_top_bar = Bar([
 
 ], top_bar_size, margin = bar_margin_top, background = bar_background_color, border_width = bar_width_top, border_color = bar_border_color, opacity=1)
 
+shapes_style_1_single_top_bar = Bar([
+    seperator(-10, background="#35353b"),
+    GroupBoxWidget(background="#35353b"),
+    seperator(background="#35353b"),
+
+    widget.Image(
+        filename = "~/.config/qtile/Assets/1_grey.png",
+        padding = -1
+    ),
+
+    widget.Spacer(background="#35353b"),
+    # ActiveWindowIcon(),
+    ActiveWindowWidget(width=bar.CALCULATED, background="#35353b"),
+    widget.Spacer(background="#35353b"),
+
+    widget.Image(
+        filename = "~/.config/qtile/Assets/2_grey.png",
+        padding = -1
+    ),
+
+    # BLUETOOTH #
+    BluetoothIcon(background="#35353b"),
+    seperator(background="#35353b"),
+
+    # VOLUME #
+    VolumeIcon(background="#35353b"),
+    seperator(background="#35353b"),
+
+    #  WIFI #
+    WifiIcon(background="#35353b"),
+
+    # CPU LOAD #
+    seperator(background="#35353b"),
+    CpuLoadIcon(background="#35353b"),
+    
+    # CPU TEMP #
+    seperator(background="#35353b"),
+    CpuTempIcon(background="#35353b"),
+
+    # URGENT NOTIFICATION #
+    seperator(background="#35353b"),
+    NotificationIcon(background="#35353b"),
+
+    # BACKLIGHT #
+    seperator(background="#35353b"),
+    BacklightIcon(background="#35353b"),
+
+    # BATTERY #
+    seperator(10, background="#35353b"),
+    BatteryIconWidget(background="#35353b"),
+
+    # TIME #
+    seperator(8, background="#35353b"),
+    ClockWidget(decor_color=transparent, background="#35353b"),
+    seperator(-10, background="#35353b"),
+
+], top_bar_size, margin = bar_margin_top, background = bar_background_color, border_width = bar_width_top, border_color = bar_border_color, opacity=1)
+
 simple_style_2_single_top_bar = Bar([
     seperator(-6),
     ClockWidget(decor_color=transparent),
+
     seperator(-12),
     GroupBoxWidget(),
     seperator(),

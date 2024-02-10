@@ -118,7 +118,7 @@ def active_window_decor(color=right_decor_background, round=True, padding_x=0, p
         )
     ]
 
-def task_list_decor(color=app_tray_color, radius=10, group=False, padding_x=0, padding_y=0):
+def task_list_decor(color=app_tray_color, radius=12, group=False, padding_x=0, padding_y=0):
     return RectDecoration(
         line_width            = bottom_widget_width,
         line_colour           = bar_border_color,
@@ -200,17 +200,17 @@ class TickTickMenu(widget.TextBox):
         self.bar.window.window.set_cursor("left_ptr")
 
 class BluetoothIcon(base.InLoopPollText, TooltipMixin):
-    def __init__(self):
+    def __init__(self, background=None):
         base.InLoopPollText.__init__(
             self,
             # text            = "",
             font            = icon_font,
-            fontsize        = icon_size + 8,
+            fontsize        = icon_size + 5,
             foreground      = icon_foreground_1,
-            background      = None,
-            padding         = icon_padding + 4,
+            background      = background,
+            padding         = icon_padding,
             update_interval = wifi_update_interval,
-            mouse_callbacks = {"Button1": lambda: self.clicked()},
+            mouse_callbacks = {"Button1": lambda: self.click()},
             decorations     = left_decor(round=True, color=icon_background_1),
         )
 
@@ -225,14 +225,17 @@ class BluetoothIcon(base.InLoopPollText, TooltipMixin):
         ]
         self.add_defaults(tooltip_defaults)
         self.tooltip_text = "Disconnected"
+        self.tray = False
 
         self.signal_file_path = os.path.expanduser("~/scripts/qtile/bar_menus/bluetooth/signal_data.txt") 
+        
+        self.normal_text = ""
+        self.clicked_text = "\n\n"
 
         self.normal_foreground = self.foreground
         self.clicked_foreground = "#b48ead"
 
-        self.active_background   = bar_border_color
-        self.inactive_background = self.background
+        self.clicked = False
 
     def poll(self):
         bluetooth_state = subprocess.check_output("systemctl status bluetooth | grep Running", shell=True, stderr=subprocess.PIPE, text=True).strip()
@@ -255,12 +258,17 @@ class BluetoothIcon(base.InLoopPollText, TooltipMixin):
                 #     return "Error"
                 else:
                     return ""
-            
             else:
                 self.tooltip_text = "Disconnected"
-                return ""
+                if self.clicked:
+                    return self.clicked_text
+                else:
+                    return self.normal_text
             
-    def clicked(self):
+    def click(self):
+        if not self.clicked:
+            self._stop_tooltip(0, 0, from_click=True)
+        self.clicked = True
         global bluetooth_menu_pid
         if not bluetooth_menu_pid:
             Qtile.cmd_spawn("python3 " + os.path.expanduser("~/scripts/qtile/bar_menus/bluetooth/bluetooth_menu.py"))
@@ -269,14 +277,15 @@ class BluetoothIcon(base.InLoopPollText, TooltipMixin):
                 file.write("hide")
             os.kill(bluetooth_menu_pid, 15)
 
+        self.text = self.clicked_text
         self.foreground = self.clicked_foreground
-        self.background = self.active_background
         self.bar.draw()
 
     @expose_command()
     def unclick(self):
+        self.clicked = False
+        self.text = self.normal_text
         self.foreground = self.normal_foreground
-        self.background = self.inactive_background
         self.bar.draw()
 
     @expose_command()
@@ -342,14 +351,14 @@ class BluetoothWidget(widget.TextBox, base.InLoopPollText):
         self.bar.draw()
 
 class VolumeIcon(base.InLoopPollText, TooltipMixin):
-    def __init__(self):
+    def __init__(self, background=None):
         base.InLoopPollText.__init__(
             self,
             # text            = "",
             font            = icon_font,
             fontsize        = icon_size + 5,
             foreground      = icon_foreground_2,
-            background      = None,
+            background      = background,
             padding         = icon_padding,
             update_interval = wifi_update_interval,
             mouse_callbacks = {"Button1": lambda: self.click()},
@@ -367,20 +376,30 @@ class VolumeIcon(base.InLoopPollText, TooltipMixin):
         ]
         self.add_defaults(tooltip_defaults)
         self.tooltip_text = "placeholder"
+        self.tray = False
+
+        self.signal_file_path = os.path.expanduser("~/scripts/qtile/bar_menus/volume/signal_data.txt") 
+
+        self.normal_text = ""
+        self.clicked_text = "\n\n"
 
         self.normal_foreground = self.foreground
         self.clicked_foreground = "#9B98B7"
 
-        self.active_background = bar_border_color
-        self.inactive_background = self.background
-        self.signal_file_path = os.path.expanduser("~/scripts/qtile/bar_menus/volume/signal_data.txt") 
+        self.clicked = False
 
     def poll(self):
         volume = subprocess.check_output("pamixer --get-volume", shell=True, text=True).strip()
         self.tooltip_text = volume + "%"
-        return ""
+        if self.clicked:
+            return self.clicked_text
+        else:
+            return self.normal_text
 
     def click(self):
+        if not self.clicked:
+            self._stop_tooltip(0, 0, from_click=True)
+        self.clicked = True
         global volume_menu_pid
         if not volume_menu_pid:
             Qtile.cmd_spawn("python3 " + os.path.expanduser("~/scripts/qtile/bar_menus/volume/volume_menu.py"))
@@ -389,14 +408,16 @@ class VolumeIcon(base.InLoopPollText, TooltipMixin):
                 file.write("hide")
             os.kill(volume_menu_pid, 15)
         
+        self.text = self.clicked_text
         self.foreground = self.clicked_foreground
-        self.background = self.active_background
         self.bar.draw()
 
     @expose_command()
     def unclick(self):
+        self.clicked = False
+        self.text = self.normal_text
         self.foreground = self.normal_foreground
-        self.background = self.inactive_background
+        self._stop_tooltip(0, 0)
         self.bar.draw()
 
     @expose_command()
@@ -437,16 +458,17 @@ class VolumeWidget(widget.PulseVolume):
         self.bar.window.window.set_cursor("left_ptr")
 
 class WifiIcon(base.InLoopPollText, TooltipMixin):
-    def __init__(self):
+    def __init__(self, background=None):
         base.InLoopPollText.__init__(
             self,
             # text            = "",
             font            = icon_font,
             fontsize        = icon_size + 5,
             foreground      = icon_foreground_3,
+            background      = background,
             padding         = icon_padding,
             update_interval = wifi_update_interval,
-            mouse_callbacks = {"Button1": lambda: self.clicked()},
+            mouse_callbacks = {"Button1": lambda: self.click()},
             decorations     = left_decor(icon_background_3),
         )
         self.tooltip_obj = TooltipMixin.__init__(self)
@@ -459,14 +481,16 @@ class WifiIcon(base.InLoopPollText, TooltipMixin):
             ("tooltip_padding", tooltip_padding, "int for all sides or list for [top/bottom, left/right]"),
         ]
         self.add_defaults(tooltip_defaults)
-
         self.tooltip_text = "BOXER_E748"
+        self.tray = False
+
+        self.normal_text = ""
+        self.clicked_text = "\n\n"
 
         self.normal_foreground = self.foreground
         self.clicked_foreground = "#81A1C1"
 
-        self.active_background = bar_border_color
-        self.inactive_background = self.background
+        self.clicked = False
 
     def poll(self):
         command = "iwconfig 2>/dev/null | grep -oP 'ESSID:\"\\K[^\"]+' | head -n 1"
@@ -475,23 +499,31 @@ class WifiIcon(base.InLoopPollText, TooltipMixin):
             self.tooltip_text = wifi_name
         else:
             self.tooltip_text = "Disconnected"
-        return ""
+        
+        if self.clicked:
+            return self.clicked_text
+        else:
+            return self.normal_text
 
-    def clicked(self):
+    def click(self):
+        if not self.clicked:
+            self._stop_tooltip(0, 0, from_click=True)
+        self.clicked = True
         global wifi_menu_pid
         if not wifi_menu_pid:
             Qtile.cmd_spawn("python3 " + os.path.expanduser("~/scripts/qtile/bar_menus/wifi/wifi_menu.py"))
         else:
             os.kill(volume_menu_pid, 15)
-            
+        
+        self.text = self.clicked_text
         self.foreground = self.clicked_foreground
-        self.background = self.active_background
         self.bar.draw()
 
     @expose_command()
     def unclick(self):
+        self.clicked = False
+        self.text = self.normal_text
         self.foreground = self.normal_foreground
-        self.background = self.inactive_background
         self.bar.draw()
 
     @expose_command()
@@ -552,7 +584,7 @@ class WifiWidget(widget.TextBox, base.InLoopPollText):
         self.bar.window.window.set_cursor("left_ptr")
         
 class CpuTempIcon(widget.TextBox, TooltipMixin):
-    def __init__(self):
+    def __init__(self, background=None):
         widget.TextBox.__init__(
             self,
             # *args, 
@@ -561,6 +593,7 @@ class CpuTempIcon(widget.TextBox, TooltipMixin):
             font            = icon_font,
             fontsize        = icon_size + 7,
             foreground      = icon_foreground_4,
+            background      = background,
             padding         = icon_padding,
             mouse_callbacks = {"Button1": lambda: self.click()},
             # decorations     = left_decor(icon_background_4),
@@ -575,8 +608,13 @@ class CpuTempIcon(widget.TextBox, TooltipMixin):
             ("tooltip_padding", tooltip_padding, "int for all sides or list for [top/bottom, left/right]"),
         ]
         self.add_defaults(tooltip_defaults)
-
         self.tooltip_text = "60 C"
+        self.tray = False
+
+        self.normal_text = ""
+        self.clicked_text = "\n\n"
+        
+        self.clicked = False
 
     def click(self):
         Qtile.cmd_spawn("python3 " + os.path.expanduser("~/scripts/qtile/bar_menus/cpu/cpu_stats_menu.py"))
@@ -603,13 +641,14 @@ class CpuTempWidget(widget.ThermalSensor):
         self.bar.window.window.set_cursor("left_ptr")
 
 class CpuLoadIcon(widget.TextBox, TooltipMixin):
-    def __init__(self):
+    def __init__(self, background=None):
         widget.TextBox.__init__(
             self,
             text            = "",
             font            = icon_font,
             fontsize        = icon_size + 6,
             foreground      = icon_foreground_5,
+            background      = background,
             padding         = icon_padding,
             mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("python3 " + os.path.expanduser("~/scripts/qtile/bar_menus/cpu/cpu_stats_menu.py"))},
             # decorations     = left_decor(icon_background_5),
@@ -626,6 +665,9 @@ class CpuLoadIcon(widget.TextBox, TooltipMixin):
         ]
         self.add_defaults(tooltip_defaults)
         self.tooltip_text = "6%"
+        self.tray = False
+
+        self.clicked = False
 
 class CpuLoadWidget(widget.CPU):
     def __init__(self):
@@ -694,10 +736,11 @@ class BatteryWidget(widget.Battery):
         self.bar.window.window.set_cursor("left_ptr")
 
 class BatteryIconWidget(widget.BatteryIcon, TooltipMixin):
-    def __init__(self, decor=False):
+    def __init__(self, decor=False, background=None):
         widget.BatteryIcon.__init__(
             self,
             theme_path      = os.path.expanduser("~/.config/qtile/battery_icons/horizontal/"),
+            background      = background,
             battery         = 0,
             scale           = 2.65,
             mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("python3 " + os.path.expanduser("~/scripts/qtile/bar_menus/power/power_management_menu.py"))},
@@ -715,6 +758,9 @@ class BatteryIconWidget(widget.BatteryIcon, TooltipMixin):
         ]
         self.add_defaults(tooltip_defaults)
         self.tooltip_text = "placeholder"
+        self.tray = False
+    
+        self.clicked = False
     
     # def mouse_enter(self, *args, **kwargs):
     #     self.bar.window.window.set_cursor("hand2")
@@ -801,13 +847,14 @@ class NotificationWidget(widget.TextBox, base.InLoopPollText):
         self.poll()
 
 class NotificationIcon(widget.TextBox, TooltipMixin):
-    def __init__(self):
+    def __init__(self, background=None):
         widget.TextBox.__init__(
             self,
             text            = "",
             font            = icon_font,
             fontsize        = icon_size + 5,
             foreground      = icon_foreground_8,
+            background      = background,
             padding         = icon_padding,
             mouse_callbacks = {"Button1": lambda: Qtile.cmd_spawn("python3 " + os.path.expanduser("~/scripts/other/get_notifications.py"))},
             # decorations     = left_decor(color=icon_background_8, round=True),
@@ -824,6 +871,9 @@ class NotificationIcon(widget.TextBox, TooltipMixin):
         ]
         self.add_defaults(tooltip_defaults)
         self.tooltip_text = "2 notifications"
+        self.tray = False
+
+        self.clicked = False
 
     def mouse_enter(self, *args, **kwargs):
         self.bar.window.window.set_cursor("hand2")
@@ -834,13 +884,14 @@ class NotificationIcon(widget.TextBox, TooltipMixin):
         self.bar.draw()
 
 class BacklightIcon(widget.TextBox, TooltipMixin):
-    def __init__(self):
+    def __init__(self, background=None):
         widget.TextBox.__init__(
             self,
             text        = "",
             font        = icon_font,
             fontsize    = icon_size + 5,
             foreground  = icon_foreground_9,
+            background  = background,
             padding     = icon_padding + 1,
             decorations = left_decor(icon_background_9),
         )
@@ -856,6 +907,9 @@ class BacklightIcon(widget.TextBox, TooltipMixin):
         ]
         self.add_defaults(tooltip_defaults)
         self.tooltip_text = "50%"
+        self.tray = False
+
+        self.clicked = False
 
 class BacklightWidget(widget.Backlight):
     def __init__(self):
@@ -910,13 +964,14 @@ class ClockIcon(widget.TextBox):
         )
 
 class ClockWidget(widget.Clock):
-    def __init__(self, decor_color=right_decor_background):
+    def __init__(self, decor_color=right_decor_background, background=None):
         widget.Clock.__init__(
             self,
             format      = "%H:%M",
             font        = bold_font,
             padding     = widget_default_padding + 5,
             foreground  = text_color,
+            background  = background,
             fontsize    = widget_default_font_size + 2,
             # decorations = right_decor(round=True),
         )
@@ -967,6 +1022,9 @@ class AppTrayIcon(widget.Image, TooltipMixin):
             icon_name = "Link search"
 
         self.tooltip_text = icon_name
+        self.tray = True
+
+        self.clicked = False
 
         self.icon_name = icon_name
 
@@ -1112,14 +1170,14 @@ class ActiveWindowIcon(widget.TextBox):
         self.bar.draw()
 
 class ActiveWindowWidget(widget.WindowName):
-    def __init__(self, width, foreground=text_color):
+    def __init__(self, width, foreground=text_color, background=None):
         widget.WindowName.__init__(
             self,
-            background         = bar_background_color,
             font               = bold_font,
             fontsize           = widget_default_font_size + 1,
             format             = "{name}",
             foreground         = foreground,
+            background         = background,
             padding            = widget_default_padding + 2,
             width              = width,
             empty_group_string = "Desktop",
@@ -1182,11 +1240,11 @@ group_box_settings = dict(
     font                        = icon_font,
     fontsize                    = widget_default_font_size + 3,
     highlight_method            = "block",
-    active                      = "#4b5662",
+    active                      = text_color,
     # active                      = "#4b5662",
     # inactive                    = "#4b5662",
-    inactive                    = "#1d2125",
-    block_highlight_text_color  = text_color,
+    inactive                    = "#4b5662",
+    block_highlight_text_color  = "#bf616a",
     highlight_color             = "#000000",
     this_current_screen_border  = right_decor_background,
     this_screen_border          = right_decor_background,
@@ -1197,11 +1255,12 @@ group_box_settings = dict(
 )
 
 class GroupBoxWidget(widget.GroupBox):
-    def __init__(self, visible_groups=None):
+    def __init__(self, visible_groups=None, background=None):
         widget.GroupBox.__init__(
             self,
             **group_box_settings, 
-            visible_groups = visible_groups
+            visible_groups = visible_groups,
+            background = background
         )
 
 class WindowCountWidget(widget.WindowCount):

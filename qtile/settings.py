@@ -270,9 +270,10 @@ app_tray_icon_color_4               = "#d08770"
 app_tray_icon_color_5               = "#bf616a"
 
 if darkmode:
+    # app_tray_color                = "#35353b.85" # shape bar
     app_tray_color                = "#31373f.85"
-    # app_tray_seperator_color      = "#1e2227.6"
-    app_tray_seperator_color      = "#454951.9"
+    app_tray_seperator_color      = "#1e2227.6"
+    # app_tray_seperator_color      = "#454951.9"
     bar_border_color              = "#454951"
     bar_background_color          = "#1e2227.85"
     # right_decor_background        = "#717c99.5"
