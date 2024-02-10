@@ -917,7 +917,7 @@ class ClockWidget(widget.Clock):
             font        = bold_font,
             padding     = widget_default_padding + 5,
             foreground  = text_color,
-            fontsize    = widget_default_font_size + 1,
+            fontsize    = widget_default_font_size + 2,
             # decorations = right_decor(round=True),
         )
 
