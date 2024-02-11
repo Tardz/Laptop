@@ -28,6 +28,8 @@ sudo rsync -av --delete "$git_path"/qtile/groups.py $HOME/.config/qtile/groups.p
 sudo rsync -av --delete "$git_path"/qtile/widgets.py $HOME/.config/qtile/widgets.py
 sudo rsync -av --delete "$git_path"/qtile/bars.py $HOME/.config/qtile/bars.py
 sudo rsync -av --delete "$git_path"/qtile/layouts.py $HOME/.config/qtile/layouts.py
+sudo rsync -av --delete "$git_path"/qtile/source_modified/ $HOME/.config/qtile/source_modified/
+
 sudo rsync -av --delete "$git_path"/fish/config.fish $HOME/.config/fish/config.fish
 sudo rsync -av --delete "$git_path"/sddm/theme.conf /usr/share/sddm/themes/sugar-candy/
 
