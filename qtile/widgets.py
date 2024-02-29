@@ -1004,9 +1004,9 @@ class AppTrayIcon(widget.Image, TooltipMixin):
 
         self.tooltip_obj = TooltipMixin.__init__(self, 670, -10, self.margin_y, self.margin_y - 3)
         tooltip_defaults = [
-            ("tooltip_delay", 1, "Time in seconds before tooltip displayed"),
-            ("tooltip_background", text_color, "Background colour for tooltip"),
-            ("tooltip_color", bar_background_color, "Font colur for tooltop"),
+            ("tooltip_delay", 0, "Time in seconds before tooltip displayed"),
+            ("tooltip_background", bar_background_color, "Background colour for tooltip"),
+            ("tooltip_color", text_color, "Font colur for tooltop"),
             ("tooltip_font", "sans", "Font colour for tooltop"),
             ("tooltip_fontsize", tooltip_fontsize, "Font size for tooltop"),
             ("tooltip_padding", tooltip_padding, "int for all sides or list for [top/bottom, left/right]"),

@@ -1,72 +1,84 @@
 [
   {
-    "SSID": "BOXER_E748",
+    "SSID": "Mediaspjuth",
     "STRENGTH": "\u2582\u2584\u2586\u2582",
-    "CONNECTED": true,
+    "CONNECTED": false,
     "KNOWN": true
   },
   {
-    "SSID": "lj",
+    "SSID": "Elscootersweden",
     "STRENGTH": "\u2582\u2584\u2586\u2582",
     "CONNECTED": false,
     "KNOWN": false
   },
   {
-    "SSID": "lj_5G",
-    "STRENGTH": "\u2582\u2584\u2586\u2582",
-    "CONNECTED": false,
-    "KNOWN": false
-  },
-  {
-    "SSID": "eduroam",
-    "STRENGTH": "\u2582\u2584\u2586\u2582",
-    "CONNECTED": false,
-    "KNOWN": false
-  },
-  {
-    "SSID": "LukasDoNotUse_5G",
-    "STRENGTH": "\u2582\u2584\u2586\u2582",
-    "CONNECTED": false,
-    "KNOWN": false
-  },
-  {
-    "SSID": "Blau_5G",
-    "STRENGTH": "\u2582\u2584\u2586\u2582",
-    "CONNECTED": false,
-    "KNOWN": false
-  },
-  {
-    "SSID": "TP-Link_1E21",
+    "SSID": "#Telia-846DB8",
     "STRENGTH": "\u2582\u2584\u2582\u2582",
     "CONNECTED": false,
     "KNOWN": false
   },
   {
-    "SSID": "Oscar",
+    "SSID": "RJLGuest",
     "STRENGTH": "\u2582\u2584\u2582\u2582",
     "CONNECTED": false,
     "KNOWN": false
   },
   {
-    "SSID": "ASUS",
+    "SSID": "Tele2_35055f",
     "STRENGTH": "\u2582\u2584\u2582\u2582",
     "CONNECTED": false,
     "KNOWN": false
   },
   {
-    "SSID": "TP-Link_A37D_5G",
+    "SSID": "RJLTeknik",
+    "STRENGTH": "\u2582\u2584\u2582\u2582",
+    "CONNECTED": false,
+    "KNOWN": false
+  },
+  {
+    "SSID": "RJL",
+    "STRENGTH": "\u2582\u2584\u2582\u2582",
+    "CONNECTED": false,
+    "KNOWN": false
+  },
+  {
+    "SSID": "Tele2_33acd7",
     "STRENGTH": "\u2582\u2582\u2582\u2582",
     "CONNECTED": false,
     "KNOWN": false
   },
   {
-    "SSID": "TP-Link_D69E_5G",
+    "SSID": "Tele2_a98db3",
     "STRENGTH": "\u2582\u2582\u2582\u2582",
     "CONNECTED": false,
     "KNOWN": false
   },
   {
-    "SSID": "gretchensvibrationer-5G",
+    "SSID": "Tele2_a4f2c4",
+    "STRENGTH": "\u2582\u2582\u2582\u2582",
+    "CONNECTED": false,
+    "KNOWN": false
+  },
+  {
+    "SSID": "Vastanhem",
+    "STRENGTH": "\u2582\u2582\u2582\u2582",
+    "CONNECTED": false,
+    "KNOWN": false
+  },
+  {
+    "SSID": "comhem_C0BB28",
+    "STRENGTH": "\u2582\u2582\u2582\u2582",
+    "CONNECTED": false,
+    "KNOWN": false
+  },
+  {
+    "SSID": "Robayoswifi",
+    "STRENGTH": "\u2582\u2582\u2582\u2582",
+    "CONNECTED": false,
+    "KNOWN": false
+  },
+  {
+    "SSID": "Tele2_ce22fe",
     "STRENGTH": "\u2582\u2582\u2582\u2582",
     "CONNECTED": false,
     "KNOWN": false
