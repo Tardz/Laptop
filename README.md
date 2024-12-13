@@ -2,14 +2,14 @@
 ## Preview
 <p align="center">
   <img src="https://github.com/Tardz/Laptop/blob/main/github/desktop_screenshot_modified.png" alt="Image 1" width="850" />
-  <img src="https://github.com/Tardz/Laptop/blob/main/github/desktop_screenshot_2.png" alt="Image 1" width="850" />
+  ##<img src="https://github.com/Tardz/Laptop/blob/main/github/desktop_screenshot_2.png" alt="Image 1" width="850" />
   <img src="https://github.com/Tardz/Laptop/blob/main/github/desktop_screenshot_3.png" alt="Image 1" width="850" />
 </p>
 
 <p align="center">
-  <img src="https://github.com/Tardz/Laptop/blob/main/github/wifi_menu_screenshot_modified.png" alt="Image 1" width="350" />
-  <img src="https://github.com/Tardz/Laptop/blob/main/github/bluetooth_menu_screenshot_modified.png" alt="Image 2" width="350" />
-  <img src="https://github.com/Tardz/Laptop/blob/main/github/volume_menu_screenshot_modified.png" alt="Image 3" width="350" />
+  ##<img src="https://github.com/Tardz/Laptop/blob/main/github/wifi_menu_screenshot_modified.png" alt="Image 1" width="350" />
+  ##<img src="https://github.com/Tardz/Laptop/blob/main/github/bluetooth_menu_screenshot_modified.png" alt="Image 2" width="350" />
+  ##<img src="https://github.com/Tardz/Laptop/blob/main/github/volume_menu_screenshot_modified.png" alt="Image 3" width="350" />
   <img src="https://github.com/Tardz/Laptop/blob/main/github/volume_menu_screenshot_2.png" alt="Image 3" width="350" />
   <img src="https://github.com/Tardz/Laptop/blob/main/github/bluetooth_menu_screenshot_2.png" alt="Image 3" width="350" />
 </p>
